@@ -3,10 +3,10 @@ import {
   LinearHomeIcon,
   BoldMessageIcon,
   LinearChatIcon,
-  LinearSearchnormalIcon,
+  LinearSearchNormalIcon,
   LinearCalendarIcon,
   LinearSettingIcon
-} from 'src/components/Svgs'
+} from 'src/components/Icons'
 
 const items = [
   {
@@ -19,7 +19,7 @@ const items = [
     icon: <LinearChatIcon />
   },
   {
-    icon: <LinearSearchnormalIcon />
+    icon: <LinearSearchNormalIcon />
   },
   {
     icon: <LinearCalendarIcon />
