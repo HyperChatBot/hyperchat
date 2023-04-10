@@ -28,14 +28,16 @@ const items = [
 
 const Siderbar: FC = () => {
   return (
-    <section className="w-22 h-full shadow-sidebar flex-1 flex flex-col items-center p-4 justify-between">
+    <section className="w-22 h-screen shadow-sidebar flex flex-col items-center p-4 justify-between">
       <div className="flex flex-col items-center">
         <div className="rounded-14 w-14 h-14 bg-main-purple flex items-center justify-center text-white font-medium">
           Q
         </div>
         <section className="mt-12 cursor-pointer">
-          {items.map((item) => (
-            <div className="mb-8">{item.icon}</div>
+          {items.map((item, key) => (
+            <div key={key} className="mb-8">
+              {item.icon}
+            </div>
           ))}
         </section>
       </div>

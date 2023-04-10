@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
 import { invoke } from '@tauri-apps/api/tauri'
+import MesssageList from './components/MessageList'
 import Siderbar from './components/Sidebar'
 import './App.css'
 
@@ -14,9 +14,9 @@ function App() {
   }
 
   return (
-    <div className="container flex min-h-screen flex-col">
+    <div className="container flex flex-row">
       <Siderbar />
-     
+      <MesssageList />
     </div>
   )
 }
