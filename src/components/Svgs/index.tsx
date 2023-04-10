@@ -1,43 +1,43 @@
-import BlodAndcircleIcon from './BlodAndcircleIcon'
+import BoldAndCircleIcon from './BoldAndCircleIcon'
 import BoldCallIcon from './BoldCallIcon'
 import BoldMessageIcon from './BoldMessageIcon'
-import BoldMorecircleIcon from './BoldMorecircleIcon'
+import BoldMoreCircleIcon from './BoldMoreCircleIcon'
 import BoldSendIcon from './BoldSendIcon'
-import LinearArrowdownIcon from './LinearArrowdownIcon'
+import LinearArrowDownIcon from './LinearArrowDownIcon'
 import LinearCalendarIcon from './LinearCalendarIcon'
 import LinearChatIcon from './LinearChatIcon'
-import LinearClipboardtextIcon from './LinearClipboardtextIcon'
-import LinearDocumentcodeIcon from './LinearDocumentcodeIcon'
-import LinearDocumentdownloadIcon from './LinearDocumentdownloadIcon'
-import LinearDocumenttextIcon from './LinearDocumenttextIcon'
+import LinearClipboardTextIcon from './LinearClipboardTextIcon'
+import LinearDocumentCodeIcon from './LinearDocumentCodeIcon'
+import LinearDocumentDownloadIcon from './LinearDocumentDownloadIcon'
+import LinearDocumentTextIcon from './LinearDocumentTextIcon'
 import LinearGalleryIcon from './LinearGalleryIcon'
 import LinearHomeIcon from './LinearHomeIcon'
 import LinearMessageIcon from './LinearMessageIcon'
 import LinearPaperclipIcon from './LinearPaperclipIcon'
-import LinearReceivesquareIcon from './LinearReceivesquareIcon'
-import LinearSearchnormalIcon from './LinearSearchnormalIcon'
+import LinearReceiveSquareIcon from './LinearReceiveSquareIcon'
+import LinearSearchNormalIcon from './LinearSearchNormalIcon'
 import LinearSendIcon from './LinearSendIcon'
 import LinearSettingIcon from './LinearSettingIcon'
 
 export {
-  BlodAndcircleIcon,
+  BoldAndCircleIcon,
   BoldCallIcon,
   BoldMessageIcon,
-  BoldMorecircleIcon,
+  BoldMoreCircleIcon,
   BoldSendIcon,
-  LinearArrowdownIcon,
+  LinearArrowDownIcon,
   LinearCalendarIcon,
   LinearChatIcon,
-  LinearClipboardtextIcon,
-  LinearDocumentcodeIcon,
-  LinearDocumentdownloadIcon,
-  LinearDocumenttextIcon,
+  LinearClipboardTextIcon,
+  LinearDocumentCodeIcon,
+  LinearDocumentDownloadIcon,
+  LinearDocumentTextIcon,
   LinearGalleryIcon,
   LinearHomeIcon,
   LinearMessageIcon,
   LinearPaperclipIcon,
-  LinearReceivesquareIcon,
-  LinearSearchnormalIcon,
+  LinearReceiveSquareIcon,
+  LinearSearchNormalIcon,
   LinearSendIcon,
   LinearSettingIcon
 }

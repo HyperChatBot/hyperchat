@@ -1,7 +1,9 @@
 import { FC } from 'react'
+import { SvgIconProps } from 'src/types/base'
 
-const LinearReceivesquareIcon: FC = () => (
+const LinearReceiveSquareIcon: FC<SvgIconProps> = ({ className }) => (
   <svg
+    className={className}
     width="24"
     height="24"
     viewBox="0 0 24 24"
@@ -25,4 +27,4 @@ const LinearReceivesquareIcon: FC = () => (
   </svg>
 )
 
-export default LinearReceivesquareIcon
+export default LinearReceiveSquareIcon

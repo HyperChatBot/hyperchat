@@ -1,7 +1,9 @@
 import { FC } from 'react'
+import { SvgIconProps } from 'src/types/base'
 
-const LinearDocumentcodeIcon: FC = () => (
+const LinearDocumentCodeIcon: FC<SvgIconProps> = ({ className }) => (
   <svg
+    className={className}
     width="24"
     height="24"
     viewBox="0 0 24 24"
@@ -27,4 +29,4 @@ const LinearDocumentcodeIcon: FC = () => (
   </svg>
 )
 
-export default LinearDocumentcodeIcon
+export default LinearDocumentCodeIcon

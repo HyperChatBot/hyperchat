@@ -1,7 +1,9 @@
 import { FC } from 'react'
+import { SvgIconProps } from 'src/types/base'
 
-const LinearSearchnormalIcon: FC = () => (
+const LinearSearchNormalIcon: FC<SvgIconProps> = ({ className }) => (
   <svg
+    className={className}
     width="24"
     height="24"
     viewBox="0 0 24 24"
@@ -18,4 +20,4 @@ const LinearSearchnormalIcon: FC = () => (
   </svg>
 )
 
-export default LinearSearchnormalIcon
+export default LinearSearchNormalIcon

@@ -1,7 +1,9 @@
 import { FC } from 'react'
+import { SvgIconProps } from 'src/types/base'
 
-const BoldMorecircleIcon: FC = () => (
+const LinearArrowDownIcon: FC<SvgIconProps> = ({ className }) => (
   <svg
+    className={className}
     width="24"
     height="24"
     viewBox="0 0 24 24"
@@ -15,4 +17,4 @@ const BoldMorecircleIcon: FC = () => (
   </svg>
 )
 
-export default BoldMorecircleIcon
+export default LinearArrowDownIcon
