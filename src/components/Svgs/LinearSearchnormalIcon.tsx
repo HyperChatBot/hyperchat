@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-const LinearSearchnormal1Icon: FC = () => (
+const LinearSearchnormalIcon: FC = () => (
   <svg
     width="24"
     height="24"
@@ -18,4 +18,4 @@ const LinearSearchnormal1Icon: FC = () => (
   </svg>
 )
 
-export default LinearSearchnormal1Icon
+export default LinearSearchnormalIcon
