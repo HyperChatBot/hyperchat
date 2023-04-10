@@ -1,0 +1,23 @@
+[package]
+name = "chat_chat_service"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix-web = "4"
+env_logger = "0.10.0"
+json = "0.12"
+log = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+actix-cors = "0.6.2"
+futures = "0.3.27"
+dotenvy = "0.15.7"
+tokio = "1.27.0"
+actix-web-lab = "0.19.1"
+rs_openai = "0.3.4"
+
+# cargo install cargo-watch
+# cargo watch -x run
