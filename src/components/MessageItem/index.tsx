@@ -16,13 +16,15 @@ const MesssageItem: FC<Props> = ({ active }) => {
       <img src={Avatar} alt="avatar" className="mr-4 h-12 w-12 rounded-xl" />
       <div className="flex w-full flex-col">
         <p className="flex justify-between">
-          <span className="text-sm font-semibold">Elmer Laverty</span>
-          <span className="text-xs font-semibold text-black text-opacity-30">
+          <span className="text-sm font-semibold dark:text-dark-text">
+            Elmer Laverty
+          </span>
+          <span className="text-xs font-semibold text-black text-opacity-30 dark:text-dark-text-sub">
             12m
           </span>
         </p>
 
-        <p className="text-xs font-semibold text-black text-opacity-40">
+        <p className="text-xs font-semibold text-black text-opacity-40 dark:text-dark-text-sub">
           Haha oh man 🔥
         </p>
       </div>

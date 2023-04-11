@@ -3,6 +3,9 @@ export default {
   darkMode: 'media',
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    screens: {
+      '3xl': '1920px',
+    },
     extend: {
       width: {
         2.5: '0.625rem', // 10px
@@ -18,13 +21,22 @@ export default {
         'main-gray': '#f1f1f1',
         'default-badge': '#edf2f7',
         'search-input': '#f3f3f3',
-        'status-green': '#68d391'
+        'status-green': '#68d391',
+        'dark-search-input': '#3b3b3b',
+        'dark-main-bg': '#131516',
+        'dark-text': '#e6edf3',
+        'dark-text-sub': '#7d8590',
+        'dark-bubule-assistant-bg': '#202324',
+        'dark-bubule-assistant-text': '#e8e6e3',
+        'dark-search-input-border': '#34383a',
+        'dark-divider-bg': '#30363d'
       },
       borderRadius: {
         14: '0.875rem' // 14px
       },
       boxShadow: {
-        sidebar: '0px 0px 24px rgba(0, 0, 0, 0.08)'
+        sidebar: '0px 0px 24px rgba(0, 0, 0, 0.08)',
+        'dark-sidebar': '0px 0px 24px rgba(0, 0, 0, 0.4)',
       },
       margin: {
         0.5: '0.125rem', // 2px

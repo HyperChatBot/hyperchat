@@ -23,12 +23,12 @@ const ChatBox: FC = () => {
         ))}
       </section>
 
-      <section className="absolute bottom-6 left-6 flex w-[calc(100%_-_3rem)] items-center bg-white pt-6">
+      <section className="absolute bottom-6 left-6 flex w-[calc(100%_-_3rem)] items-center bg-white pt-6 dark:bg-dark-main-bg">
         <LinearPaperclipIcon className="mr-6" />
-        <section className="relative flex w-full border-main-gray">
+        <section className="relative flex w-full ">
           <input
             type="text"
-            className="flex-1 rounded-xl border-2 border-main-gray pb-3.5 pl-5 pr-5 pt-3.5 text-sm text-black text-opacity-40 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600"
+            className="flex-1 rounded-xl border-2 border-main-gray pb-3.5 pl-5 pr-5 pt-3.5 text-sm text-black text-opacity-40 dark:border-dark-search-input-border dark:bg-dark-search-input dark:text-dark-text-sub"
             placeholder="Type a message"
           />
           <BoldSendIcon className="absolute right-5 top-3.5" />

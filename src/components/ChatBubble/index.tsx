@@ -23,8 +23,10 @@ const ChatBubble: FC<Props> = ({ role, avatar, children }) => {
       />
       <section
         className={classNames('rounded-xl pb-2 pl-4 pr-4 pt-2 text-sm', {
-          'bg-main-gray text-black': role === 'assistant',
-          'bg-main-purple text-white': role === 'user'
+          'bg-main-gray text-black  dark:bg-dark-bubule-assistant-bg dark:text-dark-bubule-assistant-text':
+            role === 'assistant',
+          'bg-main-purple text-white dark:text-dark-bubule-assistant-text':
+            role === 'user'
         })}
       >
         {children}
