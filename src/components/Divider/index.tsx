@@ -1,5 +1,5 @@
-import { FC } from 'react'
 import classNames from 'classnames'
+import { FC } from 'react'
 
 interface Props {
   direction?: 'horizontal' | 'vertical'
@@ -11,8 +11,8 @@ const Divider: FC<Props> = ({ direction = 'horizontal', className }) => (
     className={classNames(
       ' bg-black bg-opacity-5',
       {
-        'w-full h-px': direction === 'horizontal',
-        'w-px h-screen': direction === 'vertical'
+        'h-px w-full': direction === 'horizontal',
+        'h-screen w-px': direction === 'vertical'
       },
       className
     )}

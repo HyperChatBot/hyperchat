@@ -1,3 +1,4 @@
+import BoldAddIcon from './BoldAddIcon'
 import BoldAndCircleIcon from './BoldAndCircleIcon'
 import BoldCallIcon from './BoldCallIcon'
 import BoldMessageIcon from './BoldMessageIcon'
@@ -18,7 +19,6 @@ import LinearReceiveSquareIcon from './LinearReceiveSquareIcon'
 import LinearSearchNormalIcon from './LinearSearchNormalIcon'
 import LinearSendIcon from './LinearSendIcon'
 import LinearSettingIcon from './LinearSettingIcon'
-import BoldAddIcon from './BoldAddIcon'
 
 export {
   BoldAndCircleIcon,

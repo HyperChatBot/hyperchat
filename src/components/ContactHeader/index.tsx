@@ -3,20 +3,20 @@ import Avatar from '../Avatar'
 import { BoldCallIcon } from '../Icons'
 
 const ContractHeader: FC = () => (
-  <section className="pt-5 pr-6 pb-5 pl-6 flex items-start w-160 justify-between">
+  <section className="flex w-160 items-start justify-between pb-5 pl-6 pr-6 pt-5">
     <section className="flex items-center">
       <Avatar size="xs" />
       <section className="ml-4 flex flex-col">
-        <p className="text-black font-semibold text-xl">Florencio Dorrance</p>
+        <p className="text-xl font-semibold text-black">Florencio Dorrance</p>
         <p className="flex items-center">
-          <span className="w-2.5 h-2.5 bg-status-green rounded-full mr-2" />
-          <span className="text-black text-opacity-60 font-semibold  text-xs">
+          <span className="mr-2 h-2.5 w-2.5 rounded-full bg-status-green" />
+          <span className="text-xs font-semibold text-black  text-opacity-60">
             Online
           </span>
         </p>
       </section>
     </section>
-    <section className="flex bg-main-purple bg-opacity-10 text-main-purple pt-2.5 pb-2.5 pr-4 pl-4 rounded-lg">
+    <section className="flex rounded-lg bg-main-purple bg-opacity-10 pb-2.5 pl-4 pr-4 pt-2.5 text-main-purple">
       <BoldCallIcon className="mr-2" />
       <span>Call</span>
     </section>

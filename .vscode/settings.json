@@ -1,12 +1,12 @@
 {
-	"files.associations": {
-		"*.css": "tailwindcss"
-	},
-	"editor.quickSuggestions": {
-		"strings": true
-	},
-	"tailwindCSS.includeLanguages": {
-		"html": "html",
-		"javascript": "javascript"
-	}
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "tailwindCSS.includeLanguages": {
+    "html": "html",
+    "javascript": "javascript"
+  }
 }

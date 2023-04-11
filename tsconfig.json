@@ -2,11 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": false,
@@ -21,16 +17,10 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "src/*": [
-        "src/*"
-      ]
-    },
+      "src/*": ["src/*"]
+    }
   },
-  "include": [
-    "src",
-    "tailwind.config.js",
-    "postcss.config.js"
-  ],
+  "include": ["src", "tailwind.config.js", "postcss.config.js"],
   "references": [
     {
       "path": "./tsconfig.node.json"

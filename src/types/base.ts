@@ -1,3 +1,3 @@
 export interface SvgIconProps {
-    className?: string
+  className?: string
 }

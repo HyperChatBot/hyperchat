@@ -1,5 +1,5 @@
-import { FC } from 'react'
 import classNames from 'classnames'
+import { FC } from 'react'
 import Img from 'src/assets/avatar_mock.png'
 
 interface Props {
@@ -12,9 +12,9 @@ const Avatar: FC<Props> = ({ size, className }) => (
     src={Img}
     alt="avatar"
     className={classNames(
-      'w-12 h-12 rounded-xl',
+      'h-12 w-12 rounded-xl',
       {
-        'w-10 h-10': size === 'xs'
+        'h-10 w-10': size === 'xs'
       },
       className
     )}

@@ -1,8 +1,8 @@
 import { FC, Fragment } from 'react'
-import Divider from '../Divider'
-import ContractHeader from '../ContactHeader'
 import ChatBubble from '../ChatBubble'
-import { LinearPaperclipIcon, BoldSendIcon } from '../Icons'
+import ContractHeader from '../ContactHeader'
+import Divider from '../Divider'
+import { BoldSendIcon, LinearPaperclipIcon } from '../Icons'
 
 const ChatBox: FC = () => {
   return (
@@ -10,7 +10,7 @@ const ChatBox: FC = () => {
       <ContractHeader />
       <Divider />
 
-      <section className="p-6 h-[calc(100vh_-_10rem)] overflow-y-scroll no-scrollbar relative">
+      <section className="no-scrollbar relative h-[calc(100vh_-_10rem)] overflow-y-scroll p-6">
         {new Array(10).fill(0).map((_, k) => (
           <Fragment key={k}>
             <ChatBubble role="assistant" avatar="">
@@ -23,12 +23,12 @@ const ChatBox: FC = () => {
         ))}
       </section>
 
-      <section className="flex items-center w-[calc(100%_-_3rem)] absolute left-6 bottom-6 bg-white pt-6">
+      <section className="absolute bottom-6 left-6 flex w-[calc(100%_-_3rem)] items-center bg-white pt-6">
         <LinearPaperclipIcon className="mr-6" />
-        <section className="flex w-full border-main-gray relative">
+        <section className="relative flex w-full border-main-gray">
           <input
             type="text"
-            className="text-black text-opacity-40 text-sm pt-3.5 pr-5 pb-3.5 pl-5 flex-1 rounded-xl border-main-gray border-2 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+            className="flex-1 rounded-xl border-2 border-main-gray pb-3.5 pl-5 pr-5 pt-3.5 text-sm text-black text-opacity-40 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600"
             placeholder="Type a message"
           />
           <BoldSendIcon className="absolute right-5 top-3.5" />

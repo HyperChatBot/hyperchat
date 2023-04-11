@@ -1,5 +1,5 @@
-import { FC, ReactNode } from 'react'
 import classNames from 'classnames'
+import { FC, ReactNode } from 'react'
 import Avatar from '../Avatar'
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 const ChatBubble: FC<Props> = ({ role, avatar, children }) => {
   return (
     <section
-      className={classNames('flex items-start mb-8', {
+      className={classNames('mb-8 flex items-start', {
         'flex-row-reverse': role === 'user'
       })}
     >
@@ -22,7 +22,7 @@ const ChatBubble: FC<Props> = ({ role, avatar, children }) => {
         })}
       />
       <section
-        className={classNames('rounded-xl pt-2 pr-4 pb-2 pl-4 text-sm', {
+        className={classNames('rounded-xl pb-2 pl-4 pr-4 pt-2 text-sm', {
           'bg-main-gray text-black': role === 'assistant',
           'bg-main-purple text-white': role === 'user'
         })}

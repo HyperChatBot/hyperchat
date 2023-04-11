@@ -1,10 +1,10 @@
-import { useState } from 'react'
 import { invoke } from '@tauri-apps/api/tauri'
-import MesssageList from './components/MessageList'
-import Siderbar from './components/Sidebar'
+import { useState } from 'react'
+import './App.css'
 import ChatBox from './components/ChatBox'
 import Divider from './components/Divider'
-import './App.css'
+import MesssageList from './components/MessageList'
+import Siderbar from './components/Sidebar'
 
 function App() {
   const [greetMsg, setGreetMsg] = useState('')

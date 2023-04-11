@@ -1,10 +1,10 @@
 import { FC } from 'react'
 import {
-  LinearHomeIcon,
   BoldMessageIcon,
-  LinearChatIcon,
-  LinearSearchNormalIcon,
   LinearCalendarIcon,
+  LinearChatIcon,
+  LinearHomeIcon,
+  LinearSearchNormalIcon,
   LinearSettingIcon
 } from 'src/components/Icons'
 
@@ -28,9 +28,9 @@ const items = [
 
 const Siderbar: FC = () => {
   return (
-    <section className="w-22 h-screen shadow-sidebar flex flex-col items-center p-4 justify-between">
+    <section className="flex h-screen w-22 flex-col items-center justify-between p-4 shadow-sidebar">
       <div className="flex flex-col items-center">
-        <div className="rounded-14 w-14 h-14 bg-main-purple flex items-center justify-center text-white font-medium">
+        <div className="flex h-14 w-14 items-center justify-center rounded-14 bg-main-purple font-medium text-white">
           Q
         </div>
         <section className="mt-12 cursor-pointer">

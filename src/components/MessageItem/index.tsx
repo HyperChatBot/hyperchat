@@ -1,5 +1,5 @@
-import { FC } from 'react'
 import classNames from 'classnames'
+import { FC } from 'react'
 import Avatar from 'src/assets/avatar_mock.png'
 
 interface Props {
@@ -9,12 +9,12 @@ interface Props {
 const MesssageItem: FC<Props> = ({ active }) => {
   return (
     <div
-      className={classNames('flex w-80 p-3 mb-2 rounded-2xl', {
+      className={classNames('mb-2 flex w-80 rounded-2xl p-3', {
         'bg-main-purple bg-opacity-5': active
       })}
     >
-      <img src={Avatar} alt="avatar" className="w-12 h-12 rounded-xl mr-4" />
-      <div className="w-full flex flex-col">
+      <img src={Avatar} alt="avatar" className="mr-4 h-12 w-12 rounded-xl" />
+      <div className="flex w-full flex-col">
         <p className="flex justify-between">
           <span className="text-sm font-semibold">Elmer Laverty</span>
           <span className="text-xs font-semibold text-black text-opacity-30">
@@ -22,7 +22,9 @@ const MesssageItem: FC<Props> = ({ active }) => {
           </span>
         </p>
 
-        <p className="text-xs font-semibold text-black text-opacity-40">Haha oh man 🔥</p>
+        <p className="text-xs font-semibold text-black text-opacity-40">
+          Haha oh man 🔥
+        </p>
       </div>
     </div>
   )
