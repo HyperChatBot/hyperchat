@@ -18,6 +18,7 @@ import LinearReceiveSquareIcon from './LinearReceiveSquareIcon'
 import LinearSearchNormalIcon from './LinearSearchNormalIcon'
 import LinearSendIcon from './LinearSendIcon'
 import LinearSettingIcon from './LinearSettingIcon'
+import BoldAddIcon from './BoldAddIcon'
 
 export {
   BoldAndCircleIcon,
@@ -39,5 +40,6 @@ export {
   LinearReceiveSquareIcon,
   LinearSearchNormalIcon,
   LinearSendIcon,
-  LinearSettingIcon
+  LinearSettingIcon,
+  BoldAddIcon
 }
