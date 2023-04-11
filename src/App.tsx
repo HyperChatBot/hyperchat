@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { invoke } from '@tauri-apps/api/tauri'
 import MesssageList from './components/MessageList'
 import Siderbar from './components/Sidebar'
+import ChatBox from './components/ChatBox'
+import Divider from './components/Divider'
 import './App.css'
 
 function App() {
@@ -17,6 +19,8 @@ function App() {
     <div className="container flex flex-row">
       <Siderbar />
       <MesssageList />
+      <Divider direction="vertical" />
+      <ChatBox />
     </div>
   )
 }

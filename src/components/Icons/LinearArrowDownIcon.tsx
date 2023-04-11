@@ -13,10 +13,10 @@ const LinearArrowdownIcon: FC<SvgIconProps> = ({ className }) => (
     <path
       d="M13.28 5.96667L8.93333 10.3133C8.42 10.8267 7.58 10.8267 7.06667 10.3133L2.72 5.96667"
       stroke="black"
-      stroke-width="1.5"
-      stroke-miterlimit="10"
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      strokeWidth="1.5"
+      strokeMiterlimit="10"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     />
   </svg>
 )

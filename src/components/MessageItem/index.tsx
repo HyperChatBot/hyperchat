@@ -22,7 +22,7 @@ const MesssageItem: FC<Props> = ({ active }) => {
           </span>
         </p>
 
-        <p className="text-xs font-semibold">Haha oh man 🔥</p>
+        <p className="text-xs font-semibold text-black text-opacity-40">Haha oh man 🔥</p>
       </div>
     </div>
   )
