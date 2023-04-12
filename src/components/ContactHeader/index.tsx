@@ -3,7 +3,7 @@ import Avatar from '../Avatar'
 import { BoldCallIcon } from '../Icons'
 
 const ContractHeader: FC = () => (
-  <section className="flex w-160 items-start justify-between pb-5 pl-6 pr-6 pt-5">
+  <section className="flex items-start justify-between pb-5 pl-6 pr-6 pt-5">
     <section className="flex items-center">
       <Avatar size="xs" />
       <section className="ml-4 flex flex-col">

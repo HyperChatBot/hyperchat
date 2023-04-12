@@ -21,7 +21,7 @@ function App() {
       <MesssageList />
       <Divider direction="vertical" />
       <ChatBox />
-      <Divider direction="vertical" />
+      {/* <Divider direction="vertical" /> */}
     </div>
   )
 }
