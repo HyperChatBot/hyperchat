@@ -23,7 +23,7 @@ const MesssageList: FC = () => {
 
       <input
         type="text"
-        className="mb-3 ml-6 mr-6 mt-3 w-75 rounded-xl bg-search-input pb-3 pl-2.5 pr-2.5 pt-3 text-sm text-black text-opacity-40  dark:bg-dark-search-input"
+        className="mb-3 ml-6 mr-6 mt-3 w-75 rounded-xl bg-search-input pb-3 pl-2.5 pr-2.5 pt-3 text-sm focus:border-transparent text-black text-opacity-40  dark:bg-dark-search-input"
       />
 
       <section className="no-scrollbar ml-4 mr-4 h-[calc(100vh_-_10rem)] overflow-y-scroll">
