@@ -16,7 +16,7 @@ function App() {
   }
 
   return (
-    <div className="container flex flex-row dark:bg-dark-main-bg w-screen">
+    <div className="container flex flex-row dark:bg-dark-main-bg w-screen overflow-x-hidden">
       <Siderbar />
       <MesssageList />
       <Divider direction="vertical" />

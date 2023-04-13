@@ -1,6 +1,6 @@
 import classNames from 'classnames'
-import { clone } from 'ramda'
-import { FC, useState } from 'react'
+import { produce } from 'immer'
+import { FC, Fragment, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark as mdCodeTheme } from 'react-syntax-highlighter/dist/esm/styles/prism'
@@ -23,23 +23,19 @@ interface Message extends Omit<MessageData, 'answer'> {
   answers: string[]
 }
 
-interface MessageMapper {
-  [id: string]: Message
-}
-
 const ChatBox: FC = () => {
-  const [messages, setMessages] = useState<MessageMapper | null>(null)
+  const [messages, setMessages] = useState<Message[]>([])
   const [question, setQuestion] = useState('')
 
   const onSearch = () => {
-    setMessages({
+    setMessages([
       ...messages,
-      [EMPTY_MESSAGE_ID]: {
-        id: '',
+      {
+        id: EMPTY_MESSAGE_ID,
         question: question,
         answers: []
       }
-    })
+    ])
 
     const evtSource = new EventSource(
       'http://127.0.0.1:10086' +
@@ -63,38 +59,23 @@ const ChatBox: FC = () => {
     evtSource.addEventListener(
       'chat/completions',
       (e: MessageEvent<string>) => {
-        const { id, question, answer } = JSON.parse(e.data) as MessageData
+        const { id, answer } = JSON.parse(e.data) as MessageData
 
         setMessages((prevState) => {
-          if (prevState) {
-            const clonedMsg = clone(prevState)
-            const currMsg = clonedMsg[id]
+          const currState = produce(prevState, (draft) => {
+            const last = draft[draft.length - 1]
+            const isFirstChuck = last.id === EMPTY_MESSAGE_ID
 
-            if (currMsg) {
-              currMsg.answers = [...currMsg.answers, answer]
+            if (isFirstChuck) {
+              last.id = id
+              last.answers = [answer]
             } else {
-              clonedMsg[id] = {
-                id,
-                question,
-                answers: [answer]
-              }
+              last.answers.push(answer)
             }
+          })
 
-            return clonedMsg
-          } else {
-            return {
-              [id]: {
-                id,
-                question,
-                answers: [answer]
-              }
-            }
-          }
+          return currState
         })
-
-        if (evtSource.readyState === 2) {
-          evtSource.close()
-        }
       },
       false
     )
@@ -114,21 +95,22 @@ const ChatBox: FC = () => {
       <ContractHeader />
       <Divider />
 
-      <section className="no-scrollbar relative h-[calc(100vh_-_10rem)] overflow-y-scroll p-6">
-        {messages && (
+      <section className="no-scrollbar relative h-[calc(100vh_-_10.25rem)] overflow-y-scroll p-6">
+        {messages.length > 0 && (
           <>
-            {Object.keys(messages).map((id) => (
-              <>
+            {messages.map((message) => (
+              <Fragment key={message.id}>
                 <ChatBubble role="user" avatar="">
-                  {messages[id].question}
+                  {message.question}
                 </ChatBubble>
                 <ChatBubble role="assistant" avatar={''}>
-                  {id === EMPTY_MESSAGE_ID ? (
+                  {message.id === EMPTY_MESSAGE_ID ? (
                     <MessageSpinner />
                   ) : (
                     <ReactMarkdown
                       rehypePlugins={[rehypeKatex]}
                       remarkPlugins={[remarkGfm]}
+                      className=""
                       components={{
                         code({ inline, className, children, ...props }) {
                           const match = /language-(\w+)/.exec(className || '')
@@ -136,7 +118,7 @@ const ChatBox: FC = () => {
                             <SyntaxHighlighter
                               // @ts-ignore
                               style={mdCodeTheme}
-                              language={match[1]}
+                              language={match[1] ?? 'js'}
                               PreTag="div"
                               {...props}
                             >
@@ -154,7 +136,7 @@ const ChatBox: FC = () => {
                         p({ className, children, ...props }) {
                           return (
                             <p
-                              className={classNames('mb-4', className)}
+                              className={classNames('mb-2', className)}
                               {...props}
                             >
                               {children}
@@ -164,7 +146,10 @@ const ChatBox: FC = () => {
                         pre({ className, children, ...props }) {
                           return (
                             <pre
-                              className={classNames('mb-4 text-sm', className)}
+                              className={classNames(
+                                'mb-2 overflow-x-scroll text-sm',
+                                className
+                              )}
                               {...props}
                             >
                               {children}
@@ -175,7 +160,7 @@ const ChatBox: FC = () => {
                           return (
                             <ol
                               className={classNames(
-                                'mb-4 list-disc pl-4',
+                                'mb-2 list-disc pl-4',
                                 className
                               )}
                               {...props}
@@ -188,7 +173,7 @@ const ChatBox: FC = () => {
                           return (
                             <ul
                               className={classNames(
-                                'mb-4 list-decimal pl-4',
+                                'mb-2 list-decimal pl-4',
                                 className
                               )}
                               {...props}
@@ -200,7 +185,7 @@ const ChatBox: FC = () => {
                         li({ className, children, ...props }) {
                           return (
                             <li
-                              className={classNames('mb-4 ', className)}
+                              className={classNames('mb-2', className)}
                               {...props}
                             >
                               {children}
@@ -209,11 +194,11 @@ const ChatBox: FC = () => {
                         }
                       }}
                     >
-                      {messages[id].answers.join('')}
+                      {message.answers.join('')}
                     </ReactMarkdown>
                   )}
                 </ChatBubble>
-              </>
+              </Fragment>
             ))}
           </>
         )}

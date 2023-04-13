@@ -11,7 +11,7 @@ interface Props {
 const ChatBubble: FC<Props> = ({ role, avatar, children }) => {
   return (
     <section
-      className={classNames('mb-8 flex items-start', {
+      className={classNames('mb-8 flex w-full items-start', {
         'flex-row-reverse': role === 'user'
       })}
     >
@@ -22,10 +22,10 @@ const ChatBubble: FC<Props> = ({ role, avatar, children }) => {
         })}
       />
       <section
-        className={classNames('rounded-xl pb-2 pl-4 pr-4 pt-2 text-sm', {
+        className={classNames('max-w-160 rounded-xl pl-4 pr-4 pt-2 text-sm', {
           'bg-main-gray text-black  dark:bg-dark-bubule-assistant-bg dark:text-dark-bubule-assistant-text':
             role === 'assistant',
-          'bg-main-purple text-white dark:text-dark-bubule-assistant-text':
+          'bg-main-purple pb-2 text-white dark:text-dark-bubule-assistant-text':
             role === 'user'
         })}
       >

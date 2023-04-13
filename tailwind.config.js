@@ -4,14 +4,16 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     screens: {
-      '3xl': '1920px',
+      '3xl': '1920px'
     },
     extend: {
       width: {
         2.5: '0.625rem', // 10px
         22: '5.5rem', // 88px
-        75: '18.75rem', // 300px
-        160: '40rem' // 64px
+        75: '18.75rem' // 300px
+      },
+      maxWidth: {
+        160: '40rem' // 640px
       },
       height: {
         2.5: '0.625rem' // 10px
@@ -36,7 +38,7 @@ export default {
       },
       boxShadow: {
         sidebar: '0px 0px 24px rgba(0, 0, 0, 0.08)',
-        'dark-sidebar': '0px 0px 24px rgba(0, 0, 0, 0.4)',
+        'dark-sidebar': '0px 0px 24px rgba(0, 0, 0, 0.4)'
       },
       margin: {
         0.5: '0.125rem', // 2px
