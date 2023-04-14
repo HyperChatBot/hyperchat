@@ -4,9 +4,9 @@ import {
   LinearCalendarIcon,
   LinearChatIcon,
   LinearHomeIcon,
-  LinearSearchNormalIcon,
-  LinearSettingIcon
-} from 'src/components/Icons'
+  LinearSearchNormalIcon
+} from '../Icons'
+import Settings from '../Settings'
 
 const items = [
   {
@@ -33,7 +33,7 @@ const Siderbar: FC = () => {
         <div className="flex h-14 w-14 items-center justify-center rounded-14 bg-main-purple font-medium text-white dark:text-dark-text">
           Q
         </div>
-        <section className="mt-12 cursor-pointer">
+        <section className="mt-12">
           {items.map((item, key) => (
             <div key={key} className="mb-8 ">
               {item.icon}
@@ -41,7 +41,7 @@ const Siderbar: FC = () => {
           ))}
         </section>
       </div>
-      <LinearSettingIcon />
+      <Settings />
     </section>
   )
 }

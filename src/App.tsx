@@ -1,27 +1,33 @@
-import { invoke } from '@tauri-apps/api/tauri'
-import { useState } from 'react'
+import { useEffect } from 'react'
+import { useSetRecoilState } from 'recoil'
+import ChatBox from 'src/components/ChatBox'
+import Divider from 'src/components/Divider'
+import MesssageList from 'src/components/MessageList'
+import Siderbar from 'src/components/Sidebar'
+import { useCollection } from 'src/hooks'
+import { ChatDocument } from 'src/schemas/chatSchema'
+import { chatStore } from 'src/stores'
 import './App.css'
-import ChatBox from './components/ChatBox'
-import Divider from './components/Divider'
-import MesssageList from './components/MessageList'
-import Siderbar from './components/Sidebar'
 
-function App() {
-  const [greetMsg, setGreetMsg] = useState('')
-  const [name, setName] = useState('')
+const App = () => {
+  const chatCollection = useCollection('chat')
+  const setChatSate = useSetRecoilState(chatStore.chatState)
 
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke('greet', { name }))
+  const getChatData = async () => {
+    const res: ChatDocument[] = await chatCollection.find().exec()
+    setChatSate(res.map((data) => data._data))
   }
 
+  useEffect(() => {
+    getChatData()
+  }, [])
+
   return (
-    <div className="container flex flex-row dark:bg-dark-main-bg w-screen overflow-x-hidden">
+    <div className="container flex w-screen flex-row overflow-x-hidden dark:bg-dark-main-bg">
       <Siderbar />
       <MesssageList />
       <Divider direction="vertical" />
       <ChatBox />
-      {/* <Divider direction="vertical" /> */}
     </div>
   )
 }

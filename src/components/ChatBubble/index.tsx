@@ -1,5 +1,6 @@
 import classNames from 'classnames'
 import { FC, ReactNode } from 'react'
+import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
 import Avatar from '../Avatar'
 
 interface Props {
@@ -16,6 +17,7 @@ const ChatBubble: FC<Props> = ({ role, avatar, children }) => {
       })}
     >
       <Avatar
+        src={ChatGPTLogoImg}
         className={classNames({
           'mr-4': role === 'assistant',
           'ml-4': role === 'user'

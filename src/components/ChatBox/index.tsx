@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { produce } from 'immer'
-import { FC, Fragment, useState } from 'react'
+import { FC, Fragment, useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark as mdCodeTheme } from 'react-syntax-highlighter/dist/esm/styles/prism'
@@ -24,10 +24,26 @@ interface Message extends Omit<MessageData, 'answer'> {
 }
 
 const ChatBox: FC = () => {
+  const chatBoxRef = useRef<HTMLDivElement>(null)
   const [messages, setMessages] = useState<Message[]>([])
   const [question, setQuestion] = useState('')
 
+  const scrollToBottom = () => {
+    if (!chatBoxRef.current) return
+
+    const $el = chatBoxRef.current
+
+    if ($el.scrollHeight > $el.scrollTop + $el.clientHeight) {
+      $el.scrollTo({
+        top: $el.scrollHeight,
+        left: 0
+      })
+    }
+  }
+
   const onSearch = () => {
+    if (question.trim().length === 0) return
+
     setMessages([
       ...messages,
       {
@@ -76,6 +92,9 @@ const ChatBox: FC = () => {
 
           return currState
         })
+
+        // TODO: To scroll bottom when fetch is finished.
+        scrollToBottom()
       },
       false
     )
@@ -90,12 +109,29 @@ const ChatBox: FC = () => {
     )
   }
 
+  const onEnterPress = (e: globalThis.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      onSearch()
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('keyup', onEnterPress)
+
+    return () => {
+      document.removeEventListener('keyup', onEnterPress)
+    }
+  }, [])
+
   return (
     <section className="relative flex-1">
       <ContractHeader />
       <Divider />
 
-      <section className="no-scrollbar relative h-[calc(100vh_-_10.25rem)] overflow-y-scroll p-6">
+      <section
+        className="no-scrollbar relative h-[calc(100vh_-_10.25rem)] overflow-y-scroll p-6"
+        ref={chatBoxRef}
+      >
         {messages.length > 0 && (
           <>
             {messages.map((message) => (
@@ -206,7 +242,7 @@ const ChatBox: FC = () => {
 
       <section className="absolute bottom-6 left-6 flex w-[calc(100%_-_3rem)] items-center bg-white pt-6 dark:bg-dark-main-bg">
         <LinearPaperclipIcon className="mr-6" />
-        <section className="relative flex w-full ">
+        <section className="relative flex w-full">
           <input
             value={question}
             type="text"
@@ -216,11 +252,14 @@ const ChatBox: FC = () => {
           />
           <div onClick={onSearch}>
             <BoldSendIcon
-              className="absolute right-5 top-3.5 cursor-pointer"
-              pathClassName={classNames({
-                'text-main-purple dark:text-main-purple transition duration-250 ease-in-out':
-                  question.trim().length > 0
-              })}
+              className="absolute right-5 top-3.5"
+              pathClassName={classNames(
+                'text-black text-opacity-30 fill-current transition duration-250 ease-in-out',
+                {
+                  'text-main-purple dark:text-main-purple text-opacity-100 transition duration-250 ease-in-out':
+                    question.trim().length > 0
+                }
+              )}
             />
           </div>
         </section>

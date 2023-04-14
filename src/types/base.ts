@@ -1,12 +1,13 @@
 export interface SvgIconProps {
   className?: string
   pathClassName?: string
+  onClick?: () => void
 }
 
 export interface OpenAIErrorDetail {
-  message: string;
-  type: string;
-  code: number;
+  message: string
+  type: string
+  code: number
   param: string
 }
 
