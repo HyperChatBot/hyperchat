@@ -10,6 +10,7 @@ import MesssageItem from '../MessageItem'
 
 const MesssageList: FC = () => {
   const [chatState, setChatSate] = useRecoilState(chatStore.chatState)
+  const [currChat, setCurrChat] = useRecoilState(chatStore.currChatState)
   const { insertDocument } = useInsertDocument<ChatDocType>('chat')
 
   const addChat = async () => {
@@ -20,6 +21,10 @@ const MesssageList: FC = () => {
       created_at: +new Date(),
       updated_at: +new Date()
     })
+  }
+
+  const switchChat = (id: string) => {
+    setCurrChat(id)
   }
 
   return (
@@ -46,7 +51,12 @@ const MesssageList: FC = () => {
 
       <section className="no-scrollbar ml-4 mr-4 h-[calc(100vh_-_9.8125rem)] overflow-y-scroll">
         {chatState?.map((chat, k) => (
-          <MesssageItem key={k} active={k === 1} chat={chat} />
+          <MesssageItem
+            key={chat.chat_id}
+            active={chat.chat_id === currChat}
+            chat={chat}
+            onClick={() => switchChat(chat.chat_id)}
+          />
         ))}
       </section>
     </section>

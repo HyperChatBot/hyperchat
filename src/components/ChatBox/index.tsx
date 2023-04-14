@@ -30,7 +30,6 @@ const ChatBox: FC = () => {
 
   const scrollToBottom = () => {
     if (!chatBoxRef.current) return
-
     const $el = chatBoxRef.current
 
     if ($el.scrollHeight > $el.scrollTop + $el.clientHeight) {
@@ -41,7 +40,7 @@ const ChatBox: FC = () => {
     }
   }
 
-  const onSearch = () => {
+  const unstable_search = async () => {
     if (question.trim().length === 0) return
 
     setMessages([
@@ -53,65 +52,90 @@ const ChatBox: FC = () => {
       }
     ])
 
-    const evtSource = new EventSource(
-      'http://127.0.0.1:10086' +
-        '/create_chat' +
-        `?question=${question}&user_id=${''}`,
+    setQuestion('')
+
+    const completion = await fetch(
+      'https://api.openai.com/v1/chat/completions',
       {
-        withCredentials: true
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          messages: [
+            {
+              role: 'user',
+              content: question
+            }
+          ],
+          model: 'gpt-3.5-turbo',
+          stream: true
+        })
       }
     )
 
-    evtSource.addEventListener(
-      'open',
-      () => {
-        console.warn('已开启')
-      },
-      false
-    )
+    const reader = completion.body?.getReader()
 
-    setQuestion('')
+    if (completion.status !== 200 || !reader) {
+      return 'error'
+    }
 
-    evtSource.addEventListener(
-      'chat/completions',
-      (e: MessageEvent<string>) => {
-        const { id, answer } = JSON.parse(e.data) as MessageData
+    const decoder = new TextDecoder('utf-8')
+    try {
+      const read = async (): Promise<any> => {
+        const { done, value } = await reader.read()
+        if (done) return reader.releaseLock()
 
-        setMessages((prevState) => {
-          const currState = produce(prevState, (draft) => {
-            const last = draft[draft.length - 1]
-            const isFirstChuck = last.id === EMPTY_MESSAGE_ID
+        const chunk = decoder.decode(value, { stream: true })
 
-            if (isFirstChuck) {
-              last.id = id
-              last.answers = [answer]
-            } else {
-              last.answers.push(answer)
+        const jsons = chunk
+          .split('data:')
+          .map((data) => {
+            const trimData = data.trim()
+            if (trimData === '') return undefined
+            if (trimData === '[DONE]') {
+              // TODO: Store to DB
+              return undefined
             }
+            return JSON.parse(data.trim())
           })
+          .filter((data) => data)
 
-          return currState
+        jsons.forEach((json) => {
+          const content = json.choices[0].delta.content
+
+          if (content !== undefined) {
+            setMessages((prevState) => {
+              const currState = produce(prevState, (draft) => {
+                const last = draft[draft.length - 1]
+                const isFirstChuck = last.id === EMPTY_MESSAGE_ID
+
+                if (isFirstChuck) {
+                  last.id = json.id
+                  last.answers = [content]
+                } else {
+                  last.answers.push(content)
+                }
+              })
+
+              return currState
+            })
+          }
         })
+        return read()
+      }
+      await read()
+    } catch (e) {
+      console.error(e)
+    }
 
-        // TODO: To scroll bottom when fetch is finished.
-        scrollToBottom()
-      },
-      false
-    )
-
-    evtSource.addEventListener(
-      'error',
-      (err: Event) => {
-        console.error(err)
-        evtSource.close()
-      },
-      false
-    )
+    reader.releaseLock()
   }
 
   const onEnterPress = (e: globalThis.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      onSearch()
+      unstable_search()
     }
   }
 
@@ -250,7 +274,7 @@ const ChatBox: FC = () => {
             placeholder="Type a message"
             onChange={(e) => setQuestion(e.target.value)}
           />
-          <div onClick={onSearch}>
+          <div onClick={unstable_search}>
             <BoldSendIcon
               className="absolute right-5 top-3.5"
               pathClassName={classNames(

@@ -7,19 +7,21 @@ import { Chat } from 'src/types/chat'
 interface Props {
   active: boolean
   chat: Chat
+  onClick: () => void
 }
 
-const MesssageItem: FC<Props> = ({ active, chat }) => {
+const MesssageItem: FC<Props> = ({ active, chat, onClick }) => {
   const { isSameDay, display } = formatDate(chat.updated_at)
 
   return (
     <div
       className={classNames(
-        'mb-2 flex w-80 cursor-pointer rounded-2xl p-3 hover:bg-main-purple hover:bg-opacity-5 transition ease-linear duration-250',
+        'duration-250 mb-2 flex w-80 cursor-pointer rounded-2xl p-3 transition ease-linear hover:bg-main-purple hover:bg-opacity-5',
         {
           'bg-main-purple bg-opacity-5': active
         }
       )}
+      onClick={onClick}
     >
       <img src={Avatar} alt="avatar" className="mr-4 h-12 w-12 rounded-xl" />
       <div className="flex w-full flex-col">
