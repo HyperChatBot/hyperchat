@@ -12,7 +12,8 @@ export default {
       width: {
         2.5: '0.625rem', // 10px
         22: '5.5rem', // 88px
-        75: '18.75rem' // 300px
+        75: '18.75rem', // 300px
+        87.75: '21.9375rem' // 352px
       },
       maxWidth: {
         160: '40rem' // 640px

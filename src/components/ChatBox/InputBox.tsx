@@ -2,7 +2,7 @@ import classNames from 'classnames'
 import { produce } from 'immer'
 import { FC, useEffect, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { useModifyDocument } from 'src/hooks'
+import { useEnterKey, useModifyDocument } from 'src/hooks'
 import { EMPTY_MESSAGE_ID } from 'src/shared/constants'
 import { chatsState, currChatIdState, currChatState } from 'src/stores/chat'
 import { OpenAIChatResponse } from 'src/types/chat'
@@ -15,14 +15,9 @@ const InputBox: FC = () => {
   const [isStreaming, setIsStreaming] = useState(false)
   const setChats = useSetRecoilState(chatsState)
   const { modifyDocument } = useModifyDocument('chat')
+  useEnterKey(() => createChatCompletion())
 
-  const onEnterPress = (e: globalThis.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      onSearch()
-    }
-  }
-
-  const onSearch = async () => {
+  const createChatCompletion = async () => {
     if (question.trim().length === 0) return
 
     setIsStreaming(true)
@@ -37,7 +32,8 @@ const InputBox: FC = () => {
             message_id: EMPTY_MESSAGE_ID,
             answer: '',
             question,
-            created_at: +new Date()
+            question_created_at: +new Date(),
+            answer_created_at: +new Date()
           })
         }
       })
@@ -63,7 +59,8 @@ const InputBox: FC = () => {
             }
           ],
           model: 'gpt-3.5-turbo',
-          stream: true
+          stream: true,
+          user: currChatId
         })
       }
     )
@@ -89,7 +86,6 @@ const InputBox: FC = () => {
             if (trimData === '') return undefined
             if (trimData === '[DONE]') {
               setIsStreaming(false)
-
               return undefined
             }
             return JSON.parse(data.trim())
@@ -116,6 +112,7 @@ const InputBox: FC = () => {
                   }
 
                   last.answer += token
+                  last.answer_created_at = +new Date()
                 }
               })
 
@@ -148,14 +145,6 @@ const InputBox: FC = () => {
     }
   }, [isStreaming, currChat])
 
-  useEffect(() => {
-    document.addEventListener('keyup', onEnterPress)
-
-    return () => {
-      document.removeEventListener('keyup', onEnterPress)
-    }
-  }, [])
-
   return (
     <section className="absolute bottom-6 left-6 flex w-[calc(100%_-_3rem)] items-center bg-white pt-6 dark:bg-dark-main-bg">
       <LinearPaperclipIcon className="mr-6" />
@@ -167,14 +156,14 @@ const InputBox: FC = () => {
           placeholder="Type a message"
           onChange={(e) => setQuestion(e.target.value)}
         />
-        <div onClick={onSearch}>
+        <div onClick={createChatCompletion}>
           <BoldSendIcon
             className="absolute right-5 top-3.5"
             pathClassName={classNames(
-              'text-black dark:text-white fill-current transition duration-250 ease-in-out',
+              'text-black dark:text-white fill-current',
               {
                 'text-opacity-30': question.trim().length === 0,
-                'text-main-purple dark:text-main-purple transition duration-250 ease-in-out':
+                'text-main-purple dark:text-main-purple':
                   question.trim().length > 0
               }
             )}

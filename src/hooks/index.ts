@@ -1,5 +1,6 @@
+import useCollection from './useCollection'
+import useEnterKey from './useEnterKey'
 import useInsertDocument from './useInsertDocument'
 import useModifyDocument from './useModifyDocument'
-import useCollection from './useCollection'
 
-export { useInsertDocument, useModifyDocument, useCollection }
+export { useInsertDocument, useModifyDocument, useCollection, useEnterKey }

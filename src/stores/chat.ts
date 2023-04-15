@@ -18,5 +18,10 @@ export const currChatState = selector({
     const chats = get(chatsState)
 
     return chats.find((chat) => chat.chat_id === currId)
-  }
+  },
+  // set: ({ get, set }, newValue) =>
+  //   set(chatsState, (prevValue) => {
+  //     const chats = get(chatsState)
+
+  //   })
 })

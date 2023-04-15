@@ -81,7 +81,7 @@ const Settings: FC = () => {
               <Input placeholder="Enter OpenAI Organization ID" />
             </FormControl>
 
-            <Divider className="-ml-4 -mr-4 mb-8 mt-8" />
+            <Divider className="mb-8 mt-8" />
 
             <FormControl className="mb-4">
               <FormLabel>Assistant Avatar</FormLabel>
