@@ -12,7 +12,11 @@ const useInsertDocument = <T>(collectionName: string) => {
   const insertDocument = async (document: T) => {
     setLoading(true)
     try {
-      const res: T = await collection.insert(document)
+      const res: T = await collection.insert({
+        ...document,
+        created_at: +new Date(),
+        updated_at: +new Date()
+      })
     } catch {
     } finally {
       setLoading(false)

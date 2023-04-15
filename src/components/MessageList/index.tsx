@@ -9,22 +9,27 @@ import { BoldAddIcon, LinearArrowDownIcon } from '../Icons'
 import MesssageItem from '../MessageItem'
 
 const MesssageList: FC = () => {
-  const [chatState, setChatSate] = useRecoilState(chatStore.chatState)
-  const [currChat, setCurrChat] = useRecoilState(chatStore.currChatState)
+  const [chats, setChats] = useRecoilState(chatStore.chatsState)
+  const [currChatId, setCurrChatId] = useRecoilState(chatStore.currChatIdState)
   const { insertDocument } = useInsertDocument<ChatDocType>('chat')
 
   const addChat = async () => {
-    insertDocument({
-      chat_id: v4(),
+    const chatId = v4()
+
+    const model = {
+      chat_id: chatId,
       summary: '',
-      messages: [],
-      created_at: +new Date(),
-      updated_at: +new Date()
-    })
+      messages: []
+    }
+
+    setChats([...chats, model])
+    setCurrChatId(chatId)
+
+    insertDocument(model)
   }
 
   const switchChat = (id: string) => {
-    setCurrChat(id)
+    setCurrChatId(id)
   }
 
   return (
@@ -44,16 +49,11 @@ const MesssageList: FC = () => {
 
       <Divider />
 
-      <input
-        type="text"
-        className="mb-3 ml-6 mr-6 mt-3 w-75 rounded-xl bg-search-input pb-3 pl-2.5 pr-2.5 pt-3 text-sm text-black text-opacity-40 focus:border-transparent  dark:bg-dark-search-input"
-      />
-
-      <section className="no-scrollbar ml-4 mr-4 h-[calc(100vh_-_9.8125rem)] overflow-y-scroll">
-        {chatState?.map((chat, k) => (
+      <section className="no-scrollbar m-4 h-[calc(100vh_-_7.5625rem)] overflow-y-scroll">
+        {chats.map((chat) => (
           <MesssageItem
             key={chat.chat_id}
-            active={chat.chat_id === currChat}
+            active={chat.chat_id === currChatId}
             chat={chat}
             onClick={() => switchChat(chat.chat_id)}
           />

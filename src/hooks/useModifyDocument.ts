@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { MangoQuerySelector } from 'rxdb'
 import { db } from 'src/db'
 
-const useUpdateDocument = <T>(collectionName: string) => {
+const useModifyDocument = <T>(collectionName: string) => {
   const [loading, setLoading] = useState(false)
   const collection = db.collections[collectionName]
 
@@ -10,9 +10,9 @@ const useUpdateDocument = <T>(collectionName: string) => {
     throw new Error('')
   }
 
-  const updateDocument = async (
-    selector: MangoQuerySelector<any>,
-    updateFn: (oldData: T) => T
+  const modifyDocument = async (
+    selector: MangoQuerySelector<T>,
+    newData: object
   ) => {
     setLoading(true)
     try {
@@ -23,7 +23,7 @@ const useUpdateDocument = <T>(collectionName: string) => {
         .exec()
 
       if (document) {
-        await document.modify(updateFn)
+        await document.patch({ ...newData, updated_at: +new Date() })
       }
     } catch {
       // TODO:
@@ -34,8 +34,8 @@ const useUpdateDocument = <T>(collectionName: string) => {
 
   return {
     loading,
-    updateDocument
+    modifyDocument
   }
 }
 
-export default useUpdateDocument
+export default useModifyDocument

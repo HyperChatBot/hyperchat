@@ -28,8 +28,8 @@ const MesssageItem: FC<Props> = ({ active, chat, onClick }) => {
         <p className="flex justify-between">
           <span
             className={classNames(
-              'w-36 truncate text-sm font-semibold dark:text-dark-text',
-              { 'w-48': isSameDay }
+              'w-32 truncate text-sm font-semibold dark:text-dark-text',
+              { 'w-44': isSameDay }
             )}
           >
             {chat.chat_id}
@@ -40,8 +40,9 @@ const MesssageItem: FC<Props> = ({ active, chat, onClick }) => {
         </p>
 
         {chat.messages.length > 0 && (
-          <p className="text-xs font-semibold text-black text-opacity-40 dark:text-dark-text-sub">
-            {chat.messages[chat.messages.length - 1].answer}
+          <p className="text-xs font-semibold text-black text-opacity-40 line-clamp-2 dark:text-dark-text-sub">
+            {chat.messages[chat.messages.length - 1].answer ||
+              chat.messages[chat.messages.length - 1].question}
           </p>
         )}
       </div>

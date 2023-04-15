@@ -1,17 +1,22 @@
-import { atom } from 'recoil'
+import { atom, selector } from 'recoil'
 import { Chat } from 'src/types/chat'
 
-export const chatState = atom<Chat[] | null>({
-  key: 'chatState',
-  default: null
+export const chatsState = atom<Chat[]>({
+  key: 'chatsState',
+  default: []
 })
 
-export const chatListState = atom({
-  key: 'chatList',
-  default: null
-})
-
-export const currChatState = atom<string>({
-  key: 'currChatState',
+export const currChatIdState = atom<string>({
+  key: 'currChatIdState',
   default: ''
+})
+
+export const currChatState = selector({
+  key: 'currChatState',
+  get: ({ get }) => {
+    const currId = get(currChatIdState)
+    const chats = get(chatsState)
+
+    return chats.find((chat) => chat.chat_id === currId)
+  }
 })

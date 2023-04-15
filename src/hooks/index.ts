@@ -1,5 +1,5 @@
 import useInsertDocument from './useInsertDocument'
-import useUpdateDocument from './useUpdateDocument'
+import useModifyDocument from './useModifyDocument'
 import useCollection from './useCollection'
 
-export { useInsertDocument, useUpdateDocument, useCollection }
+export { useInsertDocument, useModifyDocument, useCollection }

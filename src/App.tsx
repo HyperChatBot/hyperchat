@@ -6,16 +6,26 @@ import MesssageList from 'src/components/MessageList'
 import Siderbar from 'src/components/Sidebar'
 import { useCollection } from 'src/hooks'
 import { ChatDocument } from 'src/schemas/chatSchema'
-import { chatStore } from 'src/stores'
+import { chatsState, currChatIdState } from 'src/stores/chat'
+import { Chat } from 'src/types/chat'
 import './App.css'
 
 const App = () => {
   const chatCollection = useCollection('chat')
-  const setChatSate = useSetRecoilState(chatStore.chatState)
+  const setChats = useSetRecoilState(chatsState)
+  const setCurrChat = useSetRecoilState(currChatIdState)
 
   const getChatData = async () => {
-    const res: ChatDocument[] = await chatCollection.find().exec()
-    setChatSate(res.map((data) => data._data))
+    const res: ChatDocument[] = await chatCollection
+      .find({
+        sort: [{ updated_at: 'desc' }]
+      })
+      .exec()
+
+      console.log(res.map((data) => data.toJSON()))
+
+    setChats(res.map((data) => data.toJSON()) as Chat[])
+    setCurrChat(res[0]?.chat_id || '')
   }
 
   useEffect(() => {

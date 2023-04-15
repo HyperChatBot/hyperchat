@@ -1,8 +1,10 @@
 import { addRxPlugin, createRxDatabase, RxDatabase, RxJsonSchema } from 'rxdb'
 import { RxDBAttachmentsPlugin } from 'rxdb/plugins/attachments'
+import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder'
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie'
 import { chatSchema, settingsSchema } from 'src/schemas'
 
+addRxPlugin(RxDBQueryBuilderPlugin)
 addRxPlugin(RxDBAttachmentsPlugin)
 
 export let db: RxDatabase

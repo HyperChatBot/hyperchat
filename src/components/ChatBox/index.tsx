@@ -1,32 +1,28 @@
 import classNames from 'classnames'
 import { produce } from 'immer'
 import { FC, Fragment, useEffect, useRef, useState } from 'react'
-import ReactMarkdown from 'react-markdown'
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { oneDark as mdCodeTheme } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import rehypeKatex from 'rehype-katex'
-import remarkGfm from 'remark-gfm'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { useModifyDocument } from 'src/hooks'
+import { ChatDocument } from 'src/schemas/chatSchema'
 import { EMPTY_MESSAGE_ID } from 'src/shared/constants'
+import { chatsState, currChatIdState, currChatState } from 'src/stores/chat'
+import { OpenAIChatResponse } from 'src/types/chat'
 import ChatBubble from '../ChatBubble'
 import ContractHeader from '../ContactHeader'
 import Divider from '../Divider'
 import { BoldSendIcon, LinearPaperclipIcon } from '../Icons'
+import Markdown from '../Markdown'
 import MessageSpinner from '../MessageSpinner'
-
-interface MessageData {
-  id: string
-  question: string
-  answer: string
-}
-
-interface Message extends Omit<MessageData, 'answer'> {
-  answers: string[]
-}
 
 const ChatBox: FC = () => {
   const chatBoxRef = useRef<HTMLDivElement>(null)
-  const [messages, setMessages] = useState<Message[]>([])
+  const currChatId = useRecoilValue(currChatIdState)
+  const currChat = useRecoilValue(currChatState)
+  const [chats, setChats] = useRecoilState(chatsState)
+
+  const [isStreaming, setIsStreaming] = useState(false)
   const [question, setQuestion] = useState('')
+  const { modifyDocument } = useModifyDocument('chat')
 
   const scrollToBottom = () => {
     if (!chatBoxRef.current) return
@@ -43,14 +39,25 @@ const ChatBox: FC = () => {
   const unstable_search = async () => {
     if (question.trim().length === 0) return
 
-    setMessages([
-      ...messages,
-      {
-        id: EMPTY_MESSAGE_ID,
-        question: question,
-        answers: []
-      }
-    ])
+    setIsStreaming(true)
+
+    // Append an empty message object to show loading spin.
+    setChats((prevState) => {
+      const currState = produce(prevState, (draft) => {
+        const currChat = draft.find((chat) => chat.chat_id === currChatId)
+
+        if (currChat) {
+          currChat.messages.push({
+            message_id: EMPTY_MESSAGE_ID,
+            answer: '',
+            question,
+            created_at: +new Date()
+          })
+        }
+      })
+
+      return currState
+    })
 
     setQuestion('')
 
@@ -85,17 +92,18 @@ const ChatBox: FC = () => {
     try {
       const read = async (): Promise<any> => {
         const { done, value } = await reader.read()
+
         if (done) return reader.releaseLock()
 
         const chunk = decoder.decode(value, { stream: true })
-
-        const jsons = chunk
+        const jsons: OpenAIChatResponse[] = chunk
           .split('data:')
           .map((data) => {
             const trimData = data.trim()
             if (trimData === '') return undefined
             if (trimData === '[DONE]') {
-              // TODO: Store to DB
+              setIsStreaming(false)
+
               return undefined
             }
             return JSON.parse(data.trim())
@@ -103,19 +111,25 @@ const ChatBox: FC = () => {
           .filter((data) => data)
 
         jsons.forEach((json) => {
-          const content = json.choices[0].delta.content
+          const token = json.choices[0].delta.content
 
-          if (content !== undefined) {
-            setMessages((prevState) => {
+          if (token !== undefined) {
+            setChats((prevState) => {
               const currState = produce(prevState, (draft) => {
-                const last = draft[draft.length - 1]
-                const isFirstChuck = last.id === EMPTY_MESSAGE_ID
+                const currChat = draft.find(
+                  (chat) => chat.chat_id === currChatId
+                )
 
-                if (isFirstChuck) {
-                  last.id = json.id
-                  last.answers = [content]
-                } else {
-                  last.answers.push(content)
+                if (currChat) {
+                  const messages = currChat.messages
+                  const last = messages[messages.length - 1]
+                  const isFirstChuck = last.message_id === EMPTY_MESSAGE_ID
+
+                  if (isFirstChuck) {
+                    last.message_id = json.id
+                  }
+
+                  last.answer += token
                 }
               })
 
@@ -123,8 +137,10 @@ const ChatBox: FC = () => {
             })
           }
         })
+
         return read()
       }
+
       await read()
     } catch (e) {
       console.error(e)
@@ -138,6 +154,19 @@ const ChatBox: FC = () => {
       unstable_search()
     }
   }
+
+  useEffect(() => {
+    if (!isStreaming && currChat && currChat.messages.length > 0) {
+      modifyDocument(
+        {
+          chat_id: currChatId
+        },
+        {
+          messages: currChat.messages
+        }
+      )
+    }
+  }, [isStreaming, currChat])
 
   useEffect(() => {
     document.addEventListener('keyup', onEnterPress)
@@ -156,106 +185,18 @@ const ChatBox: FC = () => {
         className="no-scrollbar relative h-[calc(100vh_-_10.25rem)] overflow-y-scroll p-6"
         ref={chatBoxRef}
       >
-        {messages.length > 0 && (
+        {currChat && currChat.messages.length > 0 && (
           <>
-            {messages.map((message) => (
-              <Fragment key={message.id}>
+            {currChat.messages.map((message) => (
+              <Fragment key={message.message_id}>
                 <ChatBubble role="user" avatar="">
                   {message.question}
                 </ChatBubble>
                 <ChatBubble role="assistant" avatar={''}>
-                  {message.id === EMPTY_MESSAGE_ID ? (
+                  {message.message_id === EMPTY_MESSAGE_ID ? (
                     <MessageSpinner />
                   ) : (
-                    <ReactMarkdown
-                      rehypePlugins={[rehypeKatex]}
-                      remarkPlugins={[remarkGfm]}
-                      className=""
-                      components={{
-                        code({ inline, className, children, ...props }) {
-                          const match = /language-(\w+)/.exec(className || '')
-                          return !inline && match ? (
-                            <SyntaxHighlighter
-                              // @ts-ignore
-                              style={mdCodeTheme}
-                              language={match[1] ?? 'js'}
-                              PreTag="div"
-                              {...props}
-                            >
-                              {String(children).replace(/\n$/, '')}
-                            </SyntaxHighlighter>
-                          ) : (
-                            <code
-                              className={classNames('font-semibold', className)}
-                              {...props}
-                            >
-                              `{children}`
-                            </code>
-                          )
-                        },
-                        p({ className, children, ...props }) {
-                          return (
-                            <p
-                              className={classNames('mb-2', className)}
-                              {...props}
-                            >
-                              {children}
-                            </p>
-                          )
-                        },
-                        pre({ className, children, ...props }) {
-                          return (
-                            <pre
-                              className={classNames(
-                                'mb-2 overflow-x-scroll text-sm',
-                                className
-                              )}
-                              {...props}
-                            >
-                              {children}
-                            </pre>
-                          )
-                        },
-                        ol({ className, children, ...props }) {
-                          return (
-                            <ol
-                              className={classNames(
-                                'mb-2 list-disc pl-4',
-                                className
-                              )}
-                              {...props}
-                            >
-                              {children}
-                            </ol>
-                          )
-                        },
-                        ul({ className, children, ...props }) {
-                          return (
-                            <ul
-                              className={classNames(
-                                'mb-2 list-decimal pl-4',
-                                className
-                              )}
-                              {...props}
-                            >
-                              {children}
-                            </ul>
-                          )
-                        },
-                        li({ className, children, ...props }) {
-                          return (
-                            <li
-                              className={classNames('mb-2', className)}
-                              {...props}
-                            >
-                              {children}
-                            </li>
-                          )
-                        }
-                      }}
-                    >
-                      {message.answers.join('')}
-                    </ReactMarkdown>
+                    <Markdown content={message.answer} />
                   )}
                 </ChatBubble>
               </Fragment>
@@ -278,9 +219,10 @@ const ChatBox: FC = () => {
             <BoldSendIcon
               className="absolute right-5 top-3.5"
               pathClassName={classNames(
-                'text-black text-opacity-30 fill-current transition duration-250 ease-in-out',
+                'text-black dark:text-white fill-current transition duration-250 ease-in-out',
                 {
-                  'text-main-purple dark:text-main-purple text-opacity-100 transition duration-250 ease-in-out':
+                  'text-opacity-30': question.trim().length === 0,
+                  'text-main-purple dark:text-main-purple transition duration-250 ease-in-out':
                     question.trim().length > 0
                 }
               )}

@@ -1,3 +1,4 @@
+import lineClampPlugin from '@tailwindcss/line-clamp'
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -57,5 +58,5 @@ export default {
       }
     }
   },
-  plugins: []
+  plugins: [lineClampPlugin]
 }

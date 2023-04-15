@@ -15,6 +15,7 @@
     "@chakra-ui/react": "^2.5.5",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@tailwindcss/line-clamp": "^0.4.4",
     "@tauri-apps/api": "^1.2.0",
     "capital-case": "^1.0.4",
     "classnames": "^2.3.2",
