@@ -55,6 +55,9 @@ export default {
       },
       top: {
         3.5: '0.875rem' // 14px
+      },
+      transitionDuration: {
+        250: '250ms'
       }
     }
   },

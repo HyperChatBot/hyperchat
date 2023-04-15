@@ -22,8 +22,6 @@ const App = () => {
       })
       .exec()
 
-      console.log(res.map((data) => data.toJSON()))
-
     setChats(res.map((data) => data.toJSON()) as Chat[])
     setCurrChat(res[0]?.chat_id || '')
   }

@@ -3,7 +3,6 @@ import { FC } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark as mdCodeTheme } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import rehypeKatex from 'rehype-katex'
 import remarkGfm from 'remark-gfm'
 
 interface Props {
@@ -13,18 +12,22 @@ interface Props {
 const Markdown: FC<Props> = ({ content }) => {
   return (
     <ReactMarkdown
-      rehypePlugins={[rehypeKatex]}
       remarkPlugins={[remarkGfm]}
-      className=""
       components={{
         code({ inline, className, children, ...props }) {
+          // @ts-ignore
+          // FIXME: ReactMarkdown sometimes fails to recognize multi-line code blocks,
+          // so temporarily relies on the presence of '\n' in the text to determine them.
+          const isMultiLines = props.node.children[0].value.includes('\n')
           const match = /language-(\w+)/.exec(className || '')
-          return !inline && match ? (
+          return isMultiLines || (!inline && match) ? (
             <SyntaxHighlighter
               // @ts-ignore
               style={mdCodeTheme}
-              language={match[1]}
+              language={match ? match[1] : 'js'}
               PreTag="div"
+              customStyle={{ borderRadius: 0 }}
+              showLineNumbers
               {...props}
             >
               {String(children).replace(/\n$/, '')}
@@ -37,7 +40,7 @@ const Markdown: FC<Props> = ({ content }) => {
         },
         p({ className, children, ...props }) {
           return (
-            <p className={classNames('mb-2', className)} {...props}>
+            <p className={classNames('mb-4 last:mb-2', className)} {...props}>
               {children}
             </p>
           )
@@ -46,7 +49,7 @@ const Markdown: FC<Props> = ({ content }) => {
           return (
             <pre
               className={classNames(
-                'mb-2 overflow-x-scroll text-sm',
+                '-ml-4 -mr-4 mb-4 overflow-x-scroll text-sm',
                 className
               )}
               {...props}
@@ -58,7 +61,7 @@ const Markdown: FC<Props> = ({ content }) => {
         ol({ className, children, ...props }) {
           return (
             <ol
-              className={classNames('mb-2 list-disc pl-4', className)}
+              className={classNames('mb-4 list-disc pl-4', className)}
               {...props}
             >
               {children}
@@ -68,7 +71,7 @@ const Markdown: FC<Props> = ({ content }) => {
         ul({ className, children, ...props }) {
           return (
             <ul
-              className={classNames('mb-2 list-decimal pl-4', className)}
+              className={classNames('mb-4 list-decimal pl-4', className)}
               {...props}
             >
               {children}
@@ -77,7 +80,7 @@ const Markdown: FC<Props> = ({ content }) => {
         },
         li({ className, children, ...props }) {
           return (
-            <li className={classNames('mb-2', className)} {...props}>
+            <li className={classNames('mb-4', className)} {...props}>
               {children}
             </li>
           )
