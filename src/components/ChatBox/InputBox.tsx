@@ -1,11 +1,11 @@
 import classNames from 'classnames'
 import { produce } from 'immer'
-import { FC, useEffect, useState } from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { FC, useState } from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { useEnterKey, useModifyDocument } from 'src/hooks'
 import { EMPTY_MESSAGE_ID } from 'src/shared/constants'
 import { chatsState, currChatIdState, currChatState } from 'src/stores/chat'
-import { OpenAIChatResponse } from 'src/types/chat'
+import { Chat, OpenAIChatResponse } from 'src/types/chat'
 import { BoldSendIcon, LinearPaperclipIcon } from '../Icons'
 
 const InputBox: FC = () => {
@@ -13,7 +13,7 @@ const InputBox: FC = () => {
   const currChatId = useRecoilValue(currChatIdState)
   const currChat = useRecoilValue(currChatState)
   const [isStreaming, setIsStreaming] = useState(false)
-  const setChats = useSetRecoilState(chatsState)
+  const [chats, setChats] = useRecoilState(chatsState)
   const { modifyDocument } = useModifyDocument('chat')
   useEnterKey(() => createChatCompletion())
 
@@ -71,12 +71,30 @@ const InputBox: FC = () => {
       return 'error'
     }
 
+    let _chat: Chat[]
     const decoder = new TextDecoder('utf-8')
     try {
       const read = async (): Promise<any> => {
         const { done, value } = await reader.read()
 
-        if (done) return reader.releaseLock()
+        if (done) {
+          setIsStreaming(false)
+
+          const _currChat = _chat.find((chat) => chat.chat_id === currChatId)
+          if (_currChat) {
+            modifyDocument(
+              {
+                // @ts-ignore
+                chat_id: currChatId
+              },
+              {
+                messages: _currChat.messages
+              }
+            )
+          }
+
+          return reader.releaseLock()
+        }
 
         const chunk = decoder.decode(value, { stream: true })
         const jsons: OpenAIChatResponse[] = chunk
@@ -84,10 +102,7 @@ const InputBox: FC = () => {
           .map((data) => {
             const trimData = data.trim()
             if (trimData === '') return undefined
-            if (trimData === '[DONE]') {
-              setIsStreaming(false)
-              return undefined
-            }
+            if (trimData === '[DONE]') return undefined
             return JSON.parse(data.trim())
           })
           .filter((data) => data)
@@ -116,6 +131,7 @@ const InputBox: FC = () => {
                 }
               })
 
+              _chat = currState
               return currState
             })
           }
@@ -131,19 +147,6 @@ const InputBox: FC = () => {
 
     reader.releaseLock()
   }
-
-  useEffect(() => {
-    if (!isStreaming && currChat && currChat.messages.length > 0) {
-      modifyDocument(
-        {
-          chat_id: currChatId
-        },
-        {
-          messages: currChat.messages
-        }
-      )
-    }
-  }, [isStreaming, currChat])
 
   return (
     <section className="absolute bottom-6 left-6 flex w-[calc(100%_-_3rem)] items-center bg-white pt-6 dark:bg-dark-main-bg">

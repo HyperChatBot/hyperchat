@@ -38,10 +38,18 @@ const ChatBox: FC = () => {
           <>
             {currChat.messages.map((message) => (
               <Fragment key={message.message_id}>
-                <ChatBubble role="user" avatar="">
+                <ChatBubble
+                  role="user"
+                  avatar=""
+                  date={message.question_created_at}
+                >
                   {message.question}
                 </ChatBubble>
-                <ChatBubble role="assistant" avatar={''}>
+                <ChatBubble
+                  role="assistant"
+                  avatar={''}
+                  date={message.answer_created_at}
+                >
                   {message.message_id === EMPTY_MESSAGE_ID ? (
                     <MessageSpinner />
                   ) : (

@@ -1,4 +1,5 @@
 import classNames from 'classnames'
+import { DateTime } from 'luxon'
 import { FC, ReactNode } from 'react'
 import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
 import Avatar from '../Avatar'
@@ -7,9 +8,10 @@ interface Props {
   role: 'assistant' | 'user'
   avatar: string
   children: ReactNode
+  date: number
 }
 
-const ChatBubble: FC<Props> = ({ role, avatar, children }) => {
+const ChatBubble: FC<Props> = ({ role, avatar, date, children }) => {
   return (
     <section
       className={classNames('group mb-8 flex items-start', {
@@ -41,7 +43,7 @@ const ChatBubble: FC<Props> = ({ role, avatar, children }) => {
         </section>
         <p
           className={classNames(
-            'duration-250 group-hover:duration-250 mt-2 text-xs opacity-0 transition ease-in-out group-hover:opacity-100',
+            'mt-2 text-xs opacity-0 transition duration-250 ease-in-out group-hover:opacity-100 group-hover:duration-250',
             {
               'text-black text-opacity-30 dark:text-dark-bubule-assistant-text dark:text-opacity-30':
                 role === 'assistant',
@@ -50,7 +52,9 @@ const ChatBubble: FC<Props> = ({ role, avatar, children }) => {
             }
           )}
         >
-          2022/12/31 12:00:01
+          {DateTime.fromMillis(date).toLocaleString(
+            DateTime.DATETIME_SHORT_WITH_SECONDS
+          )}
         </p>
       </section>
     </section>
