@@ -7,10 +7,10 @@ import { Chat } from 'src/types/chat'
 import { v4 } from 'uuid'
 import Divider from '../Divider'
 import { BoldAddIcon } from '../Icons'
-import MesssageEmpty from './MessageEmpty'
-import MesssageItem from './MessageItem'
+import ChatEmpty from './ChatEmpty'
+import ChatItem from './ChatItem'
 
-const MesssageList: FC = () => {
+const ChatItemWrapper: FC = () => {
   const [chats, setChats] = useRecoilState(chatsState)
   const [currChatId, setCurrChatId] = useRecoilState(currChatIdState)
   const { insertDocument } = useInsertDocument<ChatDocType>('chat')
@@ -56,7 +56,7 @@ const MesssageList: FC = () => {
       <section className="no-scrollbar m-4 h-[calc(100vh_-_7.5625rem)] overflow-y-scroll">
         {chats.length > 0 ? (
           chats.map((chat) => (
-            <MesssageItem
+            <ChatItem
               key={chat.chat_id}
               active={chat.chat_id === currChatId}
               chat={chat}
@@ -64,11 +64,11 @@ const MesssageList: FC = () => {
             />
           ))
         ) : (
-          <MesssageEmpty onClick={addChat} />
+          <ChatEmpty onClick={addChat} />
         )}
       </section>
     </section>
   )
 }
 
-export default MesssageList
+export default ChatItemWrapper

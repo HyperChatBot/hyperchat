@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useSetRecoilState } from 'recoil'
 import ChatBox from 'src/components/ChatBox'
 import Divider from 'src/components/Divider'
-import MesssageList from 'src/components/MessageList'
+import ChatList from 'src/components/ChatList'
 import Siderbar from 'src/components/Sidebar'
 import { useCollection } from 'src/hooks'
 import { ChatDocument } from 'src/schemas/chatSchema'
@@ -32,7 +32,7 @@ const App = () => {
   return (
     <div className="container flex w-screen flex-row overflow-x-hidden dark:bg-dark-main-bg">
       <Siderbar />
-      <MesssageList />
+      <ChatList />
       <Divider direction="vertical" />
       <ChatBox />
     </div>

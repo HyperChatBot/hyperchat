@@ -3,7 +3,7 @@ import { FC } from 'react'
 import Avatar from 'src/assets/avatar_mock.png'
 import { formatDate } from 'src/shared/utils'
 import { Chat } from 'src/types/chat'
-import MesssageItemWrapper from './MesssageItemWrapper'
+import ChatItemWrapper from './ChatItemWrapper'
 
 interface Props {
   active: boolean
@@ -11,11 +11,11 @@ interface Props {
   onClick: () => void
 }
 
-const MesssageItem: FC<Props> = ({ active, chat, onClick }) => {
+const ChatItem: FC<Props> = ({ active, chat, onClick }) => {
   const { isSameDay, display } = formatDate(chat.updated_at)
 
   return (
-    <MesssageItemWrapper onClick={onClick} active={active}>
+    <ChatItemWrapper onClick={onClick} active={active}>
       <img src={Avatar} alt="avatar" className="mr-4 h-12 w-12 rounded-xl" />
       <div className="flex w-full flex-col">
         <p className="flex justify-between">
@@ -39,8 +39,8 @@ const MesssageItem: FC<Props> = ({ active, chat, onClick }) => {
           </p>
         )}
       </div>
-    </MesssageItemWrapper>
+    </ChatItemWrapper>
   )
 }
 
-export default MesssageItem
+export default ChatItem

@@ -8,7 +8,7 @@ interface Props {
   onClick: () => void
 }
 
-const MesssageItemWrapper: FC<Props> = ({
+const ChatItemWrapper: FC<Props> = ({
   active,
   children,
   className,
@@ -30,4 +30,4 @@ const MesssageItemWrapper: FC<Props> = ({
   )
 }
 
-export default MesssageItemWrapper
+export default ChatItemWrapper

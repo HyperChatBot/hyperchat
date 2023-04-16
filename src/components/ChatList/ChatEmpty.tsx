@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { BoldAddIcon } from 'src/components/Icons'
-import MesssageItemWrapper from './MesssageItemWrapper'
+import MesssageItemWrapper from './ChatItemWrapper'
 
 interface Props {
   onClick: () => void
