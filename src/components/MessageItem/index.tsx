@@ -16,7 +16,7 @@ const MesssageItem: FC<Props> = ({ active, chat, onClick }) => {
   return (
     <div
       className={classNames(
-        'duration-250 mb-2 flex w-80 cursor-pointer rounded-2xl p-3 transition ease-linear hover:bg-main-purple hover:bg-opacity-5',
+        'mb-2 flex w-80 cursor-pointer rounded-2xl p-3 transition duration-250 ease-linear hover:bg-main-purple hover:bg-opacity-5',
         {
           'bg-main-purple bg-opacity-5': active
         }
@@ -40,7 +40,7 @@ const MesssageItem: FC<Props> = ({ active, chat, onClick }) => {
         </p>
 
         {chat.messages.length > 0 && (
-          <p className="text-xs font-semibold text-black text-opacity-40 line-clamp-2 dark:text-dark-text-sub">
+          <p className="mt-2 w-48 truncate text-xs font-semibold text-black text-opacity-40 dark:text-dark-text-sub">
             {chat.messages[chat.messages.length - 1].answer ||
               chat.messages[chat.messages.length - 1].question}
           </p>

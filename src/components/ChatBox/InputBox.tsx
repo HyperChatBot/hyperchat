@@ -8,7 +8,11 @@ import { chatsState, currChatIdState, currChatState } from 'src/stores/chat'
 import { Chat, OpenAIChatResponse } from 'src/types/chat'
 import { BoldSendIcon, LinearPaperclipIcon } from '../Icons'
 
-const InputBox: FC = () => {
+interface Props {
+  showScrollToBottomBtn: () => void
+}
+
+const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
   const [question, setQuestion] = useState('')
   const currChatId = useRecoilValue(currChatIdState)
   const currChat = useRecoilValue(currChatState)
@@ -18,6 +22,7 @@ const InputBox: FC = () => {
   useEnterKey(() => createChatCompletion())
 
   const createChatCompletion = async () => {
+    if (isStreaming) return
     if (question.trim().length === 0) return
 
     setIsStreaming(true)
@@ -79,6 +84,8 @@ const InputBox: FC = () => {
 
         if (done) {
           setIsStreaming(false)
+
+          showScrollToBottomBtn()
 
           const _currChat = _chat.find((chat) => chat.chat_id === currChatId)
           if (_currChat) {

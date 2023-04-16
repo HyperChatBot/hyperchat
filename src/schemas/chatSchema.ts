@@ -28,7 +28,7 @@ export const chatSchemaLiteral = {
         type: 'object',
         properties: {
           message_id: {
-            type: 'string',
+            type: 'string'
           },
           question: {
             type: 'string'

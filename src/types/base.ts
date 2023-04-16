@@ -1,4 +1,6 @@
 export interface SvgIconProps {
+  width?: number
+  height?: number
   className?: string
   pathClassName?: string
   onClick?: () => void

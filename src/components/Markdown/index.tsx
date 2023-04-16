@@ -27,6 +27,7 @@ const Markdown: FC<Props> = ({ content }) => {
               language={match ? match[1] : 'js'}
               PreTag="div"
               customStyle={{ borderRadius: 0 }}
+              lineNumberStyle={{ minWidth: 'auto' }}
               showLineNumbers
               {...props}
             >

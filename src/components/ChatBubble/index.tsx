@@ -42,15 +42,9 @@ const ChatBubble: FC<Props> = ({ role, avatar, date, children }) => {
           {children}
         </section>
         <p
-          className={classNames(
-            'mt-2 text-xs opacity-0 transition duration-250 ease-in-out group-hover:opacity-100 group-hover:duration-250',
-            {
-              'text-black text-opacity-30 dark:text-dark-bubule-assistant-text dark:text-opacity-30':
-                role === 'assistant',
-              'text-white text-opacity-30 dark:text-dark-bubule-assistant-text dark:text-opacity-30':
-                role === 'user'
-            }
-          )}
+          className={
+            'mt-2 text-xs text-black text-opacity-30 opacity-0 transition duration-250 ease-in-out group-hover:opacity-100 group-hover:duration-250 dark:text-dark-bubule-assistant-text dark:text-opacity-30'
+          }
         >
           {DateTime.fromMillis(date).toLocaleString(
             DateTime.DATETIME_SHORT_WITH_SECONDS

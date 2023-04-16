@@ -3,6 +3,8 @@ import { FC } from 'react'
 import { SvgIconProps } from 'src/types/base'
 
 const LinearArrowdownIcon: FC<SvgIconProps> = ({
+  width,
+  height,
   className,
   pathClassName,
   onClick
@@ -10,8 +12,8 @@ const LinearArrowdownIcon: FC<SvgIconProps> = ({
   <svg
     onClick={onClick}
     className={classNames('cursor-pointer', className)}
-    width="16"
-    height="16"
+    width={width || 16}
+    height={height || 16}
     viewBox="0 0 16 16"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

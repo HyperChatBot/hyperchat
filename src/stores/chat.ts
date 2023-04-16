@@ -1,4 +1,3 @@
-import {produce} from 'immer'
 import { atom, selector } from 'recoil'
 import { Chat } from 'src/types/chat'
 
@@ -20,4 +19,9 @@ export const currChatState = selector({
 
     return chats.find((chat) => chat.chat_id === currId)
   }
+})
+
+export const scrollToBottomBtnVisibleState = atom({
+  key: 'scrollToBottomBtnVisibleState',
+  default: false
 })
