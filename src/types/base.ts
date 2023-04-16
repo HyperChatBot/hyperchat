@@ -13,6 +13,6 @@ export interface OpenAIErrorDetail {
   param: string
 }
 
-export interface OpenAIError {
+export interface OpenAIError extends Error {
   error: OpenAIErrorDetail
 }
