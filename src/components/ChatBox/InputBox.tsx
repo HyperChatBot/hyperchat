@@ -15,7 +15,7 @@ interface Props {
 const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
   const [question, setQuestion] = useState('')
   const currChatId = useRecoilValue(currChatIdState)
-  const currChat = useRecoilValue(currChatState)
+  const [currChat, setCurrChat] = useRecoilState(currChatState)
   const [isStreaming, setIsStreaming] = useState(false)
   const [chats, setChats] = useRecoilState(chatsState)
   const { modifyDocument } = useModifyDocument('chat')
@@ -28,12 +28,10 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
     setIsStreaming(true)
 
     // Append an empty message object to show loading spin.
-    setChats((prevState) => {
+    setCurrChat((prevState) => {
       const currState = produce(prevState, (draft) => {
-        const currChat = draft.find((chat) => chat.chat_id === currChatId)
-
-        if (currChat) {
-          currChat.messages.push({
+        if (draft) {
+          draft.messages.push({
             message_id: EMPTY_MESSAGE_ID,
             answer: '',
             question,
@@ -76,7 +74,8 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
       return 'error'
     }
 
-    let _chat: Chat[]
+    let _currChat: Chat | undefined = undefined
+
     const decoder = new TextDecoder('utf-8')
     try {
       const read = async (): Promise<any> => {
@@ -87,7 +86,6 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
 
           showScrollToBottomBtn()
 
-          const _currChat = _chat.find((chat) => chat.chat_id === currChatId)
           if (_currChat) {
             modifyDocument(
               {
@@ -118,14 +116,10 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
           const token = json.choices[0].delta.content
 
           if (token !== undefined) {
-            setChats((prevState) => {
+            setCurrChat((prevState) => {
               const currState = produce(prevState, (draft) => {
-                const currChat = draft.find(
-                  (chat) => chat.chat_id === currChatId
-                )
-
-                if (currChat) {
-                  const messages = currChat.messages
+                if (draft) {
+                  const messages = draft.messages
                   const last = messages[messages.length - 1]
                   const isFirstChuck = last.message_id === EMPTY_MESSAGE_ID
 
@@ -138,7 +132,7 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
                 }
               })
 
-              _chat = currState
+              _currChat = currState
               return currState
             })
           }

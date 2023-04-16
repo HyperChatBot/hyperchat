@@ -1,4 +1,5 @@
-import { atom, selector } from 'recoil'
+import { produce } from 'immer'
+import { atom, DefaultValue, selector } from 'recoil'
 import { Chat } from 'src/types/chat'
 
 export const chatsState = atom<Chat[]>({
@@ -18,6 +19,21 @@ export const currChatState = selector({
     const chats = get(chatsState)
 
     return chats.find((chat) => chat.chat_id === currId)
+  },
+  set: ({ get, set }, newValue) => {
+    set(chatsState, () => {
+      const newState = produce(get(chatsState), (draft) => {
+        const index = draft.findIndex(
+          (chat) => chat.chat_id === get(currChatIdState)
+        )
+
+        if (index !== -1 && newValue && !(newValue instanceof DefaultValue)) {
+          draft.splice(index, 1, newValue)
+        }
+      })
+
+      return newState
+    })
   }
 })
 

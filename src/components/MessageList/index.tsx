@@ -2,15 +2,15 @@ import { FC } from 'react'
 import { useRecoilState } from 'recoil'
 import { useInsertDocument } from 'src/hooks'
 import { ChatDocType } from 'src/schemas'
-import { chatStore } from 'src/stores'
+import { chatsState, currChatIdState } from 'src/stores/chat'
 import { v4 } from 'uuid'
 import Divider from '../Divider'
 import { BoldAddIcon, LinearArrowDownIcon } from '../Icons'
 import MesssageItem from '../MessageItem'
 
 const MesssageList: FC = () => {
-  const [chats, setChats] = useRecoilState(chatStore.chatsState)
-  const [currChatId, setCurrChatId] = useRecoilState(chatStore.currChatIdState)
+  const [chats, setChats] = useRecoilState(chatsState)
+  const [currChatId, setCurrChatId] = useRecoilState(currChatIdState)
   const { insertDocument } = useInsertDocument<ChatDocType>('chat')
 
   const addChat = async () => {
