@@ -36,7 +36,10 @@ export const chatSchemaLiteral = {
           answer: {
             type: 'string'
           },
-          created_at: {
+          question_created_at: {
+            type: 'number'
+          },
+          answer_created_at: {
             type: 'number'
           }
         }

@@ -7,13 +7,13 @@ import {
   currChatState,
   scrollToBottomBtnVisibleState
 } from 'src/stores/chat'
-import ChatBubble from '../ChatBubble'
-import ContractHeader from '../ContactHeader'
 import Divider from '../Divider'
-import Markdown from '../Markdown'
-import MessageSpinner from '../MessageSpinner'
-import ScrollToBottom from '../ScrollToBottom'
+import ChatBubble from './ChatBubble'
+import ContractHeader from './ContactHeader'
 import InputBox from './InputBox'
+import Markdown from './Markdown'
+import MessageSpinner from './MessageSpinner'
+import ScrollToBottom from './ScrollToBottom'
 
 const ChatBox: FC = () => {
   const chatBoxRef = useRef<HTMLDivElement>(null)
@@ -26,15 +26,14 @@ const ChatBox: FC = () => {
     if (!chatBoxRef.current) return false
     const $el = chatBoxRef.current
 
-
-    return $el.scrollHeight  > $el.scrollTop + $el.clientHeight+ 24
+    return $el.scrollHeight > $el.scrollTop + $el.clientHeight + 24
   }
 
   const scrollToBottom = () => {
     if (!chatBoxRef.current) return
     const $el = chatBoxRef.current
 
-    if ($el.scrollHeight  > $el.scrollTop + $el.clientHeight+ 24) {
+    if ($el.scrollHeight > $el.scrollTop + $el.clientHeight + 24) {
       $el.scrollTo({
         top: $el.scrollHeight,
         left: 0

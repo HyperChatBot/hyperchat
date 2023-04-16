@@ -6,7 +6,7 @@ import { chatsState, currChatIdState } from 'src/stores/chat'
 import { v4 } from 'uuid'
 import Divider from '../Divider'
 import { BoldAddIcon, LinearArrowDownIcon } from '../Icons'
-import MesssageItem from '../MessageItem'
+import MesssageItem from './MessageItem'
 
 const MesssageList: FC = () => {
   const [chats, setChats] = useRecoilState(chatsState)
