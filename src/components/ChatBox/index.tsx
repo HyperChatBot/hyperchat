@@ -26,14 +26,15 @@ const ChatBox: FC = () => {
     if (!chatBoxRef.current) return false
     const $el = chatBoxRef.current
 
-    return $el.scrollHeight > $el.scrollTop + $el.clientHeight
+
+    return $el.scrollHeight  > $el.scrollTop + $el.clientHeight+ 24
   }
 
   const scrollToBottom = () => {
     if (!chatBoxRef.current) return
     const $el = chatBoxRef.current
 
-    if ($el.scrollHeight > $el.scrollTop + $el.clientHeight) {
+    if ($el.scrollHeight  > $el.scrollTop + $el.clientHeight+ 24) {
       $el.scrollTo({
         top: $el.scrollHeight,
         left: 0
@@ -43,23 +44,29 @@ const ChatBox: FC = () => {
     }
   }
 
-  const showScrollToBottomBtn = throttle(() => {
+  const showScrollToBottomBtn = () => {
     if (!scrollToBottomBtnVisible && needScrollToBottom()) {
       setScrollToBottomBtnVisible(true)
     } else {
       setScrollToBottomBtnVisible(false)
     }
-  }, 100)
+  }
 
   useEffect(() => {
     scrollToBottom()
   }, [currChatId])
 
   useEffect(() => {
-    chatBoxRef.current?.addEventListener('scroll', showScrollToBottomBtn)
+    chatBoxRef.current?.addEventListener(
+      'scroll',
+      throttle(showScrollToBottomBtn, 100)
+    )
 
     return () => {
-      chatBoxRef.current?.removeEventListener('scroll', showScrollToBottomBtn)
+      chatBoxRef.current?.removeEventListener(
+        'scroll',
+        throttle(showScrollToBottomBtn, 100)
+      )
     }
   }, [chatBoxRef.current])
 

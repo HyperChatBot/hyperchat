@@ -12,7 +12,7 @@ const ScrollToBottom: FC<Props> = ({ onClick }) => {
   const scrollToBottomBtnVisible = useRecoilValue(scrollToBottomBtnVisibleState)
 
   return (
-    <section 
+    <section
       className={classNames(
         'absolute bottom-32 right-6 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-main-purple opacity-0 duration-250',
         { 'opacity-100 duration-250': scrollToBottomBtnVisible }
