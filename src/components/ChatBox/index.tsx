@@ -1,6 +1,9 @@
+import { Image } from '@chakra-ui/react'
+import classNames from 'classnames'
 import throttle from 'lodash.throttle'
 import { FC, Fragment, useEffect, useRef } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
+import NoDataIllustration from 'src/assets/illustrations/no-data.svg'
 import { EMPTY_MESSAGE_ID } from 'src/shared/constants'
 import {
   currChatIdState,
@@ -21,6 +24,8 @@ const ChatBox: FC = () => {
   const currChatId = useRecoilValue(currChatIdState)
   const [scrollToBottomBtnVisible, setScrollToBottomBtnVisible] =
     useRecoilState(scrollToBottomBtnVisibleState)
+
+  const hasMessages = currChat && currChat.messages.length > 0
 
   const needScrollToBottom = () => {
     if (!chatBoxRef.current) return false
@@ -75,10 +80,13 @@ const ChatBox: FC = () => {
       <Divider />
 
       <section
-        className="no-scrollbar relative h-[calc(100vh_-_10.25rem)] overflow-y-scroll p-6"
+        className={classNames(
+          'no-scrollbar relative h-[calc(100vh_-_10.25rem)] overflow-y-scroll p-6',
+          { 'flex items-center justify-center': !hasMessages }
+        )}
         ref={chatBoxRef}
       >
-        {currChat && currChat.messages.length > 0 && (
+        {hasMessages ? (
           <>
             {currChat.messages.map((message) => (
               <Fragment key={message.message_id}>
@@ -103,6 +111,12 @@ const ChatBox: FC = () => {
               </Fragment>
             ))}
           </>
+        ) : (
+          <Image
+            src={NoDataIllustration}
+            alt="NoDataIllustration"
+            className="h-96 w-96 dark:opacity-50"
+          />
         )}
       </section>
 

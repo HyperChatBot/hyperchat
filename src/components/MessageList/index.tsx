@@ -3,9 +3,11 @@ import { useRecoilState } from 'recoil'
 import { useInsertDocument } from 'src/hooks'
 import { ChatDocType } from 'src/schemas'
 import { chatsState, currChatIdState } from 'src/stores/chat'
+import { Chat } from 'src/types/chat'
 import { v4 } from 'uuid'
 import Divider from '../Divider'
-import { BoldAddIcon, LinearArrowDownIcon } from '../Icons'
+import { BoldAddIcon } from '../Icons'
+import MesssageEmpty from './MessageEmpty'
 import MesssageItem from './MessageItem'
 
 const MesssageList: FC = () => {
@@ -16,16 +18,17 @@ const MesssageList: FC = () => {
   const addChat = async () => {
     const chatId = v4()
 
-    const model = {
+    const chat: Chat = {
       chat_id: chatId,
       summary: '',
-      messages: []
+      messages: [],
+      created_at: +new Date(),
+      updated_at: +new Date()
     }
 
-    setChats([...chats, model])
+    setChats([...chats, chat])
     setCurrChatId(chatId)
-
-    insertDocument(model)
+    insertDocument(chat)
   }
 
   const switchChat = (id: string) => {
@@ -36,13 +39,14 @@ const MesssageList: FC = () => {
     <section className="w-87.75">
       <section className="flex items-center justify-between p-6">
         <section className="flex items-center">
-          <span className="text-xl font-semibold dark:text-dark-text">
-            Messsage
+          <span className="mr-4 text-xl font-semibold dark:text-dark-text">
+            Chat
           </span>
-          <LinearArrowDownIcon className="ml-1.5 mr-2.5" />
-          <span className="dark:text-dark-sub-text rounded-3xl bg-default-badge pb-0.5 pl-2 pr-2 pt-0.5 text-xs font-semibold">
-            12
-          </span>
+          {chats.length > 0 && (
+            <span className="dark:text-dark-sub-text rounded-3xl bg-default-badge pb-0.5 pl-2 pr-2 pt-0.5 text-xs font-semibold">
+              {chats.length}
+            </span>
+          )}
         </section>
         <BoldAddIcon onClick={addChat} />
       </section>
@@ -50,14 +54,18 @@ const MesssageList: FC = () => {
       <Divider />
 
       <section className="no-scrollbar m-4 h-[calc(100vh_-_7.5625rem)] overflow-y-scroll">
-        {chats.map((chat) => (
-          <MesssageItem
-            key={chat.chat_id}
-            active={chat.chat_id === currChatId}
-            chat={chat}
-            onClick={() => switchChat(chat.chat_id)}
-          />
-        ))}
+        {chats.length > 0 ? (
+          chats.map((chat) => (
+            <MesssageItem
+              key={chat.chat_id}
+              active={chat.chat_id === currChatId}
+              chat={chat}
+              onClick={() => switchChat(chat.chat_id)}
+            />
+          ))
+        ) : (
+          <MesssageEmpty onClick={addChat} />
+        )}
       </section>
     </section>
   )
