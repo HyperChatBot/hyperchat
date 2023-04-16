@@ -8,7 +8,6 @@ import { useCollection } from 'src/hooks'
 import { ChatDocument } from 'src/schemas/chatSchema'
 import { chatsState, currChatIdState } from 'src/stores/chat'
 import { Chat } from 'src/types/chat'
-import './App.css'
 
 const App = () => {
   const chatCollection = useCollection('chat')
