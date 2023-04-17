@@ -1,16 +1,20 @@
 import { FC } from 'react'
+import { useRecoilValue } from 'recoil'
 import AvatarMockImg from 'src/assets/avatar_mock.png'
+import { currChatState } from 'src/stores/chat'
 import Avatar from '../Avatar'
 import { BoldCallIcon } from '../Icons'
 
 const ContractHeader: FC = () => {
+  const currChat = useRecoilValue(currChatState)
+
   return (
     <section className="flex items-start justify-between pb-5 pl-6 pr-6 pt-5">
       <section className="flex items-center">
         <Avatar size="xs" src={AvatarMockImg} />
         <section className="ml-4 flex flex-col">
           <p className="text-xl font-semibold text-black dark:text-dark-text">
-            Florencio Dorrance
+            {currChat?.summary || currChat?.chat_id || ''}
           </p>
           <p className="flex items-center">
             <span className="mr-2 h-2.5 w-2.5 rounded-full bg-status-green" />
