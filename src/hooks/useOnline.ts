@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
-import {useSetRecoilState} from 'recoil'
-import {onlineState} from 'src/stores/global'
+import { useSetRecoilState } from 'recoil'
+import { onlineState } from 'src/stores/global'
 
 const useOnline = () => {
   const setOnline = useSetRecoilState(onlineState)

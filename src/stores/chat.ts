@@ -41,3 +41,8 @@ export const scrollToBottomBtnVisibleState = atom({
   key: 'scrollToBottomBtnVisibleState',
   default: false
 })
+
+export const summaryInputVisibleState = atom({
+  key: 'summaryInputVisibleState',
+  default: false
+})

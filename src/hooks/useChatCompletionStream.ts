@@ -6,7 +6,11 @@ import {
   OPENAI_API_KEY,
   OPENAI_CHAT_COMPLTION_URL
 } from 'src/shared/constants'
-import { currChatIdState, currChatState } from 'src/stores/chat'
+import {
+  currChatIdState,
+  currChatState,
+  summaryInputVisibleState
+} from 'src/stores/chat'
 import { Chat, OpenAIChatResponse } from 'src/types/chat'
 import useModifyDocument from './useModifyDocument'
 
@@ -19,9 +23,11 @@ const useChatCompletionStream = (
 
   const currChatId = useRecoilValue(currChatIdState)
   const setCurrChat = useSetRecoilState(currChatState)
+  const summaryInputVisible = useRecoilValue(summaryInputVisibleState)
   const { modifyDocument } = useModifyDocument('chat')
 
   const createChatCompletion = async () => {
+    if (summaryInputVisible) return
     if (isStreaming) return
     if (question.trim().length === 0) return
 

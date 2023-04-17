@@ -40,7 +40,7 @@ const ChatItemWrapper: FC = () => {
       <section className="flex items-center justify-between p-6">
         <section className="flex items-center">
           <span className="mr-4 text-xl font-semibold dark:text-dark-text">
-            Chat
+            Chat Completion
           </span>
           {chats.length > 0 && (
             <span className="dark:text-dark-sub-text rounded-3xl bg-default-badge pb-0.5 pl-2 pr-2 pt-0.5 text-xs font-semibold">

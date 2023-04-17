@@ -44,6 +44,7 @@ const ChatBox: FC = () => {
   }
 
   useEffect(() => {
+    setScrollToBottomBtnVisible(false)
     scrollToBottom()
   }, [currChatId])
 
@@ -65,7 +66,7 @@ const ChatBox: FC = () => {
     <section className="relative flex-1">
       <ContractHeader />
       <Divider />
-      <ConversationBox />
+      <ConversationBox chatBoxRef={chatBoxRef} />
       {currChatId && <InputBox showScrollToBottomBtn={showScrollToBottomBtn} />}
       <ScrollToBottom onClick={scrollToBottom} />
     </section>

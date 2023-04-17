@@ -16,7 +16,11 @@ const ChatItem: FC<Props> = ({ active, chat, onClick }) => {
 
   return (
     <ChatItemWrapper onClick={onClick} active={active}>
-      <img src={ChatGPTLogoImg} alt="avatar" className="mr-4 h-12 w-12 rounded-xl" />
+      <img
+        src={ChatGPTLogoImg}
+        alt="avatar"
+        className="mr-4 h-12 w-12 rounded-xl"
+      />
       <div className="flex w-full flex-col">
         <p className="flex justify-between">
           <span
@@ -25,7 +29,7 @@ const ChatItem: FC<Props> = ({ active, chat, onClick }) => {
               { 'w-44': isSameDay }
             )}
           >
-            {chat.chat_id}
+            {chat.summary || chat.chat_id}
           </span>
           <span className="text-xs font-semibold text-black text-opacity-30 dark:text-dark-text-sub">
             {display}
