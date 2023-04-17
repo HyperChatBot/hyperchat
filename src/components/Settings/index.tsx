@@ -19,16 +19,12 @@ import {
 import { FC, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { LinearSettingIcon } from 'src/components/Icons'
-import { settingsStore } from 'src/stores'
+import { modalVisibleState, settingsInfoState } from 'src/stores/settings'
 
 const Settings: FC = () => {
   const [showPassword, setShowPassword] = useState(false)
-  const [modalVisible, setModalVisible] = useRecoilState(
-    settingsStore.modalVisibleState
-  )
-  const [settingsInfo, setSettingsInfo] = useRecoilState(
-    settingsStore.settingsInfoState
-  )
+  const [modalVisible, setModalVisible] = useRecoilState(modalVisibleState)
+  const [settingsInfo, setSettingsInfo] = useRecoilState(settingsInfoState)
 
   const handleOpen = () => setModalVisible(!modalVisible)
   const handleShowPassword = () => setShowPassword(!showPassword)

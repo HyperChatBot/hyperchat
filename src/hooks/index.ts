@@ -4,6 +4,7 @@ import useCompletion from './useCompletion'
 import useEnterKey from './useEnterKey'
 import useInsertDocument from './useInsertDocument'
 import useModifyDocument from './useModifyDocument'
+import useOnline from './useOnline'
 
 export {
   useInsertDocument,
@@ -11,5 +12,6 @@ export {
   useCollection,
   useEnterKey,
   useChatCompletionStream,
-  useCompletion
+  useCompletion,
+  useOnline
 }

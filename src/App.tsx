@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 import { useSetRecoilState } from 'recoil'
 import ChatBox from 'src/components/ChatBox'
-import Divider from 'src/components/Divider'
 import ChatList from 'src/components/ChatList'
+import Divider from 'src/components/Divider'
 import Siderbar from 'src/components/Sidebar'
-import { useCollection } from 'src/hooks'
+import { useCollection, useOnline } from 'src/hooks'
 import { ChatDocument } from 'src/schemas/chatSchema'
 import { chatsState, currChatIdState } from 'src/stores/chat'
 import { Chat } from 'src/types/chat'
@@ -13,6 +13,7 @@ const App = () => {
   const chatCollection = useCollection('chat')
   const setChats = useSetRecoilState(chatsState)
   const setCurrChat = useSetRecoilState(currChatIdState)
+  useOnline()
 
   const getChatData = async () => {
     const res: ChatDocument[] = await chatCollection
