@@ -5,8 +5,11 @@ export const formatDate = (millis: number) => {
   const date = DateTime.fromMillis(millis)
 
   if (now.hasSame(date, 'day')) {
-    return { isSameDay: true, display: date.toFormat('T') }
+    return {
+      isSameDay: true,
+      display: date.toLocaleString(DateTime.TIME_24_SIMPLE)
+    }
   }
 
-  return { isSameDay: false, display: date.toFormat('DDD') }
+  return { isSameDay: false, display: date.toLocaleString(DateTime.DATE_FULL) }
 }
