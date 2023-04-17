@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { FC } from 'react'
-import Avatar from 'src/assets/avatar_mock.png'
+import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
 import { formatDate } from 'src/shared/utils'
 import { Chat } from 'src/types/chat'
 import ChatItemWrapper from './ChatItemWrapper'
@@ -16,7 +16,7 @@ const ChatItem: FC<Props> = ({ active, chat, onClick }) => {
 
   return (
     <ChatItemWrapper onClick={onClick} active={active}>
-      <img src={Avatar} alt="avatar" className="mr-4 h-12 w-12 rounded-xl" />
+      <img src={ChatGPTLogoImg} alt="avatar" className="mr-4 h-12 w-12 rounded-xl" />
       <div className="flex w-full flex-col">
         <p className="flex justify-between">
           <span

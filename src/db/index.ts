@@ -15,6 +15,7 @@ export const connectDB = async () => {
     storage: getRxStorageDexie()
   })
 
+  // @ts-ignore
   window.db = db
 }
 

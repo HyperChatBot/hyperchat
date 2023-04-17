@@ -1,5 +1,6 @@
 import { FC } from 'react'
 import { BoldAddIcon } from 'src/components/Icons'
+import { EMPTY_CHAT_HINT } from 'src/shared/constants'
 import MesssageItemWrapper from './ChatItemWrapper'
 
 interface Props {
@@ -14,7 +15,7 @@ const MesssageEmpty: FC<Props> = ({ onClick }) => {
       className="items-center justify-center"
     >
       <p className="mr-4 font-semibold dark:text-dark-text">
-        Create your first conversation!
+        {EMPTY_CHAT_HINT}
       </p>
       <BoldAddIcon />
     </MesssageItemWrapper>

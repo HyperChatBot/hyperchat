@@ -1,4 +1,6 @@
 import { FC } from 'react'
+import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
+import Avatar from '../Avatar'
 import {
   BoldMessageIcon,
   LinearCalendarIcon,
@@ -30,12 +32,10 @@ const Siderbar: FC = () => {
   return (
     <section className="flex h-screen w-22 flex-col items-center justify-between p-4 shadow-sidebar dark:shadow-dark-sidebar">
       <div className="flex flex-col items-center">
-        <div className="flex h-14 w-14 items-center justify-center rounded-14 bg-main-purple font-medium text-white dark:text-dark-text">
-          Q
-        </div>
+        <Avatar size="xs" src={ChatGPTLogoImg} />
         <section className="mt-12">
           {items.map((item, key) => (
-            <div key={key} className="mb-8 ">
+            <div key={key} className="mb-8">
               {item.icon}
             </div>
           ))}
