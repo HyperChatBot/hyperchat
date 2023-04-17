@@ -18,6 +18,7 @@
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tauri-apps/api": "^1.2.0",
     "capital-case": "^1.0.4",
+    "chakra-react-select": "^4.6.0",
     "classnames": "^2.3.2",
     "framer-motion": "^10.11.6",
     "immer": "^9.0.21",

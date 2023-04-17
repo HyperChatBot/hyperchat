@@ -1,4 +1,5 @@
 import { FC } from 'react'
+import { NavLink } from 'react-router-dom'
 import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
 import Avatar from '../Avatar'
 import {
@@ -6,13 +7,22 @@ import {
   LinearCalendarIcon,
   LinearChatIcon,
   LinearHomeIcon,
-  LinearSearchNormalIcon
+  LinearSearchNormalIcon,
+  LinearSettingIcon
 } from '../Icons'
-import Settings from '../Settings'
 
 const items = [
   {
-    icon: <LinearHomeIcon />
+    icon: (
+      <NavLink
+        to="/"
+        className={({ isActive, isPending }) =>
+          isPending ? 'pending' : isActive ? 'active' : ''
+        }
+      >
+        <LinearHomeIcon />
+      </NavLink>
+    )
   },
   {
     icon: <BoldMessageIcon />
@@ -41,7 +51,14 @@ const Siderbar: FC = () => {
           ))}
         </section>
       </div>
-      <Settings />
+      <NavLink
+        to="/settings"
+        className={({ isActive, isPending }) =>
+          isPending ? 'pending' : isActive ? 'active' : ''
+        }
+      >
+        <LinearSettingIcon />
+      </NavLink>
     </section>
   )
 }

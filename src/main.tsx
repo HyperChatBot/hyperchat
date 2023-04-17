@@ -1,19 +1,22 @@
 import { ChakraProvider } from '@chakra-ui/react'
-import React from 'react'
+import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
 import { RecoilRoot } from 'recoil'
 import { initialDB } from 'src/db'
-import App from './App'
+import Layouts from './layouts'
 import './styles.css'
 
 await initialDB()
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
+  <StrictMode>
     <RecoilRoot>
       <ChakraProvider>
-        <App />
+        <BrowserRouter>
+          <Layouts />
+        </BrowserRouter>
       </ChakraProvider>
     </RecoilRoot>
-  </React.StrictMode>
+  </StrictMode>
 )

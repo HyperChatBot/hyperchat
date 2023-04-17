@@ -59,7 +59,7 @@ const ContractHeader: FC = () => {
       <section className="flex items-center">
         <Avatar size="xs" src={ChatGPTLogoImg} />
         <section className="ml-4 flex flex-col">
-          <div className="mb-2 flex items-center text-xl font-semibold text-black dark:text-dark-text">
+          <div className="mb-2 flex items-center font-semibold text-black dark:text-dark-text">
             {summaryInputVisible ? (
               <>
                 <Input
@@ -81,7 +81,7 @@ const ContractHeader: FC = () => {
                 onClick={() => setSummaryInputVisibleState(true)}
                 className="flex cursor-pointer items-center"
               >
-                <p className="mr-4">{summary}</p>
+                <p className="mr-4 text-base">{summary}</p>
                 <EditIcon className="fill-current text-black dark:text-dark-text" />
               </div>
             )}
