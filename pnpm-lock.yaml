@@ -1,6 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@heroicons/react': ^2.0.17
   '@tailwindcss/line-clamp': ^0.4.4
   '@tauri-apps/api': ^1.2.0
   '@tauri-apps/cli': ^1.2.2
@@ -44,6 +45,7 @@ specifiers:
   vite: ^4.2.1
 
 dependencies:
+  '@heroicons/react': 2.0.17_react@18.2.0
   '@tailwindcss/line-clamp': 0.4.4_tailwindcss@3.3.1
   '@tauri-apps/api': 1.2.0
   capital-case: 1.0.4
@@ -1042,6 +1044,14 @@ packages:
       long: 4.0.0
       protobufjs: 7.2.3
       yargs: 16.2.0
+    dev: false
+
+  /@heroicons/react/2.0.17_react@18.2.0:
+    resolution: {integrity: sha512-90GMZktkA53YbNzHp6asVEDevUQCMtxWH+2UK2S8OpnLEu7qckTJPhNxNQG52xIR1WFTwFqtH6bt7a60ZNcLLA==}
+    peerDependencies:
+      react: '>= 16'
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /@jridgewell/gen-mapping/0.3.3:

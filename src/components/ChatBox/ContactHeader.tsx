@@ -1,5 +1,4 @@
 import classNames from 'classnames'
-import { TextInput } from 'flowbite-react'
 import { FC, KeyboardEvent, useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
@@ -59,16 +58,16 @@ const ContractHeader: FC = () => {
       <section className="flex items-center">
         <Avatar size="xs" src={ChatGPTLogoImg} />
         <section className="ml-4 flex flex-col">
-          <div className="mb-2 flex items-center font-semibold text-black dark:text-dark-text">
+          <div className="mb-1 flex items-center font-semibold text-black dark:text-dark-text">
             {summaryInputVisible ? (
               <>
-                <TextInput
-                  width={400}
-                  className="mr-4"
+                <input
+                  type="text"
                   autoFocus
                   onKeyUp={saveSummaryWithKeyboard}
                   onChange={(e) => setSummaryValue(e.target.value)}
-                />
+                  className="w-96 p-0 border-b-2 border-l-0 border-r-0 border-t-0 border-main-purple focus:border-b-2 focus:border-main-purple focus:ring-0 dark:bg-gray-800"
+                ></input>
                 <LinearCheckIcon
                   className="cursor-pointer fill-current text-black dark:text-dark-text"
                   onClick={saveSummary}

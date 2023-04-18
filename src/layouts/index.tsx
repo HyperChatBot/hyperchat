@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
 import Siderbar from 'src/components/Sidebar'
 import { useCollection, useOnline } from 'src/hooks'
@@ -9,6 +9,7 @@ import { chatsState, currChatIdState } from 'src/stores/chat'
 import { Chat } from 'src/types/chat'
 
 const Layouts = () => {
+  const location = useLocation()
   const chatCollection = useCollection('chat')
   const setChats = useSetRecoilState(chatsState)
   const setCurrChat = useSetRecoilState(currChatIdState)
@@ -30,7 +31,7 @@ const Layouts = () => {
   }, [])
 
   return (
-    <div className="container flex w-screen flex-row overflow-x-hidden dark:bg-dark-main-bg">
+    <div className="container flex w-screen flex-row overflow-x-hidden dark:bg-gray-800">
       <Siderbar />
       <Routes>
         {routers.map((router) => (

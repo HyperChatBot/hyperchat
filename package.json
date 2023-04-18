@@ -11,6 +11,7 @@
     "prettier": "prettier ./.prettierrc -w ./src"
   },
   "dependencies": {
+    "@heroicons/react": "^2.0.17",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tauri-apps/api": "^1.2.0",
     "capital-case": "^1.0.4",

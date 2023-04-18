@@ -18,13 +18,13 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
   useEnterKey(() => createChatCompletion())
 
   return (
-    <section className="absolute bottom-6 left-6 flex w-[calc(100%_-_3rem)] items-center bg-white pt-6 dark:bg-dark-main-bg">
+    <section className="absolute bottom-6 left-6 flex w-[calc(100%_-_3rem)] items-center bg-white pt-6 dark:bg-gray-800">
       <LinearPaperclipIcon className="mr-6" />
       <section className="relative flex w-full">
         <input
           value={question}
           type="text"
-          className="flex-1 rounded-xl border-2 border-main-gray pb-3.5 pl-5 pr-5 pt-3.5 text-sm text-black text-opacity-40 outline-none dark:border-dark-search-input-border dark:bg-dark-search-input dark:text-dark-text-sub"
+          className="flex-1 rounded-xl border-2 pb-3.5 pl-5 pr-5 pt-3.5 text-sm text-black dark:text-white placeholder:text-black placeholder:text-opacity-50 dark:placeholder:text-white dark:placeholder:text-opacity-50"
           placeholder="Type a message"
           onChange={(e) => setQuestion(e.target.value)}
         />

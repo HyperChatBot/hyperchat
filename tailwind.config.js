@@ -1,7 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: 'class',
-  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+  content: [
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}',
+    'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}'
+  ],
   theme: {
     screens: {
       '3xl': '1920px'
@@ -9,9 +13,13 @@ export default {
     extend: {
       width: {
         2.5: '0.625rem', // 10px
+        14: '3.5rem', // 56px
         22: '5.5rem', // 88px
         75: '18.75rem', // 300px
         87.75: '21.9375rem' // 352px
+      },
+      minWidth: {
+        22: '5.5rem' // 88px
       },
       maxWidth: {
         160: '40rem' // 640px

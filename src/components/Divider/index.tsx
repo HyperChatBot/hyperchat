@@ -9,7 +9,7 @@ interface Props {
 const Divider: FC<Props> = ({ direction = 'horizontal', className }) => (
   <div
     className={classNames(
-      ' bg-black bg-opacity-5 dark:bg-dark-divider-bg dark:bg-opacity-100',
+      ' bg-black bg-opacity-5 dark:bg-gray-600 dark:bg-opacity-100',
       {
         'h-px w-full': direction === 'horizontal',
         'h-screen w-px': direction === 'vertical'
