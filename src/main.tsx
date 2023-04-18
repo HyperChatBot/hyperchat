@@ -1,4 +1,3 @@
-import { ChakraProvider } from '@chakra-ui/react'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
@@ -12,11 +11,9 @@ await initialDB()
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>
     <RecoilRoot>
-      <ChakraProvider>
-        <BrowserRouter>
-          <Layouts />
-        </BrowserRouter>
-      </ChakraProvider>
+      <BrowserRouter>
+        <Layouts />
+      </BrowserRouter>
     </RecoilRoot>
   </StrictMode>
 )

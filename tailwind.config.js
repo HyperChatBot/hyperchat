@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: 'media',
+  darkMode: 'class',
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     screens: {
@@ -60,5 +60,5 @@ export default {
       }
     }
   },
-  plugins: []
+  plugins: [require('flowbite/plugin')]
 }

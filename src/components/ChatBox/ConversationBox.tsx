@@ -1,4 +1,3 @@
-import { Image } from '@chakra-ui/react'
 import classNames from 'classnames'
 import { FC, Fragment, RefObject } from 'react'
 import { useRecoilValue } from 'recoil'
@@ -51,7 +50,7 @@ const ConversationBox: FC<Props> = ({ chatBoxRef }) => {
           ))}
         </>
       ) : (
-        <Image
+        <img
           src={NoDataIllustration}
           alt="NoDataIllustration"
           className="h-96 w-96 dark:opacity-50"

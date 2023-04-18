@@ -1,6 +1,5 @@
-import { CheckIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons'
-import { Input } from '@chakra-ui/react'
 import classNames from 'classnames'
+import { TextInput } from 'flowbite-react'
 import { FC, KeyboardEvent, useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
@@ -9,6 +8,7 @@ import { EMPTY_CHAT_HINT } from 'src/shared/constants'
 import { currChatState, summaryInputVisibleState } from 'src/stores/chat'
 import { onlineState } from 'src/stores/global'
 import Avatar from '../Avatar'
+import { LinearCheckIcon, LinearDeleteIcon, LinearEditIcon } from '../Icons'
 
 const ContractHeader: FC = () => {
   const [summaryInputVisible, setSummaryInputVisibleState] = useRecoilState(
@@ -62,16 +62,14 @@ const ContractHeader: FC = () => {
           <div className="mb-2 flex items-center font-semibold text-black dark:text-dark-text">
             {summaryInputVisible ? (
               <>
-                <Input
+                <TextInput
                   width={400}
                   className="mr-4"
                   autoFocus
                   onKeyUp={saveSummaryWithKeyboard}
                   onChange={(e) => setSummaryValue(e.target.value)}
-                  variant="flushed"
-                  size="xs"
                 />
-                <CheckIcon
+                <LinearCheckIcon
                   className="cursor-pointer fill-current text-black dark:text-dark-text"
                   onClick={saveSummary}
                 />
@@ -82,7 +80,7 @@ const ContractHeader: FC = () => {
                 className="flex cursor-pointer items-center"
               >
                 <p className="mr-4 text-base">{summary}</p>
-                <EditIcon className="fill-current text-black dark:text-dark-text" />
+                <LinearEditIcon className="h-4 w-4" />
               </div>
             )}
           </div>
@@ -94,7 +92,7 @@ const ContractHeader: FC = () => {
                 'bg-status-green': isOnline
               })}
             />
-            <span className="text-xs font-semibold text-black  text-opacity-60 dark:text-dark-text-sub">
+            <span className="text-xs font-semibold text-black text-opacity-60 dark:text-dark-text-sub">
               {isOnline ? 'Online' : 'Offline'}
             </span>
           </p>
@@ -102,7 +100,7 @@ const ContractHeader: FC = () => {
       </section>
       {currChat && (
         <section className="flex cursor-pointer rounded-lg bg-main-purple bg-opacity-10 pb-2.5 pl-4 pr-4 pt-2.5 text-main-purple">
-          <DeleteIcon w={6} h={6} />
+          <LinearDeleteIcon className="h-4 w-4" />
         </section>
       )}
     </section>

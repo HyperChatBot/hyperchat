@@ -7,10 +7,13 @@ import BoldSendIcon from './BoldSendIcon'
 import LinearArrowDownIcon from './LinearArrowDownIcon'
 import LinearCalendarIcon from './LinearCalendarIcon'
 import LinearChatIcon from './LinearChatIcon'
+import LinearCheckIcon from './LinearCheckIcon'
 import LinearClipboardTextIcon from './LinearClipboardTextIcon'
+import LinearDeleteIcon from './LinearDeleteIcon'
 import LinearDocumentCodeIcon from './LinearDocumentCodeIcon'
 import LinearDocumentDownloadIcon from './LinearDocumentDownloadIcon'
 import LinearDocumentTextIcon from './LinearDocumentTextIcon'
+import LinearEditIcon from './LinearEditIcon'
 import LinearGalleryIcon from './LinearGalleryIcon'
 import LinearHomeIcon from './LinearHomeIcon'
 import LinearMessageIcon from './LinearMessageIcon'
@@ -41,5 +44,8 @@ export {
   LinearSearchNormalIcon,
   LinearSendIcon,
   LinearSettingIcon,
-  BoldAddIcon
+  BoldAddIcon,
+  LinearCheckIcon,
+  LinearDeleteIcon,
+  LinearEditIcon
 }

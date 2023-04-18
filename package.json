@@ -11,16 +11,12 @@
     "prettier": "prettier ./.prettierrc -w ./src"
   },
   "dependencies": {
-    "@chakra-ui/icons": "^2.0.18",
-    "@chakra-ui/react": "^2.5.5",
-    "@emotion/react": "^11.10.6",
-    "@emotion/styled": "^11.10.6",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tauri-apps/api": "^1.2.0",
     "capital-case": "^1.0.4",
-    "chakra-react-select": "^4.6.0",
     "classnames": "^2.3.2",
-    "framer-motion": "^10.11.6",
+    "flowbite": "^1.6.5",
+    "flowbite-react": "^0.4.3",
     "immer": "^9.0.21",
     "lodash.throttle": "^4.1.1",
     "luxon": "^3.3.0",
