@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { useRecoilState } from 'recoil'
 import { useInsertDocument } from 'src/hooks'
-import { ChatDocType } from 'src/schemas'
+import { ChatDocType } from 'src/schemas/chatSchema'
 import { chatsState, currChatIdState } from 'src/stores/chat'
 import { Chat } from 'src/types/chat'
 import { v4 } from 'uuid'

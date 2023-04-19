@@ -2,7 +2,9 @@ import { addRxPlugin, createRxDatabase, RxDatabase, RxJsonSchema } from 'rxdb'
 import { RxDBAttachmentsPlugin } from 'rxdb/plugins/attachments'
 import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder'
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie'
-import { chatSchema, settingsSchema } from 'src/schemas'
+import { chatSchema } from 'src/schemas/chatSchema'
+import { embeddingSchema } from 'src/schemas/embeddingSchema'
+import { settingsSchema } from 'src/schemas/settingsSchema'
 
 addRxPlugin(RxDBQueryBuilderPlugin)
 addRxPlugin(RxDBAttachmentsPlugin)
@@ -36,4 +38,5 @@ export const initialDB = async () => {
   await connectDB()
   await createCollection(chatSchema)
   await createCollection(settingsSchema)
+  await createCollection(embeddingSchema)
 }
