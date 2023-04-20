@@ -24,7 +24,7 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
         <input
           value={question}
           type="text"
-          className="flex-1 rounded-xl border-2 pb-3.5 pl-5 pr-5 pt-3.5 text-sm text-black dark:text-white placeholder:text-black placeholder:text-opacity-50 dark:placeholder:text-white dark:placeholder:text-opacity-50"
+          className="flex-1 rounded-xl border-2 pb-3.5 pl-5 pr-5 pt-3.5 text-sm text-black placeholder:text-black placeholder:text-opacity-50 dark:text-white dark:placeholder:text-white dark:placeholder:text-opacity-50"
           placeholder="Type a message"
           onChange={(e) => setQuestion(e.target.value)}
         />

@@ -27,7 +27,7 @@ const useConversationCompletionStream = (
   const summaryInputVisible = useRecoilValue(summaryInputVisibleState)
   const { modifyDocument } = useModifyDocument('chat')
 
-  const createConversationCompletion = async () => {
+  const createChatCompletion = async () => {
     if (summaryInputVisible) return
     if (isStreaming) return
     if (question.trim().length === 0) return
@@ -152,7 +152,7 @@ const useConversationCompletionStream = (
     reader.releaseLock()
   }
 
-  return { createConversationCompletion }
+  return { createChatCompletion }
 }
 
 export default useConversationCompletionStream

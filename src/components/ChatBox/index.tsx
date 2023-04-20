@@ -1,10 +1,13 @@
 import throttle from 'lodash.throttle'
 import { FC, useEffect, useRef } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { currConversationIdState, scrollToBottomBtnVisibleState } from 'src/stores/conversation'
+import {
+  currConversationIdState,
+  scrollToBottomBtnVisibleState
+} from 'src/stores/conversation'
 import Divider from '../Divider'
+import ChatList from './ChatList'
 import ContractHeader from './ContactHeader'
-import ConversationBox from './ConversationBox'
 import InputBox from './InputBox'
 import ScrollToBottom from './ScrollToBottom'
 
@@ -66,8 +69,10 @@ const ChatBox: FC = () => {
     <section className="relative flex-1">
       <ContractHeader />
       <Divider />
-      <ConversationBox chatBoxRef={chatBoxRef} />
-      {currConversationId && <InputBox showScrollToBottomBtn={showScrollToBottomBtn} />}
+      <ChatList chatBoxRef={chatBoxRef} />
+      {currConversationId && (
+        <InputBox showScrollToBottomBtn={showScrollToBottomBtn} />
+      )}
       <ScrollToBottom onClick={scrollToBottom} />
     </section>
   )

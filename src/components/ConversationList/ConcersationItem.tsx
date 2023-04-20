@@ -3,7 +3,7 @@ import { FC } from 'react'
 import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
 import { formatDate } from 'src/shared/utils'
 import { Conversation } from 'src/types/conversation'
-import ChatItemWrapper from './ItemWrapper'
+import ItemWrapper from './ItemWrapper'
 
 interface Props {
   active: boolean
@@ -15,7 +15,7 @@ const ConversationItem: FC<Props> = ({ active, conversation, onClick }) => {
   const { isSameDay, display } = formatDate(conversation.updated_at)
 
   return (
-    <ChatItemWrapper onClick={onClick} active={active}>
+    <ItemWrapper onClick={onClick} active={active}>
       <img
         src={ChatGPTLogoImg}
         alt="avatar"
@@ -43,7 +43,7 @@ const ConversationItem: FC<Props> = ({ active, conversation, onClick }) => {
           </p>
         )}
       </div>
-    </ChatItemWrapper>
+    </ItemWrapper>
   )
 }
 

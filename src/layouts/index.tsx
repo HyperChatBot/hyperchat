@@ -5,7 +5,10 @@ import Siderbar from 'src/components/Sidebar'
 import { useCollection, useOnline } from 'src/hooks'
 import { routers } from 'src/routers'
 import { ChatDocument } from 'src/schemas/chatSchema'
-import { conversationsState, currConversationIdState } from 'src/stores/conversation'
+import {
+  conversationsState,
+  currConversationIdState
+} from 'src/stores/conversation'
 import { Conversation } from 'src/types/conversation'
 
 const Layouts = () => {

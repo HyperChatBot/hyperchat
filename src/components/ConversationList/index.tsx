@@ -1,24 +1,27 @@
 import { FC } from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { useInsertDocument } from 'src/hooks'
 import { ChatDocType } from 'src/schemas/chatSchema'
-import { conversationsState, currConversationIdState } from 'src/stores/conversation'
-import { SchemaNames } from 'src/types/base'
+import { conversationTitles, schemaNames } from 'src/shared/constants'
+import {
+  conversationsState,
+  currConversationIdState
+} from 'src/stores/conversation'
+import { currPruductState } from 'src/stores/global'
 import { Conversation } from 'src/types/conversation'
 import { v4 } from 'uuid'
 import Divider from '../Divider'
 import { BoldAddIcon } from '../Icons'
-import ChatEmpty from './EmptyItem'
 import ChatItem from './ConcersationItem'
+import ChatEmpty from './EmptyItem'
 
-interface Props {
-  schemaName: SchemaNames
-}
-
-const ConversationList: FC<Props> = ({ schemaName }) => {
+const ConversationList: FC = () => {
+  const currProduct = useRecoilValue(currPruductState)
   const [chats, setChats] = useRecoilState(conversationsState)
   const [currChatId, setCurrChatId] = useRecoilState(currConversationIdState)
-  const { insertDocument } = useInsertDocument<ChatDocType>(schemaName)
+  const { insertDocument } = useInsertDocument<ChatDocType>(
+    schemaNames[currProduct]
+  )
 
   const addChat = async () => {
     const chatId = v4()
@@ -45,7 +48,7 @@ const ConversationList: FC<Props> = ({ schemaName }) => {
       <section className="flex items-center justify-between p-6">
         <section className="flex items-center">
           <span className="mr-4 text-xl font-semibold dark:text-dark-text">
-            Chat Completion
+            {conversationTitles[currProduct]}
           </span>
           {chats.length > 0 && (
             <span className="dark:text-dark-sub-text rounded-3xl bg-default-badge pb-0.5 pl-2 pr-2 pt-0.5 text-xs font-semibold">

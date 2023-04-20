@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { FC } from 'react'
-import { SvgIconProps } from 'src/types/base'
+import { SvgIconProps } from 'src/types/global'
 
 const BoldCallIcon: FC<SvgIconProps> = ({
   className,

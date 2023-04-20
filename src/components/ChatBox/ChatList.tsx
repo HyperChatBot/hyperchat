@@ -12,7 +12,7 @@ interface Props {
   chatBoxRef: RefObject<HTMLDivElement>
 }
 
-const ConversationBox: FC<Props> = ({ chatBoxRef }) => {
+const ChatList: FC<Props> = ({ chatBoxRef }) => {
   const currConversation = useRecoilValue(currConversationState)
   const hasMessages = currConversation && currConversation.messages.length > 0
 
@@ -43,7 +43,7 @@ const ConversationBox: FC<Props> = ({ chatBoxRef }) => {
                 {message.message_id === EMPTY_MESSAGE_ID ? (
                   <MessageSpinner />
                 ) : (
-                  <Markdown content={message.answer} />
+                  <Markdown raw={message.answer} />
                 )}
               </ChatBubble>
             </Fragment>
@@ -60,4 +60,4 @@ const ConversationBox: FC<Props> = ({ chatBoxRef }) => {
   )
 }
 
-export default ConversationBox
+export default ChatList

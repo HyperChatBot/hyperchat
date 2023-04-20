@@ -18,13 +18,16 @@ export const currConversationState = selector({
     const currId = get(currConversationIdState)
     const conversations = get(conversationsState)
 
-    return conversations.find((conversation) => conversation.conversation_id === currId)
+    return conversations.find(
+      (conversation) => conversation.conversation_id === currId
+    )
   },
   set: ({ get, set }, newValue) => {
     set(conversationsState, () => {
       const newState = produce(get(conversationsState), (draft) => {
         const index = draft.findIndex(
-          (conversation) => conversation.conversation_id === get(currConversationIdState)
+          (conversation) =>
+            conversation.conversation_id === get(currConversationIdState)
         )
 
         if (index !== -1 && newValue && !(newValue instanceof DefaultValue)) {

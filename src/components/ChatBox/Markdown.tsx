@@ -7,10 +7,10 @@ import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
 
 interface Props {
-  content: string
+  raw: string
 }
 
-const Markdown: FC<Props> = ({ content }) => {
+const Markdown: FC<Props> = ({ raw }) => {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
@@ -90,7 +90,7 @@ const Markdown: FC<Props> = ({ content }) => {
         }
       }}
     >
-      {content}
+      {raw}
     </ReactMarkdown>
   )
 }

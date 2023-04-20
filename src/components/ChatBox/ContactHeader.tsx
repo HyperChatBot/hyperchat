@@ -12,7 +12,7 @@ import { onlineState } from 'src/stores/global'
 import Avatar from '../Avatar'
 import { LinearCheckIcon, LinearDeleteIcon, LinearEditIcon } from '../Icons'
 
-const ContractHeader: FC = () => {
+const ContactHeader: FC = () => {
   const [summaryInputVisible, setSummaryInputVisibleState] = useRecoilState(
     summaryInputVisibleState
   )
@@ -116,4 +116,4 @@ const ContractHeader: FC = () => {
   )
 }
 
-export default ContractHeader
+export default ContactHeader
