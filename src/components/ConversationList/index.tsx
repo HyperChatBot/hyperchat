@@ -2,33 +2,38 @@ import { FC } from 'react'
 import { useRecoilState } from 'recoil'
 import { useInsertDocument } from 'src/hooks'
 import { ChatDocType } from 'src/schemas/chatSchema'
-import { chatsState, currChatIdState } from 'src/stores/chat'
-import { Chat } from 'src/types/chat'
+import { conversationsState, currConversationIdState } from 'src/stores/conversation'
+import { SchemaNames } from 'src/types/base'
+import { Conversation } from 'src/types/conversation'
 import { v4 } from 'uuid'
 import Divider from '../Divider'
 import { BoldAddIcon } from '../Icons'
-import ChatEmpty from './ChatEmpty'
-import ChatItem from './ChatItem'
+import ChatEmpty from './EmptyItem'
+import ChatItem from './ConcersationItem'
 
-const ChatItemWrapper: FC = () => {
-  const [chats, setChats] = useRecoilState(chatsState)
-  const [currChatId, setCurrChatId] = useRecoilState(currChatIdState)
-  const { insertDocument } = useInsertDocument<ChatDocType>('chat')
+interface Props {
+  schemaName: SchemaNames
+}
+
+const ConversationList: FC<Props> = ({ schemaName }) => {
+  const [chats, setChats] = useRecoilState(conversationsState)
+  const [currChatId, setCurrChatId] = useRecoilState(currConversationIdState)
+  const { insertDocument } = useInsertDocument<ChatDocType>(schemaName)
 
   const addChat = async () => {
     const chatId = v4()
 
-    const chat: Chat = {
-      chat_id: chatId,
+    const conversation: Conversation = {
+      conversation_id: chatId,
       summary: '',
       messages: [],
       created_at: +new Date(),
       updated_at: +new Date()
     }
 
-    setChats([...chats, chat])
+    setChats([...chats, conversation])
     setCurrChatId(chatId)
-    insertDocument(chat)
+    insertDocument(conversation)
   }
 
   const switchChat = (id: string) => {
@@ -55,12 +60,12 @@ const ChatItemWrapper: FC = () => {
 
       <section className="no-scrollbar m-4 h-[calc(100vh_-_7.5625rem)] overflow-y-scroll">
         {chats.length > 0 ? (
-          chats.map((chat) => (
+          chats.map((conversation) => (
             <ChatItem
-              key={chat.chat_id}
-              active={chat.chat_id === currChatId}
-              chat={chat}
-              onClick={() => switchChat(chat.chat_id)}
+              key={conversation.conversation_id}
+              active={conversation.conversation_id === currChatId}
+              conversation={conversation}
+              onClick={() => switchChat(conversation.conversation_id)}
             />
           ))
         ) : (
@@ -71,4 +76,4 @@ const ChatItemWrapper: FC = () => {
   )
 }
 
-export default ChatItemWrapper
+export default ConversationList

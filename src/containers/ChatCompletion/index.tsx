@@ -4,14 +4,14 @@ import ChatList from 'src/components/ConversationList'
 import Divider from 'src/components/Divider'
 import { SchemaNames } from 'src/types/base'
 
-const Embeddings: FC = () => {
+const ChatCompletion: FC = () => {
   return (
     <>
-      <ChatList schemaName={SchemaNames.Embedding} />
+      <ChatList schemaName={SchemaNames.ChatCompletion} />
       <Divider direction="vertical" />
       <ChatBox />
     </>
   )
 }
 
-export default Embeddings
+export default ChatCompletion

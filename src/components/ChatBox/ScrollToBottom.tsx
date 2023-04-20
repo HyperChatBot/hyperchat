@@ -2,7 +2,7 @@ import classNames from 'classnames'
 import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
 import { LinearArrowDownIcon } from 'src/components/Icons'
-import { scrollToBottomBtnVisibleState } from 'src/stores/chat'
+import { scrollToBottomBtnVisibleState } from 'src/stores/conversation'
 
 interface Props {
   onClick: () => void

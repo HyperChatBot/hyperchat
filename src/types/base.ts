@@ -16,3 +16,9 @@ export interface OpenAIErrorDetail {
 export interface OpenAIError extends Error {
   error: OpenAIErrorDetail
 }
+
+export enum SchemaNames {
+  ChatCompletion = 'chat',
+  TextCompletion = 'text',
+  Embedding = 'embedding'
+}

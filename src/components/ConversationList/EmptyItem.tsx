@@ -1,13 +1,13 @@
 import { FC } from 'react'
 import { BoldAddIcon } from 'src/components/Icons'
 import { EMPTY_CHAT_HINT } from 'src/shared/constants'
-import MesssageItemWrapper from './ChatItemWrapper'
+import MesssageItemWrapper from './ItemWrapper'
 
 interface Props {
   onClick: () => void
 }
 
-const MesssageEmpty: FC<Props> = ({ onClick }) => {
+const EmptyItem: FC<Props> = ({ onClick }) => {
   return (
     <MesssageItemWrapper
       onClick={onClick}
@@ -22,4 +22,4 @@ const MesssageEmpty: FC<Props> = ({ onClick }) => {
   )
 }
 
-export default MesssageEmpty
+export default EmptyItem

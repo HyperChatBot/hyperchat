@@ -2,17 +2,17 @@ import classNames from 'classnames'
 import { FC } from 'react'
 import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
 import { formatDate } from 'src/shared/utils'
-import { Chat } from 'src/types/chat'
-import ChatItemWrapper from './ChatItemWrapper'
+import { Conversation } from 'src/types/conversation'
+import ChatItemWrapper from './ItemWrapper'
 
 interface Props {
   active: boolean
-  chat: Chat
+  conversation: Conversation
   onClick: () => void
 }
 
-const ChatItem: FC<Props> = ({ active, chat, onClick }) => {
-  const { isSameDay, display } = formatDate(chat.updated_at)
+const ConversationItem: FC<Props> = ({ active, conversation, onClick }) => {
+  const { isSameDay, display } = formatDate(conversation.updated_at)
 
   return (
     <ChatItemWrapper onClick={onClick} active={active}>
@@ -29,17 +29,17 @@ const ChatItem: FC<Props> = ({ active, chat, onClick }) => {
               { 'w-44': isSameDay }
             )}
           >
-            {chat.summary || chat.chat_id}
+            {conversation.summary || conversation.conversation_id}
           </span>
           <span className="text-xs font-semibold text-black text-opacity-30 dark:text-dark-text-sub">
             {display}
           </span>
         </p>
 
-        {chat.messages.length > 0 && (
+        {conversation.messages.length > 0 && (
           <p className="mt-2 w-48 truncate text-xs font-semibold text-black text-opacity-40 dark:text-dark-text-sub">
-            {chat.messages[chat.messages.length - 1].answer ||
-              chat.messages[chat.messages.length - 1].question}
+            {conversation.messages[conversation.messages.length - 1].answer ||
+              conversation.messages[conversation.messages.length - 1].question}
           </p>
         )}
       </div>
@@ -47,4 +47,4 @@ const ChatItem: FC<Props> = ({ active, chat, onClick }) => {
   )
 }
 
-export default ChatItem
+export default ConversationItem

@@ -1,7 +1,7 @@
 import throttle from 'lodash.throttle'
 import { FC, useEffect, useRef } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { currChatIdState, scrollToBottomBtnVisibleState } from 'src/stores/chat'
+import { currConversationIdState, scrollToBottomBtnVisibleState } from 'src/stores/conversation'
 import Divider from '../Divider'
 import ContractHeader from './ContactHeader'
 import ConversationBox from './ConversationBox'
@@ -10,7 +10,7 @@ import ScrollToBottom from './ScrollToBottom'
 
 const ChatBox: FC = () => {
   const chatBoxRef = useRef<HTMLDivElement>(null)
-  const currChatId = useRecoilValue(currChatIdState)
+  const currConversationId = useRecoilValue(currConversationIdState)
   const [scrollToBottomBtnVisible, setScrollToBottomBtnVisible] =
     useRecoilState(scrollToBottomBtnVisibleState)
 
@@ -46,7 +46,7 @@ const ChatBox: FC = () => {
   useEffect(() => {
     setScrollToBottomBtnVisible(false)
     scrollToBottom()
-  }, [currChatId])
+  }, [currConversationId])
 
   useEffect(() => {
     chatBoxRef.current?.addEventListener(
@@ -67,7 +67,7 @@ const ChatBox: FC = () => {
       <ContractHeader />
       <Divider />
       <ConversationBox chatBoxRef={chatBoxRef} />
-      {currChatId && <InputBox showScrollToBottomBtn={showScrollToBottomBtn} />}
+      {currConversationId && <InputBox showScrollToBottomBtn={showScrollToBottomBtn} />}
       <ScrollToBottom onClick={scrollToBottom} />
     </section>
   )

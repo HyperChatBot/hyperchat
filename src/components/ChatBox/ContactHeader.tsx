@@ -4,7 +4,10 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
 import { useModifyDocument } from 'src/hooks'
 import { EMPTY_CHAT_HINT } from 'src/shared/constants'
-import { currChatState, summaryInputVisibleState } from 'src/stores/chat'
+import {
+  currConversationState,
+  summaryInputVisibleState
+} from 'src/stores/conversation'
 import { onlineState } from 'src/stores/global'
 import Avatar from '../Avatar'
 import { LinearCheckIcon, LinearDeleteIcon, LinearEditIcon } from '../Icons'
@@ -13,22 +16,29 @@ const ContractHeader: FC = () => {
   const [summaryInputVisible, setSummaryInputVisibleState] = useRecoilState(
     summaryInputVisibleState
   )
-  const [currChat, setCurrChat] = useRecoilState(currChatState)
+  const [currConversation, setCurrConversation] = useRecoilState(
+    currConversationState
+  )
   const isOnline = useRecoilValue(onlineState)
-  const [summaryValue, setSummaryValue] = useState(currChat?.summary || '')
-  const summary = currChat?.summary || currChat?.chat_id || EMPTY_CHAT_HINT
+  const [summaryValue, setSummaryValue] = useState(
+    currConversation?.summary || ''
+  )
+  const summary =
+    currConversation?.summary ||
+    currConversation?.conversation_id ||
+    EMPTY_CHAT_HINT
   const { modifyDocument } = useModifyDocument('chat')
 
   const saveSummary = () => {
     if (summaryValue.trim().length === 0) return
 
-    if (currChat) {
-      setCurrChat({ ...currChat, summary: summaryValue })
+    if (currConversation) {
+      setCurrConversation({ ...currConversation, summary: summaryValue })
 
       modifyDocument(
         {
           // @ts-ignore
-          chat_id: currChat.chat_id
+          conversation_id: currConversation.conversation_id
         },
         {
           summary: summaryValue
@@ -51,7 +61,7 @@ const ContractHeader: FC = () => {
 
   useEffect(() => {
     setSummaryInputVisibleState(false)
-  }, [currChat])
+  }, [currConversation])
 
   return (
     <section className="flex items-start justify-between pb-5 pl-6 pr-6 pt-5">
@@ -66,7 +76,7 @@ const ContractHeader: FC = () => {
                   autoFocus
                   onKeyUp={saveSummaryWithKeyboard}
                   onChange={(e) => setSummaryValue(e.target.value)}
-                  className="w-96 p-0 border-b-2 border-l-0 border-r-0 border-t-0 border-main-purple focus:border-b-2 focus:border-main-purple focus:ring-0 dark:bg-gray-800"
+                  className="w-96 border-b-2 border-l-0 border-r-0 border-t-0 border-main-purple p-0 focus:border-b-2 focus:border-main-purple focus:ring-0 dark:bg-gray-800"
                 ></input>
                 <LinearCheckIcon
                   className="cursor-pointer fill-current text-black dark:text-dark-text"
@@ -97,7 +107,7 @@ const ContractHeader: FC = () => {
           </p>
         </section>
       </section>
-      {currChat && (
+      {currConversation && (
         <section className="flex cursor-pointer rounded-lg bg-main-purple bg-opacity-10 pb-2.5 pl-4 pr-4 pt-2.5 text-main-purple">
           <LinearDeleteIcon className="h-4 w-4" />
         </section>

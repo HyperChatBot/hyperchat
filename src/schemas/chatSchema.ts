@@ -11,10 +11,10 @@ export const chatSchemaLiteral = {
   description: 'describes a chat object.',
   version: 0,
   keyCompression: false,
-  primaryKey: 'chat_id',
+  primaryKey: 'conversation_id',
   type: 'object',
   properties: {
-    chat_id: {
+    conversation_id: {
       type: 'string'
     },
     summary: {
@@ -52,8 +52,8 @@ export const chatSchemaLiteral = {
       type: 'number'
     }
   },
-  required: ['chat_id'],
-  indexes: ['chat_id']
+  required: ['conversation_id'],
+  indexes: ['conversation_id']
 } as const
 
 const schemaTyped = toTypedRxJsonSchema(chatSchemaLiteral)

@@ -5,14 +5,14 @@ import Siderbar from 'src/components/Sidebar'
 import { useCollection, useOnline } from 'src/hooks'
 import { routers } from 'src/routers'
 import { ChatDocument } from 'src/schemas/chatSchema'
-import { chatsState, currChatIdState } from 'src/stores/chat'
-import { Chat } from 'src/types/chat'
+import { conversationsState, currConversationIdState } from 'src/stores/conversation'
+import { Conversation } from 'src/types/conversation'
 
 const Layouts = () => {
   const location = useLocation()
   const chatCollection = useCollection('chat')
-  const setChats = useSetRecoilState(chatsState)
-  const setCurrChat = useSetRecoilState(currChatIdState)
+  const setChats = useSetRecoilState(conversationsState)
+  const setCurrChat = useSetRecoilState(currConversationIdState)
   useOnline()
 
   const getChatData = async () => {
@@ -22,8 +22,8 @@ const Layouts = () => {
       })
       .exec()
 
-    setChats(res.map((data) => data.toJSON()) as Chat[])
-    setCurrChat(res[0]?.chat_id || '')
+    setChats(res.map((data) => data.toJSON()) as Conversation[])
+    setCurrChat(res[0]?.conversation_id || '')
   }
 
   useEffect(() => {

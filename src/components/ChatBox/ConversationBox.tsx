@@ -3,7 +3,7 @@ import { FC, Fragment, RefObject } from 'react'
 import { useRecoilValue } from 'recoil'
 import NoDataIllustration from 'src/assets/illustrations/no-data.svg'
 import { EMPTY_MESSAGE_ID } from 'src/shared/constants'
-import { currChatState } from 'src/stores/chat'
+import { currConversationState } from 'src/stores/conversation'
 import ChatBubble from './ChatBubble'
 import Markdown from './Markdown'
 import MessageSpinner from './MessageSpinner'
@@ -13,8 +13,8 @@ interface Props {
 }
 
 const ConversationBox: FC<Props> = ({ chatBoxRef }) => {
-  const currChat = useRecoilValue(currChatState)
-  const hasMessages = currChat && currChat.messages.length > 0
+  const currConversation = useRecoilValue(currConversationState)
+  const hasMessages = currConversation && currConversation.messages.length > 0
 
   return (
     <section
@@ -26,7 +26,7 @@ const ConversationBox: FC<Props> = ({ chatBoxRef }) => {
     >
       {hasMessages ? (
         <>
-          {currChat.messages.map((message) => (
+          {currConversation.messages.map((message) => (
             <Fragment key={message.message_id}>
               <ChatBubble
                 role="user"

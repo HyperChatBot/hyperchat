@@ -7,26 +7,27 @@ import {
   OPENAI_CHAT_COMPLTION_URL
 } from 'src/shared/constants'
 import {
-  currChatIdState,
-  currChatState,
+  currConversationIdState,
+  currConversationState,
   summaryInputVisibleState
-} from 'src/stores/chat'
-import { Chat, OpenAIChatResponse } from 'src/types/chat'
+} from 'src/stores/conversation'
+import { OpenAIChatResponse } from 'src/types/chatCompletion'
+import { Conversation } from 'src/types/conversation'
 import useModifyDocument from './useModifyDocument'
 
-const useChatCompletionStream = (
+const useConversationCompletionStream = (
   question: string,
   setQuestion: Dispatch<SetStateAction<string>>,
   showScrollToBottomBtn: () => void
 ) => {
   const [isStreaming, setIsStreaming] = useState(false)
 
-  const currChatId = useRecoilValue(currChatIdState)
-  const setCurrChat = useSetRecoilState(currChatState)
+  const currConversationId = useRecoilValue(currConversationIdState)
+  const setCurrConversation = useSetRecoilState(currConversationState)
   const summaryInputVisible = useRecoilValue(summaryInputVisibleState)
   const { modifyDocument } = useModifyDocument('chat')
 
-  const createChatCompletion = async () => {
+  const createConversationCompletion = async () => {
     if (summaryInputVisible) return
     if (isStreaming) return
     if (question.trim().length === 0) return
@@ -34,7 +35,7 @@ const useChatCompletionStream = (
     setIsStreaming(true)
 
     // Append an empty message object to show loading spin.
-    setCurrChat((prevState) => {
+    setCurrConversation((prevState) => {
       const currState = produce(prevState, (draft) => {
         if (draft) {
           draft.messages.push({
@@ -67,7 +68,7 @@ const useChatCompletionStream = (
         ],
         model: 'gpt-3.5-turbo',
         stream: true,
-        user: currChatId
+        user: currConversationId
       })
     })
 
@@ -77,7 +78,7 @@ const useChatCompletionStream = (
       return 'error'
     }
 
-    let _currChat: Chat | undefined = undefined
+    let _currConversation: Conversation | undefined = undefined
 
     const decoder = new TextDecoder('utf-8')
     try {
@@ -88,14 +89,14 @@ const useChatCompletionStream = (
           setIsStreaming(false)
           showScrollToBottomBtn()
 
-          if (_currChat) {
+          if (_currConversation) {
             modifyDocument(
               {
                 // @ts-ignore
-                chat_id: currChatId
+                conversation_id: currConversationId
               },
               {
-                messages: _currChat.messages
+                messages: _currConversation.messages
               }
             )
           }
@@ -118,7 +119,7 @@ const useChatCompletionStream = (
           const token = json.choices[0].delta.content
 
           if (token !== undefined) {
-            setCurrChat((prevState) => {
+            setCurrConversation((prevState) => {
               const currState = produce(prevState, (draft) => {
                 if (draft) {
                   const messages = draft.messages
@@ -134,7 +135,7 @@ const useChatCompletionStream = (
                 }
               })
 
-              _currChat = currState
+              _currConversation = currState
               return currState
             })
           }
@@ -151,7 +152,7 @@ const useChatCompletionStream = (
     reader.releaseLock()
   }
 
-  return { createChatCompletion }
+  return { createConversationCompletion }
 }
 
-export default useChatCompletionStream
+export default useConversationCompletionStream

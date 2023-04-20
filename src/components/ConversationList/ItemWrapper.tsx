@@ -8,12 +8,7 @@ interface Props {
   onClick: () => void
 }
 
-const ChatItemWrapper: FC<Props> = ({
-  active,
-  children,
-  className,
-  onClick
-}) => {
+const ItemWrapper: FC<Props> = ({ active, children, className, onClick }) => {
   return (
     <div
       className={classNames(
@@ -30,4 +25,4 @@ const ChatItemWrapper: FC<Props> = ({
   )
 }
 
-export default ChatItemWrapper
+export default ItemWrapper
