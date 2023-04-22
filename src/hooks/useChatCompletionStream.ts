@@ -4,7 +4,8 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 import {
   EMPTY_MESSAGE_ID,
   OPENAI_API_KEY,
-  OPENAI_CHAT_COMPLTION_URL
+  OPENAI_CHAT_COMPLTION_URL,
+  schemaNames
 } from 'src/shared/constants'
 import {
   currConversationIdState,
@@ -13,6 +14,7 @@ import {
 } from 'src/stores/conversation'
 import { OpenAIChatResponse } from 'src/types/chatCompletion'
 import { Conversation } from 'src/types/conversation'
+import { Products } from 'src/types/global'
 import useModifyDocument from './useModifyDocument'
 
 const useConversationCompletionStream = (
@@ -25,7 +27,9 @@ const useConversationCompletionStream = (
   const currConversationId = useRecoilValue(currConversationIdState)
   const setCurrConversation = useSetRecoilState(currConversationState)
   const summaryInputVisible = useRecoilValue(summaryInputVisibleState)
-  const { modifyDocument } = useModifyDocument('chat')
+  const { modifyDocument } = useModifyDocument(
+    schemaNames[Products.ChatCompletion]
+  )
 
   const createChatCompletion = async () => {
     if (summaryInputVisible) return

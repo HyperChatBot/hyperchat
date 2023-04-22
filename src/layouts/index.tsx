@@ -1,36 +1,38 @@
 import { useEffect } from 'react'
-import { Route, Routes, useLocation } from 'react-router-dom'
-import { useSetRecoilState } from 'recoil'
+import { Route, Routes } from 'react-router-dom'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import Siderbar from 'src/components/Sidebar'
 import { useCollection, useOnline } from 'src/hooks'
 import { routers } from 'src/routers'
 import { ChatDocument } from 'src/schemas/chatSchema'
+import { schemaNames } from 'src/shared/constants'
 import {
   conversationsState,
   currConversationIdState
 } from 'src/stores/conversation'
+import { currPruductState } from 'src/stores/global'
 import { Conversation } from 'src/types/conversation'
 
 const Layouts = () => {
-  const location = useLocation()
-  const chatCollection = useCollection('chat')
-  const setChats = useSetRecoilState(conversationsState)
-  const setCurrChat = useSetRecoilState(currConversationIdState)
+  const currPruduct = useRecoilValue(currPruductState)
+  const conversationCollection = useCollection(schemaNames[currPruduct])
+  const setConversations = useSetRecoilState(conversationsState)
+  const setCurrConversationId = useSetRecoilState(currConversationIdState)
   useOnline()
 
-  const getChatData = async () => {
-    const res: ChatDocument[] = await chatCollection
+  const getConversationData = async () => {
+    const res: ChatDocument[] = await conversationCollection
       .find({
         sort: [{ updated_at: 'desc' }]
       })
       .exec()
 
-    setChats(res.map((data) => data.toJSON()) as Conversation[])
-    setCurrChat(res[0]?.conversation_id || '')
+    setConversations(res.map((data) => data.toJSON()) as Conversation[])
+    setCurrConversationId(res[0]?.conversation_id || '')
   }
 
   useEffect(() => {
-    getChatData()
+    getConversationData()
   }, [])
 
   return (

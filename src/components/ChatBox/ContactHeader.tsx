@@ -3,16 +3,18 @@ import { FC, KeyboardEvent, useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
 import { useModifyDocument } from 'src/hooks'
-import { EMPTY_CHAT_HINT } from 'src/shared/constants'
+import { EMPTY_CHAT_HINT, schemaNames } from 'src/shared/constants'
 import {
   currConversationState,
   summaryInputVisibleState
 } from 'src/stores/conversation'
-import { onlineState } from 'src/stores/global'
+import { currPruductState, onlineState } from 'src/stores/global'
 import Avatar from '../Avatar'
 import { LinearCheckIcon, LinearDeleteIcon, LinearEditIcon } from '../Icons'
 
 const ContactHeader: FC = () => {
+  const currPruduct = useRecoilValue(currPruductState)
+
   const [summaryInputVisible, setSummaryInputVisibleState] = useRecoilState(
     summaryInputVisibleState
   )
@@ -27,7 +29,7 @@ const ContactHeader: FC = () => {
     currConversation?.summary ||
     currConversation?.conversation_id ||
     EMPTY_CHAT_HINT
-  const { modifyDocument } = useModifyDocument('chat')
+  const { modifyDocument } = useModifyDocument(schemaNames[currPruduct])
 
   const saveSummary = () => {
     if (summaryValue.trim().length === 0) return
