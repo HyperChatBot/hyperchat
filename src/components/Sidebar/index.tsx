@@ -19,59 +19,57 @@ import {
 import { Tooltip } from 'flowbite-react'
 import { FC } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { useRecoilState } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
+import { currPruductState } from 'src/stores/global'
+import { Products } from 'src/types/global'
 import Avatar from '../Avatar'
 
 const iconClassName = 'h-6 w-6 text-black dark:text-white'
 
 const items = [
   {
+    product: Products.ChatCompletion,
     tooltip: 'Chat Completion',
-    pathname: '/',
     inactive: <ChatBubbleLeftRightIconOutline className={iconClassName} />,
     active: <ChatBubbleLeftRightIconSolid className={iconClassName} />
   },
   {
+    product: Products.TextCompletion,
     tooltip: 'Text Completion',
-    pathname: '/completion',
     inactive: (
       <ChatBubbleBottomCenterTextIconOutline className={iconClassName} />
     ),
     active: <ChatBubbleBottomCenterTextIconSolid className={iconClassName} />
   },
   {
+    product: Products.Audio,
     tooltip: 'Audio',
-    pathname: '/audio',
     inactive: <MicrophoneIconOutline className={iconClassName} />,
     active: <MicrophoneIconSolid className={iconClassName} />
   },
   {
+    product: Products.Embedding,
     tooltip: 'Embeddings',
-    pathname: '/embeddings',
     inactive: <CpuChipIconOutline className={iconClassName} />,
     active: <CpuChipIconSolid className={iconClassName} />
   },
   {
+    product: Products.Moderation,
     tooltip: 'Moderation',
-    pathname: '/moderation',
     inactive: <ScaleIconOutline className={iconClassName} />,
     active: <ScaleIconSolid className={iconClassName} />
   },
   {
+    product: Products.Image,
     tooltip: 'Images',
-    pathname: '/images',
     inactive: <PhotoIconOutline className={iconClassName} />,
     active: <PhotoIconSolid className={iconClassName} />
-  },
-  {
-    tooltip: 'Settings',
-    pathname: '/settings',
-    inactive: <Cog6ToothIconOutline className={iconClassName} />,
-    active: <Cog6ToothIconSolid className={iconClassName} />
   }
 ]
 
 const Siderbar: FC = () => {
+  const [currPruduct, setCurrProduct] = useRecoilState(currPruductState)
   const location = useLocation()
 
   return (
@@ -82,14 +80,30 @@ const Siderbar: FC = () => {
           {items.map((item, key) => (
             <div key={key} className="mb-8">
               <Tooltip content={item.tooltip} placement="right">
-                <Link to={item.pathname}>
-                  {location.pathname === item.pathname
+                <Link
+                  to="/"
+                  className="cursor-pointer"
+                  onClick={() => setCurrProduct(item.product)}
+                >
+                  {currPruduct === item.product && location.pathname === '/'
                     ? item.active
                     : item.inactive}
                 </Link>
               </Tooltip>
             </div>
           ))}
+
+          <div className="mb-8">
+            <Tooltip content="Settings" placement="right">
+              <Link to="/settings">
+                {location.pathname === '/settings' ? (
+                  <Cog6ToothIconSolid className={iconClassName} />
+                ) : (
+                  <Cog6ToothIconOutline className={iconClassName} />
+                )}
+              </Link>
+            </Tooltip>
+          </div>
         </section>
       </div>
     </section>

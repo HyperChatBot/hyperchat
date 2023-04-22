@@ -1,18 +1,13 @@
-import ChatCompletion from 'src/containers/ChatCompletion'
-import Embeddings from 'src/containers/Embeddings'
+import Conversation from 'src/containers/Conversation'
 import Settings from 'src/containers/Settings'
 
 export const routers = [
   {
     path: '/',
-    element: ChatCompletion
+    element: Conversation
   },
   {
-    path: '/embeddings',
-    element: Embeddings
-  },
-  {
-    path: 'settings',
+    path: '/settings',
     element: Settings
   }
 ]

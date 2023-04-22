@@ -33,7 +33,7 @@ const Layouts = () => {
 
   useEffect(() => {
     getConversationData()
-  }, [])
+  }, [currPruduct])
 
   return (
     <div className="container flex w-screen flex-row overflow-x-hidden dark:bg-gray-800">

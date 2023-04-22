@@ -2,16 +2,15 @@ import { FC } from 'react'
 import ChatBox from 'src/components/ChatBox'
 import ChatList from 'src/components/ConversationList'
 import Divider from 'src/components/Divider'
-import { Products } from 'src/types/global'
 
-const ChatCompletion: FC = () => {
+const Conversation: FC = () => {
   return (
     <>
-      <ChatList schemaName={Products.ChatCompletion} />
+      <ChatList />
       <Divider direction="vertical" />
       <ChatBox />
     </>
   )
 }
 
-export default ChatCompletion
+export default Conversation
