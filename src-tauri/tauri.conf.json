@@ -7,7 +7,7 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "chat-chat",
+    "productName": "hyperchat",
     "version": "0.0.0"
   },
   "tauri": {
@@ -40,7 +40,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "chat-chat",
+        "title": "hyperchat",
         "width": 1280,
         "height": 960,
         "minWidth": 1280,
