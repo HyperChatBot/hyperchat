@@ -68,4 +68,5 @@ export type ModerationDocument = RxDocument<ModerationDocType>
 
 export type ModerationCollection = RxCollection<ModerationDocType>
 
-export const moderationSchema: RxJsonSchema<ModerationDocType> = moderationSchemaLiteral
+export const moderationSchema: RxJsonSchema<ModerationDocType> =
+  moderationSchemaLiteral

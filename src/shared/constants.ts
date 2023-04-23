@@ -16,7 +16,7 @@ export const conversationTitles = {
   [Products.TextCompletion]: 'Text Completion',
   [Products.Audio]: 'Audio',
   [Products.Moderation]: 'Moderations',
-  [Products.Image]: 'Images',
+  [Products.Image]: 'Images'
 }
 
 export const schemaNames = {
@@ -25,5 +25,5 @@ export const schemaNames = {
   [Products.TextCompletion]: 'text',
   [Products.Audio]: 'audio',
   [Products.Moderation]: 'moderation',
-  [Products.Image]: 'image',
+  [Products.Image]: 'image'
 }
