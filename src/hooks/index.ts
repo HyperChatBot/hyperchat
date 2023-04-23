@@ -1,10 +1,14 @@
+import useAudio from './useAudio'
 import useChatCompletionStream from './useChatCompletionStream'
 import useCollection from './useCollection'
-import useCompletion from './useCompletion'
+import useEmbedding from './useEmbedding'
 import useEnterKey from './useEnterKey'
+import useImage from './useImage'
 import useInsertDocument from './useInsertDocument'
+import useModeration from './useModeration'
 import useModifyDocument from './useModifyDocument'
 import useOnline from './useOnline'
+import useTextCompletion from './useTextCompletion'
 
 export {
   useInsertDocument,
@@ -12,6 +16,10 @@ export {
   useCollection,
   useEnterKey,
   useChatCompletionStream,
-  useCompletion,
-  useOnline
+  useTextCompletion,
+  useOnline,
+  useAudio,
+  useModeration,
+  useImage,
+  useEmbedding
 }

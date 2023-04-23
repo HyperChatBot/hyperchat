@@ -57,7 +57,7 @@ const useConversationCompletionStream = (
 
     setQuestion('')
 
-    const completion = await fetch(OPENAI_CHAT_COMPLTION_URL, {
+    const chat = await fetch(OPENAI_CHAT_COMPLTION_URL, {
       headers: {
         'Content-Type': 'application/json',
         Authorization: OPENAI_API_KEY
@@ -76,9 +76,9 @@ const useConversationCompletionStream = (
       })
     })
 
-    const reader = completion.body?.getReader()
+    const reader = chat.body?.getReader()
 
-    if (completion.status !== 200 || !reader) {
+    if (chat.status !== 200 || !reader) {
       return 'error'
     }
 

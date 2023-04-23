@@ -17,8 +17,10 @@ import ChatEmpty from './EmptyItem'
 
 const ConversationList: FC = () => {
   const currProduct = useRecoilValue(currPruductState)
-  const [chats, setChats] = useRecoilState(conversationsState)
-  const [currChatId, setCurrChatId] = useRecoilState(currConversationIdState)
+  const [conversations, setConversations] = useRecoilState(conversationsState)
+  const [currConverastionId, setCurrConversationId] = useRecoilState(
+    currConversationIdState
+  )
   const { insertDocument } = useInsertDocument<ChatDocType>(
     schemaNames[currProduct]
   )
@@ -34,13 +36,13 @@ const ConversationList: FC = () => {
       updated_at: +new Date()
     }
 
-    setChats([...chats, conversation])
-    setCurrChatId(chatId)
+    setConversations([...conversations, conversation])
+    setCurrConversationId(chatId)
     insertDocument(conversation)
   }
 
   const switchChat = (id: string) => {
-    setCurrChatId(id)
+    setCurrConversationId(id)
   }
 
   return (
@@ -50,9 +52,9 @@ const ConversationList: FC = () => {
           <span className="mr-4 text-xl font-semibold dark:text-dark-text">
             {conversationTitles[currProduct]}
           </span>
-          {chats.length > 0 && (
+          {conversations.length > 0 && (
             <span className="dark:text-dark-sub-text rounded-3xl bg-default-badge pb-0.5 pl-2 pr-2 pt-0.5 text-xs font-semibold">
-              {chats.length}
+              {conversations.length}
             </span>
           )}
         </section>
@@ -62,11 +64,11 @@ const ConversationList: FC = () => {
       <Divider />
 
       <section className="no-scrollbar m-4 h-[calc(100vh_-_7.5625rem)] overflow-y-scroll">
-        {chats.length > 0 ? (
-          chats.map((conversation) => (
+        {conversations.length > 0 ? (
+          conversations.map((conversation) => (
             <ChatItem
               key={conversation.conversation_id}
-              active={conversation.conversation_id === currChatId}
+              active={conversation.conversation_id === currConverastionId}
               conversation={conversation}
               onClick={() => switchChat(conversation.conversation_id)}
             />

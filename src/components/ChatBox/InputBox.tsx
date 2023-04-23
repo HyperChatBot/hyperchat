@@ -1,6 +1,14 @@
 import classNames from 'classnames'
 import { FC, useState } from 'react'
-import { useChatCompletionStream, useEnterKey } from 'src/hooks'
+import { useRecoilValue } from 'recoil'
+import {
+  useChatCompletionStream,
+  useEnterKey,
+  useTextCompletion,
+  useEmbedding
+} from 'src/hooks'
+import { currPruductState } from 'src/stores/global'
+import { Products } from 'src/types/global'
 import { BoldSendIcon, LinearPaperclipIcon } from '../Icons'
 
 interface Props {
@@ -8,6 +16,7 @@ interface Props {
 }
 
 const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
+  const currProduct = useRecoilValue(currPruductState)
   const [question, setQuestion] = useState('')
 
   const { createChatCompletion } = useChatCompletionStream(
@@ -15,7 +24,30 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
     setQuestion,
     showScrollToBottomBtn
   )
-  useEnterKey(() => createChatCompletion())
+
+  const { createTextCompletion } = useTextCompletion(
+    question,
+    setQuestion,
+    showScrollToBottomBtn
+  )
+
+  const { createEmbedding } = useEmbedding(
+    question,
+    setQuestion,
+    showScrollToBottomBtn
+  )
+
+
+  const requests = {
+    [Products.ChatCompletion]: createChatCompletion,
+    [Products.TextCompletion]: createTextCompletion,
+    [Products.Audio]: createTextCompletion,
+    [Products.Moderation]: createTextCompletion,
+    [Products.Image]: createTextCompletion,
+    [Products.Embedding]: createEmbedding
+  }
+
+  useEnterKey(() => requests[currProduct]())
 
   return (
     <section className="absolute bottom-6 left-6 flex w-[calc(100%_-_3rem)] items-center bg-white pt-6 dark:bg-gray-800">
@@ -28,7 +60,7 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
           placeholder="Type a message"
           onChange={(e) => setQuestion(e.target.value)}
         />
-        <div onClick={createChatCompletion}>
+        <div onClick={requests[currProduct]}>
           <BoldSendIcon
             className="absolute right-5 top-3.5"
             pathClassName={classNames(

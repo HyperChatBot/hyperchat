@@ -25,7 +25,8 @@ export default {
         160: '40rem' // 640px
       },
       height: {
-        2.5: '0.625rem' // 10px
+        2.5: '0.625rem', // 10px
+        160: '40rem', // 640px
       },
       colors: {
         'main-purple': '#615ef0',

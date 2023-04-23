@@ -3,14 +3,19 @@ import { FC } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark as mdCodeTheme } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { useRecoilValue } from 'recoil'
 import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
+import { currPruductState } from 'src/stores/global'
+import { Products } from 'src/types/global'
 
 interface Props {
   raw: string
 }
 
 const Markdown: FC<Props> = ({ raw }) => {
+  const currProduct = useRecoilValue(currPruductState)
+
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
@@ -53,6 +58,9 @@ const Markdown: FC<Props> = ({ raw }) => {
             <pre
               className={classNames(
                 '-ml-4 -mr-4 mb-4 overflow-x-scroll text-sm',
+                {
+                  'h-160 overflow-y-scroll': currProduct === Products.Embedding
+                },
                 className
               )}
               {...props}

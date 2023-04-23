@@ -54,6 +54,9 @@ export const audioSchemaLiteral = {
       type: 'number'
     }
   },
+  // attachments: {
+  //   encrypted: true
+  // },
   required: ['conversation_id'],
   indexes: ['conversation_id']
 } as const
