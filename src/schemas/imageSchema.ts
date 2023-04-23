@@ -8,15 +8,15 @@ import {
 import { schemaNames } from 'src/shared/constants'
 import { Products } from 'src/types/global'
 
-export const embeddingSchemaLiteral = {
-  title: schemaNames[Products.Embedding],
-  description: 'describes an embedding object.',
+export const imageSchemaLiteral = {
+  title: schemaNames[Products.Image],
+  description: 'describes an image object.',
   version: 0,
   keyCompression: false,
-  primaryKey: 'embedding_id',
+  primaryKey: 'conversation_id',
   type: 'object',
   properties: {
-    embedding_id: {
+    conversation_id: {
       type: 'string'
     },
     summary: {
@@ -54,19 +54,18 @@ export const embeddingSchemaLiteral = {
       type: 'number'
     }
   },
-  required: ['embedding_id'],
-  indexes: ['embedding_id']
+  required: ['conversation_id'],
+  indexes: ['conversation_id']
 } as const
 
-const schemaTyped = toTypedRxJsonSchema(embeddingSchemaLiteral)
+const schemaTyped = toTypedRxJsonSchema(imageSchemaLiteral)
 
-export type EmbeddingDocType = ExtractDocumentTypeFromTypedRxJsonSchema<
+export type ImageDocType = ExtractDocumentTypeFromTypedRxJsonSchema<
   typeof schemaTyped
 >
 
-export type EmbeddingDocument = RxDocument<EmbeddingDocType>
+export type ImageDocument = RxDocument<ImageDocType>
 
-export type EmbeddingCollection = RxCollection<EmbeddingDocType>
+export type ImageCollection = RxCollection<ImageDocType>
 
-export const embeddingSchema: RxJsonSchema<EmbeddingDocType> =
-  embeddingSchemaLiteral
+export const imageSchema: RxJsonSchema<ImageDocType> = imageSchemaLiteral

@@ -8,15 +8,15 @@ import {
 import { schemaNames } from 'src/shared/constants'
 import { Products } from 'src/types/global'
 
-export const embeddingSchemaLiteral = {
-  title: schemaNames[Products.Embedding],
-  description: 'describes an embedding object.',
+export const moderationSchemaLiteral = {
+  title: schemaNames[Products.Moderation],
+  description: 'describes a moderation object.',
   version: 0,
   keyCompression: false,
-  primaryKey: 'embedding_id',
+  primaryKey: 'conversation_id',
   type: 'object',
   properties: {
-    embedding_id: {
+    conversation_id: {
       type: 'string'
     },
     summary: {
@@ -54,19 +54,18 @@ export const embeddingSchemaLiteral = {
       type: 'number'
     }
   },
-  required: ['embedding_id'],
-  indexes: ['embedding_id']
+  required: ['conversation_id'],
+  indexes: ['conversation_id']
 } as const
 
-const schemaTyped = toTypedRxJsonSchema(embeddingSchemaLiteral)
+const schemaTyped = toTypedRxJsonSchema(moderationSchemaLiteral)
 
-export type EmbeddingDocType = ExtractDocumentTypeFromTypedRxJsonSchema<
+export type ModerationDocType = ExtractDocumentTypeFromTypedRxJsonSchema<
   typeof schemaTyped
 >
 
-export type EmbeddingDocument = RxDocument<EmbeddingDocType>
+export type ModerationDocument = RxDocument<ModerationDocType>
 
-export type EmbeddingCollection = RxCollection<EmbeddingDocType>
+export type ModerationCollection = RxCollection<ModerationDocType>
 
-export const embeddingSchema: RxJsonSchema<EmbeddingDocType> =
-  embeddingSchemaLiteral
+export const moderationSchema: RxJsonSchema<ModerationDocType> = moderationSchemaLiteral

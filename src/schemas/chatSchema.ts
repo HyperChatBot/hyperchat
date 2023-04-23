@@ -5,10 +5,12 @@ import {
   RxJsonSchema,
   toTypedRxJsonSchema
 } from 'rxdb'
+import { schemaNames } from 'src/shared/constants'
+import { Products } from 'src/types/global'
 
 export const chatSchemaLiteral = {
-  title: 'chat',
-  description: 'describes a chat object.',
+  title: schemaNames[Products.ChatCompletion],
+  description: 'describes a chat completion object.',
   version: 0,
   keyCompression: false,
   primaryKey: 'conversation_id',

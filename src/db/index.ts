@@ -2,9 +2,13 @@ import { addRxPlugin, createRxDatabase, RxDatabase, RxJsonSchema } from 'rxdb'
 import { RxDBAttachmentsPlugin } from 'rxdb/plugins/attachments'
 import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder'
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie'
+import { audioSchema } from 'src/schemas/audioSchema'
 import { chatSchema } from 'src/schemas/chatSchema'
 import { embeddingSchema } from 'src/schemas/embeddingSchema'
+import { imageSchema } from 'src/schemas/imageSchema'
+import { moderationSchema } from 'src/schemas/moderationSchema'
 import { settingsSchema } from 'src/schemas/settingsSchema'
+import { textSchema } from 'src/schemas/textSchema'
 
 addRxPlugin(RxDBQueryBuilderPlugin)
 addRxPlugin(RxDBAttachmentsPlugin)
@@ -13,7 +17,7 @@ export let db: RxDatabase
 
 export const connectDB = async () => {
   db = await createRxDatabase({
-    name: 'chatchat',
+    name: 'hyperchat',
     storage: getRxStorageDexie()
   })
 
@@ -36,7 +40,11 @@ export const createCollection = async <T>(schema: RxJsonSchema<T>) => {
 
 export const initialDB = async () => {
   await connectDB()
-  await createCollection(chatSchema)
   await createCollection(settingsSchema)
+  await createCollection(chatSchema)
   await createCollection(embeddingSchema)
+  await createCollection(audioSchema)
+  await createCollection(imageSchema)
+  await createCollection(moderationSchema)
+  await createCollection(textSchema)
 }
