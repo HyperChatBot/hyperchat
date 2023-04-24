@@ -2,7 +2,6 @@ import {
   ChatBubbleBottomCenterTextIcon as ChatBubbleBottomCenterTextIconOutline,
   ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconOutline,
   Cog6ToothIcon as Cog6ToothIconOutline,
-  CpuChipIcon as CpuChipIconOutline,
   MicrophoneIcon as MicrophoneIconOutline,
   PhotoIcon as PhotoIconOutline,
   ScaleIcon as ScaleIconOutline
@@ -11,7 +10,6 @@ import {
   ChatBubbleBottomCenterTextIcon as ChatBubbleBottomCenterTextIconSolid,
   ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconSolid,
   Cog6ToothIcon as Cog6ToothIconSolid,
-  CpuChipIcon as CpuChipIconSolid,
   MicrophoneIcon as MicrophoneIconSolid,
   PhotoIcon as PhotoIconSolid,
   ScaleIcon as ScaleIconSolid
@@ -47,12 +45,6 @@ const items = [
     tooltip: 'Audio',
     inactive: <MicrophoneIconOutline className={iconClassName} />,
     active: <MicrophoneIconSolid className={iconClassName} />
-  },
-  {
-    product: Products.Embedding,
-    tooltip: 'Embeddings',
-    inactive: <CpuChipIconOutline className={iconClassName} />,
-    active: <CpuChipIconSolid className={iconClassName} />
   },
   {
     product: Products.Moderation,

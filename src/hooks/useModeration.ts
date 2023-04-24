@@ -24,7 +24,7 @@ const useModeration = (
   const summaryInputVisible = useRecoilValue(summaryInputVisibleState)
   const { modifyDocument } = useModifyDocument(schemaNames[Products.Moderation])
 
-  const createModeration = async (prompt: string) => {
+  const createModeration = async () => {
     if (summaryInputVisible) return
     if (loading) return
     if (question.trim().length === 0) return
@@ -55,15 +55,19 @@ const useModeration = (
         input: question
       })
 
-      const { id, choices } = completion.data
+      const content = `\`\`\`json \n${JSON.stringify(
+        moderation.data,
+        null,
+        2
+      )}\n\`\`\``
 
       setCurrConversation((prevState) => {
         const currState = produce(prevState, (draft) => {
           if (draft) {
             const messages = draft.messages
             const last = messages[messages.length - 1]
-            last.message_id = id
-            last.answer = choices[0].text || ''
+            last.message_id = moderation.data.id
+            last.answer = content
             last.answer_created_at = +new Date()
           }
         })

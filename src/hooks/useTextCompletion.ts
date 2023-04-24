@@ -26,7 +26,7 @@ const useTextCompletion = (
     schemaNames[Products.TextCompletion]
   )
 
-  const createTextCompletion = async (prompt: string) => {
+  const createTextCompletion = async () => {
     if (summaryInputVisible) return
     if (loading) return
     if (question.trim().length === 0) return
@@ -55,7 +55,7 @@ const useTextCompletion = (
     try {
       const completion = await openai.createCompletion({
         model: 'text-davinci-003',
-        prompt
+        prompt: question
       })
 
       const { id, choices } = completion.data

@@ -12,6 +12,4 @@ export const edits = ['text-davinci-edit-001', 'code-davinci-edit-001']
 
 export const audios = ['whisper-1']
 
-export const embeddings = ['text-embedding-ada-002', 'text-search-ada-doc-001']
-
 export const moderations = ['text-moderation-latest', 'text-moderation-stable']

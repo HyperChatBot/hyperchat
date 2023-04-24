@@ -2,10 +2,12 @@ import classNames from 'classnames'
 import { FC, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import {
+  useAudio,
   useChatCompletionStream,
   useEnterKey,
-  useTextCompletion,
-  useEmbedding
+  useImage,
+  useModeration,
+  useTextCompletion
 } from 'src/hooks'
 import { currPruductState } from 'src/stores/global'
 import { Products } from 'src/types/global'
@@ -31,27 +33,43 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
     showScrollToBottomBtn
   )
 
-  const { createEmbedding } = useEmbedding(
+  const { createModeration } = useModeration(
     question,
     setQuestion,
     showScrollToBottomBtn
   )
 
+  const { createImage } = useImage(question, setQuestion, showScrollToBottomBtn)
+
+  const { createTranscription } = useAudio(
+    question,
+    setQuestion,
+    showScrollToBottomBtn
+  )
 
   const requests = {
     [Products.ChatCompletion]: createChatCompletion,
     [Products.TextCompletion]: createTextCompletion,
-    [Products.Audio]: createTextCompletion,
-    [Products.Moderation]: createTextCompletion,
-    [Products.Image]: createTextCompletion,
-    [Products.Embedding]: createEmbedding
+    [Products.Audio]: createTranscription,
+    [Products.Moderation]: createModeration,
+    [Products.Image]: createImage
   }
 
   useEnterKey(() => requests[currProduct]())
 
   return (
     <section className="absolute bottom-6 left-6 flex w-[calc(100%_-_3rem)] items-center bg-white pt-6 dark:bg-gray-800">
-      <LinearPaperclipIcon className="mr-6" />
+      {currProduct === Products.Audio && (
+        <label htmlFor="$$video-input" className="relative">
+          <input
+            type="file"
+            id="$$video-input"
+            accept="audio/mp3,video/mp4,video/mpeg,video/mpea,video/m4a,video/wav,video/webm"
+            className="absolute h-6 w-6 opacity-0"
+          />
+          <LinearPaperclipIcon className="mr-6" />
+        </label>
+      )}
       <section className="relative flex w-full">
         <input
           value={question}

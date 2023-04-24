@@ -5,7 +5,6 @@ import {
   audios,
   chatCompletions,
   edits,
-  embeddings,
   moderations,
   textCompletions
 } from 'src/openai/models'
@@ -159,20 +158,6 @@ const Settings: FC = () => {
               <Select id="$$audio-model-selector" required={true}>
                 {audios.map((audio) => (
                   <option key={audio}>{audio}</option>
-                ))}
-              </Select>
-            </div>
-
-            <div id="$$embeddings-model-selector" className="mb-6">
-              <div className="mb-2 block">
-                <Label
-                  htmlFor="$$embeddings-model-selector"
-                  value="Embeddings Model"
-                />
-              </div>
-              <Select id="$$embeddings-model-selector" required={true}>
-                {embeddings.map((embedding) => (
-                  <option key={embedding}>{embedding}</option>
                 ))}
               </Select>
             </div>

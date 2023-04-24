@@ -4,7 +4,6 @@ import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder'
 import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie'
 import { audioSchema } from 'src/schemas/audioSchema'
 import { chatSchema } from 'src/schemas/chatSchema'
-import { embeddingSchema } from 'src/schemas/embeddingSchema'
 import { imageSchema } from 'src/schemas/imageSchema'
 import { moderationSchema } from 'src/schemas/moderationSchema'
 import { settingsSchema } from 'src/schemas/settingsSchema'
@@ -42,7 +41,6 @@ export const initialDB = async () => {
   await connectDB()
   await createCollection(settingsSchema)
   await createCollection(chatSchema)
-  await createCollection(embeddingSchema)
   await createCollection(audioSchema)
   await createCollection(imageSchema)
   await createCollection(moderationSchema)

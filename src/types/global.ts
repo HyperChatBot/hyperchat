@@ -20,7 +20,6 @@ export interface OpenAIError extends Error {
 export enum Products {
   ChatCompletion,
   TextCompletion,
-  Embedding,
   Audio,
   Moderation,
   Image

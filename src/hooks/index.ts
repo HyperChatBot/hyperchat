@@ -1,7 +1,6 @@
 import useAudio from './useAudio'
 import useChatCompletionStream from './useChatCompletionStream'
 import useCollection from './useCollection'
-import useEmbedding from './useEmbedding'
 import useEnterKey from './useEnterKey'
 import useImage from './useImage'
 import useInsertDocument from './useInsertDocument'
@@ -20,6 +19,5 @@ export {
   useOnline,
   useAudio,
   useModeration,
-  useImage,
-  useEmbedding
+  useImage
 }
