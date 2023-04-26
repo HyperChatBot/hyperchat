@@ -3,32 +3,34 @@ import produce from 'immer'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { openai } from 'src/openai'
-import { EMPTY_MESSAGE_ID, schemaNames } from 'src/shared/constants'
+import { EMPTY_MESSAGE_ID } from 'src/shared/constants'
 import {
   currConversationIdState,
   currConversationState,
   summaryInputVisibleState
 } from 'src/stores/conversation'
-import { OpenAIError, Products } from 'src/types/global'
+import { errorAlertState } from 'src/stores/global'
+import { OpenAIError } from 'src/types/global'
 import { v4 } from 'uuid'
 import useModifyDocument from './useModifyDocument'
 
 const useAudio = (
   question: string,
   setQuestion: Dispatch<SetStateAction<string>>,
+  file: File | null,
   showScrollToBottomBtn: () => void
 ) => {
   const [loading, setLoading] = useState(false)
-
+  const setErrorAlertState = useSetRecoilState(errorAlertState)
   const currConversationId = useRecoilValue(currConversationIdState)
   const setCurrConversation = useSetRecoilState(currConversationState)
   const summaryInputVisible = useRecoilValue(summaryInputVisibleState)
-  const { modifyDocument } = useModifyDocument(schemaNames[Products.Audio])
+  const { modifyDocument } = useModifyDocument()
 
-  const createTranscription = async (file: File, prompt?: string) => {
+  const createTranscription = async () => {
     if (summaryInputVisible) return
     if (loading) return
-    if (question.trim().length === 0) return
+    if (!file) return
 
     setLoading(true)
 
@@ -52,7 +54,11 @@ const useAudio = (
     setQuestion('')
 
     try {
-      const transcription = await openai.createTranscription(file, '', prompt)
+      const transcription = await openai.createTranscription(
+        file,
+        'whisper-1',
+        question
+      )
 
       setCurrConversation((prevState) => {
         const currState = produce(prevState, (draft) => {
@@ -81,33 +87,17 @@ const useAudio = (
       showScrollToBottomBtn()
     } catch (error: unknown) {
       if (isAxiosError<OpenAIError, Record<string, unknown>>(error)) {
-        console.log(error.response?.status) // Eg: 404
-        console.log(error.response?.data) //  OpenAIError
-      } else {
-        console.log(error)
+        setErrorAlertState({
+          code: error.response?.status || 0,
+          message: error.response?.data.error.message || ''
+        })
       }
     } finally {
       setLoading(false)
     }
   }
 
-  const createTranslation = async (file: File, prompt?: string) => {
-    setLoading(true)
-    try {
-      const res = await openai.createTranslation(file, '', prompt)
-    } catch (error: unknown) {
-      if (isAxiosError<OpenAIError, Record<string, unknown>>(error)) {
-        console.log(error.response?.status) // Eg: 404
-        console.log(error.response?.data) //  OpenAIError
-      } else {
-        console.log(error)
-      }
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return { loading, createTranscription, createTranslation }
+  return { loading, createTranscription }
 }
 
 export default useAudio

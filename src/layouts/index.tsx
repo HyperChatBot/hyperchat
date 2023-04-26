@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import ErrorAlert from 'src/components/ErrorAlert'
 import Siderbar from 'src/components/Sidebar'
 import { useCollection, useOnline } from 'src/hooks'
 import { routers } from 'src/routers'
@@ -47,6 +48,7 @@ const Layouts = () => {
           />
         ))}
       </Routes>
+      <ErrorAlert />
     </div>
   )
 }

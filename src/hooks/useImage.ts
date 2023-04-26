@@ -3,13 +3,14 @@ import produce from 'immer'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { openai } from 'src/openai'
-import { EMPTY_MESSAGE_ID, schemaNames } from 'src/shared/constants'
+import { EMPTY_MESSAGE_ID } from 'src/shared/constants'
 import {
   currConversationIdState,
   currConversationState,
   summaryInputVisibleState
 } from 'src/stores/conversation'
-import { OpenAIError, Products } from 'src/types/global'
+import { errorAlertState } from 'src/stores/global'
+import { OpenAIError } from 'src/types/global'
 import { v4 } from 'uuid'
 import useModifyDocument from './useModifyDocument'
 
@@ -19,11 +20,11 @@ const useImage = (
   showScrollToBottomBtn: () => void
 ) => {
   const [loading, setLoading] = useState(false)
-
+  const setErrorAlertState = useSetRecoilState(errorAlertState)
   const currConversationId = useRecoilValue(currConversationIdState)
   const setCurrConversation = useSetRecoilState(currConversationState)
   const summaryInputVisible = useRecoilValue(summaryInputVisibleState)
-  const { modifyDocument } = useModifyDocument(schemaNames[Products.Image])
+  const { modifyDocument } = useModifyDocument()
 
   const createImage = async () => {
     if (summaryInputVisible) return
@@ -87,10 +88,10 @@ const useImage = (
       showScrollToBottomBtn()
     } catch (error: unknown) {
       if (isAxiosError<OpenAIError, Record<string, unknown>>(error)) {
-        console.log(error.response?.status) // Eg: 404
-        console.log(error.response?.data) //  OpenAIError
-      } else {
-        console.log(error)
+        setErrorAlertState({
+          code: error.response?.status || 0,
+          message: error.response?.data.error.message || ''
+        })
       }
     } finally {
       setLoading(false)

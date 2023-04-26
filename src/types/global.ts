@@ -24,3 +24,14 @@ export enum Products {
   Moderation,
   Image
 }
+
+export interface AlertError {
+  code: number
+  message: string
+}
+
+export enum ErrorType {
+  OpenAI = '[OpenAI] ',
+  RxDB = '[RxDB] ',
+  Unknown = '[Unknown] '
+}

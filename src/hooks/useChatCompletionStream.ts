@@ -1,20 +1,22 @@
+import { isAxiosError } from 'axios'
 import produce from 'immer'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import {
   EMPTY_MESSAGE_ID,
   OPENAI_API_KEY,
-  OPENAI_CHAT_COMPLTION_URL,
-  schemaNames
+  OPENAI_CHAT_COMPLTION_URL
 } from 'src/shared/constants'
+import { generateErrorMessage } from 'src/shared/utils'
 import {
   currConversationIdState,
   currConversationState,
   summaryInputVisibleState
 } from 'src/stores/conversation'
+import { errorAlertState } from 'src/stores/global'
 import { OpenAIChatResponse } from 'src/types/chatCompletion'
 import { Conversation } from 'src/types/conversation'
-import { Products } from 'src/types/global'
+import { ErrorType, OpenAIError } from 'src/types/global'
 import useModifyDocument from './useModifyDocument'
 
 const useConversationCompletionStream = (
@@ -23,13 +25,11 @@ const useConversationCompletionStream = (
   showScrollToBottomBtn: () => void
 ) => {
   const [isStreaming, setIsStreaming] = useState(false)
-
+  const setErrorAlertState = useSetRecoilState(errorAlertState)
   const currConversationId = useRecoilValue(currConversationIdState)
   const setCurrConversation = useSetRecoilState(currConversationState)
   const summaryInputVisible = useRecoilValue(summaryInputVisibleState)
-  const { modifyDocument } = useModifyDocument(
-    schemaNames[Products.ChatCompletion]
-  )
+  const { modifyDocument } = useModifyDocument()
 
   const createChatCompletion = async () => {
     if (summaryInputVisible) return
@@ -78,8 +78,25 @@ const useConversationCompletionStream = (
 
     const reader = chat.body?.getReader()
 
-    if (chat.status !== 200 || !reader) {
-      return 'error'
+    if (!reader) {
+      setErrorAlertState({
+        code: 500,
+        message: generateErrorMessage(
+          ErrorType.Unknown,
+          'Cannot read ReadableStream.'
+        )
+      })
+
+      return
+    }
+
+    if (chat.status !== 200) {
+      setErrorAlertState({
+        code: chat.status,
+        message: generateErrorMessage(ErrorType.OpenAI, chat.statusText)
+      })
+
+      return
     }
 
     let _currConversation: Conversation | undefined = undefined
@@ -149,8 +166,13 @@ const useConversationCompletionStream = (
       }
 
       await read()
-    } catch (e) {
-      console.error(e)
+    } catch (error) {
+      if (isAxiosError<OpenAIError, Record<string, unknown>>(error)) {
+        setErrorAlertState({
+          code: error.response?.status || 0,
+          message: error.response?.data.error.message || ''
+        })
+      }
     }
 
     reader.releaseLock()

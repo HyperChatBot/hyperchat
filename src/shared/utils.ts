@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon'
+import { ErrorType } from 'src/types/global'
 
 export const formatDate = (millis: number) => {
   const now = DateTime.now()
@@ -13,3 +14,6 @@ export const formatDate = (millis: number) => {
 
   return { isSameDay: false, display: date.toLocaleString(DateTime.DATE_FULL) }
 }
+
+export const generateErrorMessage = (type: ErrorType, message: string) =>
+  type + message

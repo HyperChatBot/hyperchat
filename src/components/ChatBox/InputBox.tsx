@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { FC, useState } from 'react'
+import { ChangeEvent, FC, useRef, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import {
   useAudio,
@@ -18,8 +18,18 @@ interface Props {
 }
 
 const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const currProduct = useRecoilValue(currPruductState)
   const [question, setQuestion] = useState('')
+  const [currFile, setCurrFile] = useState<File | null>(null)
+
+  const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0]
+
+    if (file) {
+      setCurrFile(file)
+    }
+  }
 
   const { createChatCompletion } = useChatCompletionStream(
     question,
@@ -44,6 +54,7 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
   const { createTranscription } = useAudio(
     question,
     setQuestion,
+    currFile,
     showScrollToBottomBtn
   )
 
@@ -66,6 +77,8 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
             id="$$video-input"
             accept="audio/mp3,video/mp4,video/mpeg,video/mpea,video/m4a,video/wav,video/webm"
             className="absolute h-6 w-6 opacity-0"
+            ref={fileInputRef}
+            onChange={onFileChange}
           />
           <LinearPaperclipIcon className="mr-6" />
         </label>

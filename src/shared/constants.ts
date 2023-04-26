@@ -13,7 +13,7 @@ export const EMPTY_CHAT_HINT = 'Create your first conversation!'
 export const conversationTitles = {
   [Products.ChatCompletion]: 'Chat Completion',
   [Products.TextCompletion]: 'Text Completion',
-  [Products.Audio]: 'Audio',
+  [Products.Audio]: 'Audio Transcription',
   [Products.Moderation]: 'Moderations',
   [Products.Image]: 'Images'
 }
