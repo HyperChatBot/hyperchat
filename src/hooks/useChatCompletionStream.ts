@@ -2,12 +2,12 @@ import { isAxiosError } from 'axios'
 import produce from 'immer'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { OPENAI_API_KEY, OPENAI_CHAT_COMPLTION_URL } from 'src/shared/constants'
 import {
-  EMPTY_MESSAGE_ID,
-  OPENAI_API_KEY,
-  OPENAI_CHAT_COMPLTION_URL
-} from 'src/shared/constants'
-import { generateEmptyMessage, generateErrorMessage } from 'src/shared/utils'
+  generateEmptyMessage,
+  generateErrorMessage,
+  updateMessageState
+} from 'src/shared/utils'
 import {
   currConversationIdState,
   currConversationState,
@@ -137,16 +137,7 @@ const useConversationCompletionStream = (
             setCurrConversation((prevState) => {
               const currState = produce(prevState, (draft) => {
                 if (draft) {
-                  const messages = draft.messages
-                  const last = messages[messages.length - 1]
-                  const isFirstChuck = last.message_id === EMPTY_MESSAGE_ID
-
-                  if (isFirstChuck) {
-                    last.message_id = json.id
-                  }
-
-                  last.answer += token
-                  last.answer_created_at = +new Date()
+                  updateMessageState(draft, json.id, token, true)
                 }
               })
 
