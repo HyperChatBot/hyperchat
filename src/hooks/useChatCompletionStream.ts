@@ -7,7 +7,7 @@ import {
   OPENAI_API_KEY,
   OPENAI_CHAT_COMPLTION_URL
 } from 'src/shared/constants'
-import { generateErrorMessage } from 'src/shared/utils'
+import { generateEmptyMessage, generateErrorMessage } from 'src/shared/utils'
 import {
   currConversationIdState,
   currConversationState,
@@ -42,13 +42,7 @@ const useConversationCompletionStream = (
     setCurrConversation((prevState) => {
       const currState = produce(prevState, (draft) => {
         if (draft) {
-          draft.messages.push({
-            message_id: EMPTY_MESSAGE_ID,
-            answer: '',
-            question,
-            question_created_at: +new Date(),
-            answer_created_at: +new Date()
-          })
+          draft.messages.push(generateEmptyMessage(question))
         }
       })
 

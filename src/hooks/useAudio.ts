@@ -3,7 +3,7 @@ import produce from 'immer'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { openai } from 'src/openai'
-import { EMPTY_MESSAGE_ID } from 'src/shared/constants'
+import { generateEmptyMessage } from 'src/shared/utils'
 import {
   currConversationIdState,
   currConversationState,
@@ -38,13 +38,7 @@ const useAudio = (
     setCurrConversation((prevState) => {
       const currState = produce(prevState, (draft) => {
         if (draft) {
-          draft.messages.push({
-            message_id: EMPTY_MESSAGE_ID,
-            answer: '',
-            question,
-            question_created_at: +new Date(),
-            answer_created_at: +new Date()
-          })
+          draft.messages.push(generateEmptyMessage(question))
         }
       })
 
