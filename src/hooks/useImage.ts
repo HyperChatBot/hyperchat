@@ -87,6 +87,16 @@ const useImage = (
           message: error.response?.data.error.message || ''
         })
       }
+
+      setCurrConversation((prevState) => {
+        const currState = produce(prevState, (draft) => {
+          if (draft) {
+            draft.messages.pop()
+          }
+        })
+
+        return currState
+      })
     } finally {
       setLoading(false)
     }
