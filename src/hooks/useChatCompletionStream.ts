@@ -1,6 +1,6 @@
 import { isAxiosError } from 'axios'
 import produce from 'immer'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { OPENAI_API_KEY, OPENAI_CHAT_COMPLTION_URL } from 'src/shared/constants'
 import {
@@ -21,7 +21,7 @@ import useModifyDocument from './useModifyDocument'
 
 const useConversationCompletionStream = (
   question: string,
-  setQuestion: Dispatch<SetStateAction<string>>,
+  clearTextarea: () => void,
   showScrollToBottomBtn: () => void
 ) => {
   const [isStreaming, setIsStreaming] = useState(false)
@@ -49,7 +49,7 @@ const useConversationCompletionStream = (
       return currState
     })
 
-    setQuestion('')
+    clearTextarea()
 
     const chat = await fetch(OPENAI_CHAT_COMPLTION_URL, {
       headers: {

@@ -1,6 +1,6 @@
 import { isAxiosError } from 'axios'
 import produce from 'immer'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { openai } from 'src/openai'
 import { generateEmptyMessage, updateMessageState } from 'src/shared/utils'
@@ -16,7 +16,7 @@ import useModifyDocument from './useModifyDocument'
 
 const useAudio = (
   question: string,
-  setQuestion: Dispatch<SetStateAction<string>>,
+  clearTextarea: () => void,
   file: File | null,
   showScrollToBottomBtn: () => void
 ) => {
@@ -45,7 +45,7 @@ const useAudio = (
       return currState
     })
 
-    setQuestion('')
+    clearTextarea()
 
     try {
       const transcription = await openai.createTranscription(

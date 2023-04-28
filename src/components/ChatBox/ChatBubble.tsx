@@ -1,7 +1,6 @@
 import classNames from 'classnames'
 import { DateTime } from 'luxon'
 import { FC, ReactNode } from 'react'
-import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
 import Avatar from '../Avatar'
 
 interface Props {
@@ -19,7 +18,7 @@ const ChatBubble: FC<Props> = ({ role, avatar, date, children }) => {
       })}
     >
       <Avatar
-        src={ChatGPTLogoImg}
+        src={avatar}
         className={classNames({
           'mr-4': role === 'assistant',
           'ml-4': role === 'user'
@@ -32,10 +31,10 @@ const ChatBubble: FC<Props> = ({ role, avatar, date, children }) => {
         })}
       >
         <section
-          className={classNames('max-w-160 rounded-xl pl-4 pr-4 pt-2 text-sm', {
+          className={classNames('max-w-160 rounded-xl px-3 py-3 text-sm', {
             'bg-main-gray text-black dark:bg-gray-700 dark:text-dark-bubule-assistant-text':
               role === 'assistant',
-            'bg-main-purple pb-2 text-white dark:text-dark-bubule-assistant-text':
+            'flex min-h-[20px] flex-col items-start gap-4 whitespace-pre-wrap break-words bg-main-purple text-white dark:text-dark-bubule-assistant-text':
               role === 'user'
           })}
         >

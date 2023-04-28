@@ -1,7 +1,9 @@
 import classNames from 'classnames'
 import { FC, Fragment, RefObject } from 'react'
 import { useRecoilValue } from 'recoil'
+import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
 import NoDataIllustration from 'src/assets/illustrations/no-data.svg'
+import UserLogoImg from 'src/assets/user-avatar.png'
 import { EMPTY_MESSAGE_ID } from 'src/shared/constants'
 import { currConversationState } from 'src/stores/conversation'
 import ChatBubble from './ChatBubble'
@@ -30,14 +32,14 @@ const ChatList: FC<Props> = ({ chatBoxRef }) => {
             <Fragment key={message.message_id}>
               <ChatBubble
                 role="user"
-                avatar=""
+                avatar={UserLogoImg}
                 date={message.question_created_at}
               >
                 {message.question}
               </ChatBubble>
               <ChatBubble
                 role="assistant"
-                avatar={''}
+                avatar={ChatGPTLogoImg}
                 date={message.answer_created_at}
               >
                 {message.message_id === EMPTY_MESSAGE_ID ? (

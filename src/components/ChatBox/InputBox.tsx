@@ -9,6 +9,7 @@ import {
   useModeration,
   useTextCompletion
 } from 'src/hooks'
+import { TEXTAREA_MAX_ROWS } from 'src/shared/constants'
 import { currPruductState } from 'src/stores/global'
 import { Products } from 'src/types/global'
 import { BoldSendIcon, LinearPaperclipIcon } from '../Icons'
@@ -20,8 +21,14 @@ interface Props {
 const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const currProduct = useRecoilValue(currPruductState)
+  const [rows, setRows] = useState(1)
   const [question, setQuestion] = useState('')
   const [currFile, setCurrFile] = useState<File | null>(null)
+
+  const clearTextarea = () => {
+    setRows(1)
+    setQuestion('')
+  }
 
   const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
@@ -33,27 +40,31 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
 
   const { createChatCompletion } = useChatCompletionStream(
     question,
-    setQuestion,
+    clearTextarea,
     showScrollToBottomBtn
   )
 
   const { createTextCompletion } = useTextCompletion(
     question,
-    setQuestion,
+    clearTextarea,
     showScrollToBottomBtn
   )
 
   const { createModeration } = useModeration(
     question,
-    setQuestion,
+    clearTextarea,
     showScrollToBottomBtn
   )
 
-  const { createImage } = useImage(question, setQuestion, showScrollToBottomBtn)
+  const { createImage } = useImage(
+    question,
+    clearTextarea,
+    showScrollToBottomBtn
+  )
 
   const { createTranscription } = useAudio(
     question,
-    setQuestion,
+    clearTextarea,
     currFile,
     showScrollToBottomBtn
   )
@@ -68,8 +79,15 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
 
   useEnterKey(() => requests[currProduct]())
 
+  const onTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setQuestion(e.target.value)
+
+    const currRow = Math.floor(e.target.scrollHeight / e.target.clientHeight)
+    setRows(currRow > TEXTAREA_MAX_ROWS ? TEXTAREA_MAX_ROWS : currRow)
+  }
+
   return (
-    <section className="absolute bottom-6 left-6 flex w-[calc(100%_-_3rem)] items-center bg-white pt-6 dark:bg-gray-800">
+    <section className="items-centerbg-white absolute bottom-6 left-6 flex w-[calc(100%_-_3rem)] pt-6 dark:bg-gray-800">
       {currProduct === Products.Audio && (
         <label htmlFor="$$video-input" className="relative">
           <input
@@ -84,26 +102,22 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
         </label>
       )}
       <section className="relative flex w-full">
-        <input
+        <textarea
+          tabIndex={0}
+          rows={rows}
           value={question}
-          type="text"
-          className="flex-1 rounded-xl border-2 pb-3.5 pl-5 pr-5 pt-3.5 text-sm text-black placeholder:text-black placeholder:text-opacity-50 dark:text-white dark:placeholder:text-white dark:placeholder:text-opacity-50"
-          placeholder="Type a message"
-          onChange={(e) => setQuestion(e.target.value)}
+          className="z-10 flex-1 resize-none rounded-xl border-2 pb-3.5 pl-5 pr-14 pt-3.5 text-sm text-black placeholder:text-black placeholder:text-opacity-50 dark:text-white dark:placeholder:text-white dark:placeholder:text-opacity-50"
+          placeholder="Send a message."
+          onChange={onTextareaChange}
         />
-        <div onClick={requests[currProduct]}>
-          <BoldSendIcon
-            className="absolute right-5 top-3.5"
-            pathClassName={classNames(
-              'text-black dark:text-white fill-current',
-              {
-                'text-opacity-30': question.trim().length === 0,
-                'text-main-purple dark:text-main-purple':
-                  question.trim().length > 0
-              }
-            )}
-          />
-        </div>
+        <BoldSendIcon
+          onClick={requests[currProduct]}
+          className="absolute bottom-3.5 right-5 z-10"
+          pathClassName={classNames('text-black dark:text-white fill-current', {
+            'text-opacity-30': question.trim().length === 0,
+            'text-main-purple dark:text-main-purple': question.trim().length > 0
+          })}
+        />
       </section>
     </section>
   )

@@ -47,7 +47,7 @@ const Markdown: FC<Props> = ({ raw }) => {
         },
         p({ className, children, ...props }) {
           return (
-            <p className={classNames('mb-4 last:mb-2', className)} {...props}>
+            <p className={classNames('mb-3 last:mb-0', className)} {...props}>
               {children}
             </p>
           )
@@ -56,7 +56,7 @@ const Markdown: FC<Props> = ({ raw }) => {
           return (
             <pre
               className={classNames(
-                '-ml-4 -mr-4 mb-4 overflow-x-scroll text-sm',
+                '-mx-3 -mt-2 mb-1 overflow-x-scroll text-sm last:mb-0',
                 className
               )}
               {...props}
@@ -68,7 +68,7 @@ const Markdown: FC<Props> = ({ raw }) => {
         ol({ className, children, ...props }) {
           return (
             <ol
-              className={classNames('mb-4 list-disc pl-4', className)}
+              className={classNames('mb-3 list-disc pl-3 last:mb-0', className)}
               {...props}
             >
               {children}
@@ -78,7 +78,10 @@ const Markdown: FC<Props> = ({ raw }) => {
         ul({ className, children, ...props }) {
           return (
             <ul
-              className={classNames('mb-4 list-decimal pl-4', className)}
+              className={classNames(
+                'mb-3 list-decimal pl-3  last:mb-0',
+                className
+              )}
               {...props}
             >
               {children}
@@ -87,7 +90,7 @@ const Markdown: FC<Props> = ({ raw }) => {
         },
         li({ className, children, ...props }) {
           return (
-            <li className={classNames('mb-4', className)} {...props}>
+            <li className={classNames('mb-3 last:mb-0', className)} {...props}>
               {children}
             </li>
           )

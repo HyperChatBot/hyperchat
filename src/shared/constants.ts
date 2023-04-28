@@ -25,3 +25,5 @@ export const schemaNames = {
   [Products.Moderation]: 'moderation',
   [Products.Image]: 'image'
 }
+
+export const TEXTAREA_MAX_ROWS = 8
