@@ -5,7 +5,6 @@ import { getRxStorageDexie } from 'rxdb/plugins/storage-dexie'
 import { audioSchema } from 'src/schemas/audioSchema'
 import { chatSchema } from 'src/schemas/chatSchema'
 import { imageSchema } from 'src/schemas/imageSchema'
-import { moderationSchema } from 'src/schemas/moderationSchema'
 import { settingsSchema } from 'src/schemas/settingsSchema'
 import { textSchema } from 'src/schemas/textSchema'
 
@@ -43,6 +42,5 @@ export const initialDB = async () => {
   await createCollection(chatSchema)
   await createCollection(audioSchema)
   await createCollection(imageSchema)
-  await createCollection(moderationSchema)
   await createCollection(textSchema)
 }

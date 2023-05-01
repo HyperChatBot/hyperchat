@@ -11,11 +11,11 @@ import {
   conversationsState,
   currConversationIdState
 } from 'src/stores/conversation'
-import { currPruductState } from 'src/stores/global'
+import { currProductState } from 'src/stores/global'
 import { Conversation } from 'src/types/conversation'
 
 const Layouts = () => {
-  const currPruduct = useRecoilValue(currPruductState)
+  const currPruduct = useRecoilValue(currProductState)
   const conversationCollection = useCollection(schemaNames[currPruduct])
   const setConversations = useSetRecoilState(conversationsState)
   const setCurrConversationId = useSetRecoilState(currConversationIdState)

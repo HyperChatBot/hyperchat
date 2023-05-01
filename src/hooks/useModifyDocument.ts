@@ -4,12 +4,12 @@ import { MangoQuerySelector } from 'rxdb'
 import { useCollection } from 'src/hooks'
 import { schemaNames } from 'src/shared/constants'
 import { generateErrorMessage } from 'src/shared/utils'
-import { currPruductState, errorAlertState } from 'src/stores/global'
+import { currProductState, errorAlertState } from 'src/stores/global'
 import { ErrorType } from 'src/types/global'
 
 const useModifyDocument = <T>() => {
   const [loading, setLoading] = useState(false)
-  const currPruduct = useRecoilValue(currPruductState)
+  const currPruduct = useRecoilValue(currProductState)
   const conversationCollection = useCollection(schemaNames[currPruduct])
   const setErrorAlertState = useSetRecoilState(errorAlertState)
 

@@ -21,7 +21,6 @@ export enum Products {
   ChatCompletion,
   TextCompletion,
   Audio,
-  Moderation,
   Image
 }
 

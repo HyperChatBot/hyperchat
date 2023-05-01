@@ -11,5 +11,3 @@ export const chatCompletions = ['gpt-3.5-turbo', 'gpt-4']
 export const edits = ['text-davinci-edit-001', 'code-davinci-edit-001']
 
 export const audios = ['whisper-1']
-
-export const moderations = ['text-moderation-latest', 'text-moderation-stable']

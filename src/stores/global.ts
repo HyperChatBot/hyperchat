@@ -6,8 +6,8 @@ export const onlineState = atom({
   default: window.navigator.onLine
 })
 
-export const currPruductState = atom({
-  key: 'currPruductState',
+export const currProductState = atom({
+  key: 'currProductState',
   default: Products.ChatCompletion
 })
 

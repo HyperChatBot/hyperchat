@@ -6,11 +6,10 @@ import {
   useChatCompletionStream,
   useEnterKey,
   useImage,
-  useModeration,
   useTextCompletion
 } from 'src/hooks'
 import { TEXTAREA_MAX_ROWS } from 'src/shared/constants'
-import { currPruductState } from 'src/stores/global'
+import { currProductState } from 'src/stores/global'
 import { Products } from 'src/types/global'
 import { BoldSendIcon, LinearPaperclipIcon } from '../Icons'
 
@@ -20,7 +19,7 @@ interface Props {
 
 const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const currProduct = useRecoilValue(currPruductState)
+  const currProduct = useRecoilValue(currProductState)
   const [rows, setRows] = useState(1)
   const [question, setQuestion] = useState('')
   const [currFile, setCurrFile] = useState<File | null>(null)
@@ -50,12 +49,6 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
     showScrollToBottomBtn
   )
 
-  const { createModeration } = useModeration(
-    question,
-    clearTextarea,
-    showScrollToBottomBtn
-  )
-
   const { createImage } = useImage(
     question,
     clearTextarea,
@@ -73,7 +66,6 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
     [Products.ChatCompletion]: createChatCompletion,
     [Products.TextCompletion]: createTextCompletion,
     [Products.Audio]: createTranscription,
-    [Products.Moderation]: createModeration,
     [Products.Image]: createImage
   }
 
@@ -106,7 +98,7 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
           tabIndex={0}
           rows={rows}
           value={question}
-          className="z-10 flex-1 resize-none rounded-xl border-2 pb-3.5 pl-5 pr-14 pt-3.5 text-sm text-black placeholder:text-black placeholder:text-opacity-50 dark:text-white dark:placeholder:text-white dark:placeholder:text-opacity-50"
+          className="z-10 flex-1 resize-none rounded-xl border-2 pb-3.5 pl-5 pr-14 pt-3.5 text-sm text-black placeholder:text-black placeholder:text-opacity-50 dark:bg-gray-800 dark:text-white dark:placeholder:text-white dark:placeholder:text-opacity-50"
           placeholder="Send a message."
           onChange={onTextareaChange}
         />

@@ -3,22 +3,16 @@ import { FC } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark as mdCodeTheme } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { useRecoilValue } from 'recoil'
-import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
-import { currPruductState } from 'src/stores/global'
 
 interface Props {
   raw: string
 }
 
 const Markdown: FC<Props> = ({ raw }) => {
-  const currProduct = useRecoilValue(currPruductState)
-
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
-      rehypePlugins={[rehypeRaw]}
       components={{
         code({ inline, className, children, ...props }) {
           // @ts-ignore
@@ -32,9 +26,7 @@ const Markdown: FC<Props> = ({ raw }) => {
               style={mdCodeTheme}
               language={match ? match[1] : 'js'}
               PreTag="div"
-              customStyle={{ borderRadius: 0 }}
-              lineNumberStyle={{ minWidth: 'auto' }}
-              showLineNumbers
+              customStyle={{ borderRadius: 0, margin: 0 }}
               {...props}
             >
               {String(children).replace(/\n$/, '')}
@@ -47,7 +39,13 @@ const Markdown: FC<Props> = ({ raw }) => {
         },
         p({ className, children, ...props }) {
           return (
-            <p className={classNames('mb-3 last:mb-0', className)} {...props}>
+            <p
+              className={classNames(
+                'mb-3 whitespace-pre-wrap break-words last:mb-0',
+                className
+              )}
+              {...props}
+            >
               {children}
             </p>
           )
@@ -56,7 +54,7 @@ const Markdown: FC<Props> = ({ raw }) => {
           return (
             <pre
               className={classNames(
-                '-mx-3 -mt-2 mb-1 overflow-x-scroll text-sm last:mb-0',
+                '-mx-4 my-3 overflow-x-scroll text-xs last:my-0',
                 className
               )}
               {...props}
@@ -79,7 +77,7 @@ const Markdown: FC<Props> = ({ raw }) => {
           return (
             <ul
               className={classNames(
-                'mb-3 list-decimal pl-3  last:mb-0',
+                'mb-3 list-decimal pl-3 last:mb-0',
                 className
               )}
               {...props}

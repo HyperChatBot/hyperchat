@@ -19,7 +19,7 @@ import { FC } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
-import { currPruductState } from 'src/stores/global'
+import { currProductState } from 'src/stores/global'
 import { Products } from 'src/types/global'
 import Avatar from '../Avatar'
 
@@ -47,12 +47,6 @@ const items = [
     active: <MicrophoneIconSolid className={iconClassName} />
   },
   {
-    product: Products.Moderation,
-    tooltip: 'Moderation',
-    inactive: <ScaleIconOutline className={iconClassName} />,
-    active: <ScaleIconSolid className={iconClassName} />
-  },
-  {
     product: Products.Image,
     tooltip: 'Images',
     inactive: <PhotoIconOutline className={iconClassName} />,
@@ -61,7 +55,7 @@ const items = [
 ]
 
 const Siderbar: FC = () => {
-  const [currPruduct, setCurrProduct] = useRecoilState(currPruductState)
+  const [currPruduct, setCurrProduct] = useRecoilState(currProductState)
   const location = useLocation()
 
   return (

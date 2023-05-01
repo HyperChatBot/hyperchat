@@ -18,7 +18,7 @@ const LinearChatIcon: FC<SvgIconProps> = ({
   >
     <path
       className={classNames(
-        'dark:stroke-current dark:text-dark-bubule-assistant-text',
+        'dark:stroke-current dark:text-dark-bubble-assistant-text',
         pathClassName
       )}
       d="M7 10.74V13.94M12 9V15.68M17 10.74V13.94M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z"

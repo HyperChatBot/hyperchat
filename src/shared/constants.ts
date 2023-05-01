@@ -14,7 +14,6 @@ export const conversationTitles = {
   [Products.ChatCompletion]: 'Chat Completion',
   [Products.TextCompletion]: 'Text Completion',
   [Products.Audio]: 'Audio Transcription',
-  [Products.Moderation]: 'Moderations',
   [Products.Image]: 'Images'
 }
 
@@ -22,7 +21,6 @@ export const schemaNames = {
   [Products.ChatCompletion]: 'chat',
   [Products.TextCompletion]: 'text',
   [Products.Audio]: 'audio',
-  [Products.Moderation]: 'moderation',
   [Products.Image]: 'image'
 }
 

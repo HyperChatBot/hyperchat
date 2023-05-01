@@ -8,12 +8,12 @@ import {
   currConversationState,
   summaryInputVisibleState
 } from 'src/stores/conversation'
-import { currPruductState, onlineState } from 'src/stores/global'
+import { currProductState, onlineState } from 'src/stores/global'
 import Avatar from '../Avatar'
 import { LinearCheckIcon, LinearDeleteIcon, LinearEditIcon } from '../Icons'
 
 const ContactHeader: FC = () => {
-  const currPruduct = useRecoilValue(currPruductState)
+  const currPruduct = useRecoilValue(currProductState)
 
   const [summaryInputVisible, setSummaryInputVisibleState] = useRecoilState(
     summaryInputVisibleState

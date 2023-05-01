@@ -7,18 +7,18 @@ import {
   conversationsState,
   currConversationIdState
 } from 'src/stores/conversation'
-import { currPruductState } from 'src/stores/global'
+import { currProductState } from 'src/stores/global'
 import { Conversation } from 'src/types/conversation'
 import { v4 } from 'uuid'
 import Divider from '../Divider'
 import { BoldAddIcon } from '../Icons'
-import ChatItem from './ConcersationItem'
+import ConversationItem from './ConversationItem'
 import ChatEmpty from './EmptyItem'
 
 const ConversationList: FC = () => {
-  const currProduct = useRecoilValue(currPruductState)
+  const currProduct = useRecoilValue(currProductState)
   const [conversations, setConversations] = useRecoilState(conversationsState)
-  const [currConverastionId, setCurrConversationId] = useRecoilState(
+  const [currConversationId, setCurrConversationId] = useRecoilState(
     currConversationIdState
   )
   const { insertDocument } = useInsertDocument<ChatDocType>(
@@ -48,16 +48,9 @@ const ConversationList: FC = () => {
   return (
     <section className="w-87.75">
       <section className="flex items-center justify-between p-6">
-        <section className="flex items-center">
-          <span className="mr-4 text-xl font-semibold dark:text-dark-text">
-            {conversationTitles[currProduct]}
-          </span>
-          {conversations.length > 0 && (
-            <span className="dark:text-dark-sub-text rounded-3xl bg-default-badge pb-0.5 pl-2 pr-2 pt-0.5 text-xs font-semibold">
-              {conversations.length}
-            </span>
-          )}
-        </section>
+        <span className="mr-4 text-xl font-semibold dark:text-dark-text">
+          {conversationTitles[currProduct]}
+        </span>
         <BoldAddIcon onClick={addChat} />
       </section>
 
@@ -66,9 +59,9 @@ const ConversationList: FC = () => {
       <section className="no-scrollbar m-4 h-[calc(100vh_-_7.5625rem)] overflow-y-scroll">
         {conversations.length > 0 ? (
           conversations.map((conversation) => (
-            <ChatItem
+            <ConversationItem
               key={conversation.conversation_id}
-              active={conversation.conversation_id === currConverastionId}
+              active={conversation.conversation_id === currConversationId}
               conversation={conversation}
               onClick={() => switchChat(conversation.conversation_id)}
             />

@@ -18,7 +18,7 @@ const LinearPaperclipIcon: FC<SvgIconProps> = ({
   >
     <path
       className={classNames(
-        'dark:stroke-current dark:text-dark-bubule-assistant-text',
+        'dark:stroke-current dark:text-dark-bubble-assistant-text',
         pathClassName
       )}
       d="M11.97 12V15.5C11.97 17.43 13.54 19 15.47 19C17.4 19 18.97 17.43 18.97 15.5V10C18.97 6.13 15.84 3 11.97 3C8.1 3 4.97 6.13 4.97 10V16C4.97 19.31 7.66 22 10.97 22"

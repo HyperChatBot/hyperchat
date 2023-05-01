@@ -5,7 +5,6 @@ import {
   audios,
   chatCompletions,
   edits,
-  moderations,
   textCompletions
 } from 'src/openai/models'
 
@@ -158,20 +157,6 @@ const Settings: FC = () => {
               <Select id="$$audio-model-selector" required={true}>
                 {audios.map((audio) => (
                   <option key={audio}>{audio}</option>
-                ))}
-              </Select>
-            </div>
-
-            <div id="$$moderations-model-selector" className="mb-6">
-              <div className="mb-2 block">
-                <Label
-                  htmlFor="$$moderations-model-selector"
-                  value="Moderations Model"
-                />
-              </div>
-              <Select id="$$moderations-model-selector" required={true}>
-                {moderations.map((moderation) => (
-                  <option key={moderation}>{moderation}</option>
                 ))}
               </Select>
             </div>

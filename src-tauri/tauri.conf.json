@@ -42,9 +42,9 @@
         "resizable": true,
         "title": "hyperchat",
         "width": 1280,
-        "height": 960,
+        "height": 900,
         "minWidth": 1280,
-        "minHeight": 960
+        "minHeight": 900
       }
     ]
   }

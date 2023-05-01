@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: 'class',
+  darkMode: 'media',
   content: [
     './index.html',
     './src/**/*.{js,ts,jsx,tsx}',
@@ -19,14 +19,15 @@ export default {
         87.75: '21.9375rem' // 352px
       },
       minWidth: {
-        22: '5.5rem' // 88px
+        22: '5.5rem', // 88px
+        50: '12.5rem' // 200px
       },
       maxWidth: {
         160: '40rem' // 640px
       },
       height: {
         2.5: '0.625rem', // 10px
-        160: '40rem', // 640px
+        160: '40rem' // 640px
       },
       colors: {
         'main-purple': '#615ef0',
@@ -38,8 +39,8 @@ export default {
         'dark-main-bg': '#131516',
         'dark-text': '#e6edf3',
         'dark-text-sub': '#7d8590',
-        'dark-bubule-assistant-bg': '#202324',
-        'dark-bubule-assistant-text': '#e8e6e3',
+        'dark-bubble-assistant-bg': '#202324',
+        'dark-bubble-assistant-text': '#e8e6e3',
         'dark-search-input-border': '#34383a',
         'dark-divider-bg': '#30363d'
       },
