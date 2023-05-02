@@ -17,11 +17,4 @@ export const conversationTitles = {
   [Products.Image]: 'Images'
 }
 
-export const schemaNames = {
-  [Products.ChatCompletion]: 'chat',
-  [Products.TextCompletion]: 'text',
-  [Products.Audio]: 'audio',
-  [Products.Image]: 'image'
-}
-
 export const TEXTAREA_MAX_ROWS = 8

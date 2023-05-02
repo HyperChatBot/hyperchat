@@ -1,10 +1,9 @@
-import { FC } from 'react'
+import { useLiveQuery } from 'dexie-react-hooks'
+import { FC, useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
+import { db } from 'src/models/db'
 import { conversationTitles } from 'src/shared/constants'
-import {
-  conversationsState,
-  currConversationIdState
-} from 'src/stores/conversation'
+import { currConversationIdState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { Conversation } from 'src/types/conversation'
 import { v4 } from 'uuid'
@@ -13,11 +12,12 @@ import { BoldAddIcon } from '../Icons'
 import ConversationItem from './ConversationItem'
 import ChatEmpty from './EmptyItem'
 
-import { db } from 'src/models/db'
-
 const ConversationList: FC = () => {
   const currProduct = useRecoilValue(currProductState)
-  const [conversations, setConversations] = useRecoilState(conversationsState)
+  const conversations = useLiveQuery(
+    () => db[currProduct].orderBy('updated_at').reverse().toArray(),
+    []
+  )
   const [currConversationId, setCurrConversationId] = useRecoilState(
     currConversationIdState
   )
@@ -33,14 +33,21 @@ const ConversationList: FC = () => {
       updated_at: +new Date()
     }
 
-    setConversations([...conversations, conversation])
     setCurrConversationId(chatId)
-    db.chat.add(conversation)
+    db[currProduct].add(conversation)
   }
 
   const switchChat = (id: string) => {
     setCurrConversationId(id)
   }
+
+  useEffect(() => {
+    if (conversations && conversations.length > 0) {
+      setCurrConversationId(conversations[0].conversation_id)
+    }
+  }, [conversations])
+
+  if (!conversations) return null
 
   return (
     <section className="w-87.75">
@@ -54,7 +61,7 @@ const ConversationList: FC = () => {
       <Divider />
 
       <section className="no-scrollbar m-4 h-[calc(100vh_-_7.5625rem)] overflow-y-scroll">
-        {conversations.length > 0 ? (
+        {conversations?.length > 0 ? (
           conversations.map((conversation) => (
             <ConversationItem
               key={conversation.conversation_id}

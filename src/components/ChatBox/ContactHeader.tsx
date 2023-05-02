@@ -4,21 +4,22 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
 import { db } from 'src/models/db'
 import { EMPTY_CHAT_HINT } from 'src/shared/constants'
-import {
-  currConversationState,
-  summaryInputVisibleState
-} from 'src/stores/conversation'
-import { onlineState } from 'src/stores/global'
+import { summaryInputVisibleState } from 'src/stores/conversation'
+import { currProductState, onlineState } from 'src/stores/global'
+import { Conversation } from 'src/types/conversation'
 import Avatar from '../Avatar'
 import { LinearCheckIcon, LinearDeleteIcon, LinearEditIcon } from '../Icons'
 
-const ContactHeader: FC = () => {
+interface Props {
+  currConversation?: Conversation
+}
+
+const ContactHeader: FC<Props> = ({ currConversation }) => {
+  const currProduct = useRecoilValue(currProductState)
   const [summaryInputVisible, setSummaryInputVisibleState] = useRecoilState(
     summaryInputVisibleState
   )
-  const [currConversation, setCurrConversation] = useRecoilState(
-    currConversationState
-  )
+
   const isOnline = useRecoilValue(onlineState)
   const [summaryValue, setSummaryValue] = useState(
     currConversation?.summary || ''
@@ -28,13 +29,11 @@ const ContactHeader: FC = () => {
     currConversation?.conversation_id ||
     EMPTY_CHAT_HINT
 
-  const saveSummary = () => {
+  const saveSummary = async () => {
     if (summaryValue.trim().length === 0) return
 
     if (currConversation) {
-      setCurrConversation({ ...currConversation, summary: summaryValue })
-
-      db.chat.update(currConversation.conversation_id, {
+      await db[currProduct].update(currConversation.conversation_id, {
         summary: summaryValue
       })
 

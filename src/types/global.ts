@@ -18,10 +18,10 @@ export interface OpenAIError extends Error {
 }
 
 export enum Products {
-  ChatCompletion,
-  TextCompletion,
-  Audio,
-  Image
+  ChatCompletion = 'chat',
+  TextCompletion = 'text',
+  Audio = 'audio',
+  Image = 'image'
 }
 
 export interface AlertError {

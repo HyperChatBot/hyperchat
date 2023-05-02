@@ -1,4 +1,5 @@
 import { isAxiosError } from 'axios'
+import { useLiveQuery } from 'dexie-react-hooks'
 import produce from 'immer'
 import { useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
@@ -11,12 +12,12 @@ import {
 } from 'src/shared/utils'
 import {
   currConversationIdState,
-  currConversationState,
-  summaryInputVisibleState
+  summaryInputVisibleState,
+  tempMessageState
 } from 'src/stores/conversation'
 import { errorAlertState } from 'src/stores/global'
 import { OpenAIChatResponse } from 'src/types/chatCompletion'
-import { Conversation } from 'src/types/conversation'
+import { Message } from 'src/types/conversation'
 import { ErrorType, OpenAIError } from 'src/types/global'
 
 const useConversationCompletionStream = (
@@ -25,10 +26,14 @@ const useConversationCompletionStream = (
   showScrollToBottomBtn: () => void
 ) => {
   const [isStreaming, setIsStreaming] = useState(false)
-  const setErrorAlertState = useSetRecoilState(errorAlertState)
   const currConversationId = useRecoilValue(currConversationIdState)
-  const setCurrConversation = useSetRecoilState(currConversationState)
+  const currConversation = useLiveQuery(
+    () => db.chat.get(currConversationId),
+    [currConversationId]
+  )
   const summaryInputVisible = useRecoilValue(summaryInputVisibleState)
+  const setErrorAlertState = useSetRecoilState(errorAlertState)
+  const setTempMessage = useSetRecoilState(tempMessageState)
 
   const createChatCompletion = async () => {
     if (summaryInputVisible) return
@@ -36,19 +41,9 @@ const useConversationCompletionStream = (
     if (question.trim().length === 0) return
 
     setIsStreaming(true)
-
-    // Append an empty message object to show loading spin.
-    setCurrConversation((prevState) => {
-      const currState = produce(prevState, (draft) => {
-        if (draft) {
-          draft.messages.push(generateEmptyMessage(question))
-        }
-      })
-
-      return currState
-    })
-
     clearTextarea()
+    // Append an empty message object to show loading spin.
+    setTempMessage(generateEmptyMessage(question))
 
     const chat = await fetch(OPENAI_CHAT_COMPLTION_URL, {
       headers: {
@@ -92,7 +87,7 @@ const useConversationCompletionStream = (
       return
     }
 
-    let _currConversation: Conversation | undefined = undefined
+    let _currMessage: Message | null = null
 
     const decoder = new TextDecoder('utf-8')
     try {
@@ -103,9 +98,11 @@ const useConversationCompletionStream = (
           setIsStreaming(false)
           showScrollToBottomBtn()
 
-          if (_currConversation) {
-            db.chat.update(currConversationId, {
-              messages: _currConversation.messages
+          if (_currMessage) {
+            await db.chat.update(currConversationId, {
+              messages: currConversation
+                ? [...currConversation.messages, _currMessage]
+                : [_currMessage]
             })
           }
 
@@ -127,14 +124,14 @@ const useConversationCompletionStream = (
           const token = json.choices[0].delta.content
 
           if (token !== undefined) {
-            setCurrConversation((prevState) => {
+            setTempMessage((prevState) => {
               const currState = produce(prevState, (draft) => {
                 if (draft) {
                   updateMessageState(draft, json.id, token, true)
                 }
               })
 
-              _currConversation = currState
+              _currMessage = currState
               return currState
             })
           }
@@ -151,16 +148,8 @@ const useConversationCompletionStream = (
           message: error.response?.data.error.message || ''
         })
       }
-
-      setCurrConversation((prevState) => {
-        const currState = produce(prevState, (draft) => {
-          if (draft) {
-            draft.messages.pop()
-          }
-        })
-
-        return currState
-      })
+    } finally {
+      setTempMessage(null)
     }
 
     reader.releaseLock()

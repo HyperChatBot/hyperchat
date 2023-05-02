@@ -1,10 +1,13 @@
+import { useLiveQuery } from 'dexie-react-hooks'
 import throttle from 'lodash.throttle'
 import { FC, useEffect, useRef } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
+import { db } from 'src/models/db'
 import {
   currConversationIdState,
   scrollToBottomBtnVisibleState
 } from 'src/stores/conversation'
+import { currProductState } from 'src/stores/global'
 import Divider from '../Divider'
 import ChatList from './ChatList'
 import ContractHeader from './ContactHeader'
@@ -12,8 +15,14 @@ import InputBox from './InputBox'
 import ScrollToBottom from './ScrollToBottom'
 
 const ChatBox: FC = () => {
+  const currProduct = useRecoilValue(currProductState)
   const chatBoxRef = useRef<HTMLDivElement>(null)
   const currConversationId = useRecoilValue(currConversationIdState)
+  const currConversation = useLiveQuery(
+    () => db[currProduct].get(currConversationId),
+    [currConversationId]
+  )
+
   const [scrollToBottomBtnVisible, setScrollToBottomBtnVisible] =
     useRecoilState(scrollToBottomBtnVisibleState)
 
@@ -67,9 +76,9 @@ const ChatBox: FC = () => {
 
   return (
     <section className="relative flex-1">
-      <ContractHeader />
+      <ContractHeader currConversation={currConversation} />
       <Divider />
-      <ChatList chatBoxRef={chatBoxRef} />
+      <ChatList chatBoxRef={chatBoxRef} currConversation={currConversation} />
       {currConversationId && (
         <InputBox showScrollToBottomBtn={showScrollToBottomBtn} />
       )}

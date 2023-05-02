@@ -4,6 +4,9 @@ export interface Message {
   answer: string
   question_created_at: number
   answer_created_at: number
+
+  file_path?: string
+  type?: AudioType
 }
 
 export interface Conversation {
@@ -17,13 +20,4 @@ export interface Conversation {
 export enum AudioType {
   Transcription,
   Translation
-}
-
-export interface AudioMessage extends Message {
-  file_path: string
-  type: AudioType
-}
-
-export interface AudioConversation extends Conversation {
-  messages: AudioMessage[]
 }

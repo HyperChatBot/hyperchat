@@ -1,6 +1,6 @@
 import { WritableDraft } from 'immer/dist/internal'
 import { DateTime } from 'luxon'
-import { Conversation } from 'src/types/conversation'
+import { Conversation, Message } from 'src/types/conversation'
 import { ErrorType } from 'src/types/global'
 import { EMPTY_MESSAGE_ID } from './constants'
 
@@ -29,7 +29,7 @@ export const generateEmptyMessage = (question: string) => ({
   answer_created_at: +new Date()
 })
 
-export const updateMessageState = (
+export const updateConversationState = (
   draft: WritableDraft<Conversation>,
   id: string,
   answer: string,
@@ -50,4 +50,24 @@ export const updateMessageState = (
   }
 
   last.answer_created_at = +new Date()
+}
+
+export const updateMessageState = (
+  draft: WritableDraft<Message>,
+  id: string,
+  answer: string,
+  stream?: boolean
+) => {
+  const isFirstChuck = draft.message_id === EMPTY_MESSAGE_ID
+  if (isFirstChuck) {
+    draft.message_id = id
+  }
+
+  if (stream) {
+    draft.answer += answer
+  } else {
+    draft.answer = answer
+  }
+
+  draft.answer_created_at = +new Date()
 }

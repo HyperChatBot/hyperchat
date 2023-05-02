@@ -1,4 +1,5 @@
 import { isAxiosError } from 'axios'
+import { useLiveQuery } from 'dexie-react-hooks'
 import produce from 'immer'
 import { useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
@@ -7,8 +8,8 @@ import { openai } from 'src/openai'
 import { generateEmptyMessage, updateMessageState } from 'src/shared/utils'
 import {
   currConversationIdState,
-  currConversationState,
-  summaryInputVisibleState
+  summaryInputVisibleState,
+  tempMessageState
 } from 'src/stores/conversation'
 import { errorAlertState } from 'src/stores/global'
 import { OpenAIError } from 'src/types/global'
@@ -21,8 +22,12 @@ const useTextCompletion = (
   const [loading, setLoading] = useState(false)
   const setErrorAlertState = useSetRecoilState(errorAlertState)
   const currConversationId = useRecoilValue(currConversationIdState)
-  const setCurrConversation = useSetRecoilState(currConversationState)
   const summaryInputVisible = useRecoilValue(summaryInputVisibleState)
+  const currConversation = useLiveQuery(
+    () => db.audio.get(currConversationId),
+    [currConversationId]
+  )
+  const setTempMessage = useSetRecoilState(tempMessageState)
 
   const createTextCompletion = async () => {
     if (summaryInputVisible) return
@@ -30,18 +35,7 @@ const useTextCompletion = (
     if (question.trim().length === 0) return
 
     setLoading(true)
-
-    // Append an empty message object to show loading spin.
-    setCurrConversation((prevState) => {
-      const currState = produce(prevState, (draft) => {
-        if (draft) {
-          draft.messages.push(generateEmptyMessage(question))
-        }
-      })
-
-      return currState
-    })
-
+    setTempMessage(generateEmptyMessage(question))
     clearTextarea()
 
     try {
@@ -52,16 +46,20 @@ const useTextCompletion = (
 
       const { id, choices } = completion.data
 
-      setCurrConversation((prevState) => {
+      setTempMessage((prevState) => {
         const currState = produce(prevState, (draft) => {
           if (draft) {
             updateMessageState(draft, id, choices[0].text || '')
           }
         })
 
-        db.text.update(currConversationId, {
-          messages: currState?.messages
-        })
+        if (currState) {
+          db.audio.update(currConversationId, {
+            messages: currConversation
+              ? [...currConversation.messages, currState]
+              : [currState]
+          })
+        }
 
         return currState
       })
@@ -74,17 +72,8 @@ const useTextCompletion = (
           message: error.response?.data.error.message || ''
         })
       }
-
-      setCurrConversation((prevState) => {
-        const currState = produce(prevState, (draft) => {
-          if (draft) {
-            draft.messages.pop()
-          }
-        })
-
-        return currState
-      })
     } finally {
+      setTempMessage(null)
       setLoading(false)
     }
   }

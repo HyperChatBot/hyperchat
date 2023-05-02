@@ -3,16 +3,14 @@ import {
   ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconOutline,
   Cog6ToothIcon as Cog6ToothIconOutline,
   MicrophoneIcon as MicrophoneIconOutline,
-  PhotoIcon as PhotoIconOutline,
-  ScaleIcon as ScaleIconOutline
+  PhotoIcon as PhotoIconOutline
 } from '@heroicons/react/24/outline'
 import {
   ChatBubbleBottomCenterTextIcon as ChatBubbleBottomCenterTextIconSolid,
   ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconSolid,
   Cog6ToothIcon as Cog6ToothIconSolid,
   MicrophoneIcon as MicrophoneIconSolid,
-  PhotoIcon as PhotoIconSolid,
-  ScaleIcon as ScaleIconSolid
+  PhotoIcon as PhotoIconSolid
 } from '@heroicons/react/24/solid'
 import { Tooltip } from 'flowbite-react'
 import { FC } from 'react'

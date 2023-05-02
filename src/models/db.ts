@@ -1,20 +1,24 @@
 import Dexie, { Table } from 'dexie'
-import { AudioConversation, Conversation } from 'src/types/conversation'
+import { Conversation } from 'src/types/conversation'
+import { Products } from 'src/types/global'
 
 export class HyperChatDB extends Dexie {
-  chat!: Table<Conversation>
-  text!: Table<Conversation>
-  audio!: Table<AudioConversation>
-  image!: Table<Conversation>
+  [Products.ChatCompletion]!: Table<Conversation>;
+  [Products.TextCompletion]!: Table<Conversation>;
+  [Products.Audio]!: Table<Conversation>;
+  [Products.Image]!: Table<Conversation>
 
   constructor() {
     super('hyperchat2')
     this.version(1).stores({
-      chat: '&conversation_id, summary, created_at, updated_at, *messages',
-      text: '&conversation_id, summary, created_at, updated_at, *messages',
-      audio:
+      [Products.ChatCompletion]:
+        '&conversation_id, summary, created_at, updated_at, *messages',
+      [Products.TextCompletion]:
+        '&conversation_id, summary, created_at, updated_at, *messages',
+      [Products.Audio]:
         '&conversation_id, summary, created_at, updated_at, type, file_path, *messages',
-      image: '&conversation_id, summary, created_at, updated_at, *messages'
+      [Products.Image]:
+        '&conversation_id, summary, created_at, updated_at, *messages'
     })
   }
 }
