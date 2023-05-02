@@ -2,6 +2,7 @@ export interface Message {
   message_id: string
   question: string
   answer: string
+  file_path?: string
   question_created_at: number
   answer_created_at: number
 }

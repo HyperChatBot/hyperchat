@@ -38,6 +38,9 @@ export const audioSchemaLiteral = {
           answer: {
             type: 'string'
           },
+          file_path: {
+            type: 'string'
+          },
           question_created_at: {
             type: 'number'
           },

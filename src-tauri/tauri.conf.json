@@ -4,10 +4,10 @@
     "beforeBuildCommand": "pnpm build",
     "devPath": "http://localhost:1420",
     "distDir": "../dist",
-    "withGlobalTauri": false
+    "withGlobalTauri": true
   },
   "package": {
-    "productName": "hyperchat",
+    "productName": "HyperChat",
     "version": "0.0.0"
   },
   "tauri": {
@@ -16,6 +16,10 @@
       "shell": {
         "all": false,
         "open": true
+      },
+      "fs": {
+        "scope": ["**"],
+        "all": true
       }
     },
     "bundle": {
@@ -27,7 +31,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "hyperchat",
       "targets": "all"
     },
     "security": {
@@ -40,7 +44,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "hyperchat",
+        "title": "HyperChat",
         "width": 1280,
         "height": 900,
         "minWidth": 1280,

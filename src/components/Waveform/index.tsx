@@ -8,19 +8,17 @@ interface Props {
 
 const Waveform: FC<Props> = ({ audio }) => {
   const [isPlaying, toggleIsPlaying] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
-  const waveSurferRef = useRef<WaveSurfer>({
-    isPlaying: () => false
-  })
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const waveSurferRef = useRef<WaveSurfer | null>(null)
 
   const handlePlaying = () => {
-    waveSurferRef.current.playPause()
-    toggleIsPlaying(waveSurferRef.current.isPlaying())
+    waveSurferRef.current?.playPause()
+    toggleIsPlaying(!waveSurferRef.current?.isPlaying())
   }
 
   useEffect(() => {
     const waveSurfer = WaveSurfer.create({
-      container: containerRef.current,
+      container: containerRef.current as HTMLDivElement,
       responsive: true,
       cursorWidth: 0,
       barWidth: 2,
@@ -39,7 +37,7 @@ const Waveform: FC<Props> = ({ audio }) => {
   }, [audio])
 
   return (
-    <section className="flex items-center w-full">
+    <section className="flex w-full items-center">
       {isPlaying ? (
         <PauseCircleIcon
           className="flex-shrink-0 cursor-pointer"

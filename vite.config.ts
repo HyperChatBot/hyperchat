@@ -29,5 +29,10 @@ export default defineConfig(async () => ({
     alias: {
       src: path.resolve(__dirname, './src')
     }
+  },
+  esbuild: {
+    supported: {
+      'top-level-await': true
+    }
   }
 }))

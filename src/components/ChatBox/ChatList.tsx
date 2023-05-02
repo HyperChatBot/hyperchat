@@ -3,9 +3,10 @@ import { FC, Fragment, RefObject } from 'react'
 import { useRecoilValue } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
 import NoDataIllustration from 'src/assets/illustrations/no-data.svg'
-import UserLogoImg from 'src/assets/user-avatar.png'
 import { EMPTY_MESSAGE_ID } from 'src/shared/constants'
 import { currConversationState } from 'src/stores/conversation'
+import { currProductState } from 'src/stores/global'
+import Waveform from '../Waveform'
 import ChatBubble from './ChatBubble'
 import Markdown from './Markdown'
 import MessageSpinner from './MessageSpinner'
@@ -15,6 +16,7 @@ interface Props {
 }
 
 const ChatList: FC<Props> = ({ chatBoxRef }) => {
+  const currProduct = useRecoilValue(currProductState)
   const currConversation = useRecoilValue(currConversationState)
   const hasMessages = currConversation && currConversation.messages.length > 0
 
@@ -32,9 +34,10 @@ const ChatList: FC<Props> = ({ chatBoxRef }) => {
             <Fragment key={message.message_id}>
               <ChatBubble
                 role="user"
-                avatar={UserLogoImg}
+                avatar=""
                 date={message.question_created_at}
               >
+                {/* <Waveform audio="" /> */}
                 {message.question}
               </ChatBubble>
               <ChatBubble

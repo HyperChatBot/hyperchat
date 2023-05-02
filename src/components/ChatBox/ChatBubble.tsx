@@ -1,11 +1,6 @@
 import classNames from 'classnames'
 import { DateTime } from 'luxon'
 import { FC, ReactNode } from 'react'
-import { useRecoilValue } from 'recoil'
-import MP3 from 'src/assets/小星星.mp3'
-import Waveform from 'src/components/Waveform'
-import { currProductState } from 'src/stores/global'
-import { Products } from 'src/types/global'
 import Avatar from '../Avatar'
 
 interface Props {
@@ -16,7 +11,6 @@ interface Props {
 }
 
 const ChatBubble: FC<Props> = ({ role, avatar, date, children }) => {
-  const currProduct = useRecoilValue(currProductState)
   return (
     <section
       className={classNames('group mb-8 flex items-start', {
@@ -43,10 +37,9 @@ const ChatBubble: FC<Props> = ({ role, avatar, date, children }) => {
             'rounded-tl-none bg-main-gray text-black dark:bg-gray-700 dark:text-dark-bubble-assistant-text':
               role === 'assistant',
             'flex min-h-[20px] flex-col items-start gap-4 whitespace-pre-wrap break-words rounded-br-none bg-main-purple text-white ':
-              role === 'user',
+              role === 'user'
           })}
         >
-          <Waveform audio={MP3} />
           {children}
         </section>
         <p

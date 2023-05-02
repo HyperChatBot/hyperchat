@@ -44,6 +44,7 @@ specifiers:
   uuid: ^9.0.0
   vite: ^4.2.1
   wavesurfer.js: ^6.6.3
+  yancey-js-util: ^3.1.0
 
 dependencies:
   '@heroicons/react': 2.0.17_react@18.2.0
@@ -69,6 +70,7 @@ dependencies:
   rxjs: 7.8.0
   uuid: 9.0.0
   wavesurfer.js: 6.6.3
+  yancey-js-util: 3.1.0
 
 devDependencies:
   '@tauri-apps/cli': 1.2.3
@@ -4158,6 +4160,10 @@ packages:
   /yaml/1.10.2:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
     engines: {node: '>= 6'}
+
+  /yancey-js-util/3.1.0:
+    resolution: {integrity: sha512-e9NoVFpoUnmTjPXEAhWaZhBiwzZL4lM59XA1Mx+dKz4QuZH2WxWhaXeomWA4RAc1zH64YsdlgrqQZkbBRCZQrQ==}
+    dev: false
 
   /yargs-parser/20.2.9:
     resolution: {integrity: sha512-y11nGElTIV+CT3Zv9t7VKl+Q3hTQoT9a1Qzezhhl6Rp21gJ/IVTW7Z3y9EWXhuUBC2Shnf+DX0antecpAwSP8w==}
