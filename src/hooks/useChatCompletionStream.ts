@@ -2,6 +2,7 @@ import { isAxiosError } from 'axios'
 import produce from 'immer'
 import { useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { db } from 'src/models/db'
 import { OPENAI_API_KEY, OPENAI_CHAT_COMPLTION_URL } from 'src/shared/constants'
 import {
   generateEmptyMessage,
@@ -17,7 +18,6 @@ import { errorAlertState } from 'src/stores/global'
 import { OpenAIChatResponse } from 'src/types/chatCompletion'
 import { Conversation } from 'src/types/conversation'
 import { ErrorType, OpenAIError } from 'src/types/global'
-import useModifyDocument from './useModifyDocument'
 
 const useConversationCompletionStream = (
   question: string,
@@ -29,7 +29,6 @@ const useConversationCompletionStream = (
   const currConversationId = useRecoilValue(currConversationIdState)
   const setCurrConversation = useSetRecoilState(currConversationState)
   const summaryInputVisible = useRecoilValue(summaryInputVisibleState)
-  const { modifyDocument } = useModifyDocument()
 
   const createChatCompletion = async () => {
     if (summaryInputVisible) return
@@ -105,15 +104,9 @@ const useConversationCompletionStream = (
           showScrollToBottomBtn()
 
           if (_currConversation) {
-            modifyDocument(
-              {
-                // @ts-ignore
-                conversation_id: currConversationId
-              },
-              {
-                messages: _currConversation.messages
-              }
-            )
+            db.chat.update(currConversationId, {
+              messages: _currConversation.messages
+            })
           }
 
           return reader.releaseLock()

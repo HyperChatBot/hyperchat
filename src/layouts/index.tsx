@@ -1,44 +1,38 @@
 import { useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import ErrorAlert from 'src/components/ErrorAlert'
-import Siderbar from 'src/components/Sidebar'
-import { useCollection, useOnline } from 'src/hooks'
+import Sidebar from 'src/components/Sidebar'
+import { useOnline } from 'src/hooks'
+import { db } from 'src/models/db'
 import { routers } from 'src/routers'
-import { ChatDocument } from 'src/schemas/chatSchema'
-import { schemaNames } from 'src/shared/constants'
 import {
   conversationsState,
   currConversationIdState
 } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
-import { Conversation } from 'src/types/conversation'
 
 const Layouts = () => {
-  const currPruduct = useRecoilValue(currProductState)
-  const conversationCollection = useCollection(schemaNames[currPruduct])
+  const currProduct = useRecoilValue(currProductState)
   const setConversations = useSetRecoilState(conversationsState)
   const setCurrConversationId = useSetRecoilState(currConversationIdState)
   useOnline()
 
   const getConversationData = async () => {
-    const res: ChatDocument[] = await conversationCollection
-      .find({
-        sort: [{ updated_at: 'desc' }]
-      })
-      .exec()
+    const data = await db.chat.toArray()
+    data.sort((a, b) => b.updated_at - a.updated_at)
 
-    setConversations(res.map((data) => data.toJSON()) as Conversation[])
-    setCurrConversationId(res[0]?.conversation_id || '')
+    setConversations(data)
+    setCurrConversationId(data[0]?.conversation_id || '')
   }
 
   useEffect(() => {
     getConversationData()
-  }, [currPruduct])
+  }, [currProduct])
 
   return (
     <div className="container flex w-screen flex-row overflow-x-hidden dark:bg-gray-800">
-      <Siderbar />
+      <Sidebar />
       <Routes>
         {routers.map((router) => (
           <Route

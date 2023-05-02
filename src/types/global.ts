@@ -31,6 +31,5 @@ export interface AlertError {
 
 export enum ErrorType {
   OpenAI = '[OpenAI] ',
-  RxDB = '[RxDB] ',
   Unknown = '[Unknown] '
 }

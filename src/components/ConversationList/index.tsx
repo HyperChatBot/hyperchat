@@ -1,8 +1,6 @@
 import { FC } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { useInsertDocument } from 'src/hooks'
-import { ChatDocType } from 'src/schemas/chatSchema'
-import { conversationTitles, schemaNames } from 'src/shared/constants'
+import { conversationTitles } from 'src/shared/constants'
 import {
   conversationsState,
   currConversationIdState
@@ -15,17 +13,16 @@ import { BoldAddIcon } from '../Icons'
 import ConversationItem from './ConversationItem'
 import ChatEmpty from './EmptyItem'
 
+import { db } from 'src/models/db'
+
 const ConversationList: FC = () => {
   const currProduct = useRecoilValue(currProductState)
   const [conversations, setConversations] = useRecoilState(conversationsState)
   const [currConversationId, setCurrConversationId] = useRecoilState(
     currConversationIdState
   )
-  const { insertDocument } = useInsertDocument<ChatDocType>(
-    schemaNames[currProduct]
-  )
 
-  const addChat = async () => {
+  const addConversation = async () => {
     const chatId = v4()
 
     const conversation: Conversation = {
@@ -38,7 +35,7 @@ const ConversationList: FC = () => {
 
     setConversations([...conversations, conversation])
     setCurrConversationId(chatId)
-    insertDocument(conversation)
+    db.chat.add(conversation)
   }
 
   const switchChat = (id: string) => {
@@ -51,7 +48,7 @@ const ConversationList: FC = () => {
         <span className="mr-4 text-xl font-semibold dark:text-dark-text">
           {conversationTitles[currProduct]}
         </span>
-        <BoldAddIcon onClick={addChat} />
+        <BoldAddIcon onClick={addConversation} />
       </section>
 
       <Divider />
@@ -67,7 +64,7 @@ const ConversationList: FC = () => {
             />
           ))
         ) : (
-          <ChatEmpty onClick={addChat} />
+          <ChatEmpty onClick={addConversation} />
         )}
       </section>
     </section>

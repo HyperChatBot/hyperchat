@@ -3,6 +3,7 @@ import { isAxiosError } from 'axios'
 import produce from 'immer'
 import { useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { db } from 'src/models/db'
 import { openai } from 'src/openai'
 import { generateEmptyMessage, updateMessageState } from 'src/shared/utils'
 import {
@@ -14,7 +15,6 @@ import { errorAlertState } from 'src/stores/global'
 import { OpenAIError } from 'src/types/global'
 import { v4 } from 'uuid'
 import { getFileExtension } from 'yancey-js-util'
-import useModifyDocument from './useModifyDocument'
 
 const useAudio = (
   question: string,
@@ -27,7 +27,6 @@ const useAudio = (
   const currConversationId = useRecoilValue(currConversationIdState)
   const setCurrConversation = useSetRecoilState(currConversationState)
   const summaryInputVisible = useRecoilValue(summaryInputVisibleState)
-  const { modifyDocument } = useModifyDocument()
 
   const createTranscription = async () => {
     if (summaryInputVisible) return
@@ -69,15 +68,9 @@ const useAudio = (
           }
         })
 
-        modifyDocument(
-          {
-            // @ts-ignore
-            conversation_id: currConversationId
-          },
-          {
-            messages: currState?.messages
-          }
-        )
+        db.audio.update(currConversationId, {
+          messages: currState?.messages
+        })
 
         return currState
       })

@@ -2,6 +2,7 @@ import { isAxiosError } from 'axios'
 import produce from 'immer'
 import { useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { db } from 'src/models/db'
 import { openai } from 'src/openai'
 import { generateEmptyMessage, updateMessageState } from 'src/shared/utils'
 import {
@@ -12,7 +13,6 @@ import {
 import { errorAlertState } from 'src/stores/global'
 import { OpenAIError } from 'src/types/global'
 import { v4 } from 'uuid'
-import useModifyDocument from './useModifyDocument'
 
 const useImage = (
   question: string,
@@ -24,7 +24,6 @@ const useImage = (
   const currConversationId = useRecoilValue(currConversationIdState)
   const setCurrConversation = useSetRecoilState(currConversationState)
   const summaryInputVisible = useRecoilValue(summaryInputVisibleState)
-  const { modifyDocument } = useModifyDocument()
 
   const createImage = async () => {
     if (summaryInputVisible) return
@@ -62,15 +61,9 @@ const useImage = (
           }
         })
 
-        modifyDocument(
-          {
-            // @ts-ignore
-            conversation_id: currConversationId
-          },
-          {
-            messages: currState?.messages
-          }
-        )
+        db.image.update(currConversationId, {
+          messages: currState?.messages
+        })
 
         return currState
       })

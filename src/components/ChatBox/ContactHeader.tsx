@@ -2,7 +2,7 @@ import classNames from 'classnames'
 import { FC, KeyboardEvent, useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
-import { useModifyDocument } from 'src/hooks'
+import { db } from 'src/models/db'
 import { EMPTY_CHAT_HINT } from 'src/shared/constants'
 import {
   currConversationState,
@@ -27,7 +27,6 @@ const ContactHeader: FC = () => {
     currConversation?.summary ||
     currConversation?.conversation_id ||
     EMPTY_CHAT_HINT
-  const { modifyDocument } = useModifyDocument()
 
   const saveSummary = () => {
     if (summaryValue.trim().length === 0) return
@@ -35,15 +34,9 @@ const ContactHeader: FC = () => {
     if (currConversation) {
       setCurrConversation({ ...currConversation, summary: summaryValue })
 
-      modifyDocument(
-        {
-          // @ts-ignore
-          conversation_id: currConversation.conversation_id
-        },
-        {
-          summary: summaryValue
-        }
-      )
+      db.chat.update(currConversation.conversation_id, {
+        summary: summaryValue
+      })
 
       setSummaryInputVisibleState(false)
     }
