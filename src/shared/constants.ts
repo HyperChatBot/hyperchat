@@ -15,6 +15,7 @@ export const conversationTitles = {
   [Products.TextCompletion]: 'Text Completion',
   [Products.AudioTranscription]: 'Audio Transcription',
   [Products.AudioTranslation]: 'Audio Translation',
+  [Products.Moderation]: 'Moderation',
   [Products.Image]: 'Image Generation'
 }
 

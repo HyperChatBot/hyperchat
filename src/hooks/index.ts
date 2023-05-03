@@ -5,6 +5,7 @@ import useEnterKey from './useEnterKey'
 import useImage from './useImage'
 import useOnline from './useOnline'
 import useTextCompletion from './useTextCompletion'
+import useModeration from './useModeration'
 
 export {
   useEnterKey,
@@ -13,5 +14,6 @@ export {
   useAudioTranslation,
   useOnline,
   useAudioTranscription,
-  useImage
+  useImage,
+  useModeration
 }

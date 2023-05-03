@@ -7,6 +7,7 @@ import {
   useChatCompletionStream,
   useEnterKey,
   useImage,
+  useModeration,
   useTextCompletion
 } from 'src/hooks'
 import { TEXTAREA_MAX_ROWS } from 'src/shared/constants'
@@ -67,12 +68,15 @@ const InputBox: FC = () => {
     hashFile
   )
 
+  const { createModeration } = useModeration(question, clearTextarea)
+
   const requests = {
     [Products.ChatCompletion]: createChatCompletion,
     [Products.TextCompletion]: createTextCompletion,
     [Products.AudioTranscription]: createTranscription,
     [Products.AudioTranslation]: createTranslation,
-    [Products.Image]: createImage
+    [Products.Image]: createImage,
+    [Products.Moderation]: createModeration
   }
 
   const handleRequest = () => {

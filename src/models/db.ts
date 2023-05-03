@@ -7,7 +7,8 @@ export class HyperChatDB extends Dexie {
   [Products.TextCompletion]!: Table<Conversation>;
   [Products.AudioTranscription]!: Table<Conversation>;
   [Products.AudioTranslation]!: Table<Conversation>;
-  [Products.Image]!: Table<Conversation>
+  [Products.Image]!: Table<Conversation>;
+  [Products.Moderation]!: Table<Conversation>
 
   constructor() {
     super('hyperchat')
@@ -21,6 +22,8 @@ export class HyperChatDB extends Dexie {
       [Products.AudioTranslation]:
         '&conversation_id, summary, created_at, updated_at, file_name, *messages',
       [Products.Image]:
+        '&conversation_id, summary, created_at, updated_at, *messages',
+      [Products.Moderation]:
         '&conversation_id, summary, created_at, updated_at, *messages'
     })
   }
