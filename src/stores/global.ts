@@ -1,5 +1,5 @@
 import { atom } from 'recoil'
-import { AlertError, Products } from 'src/types/global'
+import { Products } from 'src/types/global'
 
 export const onlineState = atom({
   key: 'onlineState',
@@ -11,9 +11,4 @@ export const currProductState = atom({
   default:
     (window.localStorage.getItem('currProductState') as Products) ||
     Products.ChatCompletion
-})
-
-export const errorAlertState = atom<AlertError | false>({
-  key: 'errorAlertState',
-  default: false
 })

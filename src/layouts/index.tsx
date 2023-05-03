@@ -1,5 +1,4 @@
 import { Route, Routes } from 'react-router-dom'
-import ErrorAlert from 'src/components/ErrorAlert'
 import Sidebar from 'src/components/Sidebar'
 import { useOnline } from 'src/hooks'
 import { routers } from 'src/routers'
@@ -19,7 +18,6 @@ const Layouts = () => {
           />
         ))}
       </Routes>
-      <ErrorAlert />
     </div>
   )
 }

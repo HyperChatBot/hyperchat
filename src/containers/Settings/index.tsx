@@ -1,10 +1,17 @@
-import { Button, Card, Label, Select, TextInput } from 'flowbite-react'
+import Box from '@mui/material/Box'
+import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import Select from '@mui/material/Select'
+import TextField from '@mui/material/TextField'
 import { FC, useState } from 'react'
 import Divider from 'src/components/Divider'
 import {
+  audioResponseTypes,
   audios,
   chatCompletions,
   edits,
+  moderations,
   textCompletions
 } from 'src/openai/models'
 
@@ -20,148 +27,172 @@ const Settings: FC = () => {
 
       <Divider />
 
-      <div className="no-scrollbar flex h-[calc(100vh_-_3.8125rem)] w-full flex-col gap-8 overflow-y-scroll p-6">
-        <Card className="w-3/5 shadow-none">
-          <form>
-            <div className="mb-6">
-              <div className="mb-2 block">
-                <span className="text-red-600">* </span>
-                <Label htmlFor="$$openai-secret-key" value="Secret Key" />
-              </div>
-              <div className="flex">
-                <div className="w-full">
-                  <TextInput
-                    required
-                    id="$$openai-secret-key"
-                    type="password"
-                    sizing="sm"
-                    placeholder="Enter OpenAI Secret Key"
-                    helperText={
-                      <>Your secret key will only be stored in IndexedDB.</>
-                    }
-                  />
-                </div>
-                <Button className="ml-4 cursor-pointer" type="submit">
-                  Save
-                </Button>
-              </div>
-            </div>
+      <div className="no-scrollbar  h-[calc(100vh_-_3.8125rem)] w-full  overflow-y-scroll p-6">
+        <Box
+          component="form"
+          noValidate
+          autoComplete="off"
+          className="flex w-3/5 flex-col gap-8"
+        >
+          <div className="flex flex-col gap-8 rounded-2xl border border-black border-opacity-5 p-8 dark:border-gray-600 dark:border-opacity-100">
+            <TextField
+              required
+              id="outlined-basic"
+              label="Secret Key"
+              variant="standard"
+              size="small"
+              type="password"
+              placeholder="Enter OpenAI Secret Key"
+              helperText="Your secret key will only be stored in IndexedDB."
+              fullWidth
+            />
 
-            <div className="mb-6">
-              <div className="mb-2 block">
-                <Label
-                  htmlFor="$$openai-organization-key"
-                  value="Organization ID"
-                />
-              </div>
-              <div className="flex">
-                <div className="w-full">
-                  <TextInput
-                    id="$$openai-organization-key"
-                    type="text"
-                    sizing="sm"
-                    placeholder="Enter OpenAI Organization ID"
-                  />
-                </div>
-                <Button className="ml-4 cursor-pointer" type="submit">
-                  Save
-                </Button>
-              </div>
-            </div>
+            <TextField
+              id="outlined-basic"
+              label="Organization ID"
+              variant="standard"
+              size="small"
+              type="text"
+              fullWidth
+            />
+          </div>
 
-            <div className="mb-6 flex flex-col">
-              <Label htmlFor="$$assistant-avatar" value="Assistant Avatar" />
-              <div className="mt-2 flex items-center">
-                <img
-                  className="h-16 w-16 rounded-full object-cover"
-                  src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1361&q=80"
-                  alt="Current profile photo"
-                />
-                <label className="block">
-                  <span className="sr-only">Choose assistant avatar</span>
-                  <input
-                    id="$$assistant-avatar"
-                    type="file"
-                    className="ml-4 block w-full rounded-full text-sm text-slate-500 file:mr-4 file:rounded-full file:border-0 file:bg-violet-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-violet-700 hover:file:bg-violet-100"
-                  />
-                </label>
-              </div>
-            </div>
-
-            <div className="mb-6 flex flex-col">
-              <Label htmlFor="$$user-avatar" value="User Avatar" />
-              <div className="mt-2 flex items-center">
-                <img
-                  className="h-16 w-16 rounded-full object-cover"
-                  src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1361&q=80"
-                  alt="Current profile photo"
-                />
-                <label className="block">
-                  <span className="sr-only">Choose user avatar</span>
-                  <input
-                    id="$$user-avatar"
-                    type="file"
-                    className="ml-4 block w-full rounded-full text-sm text-slate-500 file:mr-4 file:rounded-full file:border-0 file:bg-violet-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-violet-700 hover:file:bg-violet-100"
-                  />
-                </label>
-              </div>
-            </div>
-          </form>
-        </Card>
-
-        <Card className="mb-8 w-3/5 shadow-none">
-          <form>
-            <div id="$$chat-completion-model-selector" className="mb-6">
-              <div className="mb-2 block">
-                <Label
-                  htmlFor="$$chat-completion-model-selector"
-                  value="Chat Completion Model"
-                />
-              </div>
-              <Select id="$$chat-completion-model-selector" required={true}>
+          <div className="flex flex-col gap-8 rounded-2xl border border-black border-opacity-5 p-8 dark:border-gray-600 dark:border-opacity-100">
+            <FormControl size="small">
+              <InputLabel id="chat-completion-model-select-label">
+                Chat Completion Model
+              </InputLabel>
+              <Select
+                labelId="chat-completion-model-select-label"
+                id="chat-completion-model-select"
+                value={chatCompletions[0]}
+                label="Chat Completion Model"
+                onChange={() => {}}
+              >
                 {chatCompletions.map((chatCompletion) => (
-                  <option key={chatCompletion}>{chatCompletion}</option>
+                  <MenuItem key={chatCompletion} value={chatCompletion}>
+                    {chatCompletion}
+                  </MenuItem>
                 ))}
               </Select>
-            </div>
+            </FormControl>
 
-            <div id="$$text-completion-model-selector" className="mb-6">
-              <div className="mb-2 block">
-                <Label
-                  htmlFor="$$text-completion-model-selector"
-                  value="Text Completion Model"
-                />
-              </div>
-              <Select id="$$text-completion-model-selector" required={true}>
-                {textCompletions.map((textCompletion) => (
-                  <option key={textCompletion}>{textCompletion}</option>
-                ))}
-              </Select>
-            </div>
-
-            <div id="$$edits-model-selector" className="mb-6">
-              <div className="mb-2 block">
-                <Label htmlFor="$$edits-model-selector" value="Edits Model" />
-              </div>
-              <Select id="$$edits-model-selector" required={true}>
+            <FormControl size="small">
+              <InputLabel id="demo-select-small-label">Edit Model</InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={10}
+                label="Edit Model"
+                onChange={() => {}}
+              >
                 {edits.map((edit) => (
-                  <option key={edit}>{edit}</option>
+                  <MenuItem key={edit} value={edit}>
+                    {edit}
+                  </MenuItem>
                 ))}
               </Select>
-            </div>
+            </FormControl>
 
-            <div id="$$audio-model-selector" className="mb-6">
-              <div className="mb-2 block">
-                <Label htmlFor="$$audio-model-selector" value="Audio Model" />
-              </div>
-              <Select id="$$audio-model-selector" required={true}>
-                {audios.map((audio) => (
-                  <option key={audio}>{audio}</option>
+            <FormControl size="small">
+              <InputLabel id="demo-select-small-label">
+                Text Completion Model
+              </InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={10}
+                label="Text Completion Model"
+                onChange={() => {}}
+              >
+                {textCompletions.map((textCompletion) => (
+                  <MenuItem key={textCompletion} value={textCompletion}>
+                    {textCompletion}
+                  </MenuItem>
                 ))}
               </Select>
-            </div>
-          </form>
-        </Card>
+            </FormControl>
+          </div>
+
+          <div className="flex flex-col gap-8 rounded-2xl border border-black border-opacity-5 p-8 dark:border-gray-600 dark:border-opacity-100">
+            <FormControl size="small">
+              <InputLabel id="demo-select-small-label">
+                Moderation Model
+              </InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={10}
+                label="Moderation Model"
+                onChange={() => {}}
+              >
+                {moderations.map((moderation) => (
+                  <MenuItem key={moderation} value={moderation}>
+                    {moderation}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <div className="flex flex-col gap-8 rounded-2xl border border-black border-opacity-5 p-8 dark:border-gray-600 dark:border-opacity-100">
+            <FormControl size="small">
+              <InputLabel id="demo-select-small-label">
+                Audio Transcription Model
+              </InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={10}
+                label="Audio Transcription Model"
+                onChange={() => {}}
+              >
+                {audios.map((audio) => (
+                  <MenuItem key={audio} value={audio}>
+                    {audio}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl size="small">
+              <InputLabel id="demo-select-small-label">
+                Audio Translation Model
+              </InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={10}
+                label="Audio Translation Model"
+                onChange={() => {}}
+              >
+                {audios.map((audio) => (
+                  <MenuItem key={audio} value={audio}>
+                    {audio}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl size="small">
+              <InputLabel id="demo-select-small-label">
+                Audio Response Type
+              </InputLabel>
+              <Select
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                value={10}
+                label="Audio Response Type"
+                onChange={() => {}}
+              >
+                {audioResponseTypes.map((audioResponseType) => (
+                  <MenuItem key={audioResponseType} value={audioResponseType}>
+                    {audioResponseType}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+        </Box>
       </div>
     </section>
   )

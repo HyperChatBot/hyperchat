@@ -1,6 +1,6 @@
 import { Cog6ToothIcon as Cog6ToothIconOutline } from '@heroicons/react/24/outline'
 import { Cog6ToothIcon as Cog6ToothIconSolid } from '@heroicons/react/24/solid'
-import { Tooltip } from 'flowbite-react'
+import Tooltip from '@mui/material/Tooltip'
 import { FC } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
@@ -26,7 +26,7 @@ const Sidebar: FC = () => {
         <section className="mt-12">
           {items.map((item, key) => (
             <div key={key} className="mb-8">
-              <Tooltip content={item.tooltip} placement="right">
+              <Tooltip title={item.tooltip} placement="right">
                 <Link
                   to="/"
                   className="cursor-pointer"
@@ -41,7 +41,7 @@ const Sidebar: FC = () => {
           ))}
 
           <div className="mb-8">
-            <Tooltip content="Settings" placement="right">
+            <Tooltip title="Settings" placement="right">
               <Link to="/settings">
                 {location.pathname === '/settings' ? (
                   <Cog6ToothIconSolid className={iconClassName} />

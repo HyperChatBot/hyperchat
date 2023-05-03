@@ -1,3 +1,4 @@
+import { SnackbarOrigin } from '@mui/material'
 import { Products } from 'src/types/global'
 
 export const EMPTY_MESSAGE_ID = '$$EMPTY_MESSAGE_ID'
@@ -21,3 +22,12 @@ export const conversationTitles = {
 }
 
 export const TEXTAREA_MAX_ROWS = 8
+
+export const SNACKBAR_ANCHOR_ORIGIN: SnackbarOrigin = {
+  vertical: 'top',
+  horizontal: 'center'
+}
+
+export const SNACKBAR_MAX_NUM = 1
+
+export const SNACKBAR_AUTO_HIDE_DURATION = 3000

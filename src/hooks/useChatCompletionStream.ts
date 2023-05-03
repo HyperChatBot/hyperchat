@@ -3,6 +3,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import produce from 'immer'
 import { useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
+import toast from 'src/components/Snackbar'
 import { db } from 'src/models/db'
 import { OPENAI_API_KEY, OPENAI_CHAT_COMPLTION_URL } from 'src/shared/constants'
 import {
@@ -14,7 +15,6 @@ import {
   currConversationIdState,
   tempMessageState
 } from 'src/stores/conversation'
-import { errorAlertState } from 'src/stores/global'
 import { OpenAIChatResponse } from 'src/types/chatCompletion'
 import { Message } from 'src/types/conversation'
 import { ErrorType, OpenAIError } from 'src/types/global'
@@ -29,7 +29,6 @@ const useConversationCompletionStream = (
     () => db.chat.get(currConversationId),
     [currConversationId]
   )
-  const setErrorAlertState = useSetRecoilState(errorAlertState)
   const setTempMessage = useSetRecoilState(tempMessageState)
 
   const createChatCompletion = async () => {
@@ -62,23 +61,14 @@ const useConversationCompletionStream = (
     const reader = chat.body?.getReader()
 
     if (!reader) {
-      setErrorAlertState({
-        code: 500,
-        message: generateErrorMessage(
-          ErrorType.Unknown,
-          'Cannot read ReadableStream.'
-        )
-      })
-
+      toast.error(
+        generateErrorMessage(ErrorType.Unknown, 'Cannot read ReadableStream.')
+      )
       return
     }
 
     if (chat.status !== 200) {
-      setErrorAlertState({
-        code: chat.status,
-        message: generateErrorMessage(ErrorType.OpenAI, chat.statusText)
-      })
-
+      toast.error(generateErrorMessage(ErrorType.OpenAI, chat.statusText))
       return
     }
 
@@ -137,10 +127,7 @@ const useConversationCompletionStream = (
       await read()
     } catch (error) {
       if (isAxiosError<OpenAIError, Record<string, unknown>>(error)) {
-        setErrorAlertState({
-          code: error.response?.status || 0,
-          message: error.response?.data.error.message || ''
-        })
+        toast.error(error.response?.data.error.message || '')
       }
     } finally {
       setTempMessage(null)

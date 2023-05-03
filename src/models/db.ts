@@ -1,6 +1,6 @@
-import Dexie,{ Table } from 'dexie';
-import { Conversation } from 'src/types/conversation';
-import { Products } from 'src/types/global';
+import Dexie, { Table } from 'dexie'
+import { Conversation } from 'src/types/conversation'
+import { Products } from 'src/types/global'
 
 export class HyperChatDB extends Dexie {
   [Products.ChatCompletion]!: Table<Conversation>;
@@ -8,7 +8,7 @@ export class HyperChatDB extends Dexie {
   [Products.AudioTranscription]!: Table<Conversation>;
   [Products.AudioTranslation]!: Table<Conversation>;
   [Products.Image]!: Table<Conversation>;
-  [Products.Moderation]!: Table<Conversation>
+  [Products.Moderation]!: Table<Conversation>;
   [Products.Edit]!: Table<Conversation>
 
   constructor() {

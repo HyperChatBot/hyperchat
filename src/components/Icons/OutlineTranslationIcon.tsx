@@ -2,10 +2,7 @@ import classNames from 'classnames'
 import { FC } from 'react'
 import { SvgIconProps } from 'src/types/global'
 
-const OutlineTranslationIcon: FC<SvgIconProps> = ({
-  className,
-  onClick
-}) => (
+const OutlineTranslationIcon: FC<SvgIconProps> = ({ className, onClick }) => (
   <svg
     onClick={onClick}
     className={classNames('cursor-pointer', className)}
