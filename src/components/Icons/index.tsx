@@ -22,30 +22,34 @@ import LinearReceiveSquareIcon from './LinearReceiveSquareIcon'
 import LinearSearchNormalIcon from './LinearSearchNormalIcon'
 import LinearSendIcon from './LinearSendIcon'
 import LinearSettingIcon from './LinearSettingIcon'
+import OutlineTranslationIcon from './OutlineTranslationIcon'
+import SolidTranslationIcon from './SolidTranslationIcon'
 
 export {
-  BoldAndCircleIcon,
-  BoldCallIcon,
-  BoldMessageIcon,
-  BoldMoreCircleIcon,
-  BoldSendIcon,
-  LinearArrowDownIcon,
-  LinearCalendarIcon,
-  LinearChatIcon,
-  LinearClipboardTextIcon,
-  LinearDocumentCodeIcon,
-  LinearDocumentDownloadIcon,
-  LinearDocumentTextIcon,
-  LinearGalleryIcon,
-  LinearHomeIcon,
-  LinearMessageIcon,
-  LinearPaperclipIcon,
-  LinearReceiveSquareIcon,
-  LinearSearchNormalIcon,
-  LinearSendIcon,
-  LinearSettingIcon,
-  BoldAddIcon,
-  LinearCheckIcon,
-  LinearDeleteIcon,
-  LinearEditIcon
+BoldAndCircleIcon,
+BoldCallIcon,
+BoldMessageIcon,
+BoldMoreCircleIcon,
+BoldSendIcon,
+LinearArrowDownIcon,
+LinearCalendarIcon,
+LinearChatIcon,
+LinearClipboardTextIcon,
+LinearDocumentCodeIcon,
+LinearDocumentDownloadIcon,
+LinearDocumentTextIcon,
+LinearGalleryIcon,
+LinearHomeIcon,
+LinearMessageIcon,
+LinearPaperclipIcon,
+LinearReceiveSquareIcon,
+LinearSearchNormalIcon,
+LinearSendIcon,
+LinearSettingIcon,
+BoldAddIcon,
+LinearCheckIcon,
+LinearDeleteIcon,
+LinearEditIcon,
+OutlineTranslationIcon,
+SolidTranslationIcon
 }

@@ -16,6 +16,8 @@ import {
 } from '@heroicons/react/24/solid'
 import { conversationTitles } from 'src/shared/constants'
 import { Products } from 'src/types/global'
+import { OutlineTranslationIcon,
+  SolidTranslationIcon}from 'src/components/Icons'
 
 export const iconClassName = 'h-6 w-6 text-black dark:text-white'
 
@@ -43,8 +45,8 @@ export default [
   {
     product: Products.AudioTranslation,
     tooltip: conversationTitles[Products.AudioTranslation],
-    inactive: <LanguageIconOutline className={iconClassName} />,
-    active: <LanguageIconSolid className={iconClassName} />
+    inactive: <OutlineTranslationIcon className={iconClassName} />,
+    active: <SolidTranslationIcon className={iconClassName} />
   },
   {
     product: Products.Image,
