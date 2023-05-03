@@ -1,23 +1,25 @@
 import {
   ChatBubbleBottomCenterTextIcon as ChatBubbleBottomCenterTextIconOutline,
   ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconOutline,
-  LanguageIcon as LanguageIconOutline,
   MicrophoneIcon as MicrophoneIconOutline,
+  PencilIcon as PencilIconOutline,
   PhotoIcon as PhotoIconOutline,
   ShieldCheckIcon as ShieldCheckIconOutline
 } from '@heroicons/react/24/outline'
 import {
   ChatBubbleBottomCenterTextIcon as ChatBubbleBottomCenterTextIconSolid,
   ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconSolid,
-  LanguageIcon as LanguageIconSolid,
   MicrophoneIcon as MicrophoneIconSolid,
+  PencilIcon as PencilIconSolid,
   PhotoIcon as PhotoIconSolid,
   ShieldCheckIcon as ShieldCheckIconSolid
 } from '@heroicons/react/24/solid'
+import {
+  OutlineTranslationIcon,
+  SolidTranslationIcon
+} from 'src/components/Icons'
 import { conversationTitles } from 'src/shared/constants'
 import { Products } from 'src/types/global'
-import { OutlineTranslationIcon,
-  SolidTranslationIcon}from 'src/components/Icons'
 
 export const iconClassName = 'h-6 w-6 text-black dark:text-white'
 
@@ -35,6 +37,12 @@ export default [
       <ChatBubbleBottomCenterTextIconOutline className={iconClassName} />
     ),
     active: <ChatBubbleBottomCenterTextIconSolid className={iconClassName} />
+  },
+  {
+    product: Products.Edit,
+    tooltip: conversationTitles[Products.Edit],
+    inactive: <PencilIconOutline className={iconClassName} />,
+    active: <PencilIconSolid className={iconClassName} />
   },
   {
     product: Products.AudioTranscription,

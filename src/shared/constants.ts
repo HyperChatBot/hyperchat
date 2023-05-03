@@ -16,7 +16,8 @@ export const conversationTitles = {
   [Products.AudioTranscription]: 'Audio Transcription',
   [Products.AudioTranslation]: 'Audio Translation',
   [Products.Moderation]: 'Moderation',
-  [Products.Image]: 'Image Generation'
+  [Products.Image]: 'Image Generation',
+  [Products.Edit]: 'Edit'
 }
 
 export const TEXTAREA_MAX_ROWS = 8

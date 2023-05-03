@@ -1,6 +1,6 @@
-import Dexie, { Table } from 'dexie'
-import { Conversation } from 'src/types/conversation'
-import { Products } from 'src/types/global'
+import Dexie,{ Table } from 'dexie';
+import { Conversation } from 'src/types/conversation';
+import { Products } from 'src/types/global';
 
 export class HyperChatDB extends Dexie {
   [Products.ChatCompletion]!: Table<Conversation>;
@@ -9,10 +9,12 @@ export class HyperChatDB extends Dexie {
   [Products.AudioTranslation]!: Table<Conversation>;
   [Products.Image]!: Table<Conversation>;
   [Products.Moderation]!: Table<Conversation>
+  [Products.Edit]!: Table<Conversation>
 
   constructor() {
     super('hyperchat')
-    this.version(1).stores({
+    // Update version when create a table
+    this.version(2).stores({
       [Products.ChatCompletion]:
         '&conversation_id, summary, created_at, updated_at, *messages',
       [Products.TextCompletion]:
@@ -24,6 +26,8 @@ export class HyperChatDB extends Dexie {
       [Products.Image]:
         '&conversation_id, summary, created_at, updated_at, *messages',
       [Products.Moderation]:
+        '&conversation_id, summary, created_at, updated_at, *messages',
+      [Products.Edit]:
         '&conversation_id, summary, created_at, updated_at, *messages'
     })
   }

@@ -1,6 +1,7 @@
 import useAudioTranscription from './useAudioTranscription'
 import useAudioTranslation from './useAudioTranslation'
 import useChatCompletionStream from './useChatCompletionStream'
+import useEdit from './useEdit'
 import useEnterKey from './useEnterKey'
 import useImage from './useImage'
 import useModeration from './useModeration'
@@ -15,5 +16,6 @@ export {
   useOnline,
   useAudioTranscription,
   useImage,
-  useModeration
+  useModeration,
+  useEdit
 }

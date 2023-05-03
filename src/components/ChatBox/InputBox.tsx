@@ -5,6 +5,7 @@ import {
   useAudioTranscription,
   useAudioTranslation,
   useChatCompletionStream,
+  useEdit,
   useEnterKey,
   useImage,
   useModeration,
@@ -70,13 +71,16 @@ const InputBox: FC = () => {
 
   const { createModeration } = useModeration(question, clearTextarea)
 
+  const { createEdit } = useEdit(question, clearTextarea)
+
   const requests = {
     [Products.ChatCompletion]: createChatCompletion,
     [Products.TextCompletion]: createTextCompletion,
     [Products.AudioTranscription]: createTranscription,
     [Products.AudioTranslation]: createTranslation,
     [Products.Image]: createImage,
-    [Products.Moderation]: createModeration
+    [Products.Moderation]: createModeration,
+    [Products.Edit]: createEdit
   }
 
   const handleRequest = () => {
