@@ -21,8 +21,7 @@ import { ErrorType, OpenAIError } from 'src/types/global'
 
 const useConversationCompletionStream = (
   question: string,
-  clearTextarea: () => void,
-  showScrollToBottomBtn: () => void
+  clearTextarea: () => void
 ) => {
   const [isStreaming, setIsStreaming] = useState(false)
   const currConversationId = useRecoilValue(currConversationIdState)
@@ -92,7 +91,6 @@ const useConversationCompletionStream = (
 
         if (done) {
           setIsStreaming(false)
-          showScrollToBottomBtn()
 
           if (_currMessage) {
             await db.chat.update(currConversationId, {
@@ -106,7 +104,7 @@ const useConversationCompletionStream = (
         }
 
         const chunk = decoder.decode(value, { stream: true })
-        const jsons: OpenAIChatResponse[] = chunk
+        const chunks: OpenAIChatResponse[] = chunk
           .split('data:')
           .map((data) => {
             const trimData = data.trim()
@@ -116,14 +114,14 @@ const useConversationCompletionStream = (
           })
           .filter((data) => data)
 
-        jsons.forEach((json) => {
-          const token = json.choices[0].delta.content
+        chunks.forEach((data) => {
+          const token = data.choices[0].delta.content
 
           if (token !== undefined) {
             setTempMessage((prevState) => {
               const currState = produce(prevState, (draft) => {
                 if (draft) {
-                  updateMessageState(draft, json.id, token, true)
+                  updateMessageState(draft, data.id, token, true)
                 }
               })
 

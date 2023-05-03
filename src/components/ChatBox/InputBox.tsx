@@ -20,11 +20,7 @@ import { currProductState } from 'src/stores/global'
 import { HashFile, Products } from 'src/types/global'
 import { BoldSendIcon, LinearPaperclipIcon } from '../Icons'
 
-interface Props {
-  showScrollToBottomBtn: () => void
-}
-
-const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
+const InputBox: FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const summaryInputVisible = useRecoilValue(summaryInputVisibleState)
   const currProduct = useRecoilValue(currProductState)
@@ -52,34 +48,23 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
 
   const { createChatCompletion } = useChatCompletionStream(
     question,
-    clearTextarea,
-    showScrollToBottomBtn
+    clearTextarea
   )
 
-  const { createTextCompletion } = useTextCompletion(
-    question,
-    clearTextarea,
-    showScrollToBottomBtn
-  )
+  const { createTextCompletion } = useTextCompletion(question, clearTextarea)
 
-  const { createImage } = useImage(
-    question,
-    clearTextarea,
-    showScrollToBottomBtn
-  )
+  const { createImage } = useImage(question, clearTextarea)
 
   const { createTranscription } = useAudioTranscription(
     question,
     clearTextarea,
-    hashFile,
-    showScrollToBottomBtn
+    hashFile
   )
 
   const { createTranslation } = useAudioTranslation(
     question,
     clearTextarea,
-    hashFile,
-    showScrollToBottomBtn
+    hashFile
   )
 
   const requests = {

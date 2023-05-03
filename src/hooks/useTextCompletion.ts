@@ -16,7 +16,7 @@ import { OpenAIError } from 'src/types/global'
 const useTextCompletion = (
   question: string,
   clearTextarea: () => void,
-  showScrollToBottomBtn: () => void
+  
 ) => {
   const [loading, setLoading] = useState(false)
   const setErrorAlertState = useSetRecoilState(errorAlertState)
@@ -55,7 +55,7 @@ const useTextCompletion = (
           : [newMessage]
       })
 
-      showScrollToBottomBtn()
+     
     } catch (error: unknown) {
       if (isAxiosError<OpenAIError, Record<string, unknown>>(error)) {
         setErrorAlertState({

@@ -6,11 +6,6 @@ export const currConversationIdState = atom<string>({
   default: ''
 })
 
-export const scrollToBottomBtnVisibleState = atom({
-  key: 'scrollToBottomBtnVisibleState',
-  default: false
-})
-
 export const summaryInputVisibleState = atom({
   key: 'summaryInputVisibleState',
   default: false
@@ -20,7 +15,6 @@ export const avatarPickerVisibleState = atom({
   key: 'avatarPickerVisibleState',
   default: false
 })
-
 
 export const tempMessageState = atom<Message | null>({
   key: 'tempMessageState',

@@ -5,12 +5,14 @@ interface Props {
   src: string
   size?: 'xs' | 'm'
   className?: string
+  onClick?: () => void
 }
 
-const Avatar: FC<Props> = ({ src, size, className }) => (
+const Avatar: FC<Props> = ({ src, size, className, onClick }) => (
   <img
     src={src}
     alt="avatar"
+    onClick={onClick}
     className={classNames(
       'h-12 w-12 rounded-xl',
       {

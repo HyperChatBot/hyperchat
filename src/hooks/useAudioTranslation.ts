@@ -18,7 +18,7 @@ const useAudioTranslation = (
   question: string,
   clearTextarea: () => void,
   hashFile: HashFile | null,
-  showScrollToBottomBtn: () => void
+  
 ) => {
   const [loading, setLoading] = useState(false)
   const setErrorAlertState = useSetRecoilState(errorAlertState)
@@ -60,7 +60,7 @@ const useAudioTranslation = (
           : [newMessage]
       })
 
-      showScrollToBottomBtn()
+     
     } catch (error: unknown) {
       if (isAxiosError<OpenAIError, Record<string, unknown>>(error)) {
         setErrorAlertState({

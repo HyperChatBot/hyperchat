@@ -69,8 +69,6 @@ const ContactHeader: FC<Props> = ({ currConversation }) => {
     }
   }
 
-  
-
   useEffect(() => {
     setSummaryInputVisible(false)
     setAvatarPickerVisible(false)
@@ -78,23 +76,23 @@ const ContactHeader: FC<Props> = ({ currConversation }) => {
 
   return (
     <section className="relative flex items-start justify-between pb-5 pl-6 pr-6 pt-5">
-      <section
-        className="flex cursor-pointer items-center"
-        onClick={() => setAvatarPickerVisible(true)}
-      >
+      <section className="flex cursor-pointer items-center">
         {currConversation?.avatar ? (
-          <div className="flex items-center justify-center text-5xl">
+          <div
+            className="flex items-center justify-center text-5xl"
+            onClick={() => setAvatarPickerVisible(true)}
+          >
             {currConversation?.avatar}
           </div>
         ) : (
-          <Avatar size="xs" src={ChatGPTLogoImg} />
-        )}
-
-        {avatarPickerVisible && (
-          <EmojiPicker
-            onEmojiSelect={saveAvatar}
+          <Avatar
+            size="xs"
+            src={ChatGPTLogoImg}
+            onClick={() => setAvatarPickerVisible(true)}
           />
         )}
+
+        {avatarPickerVisible && <EmojiPicker onEmojiSelect={saveAvatar} />}
 
         <section className="ml-4 flex flex-col">
           <div className="mb-1 flex items-center font-semibold text-black dark:text-dark-text">
