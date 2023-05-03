@@ -20,7 +20,7 @@ const ChatBox: FC = () => {
   const currConversationId = useRecoilValue(currConversationIdState)
   const currConversation = useLiveQuery(
     () => db[currProduct].get(currConversationId),
-    [currConversationId]
+    [currConversationId, currProduct]
   )
 
   const [scrollToBottomBtnVisible, setScrollToBottomBtnVisible] =
@@ -79,7 +79,7 @@ const ChatBox: FC = () => {
       <ContractHeader currConversation={currConversation} />
       <Divider />
       <ChatList chatBoxRef={chatBoxRef} currConversation={currConversation} />
-      {currConversationId && (
+      {currConversation && (
         <InputBox showScrollToBottomBtn={showScrollToBottomBtn} />
       )}
       <ScrollToBottom onClick={scrollToBottom} />

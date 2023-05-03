@@ -16,7 +16,7 @@ const ConversationList: FC = () => {
   const currProduct = useRecoilValue(currProductState)
   const conversations = useLiveQuery(
     () => db[currProduct].orderBy('updated_at').reverse().toArray(),
-    []
+    [currProduct]
   )
   const [currConversationId, setCurrConversationId] = useRecoilState(
     currConversationIdState

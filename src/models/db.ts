@@ -16,7 +16,7 @@ export class HyperChatDB extends Dexie {
       [Products.TextCompletion]:
         '&conversation_id, summary, created_at, updated_at, *messages',
       [Products.Audio]:
-        '&conversation_id, summary, created_at, updated_at, type, file_path, *messages',
+        '&conversation_id, summary, created_at, updated_at, type, file_name, *messages',
       [Products.Image]:
         '&conversation_id, summary, created_at, updated_at, *messages'
     })

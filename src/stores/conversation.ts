@@ -20,3 +20,8 @@ export const tempMessageState = atom<Message | null>({
   key: 'tempMessageState',
   default: null
 })
+
+export const currPlayingAudioIdState = atom<string | null>({
+  key: 'currPlayingAudioIdState',
+  default: null
+})

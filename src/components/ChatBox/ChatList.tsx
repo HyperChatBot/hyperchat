@@ -1,12 +1,14 @@
 import classNames from 'classnames'
 import { FC, Fragment, RefObject } from 'react'
+import { useRecoilValue } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
 import NoDataIllustration from 'src/assets/illustrations/no-data.svg'
 import { EMPTY_MESSAGE_ID } from 'src/shared/constants'
-// import Waveform from '../Waveform'
-import { useRecoilValue } from 'recoil'
 import { tempMessageState } from 'src/stores/conversation'
+import { currProductState } from 'src/stores/global'
 import { Conversation } from 'src/types/conversation'
+import { Products } from 'src/types/global'
+import Waveform from '../Waveform'
 import ChatBubble from './ChatBubble'
 import Markdown from './Markdown'
 import MessageSpinner from './MessageSpinner'
@@ -17,6 +19,7 @@ interface Props {
 }
 
 const ChatList: FC<Props> = ({ currConversation, chatBoxRef }) => {
+  const currProduct = useRecoilValue(currProductState)
   const tempMessage = useRecoilValue(tempMessageState)
   const hasMessages = currConversation && currConversation.messages.length > 0
 
@@ -37,7 +40,9 @@ const ChatList: FC<Props> = ({ currConversation, chatBoxRef }) => {
                 avatar=""
                 date={message.question_created_at}
               >
-                {/* <Waveform audio="" /> */}
+                {currProduct === Products.Audio && message.file_name && (
+                  <Waveform filename={message.file_name} />
+                )}
                 {message.question}
               </ChatBubble>
               <ChatBubble
@@ -57,7 +62,9 @@ const ChatList: FC<Props> = ({ currConversation, chatBoxRef }) => {
                 avatar=""
                 date={tempMessage.question_created_at}
               >
-                {/* <Waveform audio="" /> */}
+                {currProduct === Products.Audio && tempMessage?.file_name && (
+                  <Waveform filename={tempMessage.file_name} />
+                )}
                 {tempMessage.question}
               </ChatBubble>
               <ChatBubble
@@ -78,7 +85,7 @@ const ChatList: FC<Props> = ({ currConversation, chatBoxRef }) => {
         <img
           src={NoDataIllustration}
           alt="NoDataIllustration"
-          className="h-96 w-96 dark:opacity-60"
+          className="h-96 w-96 dark:opacity-80"
         />
       )}
     </section>

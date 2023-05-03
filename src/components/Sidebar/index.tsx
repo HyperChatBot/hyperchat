@@ -52,9 +52,14 @@ const items = [
   }
 ]
 
-const Siderbar: FC = () => {
-  const [currPruduct, setCurrProduct] = useRecoilState(currProductState)
+const Sidebar: FC = () => {
+  const [currProduct, setCurrProduct] = useRecoilState(currProductState)
   const location = useLocation()
+
+  const setProduct = (product: Products) => {
+    window.localStorage.setItem('currProductState', product)
+    setCurrProduct(product)
+  }
 
   return (
     <section className="flex h-screen w-22 min-w-22 flex-col items-center justify-between p-4 shadow-sidebar dark:shadow-dark-sidebar">
@@ -67,9 +72,9 @@ const Siderbar: FC = () => {
                 <Link
                   to="/"
                   className="cursor-pointer"
-                  onClick={() => setCurrProduct(item.product)}
+                  onClick={() => setProduct(item.product)}
                 >
-                  {currPruduct === item.product && location.pathname === '/'
+                  {currProduct === item.product && location.pathname === '/'
                     ? item.active
                     : item.inactive}
                 </Link>
@@ -94,4 +99,4 @@ const Siderbar: FC = () => {
   )
 }
 
-export default Siderbar
+export default Sidebar

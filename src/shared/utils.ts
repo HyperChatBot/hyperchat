@@ -1,7 +1,12 @@
+import { BaseDirectory, createDir, writeBinaryFile } from '@tauri-apps/api/fs'
+import { appDataDir, join } from '@tauri-apps/api/path'
+import { convertFileSrc } from '@tauri-apps/api/tauri'
 import { WritableDraft } from 'immer/dist/internal'
 import { DateTime } from 'luxon'
-import { Conversation, Message } from 'src/types/conversation'
-import { ErrorType } from 'src/types/global'
+import { Message } from 'src/types/conversation'
+import { ErrorType, HashFile } from 'src/types/global'
+import { v4 } from 'uuid'
+import { getFileExtension } from 'yancey-js-util'
 import { EMPTY_MESSAGE_ID } from './constants'
 
 export const formatDate = (millis: number) => {
@@ -29,29 +34,6 @@ export const generateEmptyMessage = (question: string) => ({
   answer_created_at: +new Date()
 })
 
-export const updateConversationState = (
-  draft: WritableDraft<Conversation>,
-  id: string,
-  answer: string,
-  stream?: boolean
-) => {
-  const messages = draft.messages
-  const last = messages[messages.length - 1]
-
-  const isFirstChuck = last.message_id === EMPTY_MESSAGE_ID
-  if (isFirstChuck) {
-    last.message_id = id
-  }
-
-  if (stream) {
-    last.answer += answer
-  } else {
-    last.answer = answer
-  }
-
-  last.answer_created_at = +new Date()
-}
-
 export const updateMessageState = (
   draft: WritableDraft<Message>,
   id: string,
@@ -70,4 +52,34 @@ export const updateMessageState = (
   }
 
   draft.answer_created_at = +new Date()
+}
+
+export const generateHashName = (fileName: string) => {
+  const extension = getFileExtension(fileName)
+  const hashName = `${v4()}_${+new Date()}.${extension}`
+
+  return hashName
+}
+
+export const saveFileToAppDataDir = async (hashFile: HashFile) => {
+  try {
+    await createDir('data', { dir: BaseDirectory.AppData, recursive: true })
+    await writeBinaryFile(
+      `data/${hashFile.hashName}`,
+      await hashFile.file.arrayBuffer(),
+      {
+        dir: BaseDirectory.AppData
+      }
+    )
+  } catch {}
+}
+
+export const generateFileSrc = async (fileName: string) => {
+  try {
+    const appDataDirPath = await appDataDir()
+    const filePath = await join(appDataDirPath, `data/${fileName}`)
+    const assetUrl = convertFileSrc(filePath)
+
+    return assetUrl
+  } catch {}
 }

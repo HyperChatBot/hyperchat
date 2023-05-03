@@ -5,7 +5,7 @@ export interface Message {
   question_created_at: number
   answer_created_at: number
 
-  file_path?: string
+  file_name?: string
   type?: AudioType
 }
 

@@ -1,22 +1,52 @@
 import { PauseCircleIcon, PlayCircleIcon } from '@heroicons/react/24/outline'
 import { FC, useEffect, useRef, useState } from 'react'
+import { useRecoilState } from 'recoil'
+import { generateFileSrc } from 'src/shared/utils'
+import { currPlayingAudioIdState } from 'src/stores/conversation'
 import WaveSurfer from 'wavesurfer.js'
 
 interface Props {
-  audio: string
+  filename: string
 }
 
-const Waveform: FC<Props> = ({ audio }) => {
+const Waveform: FC<Props> = ({ filename }) => {
+  const [currPlayingAudioId, setCurrPlayingAudioId] = useRecoilState(
+    currPlayingAudioIdState
+  )
+  const [src, setSrc] = useState('')
   const [isPlaying, toggleIsPlaying] = useState(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const waveSurferRef = useRef<WaveSurfer | null>(null)
 
   const handlePlaying = () => {
-    waveSurferRef.current?.playPause()
     toggleIsPlaying(!waveSurferRef.current?.isPlaying())
+
+    if (!waveSurferRef.current?.isPlaying()) {
+      setCurrPlayingAudioId(filename)
+    }
+
+    waveSurferRef.current?.playPause()
+  }
+
+  const createFileSrc = async () => {
+    const currSrc = await generateFileSrc(filename)
+    setSrc(currSrc || '')
   }
 
   useEffect(() => {
+    createFileSrc()
+  }, [])
+
+  useEffect(() => {
+    if (currPlayingAudioId !== filename) {
+      waveSurferRef.current?.stop()
+      toggleIsPlaying(false)
+    }
+  }, [currPlayingAudioId])
+
+  useEffect(() => {
+    if (!src) return
+
     const waveSurfer = WaveSurfer.create({
       container: containerRef.current as HTMLDivElement,
       responsive: true,
@@ -26,15 +56,18 @@ const Waveform: FC<Props> = ({ audio }) => {
       waveColor: 'rgba(255, 255, 255, 0.6)',
       progressColor: '#fff'
     })
-    waveSurfer.load(audio)
+    waveSurfer.load(src)
     waveSurfer.on('ready', () => {
       waveSurferRef.current = waveSurfer
+    })
+    waveSurfer.on('finish', () => {
+      toggleIsPlaying(false)
     })
 
     return () => {
       waveSurfer.destroy()
     }
-  }, [audio])
+  }, [src])
 
   return (
     <section className="flex w-full items-center">

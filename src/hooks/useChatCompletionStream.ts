@@ -12,7 +12,6 @@ import {
 } from 'src/shared/utils'
 import {
   currConversationIdState,
-  summaryInputVisibleState,
   tempMessageState
 } from 'src/stores/conversation'
 import { errorAlertState } from 'src/stores/global'
@@ -31,14 +30,11 @@ const useConversationCompletionStream = (
     () => db.chat.get(currConversationId),
     [currConversationId]
   )
-  const summaryInputVisible = useRecoilValue(summaryInputVisibleState)
   const setErrorAlertState = useSetRecoilState(errorAlertState)
   const setTempMessage = useSetRecoilState(tempMessageState)
 
   const createChatCompletion = async () => {
-    if (summaryInputVisible) return
     if (isStreaming) return
-    if (question.trim().length === 0) return
 
     setIsStreaming(true)
     clearTextarea()

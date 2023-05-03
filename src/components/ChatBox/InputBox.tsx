@@ -9,8 +9,10 @@ import {
   useTextCompletion
 } from 'src/hooks'
 import { TEXTAREA_MAX_ROWS } from 'src/shared/constants'
+import { generateHashName, saveFileToAppDataDir } from 'src/shared/utils'
+import { summaryInputVisibleState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
-import { Products } from 'src/types/global'
+import { HashFile, Products } from 'src/types/global'
 import { BoldSendIcon, LinearPaperclipIcon } from '../Icons'
 
 interface Props {
@@ -19,21 +21,27 @@ interface Props {
 
 const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const summaryInputVisible = useRecoilValue(summaryInputVisibleState)
   const currProduct = useRecoilValue(currProductState)
   const [rows, setRows] = useState(1)
   const [question, setQuestion] = useState('')
-  const [currFile, setCurrFile] = useState<File | null>(null)
+  const [hashFile, setHashFile] = useState<HashFile | null>(null)
 
   const clearTextarea = () => {
     setRows(1)
     setQuestion('')
   }
 
-  const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
 
     if (file) {
-      setCurrFile(file)
+      const hashFile = {
+        file,
+        hashName: generateHashName(file.name)
+      }
+      setHashFile(hashFile)
+      await saveFileToAppDataDir(hashFile)
     }
   }
 
@@ -58,7 +66,7 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
   const { createTranscription } = useAudio(
     question,
     clearTextarea,
-    currFile,
+    hashFile,
     showScrollToBottomBtn
   )
 
@@ -69,7 +77,14 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
     [Products.Image]: createImage
   }
 
-  useEnterKey(() => requests[currProduct]())
+  const handleRequest = () => {
+    if (summaryInputVisible) return
+    if (currProduct !== Products.Audio && question.trim().length === 0) return
+
+    requests[currProduct]()
+  }
+
+  useEnterKey(() => handleRequest())
 
   const onTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setQuestion(e.target.value)
@@ -81,7 +96,7 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
   return (
     <section className="items-centerbg-white absolute bottom-6 left-6 flex w-[calc(100%_-_3rem)] pt-6 dark:bg-gray-800">
       {currProduct === Products.Audio && (
-        <label htmlFor="$$video-input" className="relative">
+        <label htmlFor="$$video-input" className="relative flex items-center">
           <input
             type="file"
             id="$$video-input"
@@ -103,7 +118,7 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
           onChange={onTextareaChange}
         />
         <BoldSendIcon
-          onClick={requests[currProduct]}
+          onClick={handleRequest}
           className="absolute bottom-3.5 right-5 z-10"
           pathClassName={classNames('text-black dark:text-white fill-current', {
             'text-opacity-30': question.trim().length === 0,

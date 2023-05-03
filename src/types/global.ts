@@ -33,3 +33,8 @@ export enum ErrorType {
   OpenAI = '[OpenAI] ',
   Unknown = '[Unknown] '
 }
+
+export interface HashFile {
+  file: File
+  hashName: string
+}

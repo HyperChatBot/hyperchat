@@ -5,10 +5,9 @@ import { useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { db } from 'src/models/db'
 import { openai } from 'src/openai'
-import { generateEmptyMessage, updateMessageState } from 'src/shared/utils'
+import { generateEmptyMessage } from 'src/shared/utils'
 import {
   currConversationIdState,
-  summaryInputVisibleState,
   tempMessageState
 } from 'src/stores/conversation'
 import { errorAlertState } from 'src/stores/global'
@@ -23,7 +22,6 @@ const useImage = (
   const [loading, setLoading] = useState(false)
   const setErrorAlertState = useSetRecoilState(errorAlertState)
   const currConversationId = useRecoilValue(currConversationIdState)
-  const summaryInputVisible = useRecoilValue(summaryInputVisibleState)
   const currConversation = useLiveQuery(
     () => db.audio.get(currConversationId),
     [currConversationId]
@@ -31,12 +29,11 @@ const useImage = (
   const setTempMessage = useSetRecoilState(tempMessageState)
 
   const createImage = async () => {
-    if (summaryInputVisible) return
     if (loading) return
-    if (question.trim().length === 0) return
 
     setLoading(true)
-    setTempMessage(generateEmptyMessage(question))
+    const tempMessage = generateEmptyMessage(question)
+    setTempMessage(tempMessage)
     clearTextarea()
 
     try {
@@ -48,22 +45,16 @@ const useImage = (
         .map((val, key) => `![${question}-${key}](${val.url})\n`)
         .join('')
 
-      setTempMessage((prevState) => {
-        const currState = produce(prevState, (draft) => {
-          if (draft) {
-            updateMessageState(draft, v4(), content)
-          }
-        })
+      const newMessage = produce(tempMessage, (draft) => {
+        draft.answer_created_at = +new Date()
+        draft.answer = content
+        draft.message_id = v4()
+      })
 
-        if (currState) {
-          db.audio.update(currConversationId, {
-            messages: currConversation
-              ? [...currConversation.messages, currState]
-              : [currState]
-          })
-        }
-
-        return currState
+      await db.image.update(currConversationId, {
+        messages: currConversation
+          ? [...currConversation.messages, newMessage]
+          : [newMessage]
       })
 
       showScrollToBottomBtn()
