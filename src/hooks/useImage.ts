@@ -14,11 +14,7 @@ import { errorAlertState } from 'src/stores/global'
 import { OpenAIError } from 'src/types/global'
 import { v4 } from 'uuid'
 
-const useImage = (
-  question: string,
-  clearTextarea: () => void,
-  
-) => {
+const useImage = (question: string, clearTextarea: () => void) => {
   const [loading, setLoading] = useState(false)
   const setErrorAlertState = useSetRecoilState(errorAlertState)
   const currConversationId = useRecoilValue(currConversationIdState)
@@ -56,8 +52,6 @@ const useImage = (
           ? [...currConversation.messages, newMessage]
           : [newMessage]
       })
-
-     
     } catch (error: unknown) {
       if (isAxiosError<OpenAIError, Record<string, unknown>>(error)) {
         setErrorAlertState({

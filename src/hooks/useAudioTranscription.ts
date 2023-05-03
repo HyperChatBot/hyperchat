@@ -17,8 +17,7 @@ import { v4 } from 'uuid'
 const useAudioTranscription = (
   question: string,
   clearTextarea: () => void,
-  hashFile: HashFile | null,
-  
+  hashFile: HashFile | null
 ) => {
   const [loading, setLoading] = useState(false)
   const setErrorAlertState = useSetRecoilState(errorAlertState)
@@ -59,8 +58,6 @@ const useAudioTranscription = (
           ? [...currConversation.messages, newMessage]
           : [newMessage]
       })
-
-     
     } catch (error: unknown) {
       if (isAxiosError<OpenAIError, Record<string, unknown>>(error)) {
         setErrorAlertState({

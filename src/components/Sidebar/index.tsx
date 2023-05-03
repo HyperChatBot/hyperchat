@@ -4,7 +4,7 @@ import { Tooltip } from 'flowbite-react'
 import { FC } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
-import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
+import LogoImg from 'src/assets/Logo.png'
 import { currProductState } from 'src/stores/global'
 import { Products } from 'src/types/global'
 import Avatar from '../Avatar'
@@ -22,7 +22,7 @@ const Sidebar: FC = () => {
   return (
     <section className="flex h-screen w-22 min-w-22 flex-col items-center justify-between p-4 shadow-sidebar dark:shadow-dark-sidebar">
       <div className="flex flex-col items-center">
-        <Avatar size="xs" src={ChatGPTLogoImg} />
+        <Avatar size="xs" src={LogoImg} />
         <section className="mt-12">
           {items.map((item, key) => (
             <div key={key} className="mb-8">
