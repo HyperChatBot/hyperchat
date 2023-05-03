@@ -22,7 +22,7 @@ const useTextCompletion = (
   const setErrorAlertState = useSetRecoilState(errorAlertState)
   const currConversationId = useRecoilValue(currConversationIdState)
   const currConversation = useLiveQuery(
-    () => db.audio.get(currConversationId),
+    () => db.text.get(currConversationId),
     [currConversationId]
   )
   const setTempMessage = useSetRecoilState(tempMessageState)

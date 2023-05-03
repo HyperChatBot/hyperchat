@@ -4,7 +4,7 @@ import { convertFileSrc } from '@tauri-apps/api/tauri'
 import { WritableDraft } from 'immer/dist/internal'
 import { DateTime } from 'luxon'
 import { Message } from 'src/types/conversation'
-import { ErrorType, HashFile } from 'src/types/global'
+import { ErrorType, HashFile, Products } from 'src/types/global'
 import { v4 } from 'uuid'
 import { getFileExtension } from 'yancey-js-util'
 import { EMPTY_MESSAGE_ID } from './constants'
@@ -83,3 +83,7 @@ export const generateFileSrc = async (fileName: string) => {
     return assetUrl
   } catch {}
 }
+
+export const isAudioProduct = (product: Products) =>
+  product === Products.AudioTranscription ||
+  product === Products.AudioTranslation

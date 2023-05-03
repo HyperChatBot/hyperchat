@@ -4,10 +4,10 @@ import { useRecoilValue } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
 import NoDataIllustration from 'src/assets/illustrations/no-data.svg'
 import { EMPTY_MESSAGE_ID } from 'src/shared/constants'
+import { isAudioProduct } from 'src/shared/utils'
 import { tempMessageState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { Conversation } from 'src/types/conversation'
-import { Products } from 'src/types/global'
 import Waveform from '../Waveform'
 import ChatBubble from './ChatBubble'
 import Markdown from './Markdown'
@@ -40,7 +40,7 @@ const ChatList: FC<Props> = ({ currConversation, chatBoxRef }) => {
                 avatar=""
                 date={message.question_created_at}
               >
-                {currProduct === Products.Audio && message.file_name && (
+                {isAudioProduct(currProduct) && message.file_name && (
                   <Waveform filename={message.file_name} />
                 )}
                 {message.question}
@@ -62,7 +62,7 @@ const ChatList: FC<Props> = ({ currConversation, chatBoxRef }) => {
                 avatar=""
                 date={tempMessage.question_created_at}
               >
-                {currProduct === Products.Audio && tempMessage?.file_name && (
+                {isAudioProduct(currProduct) && tempMessage?.file_name && (
                   <Waveform filename={tempMessage.file_name} />
                 )}
                 {tempMessage.question}

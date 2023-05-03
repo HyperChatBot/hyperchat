@@ -24,7 +24,7 @@ const useAudioTranslation = (
   const setErrorAlertState = useSetRecoilState(errorAlertState)
   const currConversationId = useRecoilValue(currConversationIdState)
   const currConversation = useLiveQuery(
-    () => db.audio_transcription.get(currConversationId),
+    () => db.audio_translation.get(currConversationId),
     [currConversationId]
   )
   const setTempMessage = useSetRecoilState(tempMessageState)
@@ -54,7 +54,7 @@ const useAudioTranslation = (
         draft.message_id = v4()
       })
 
-      await db.audio_transcription.update(currConversationId, {
+      await db.audio_translation.update(currConversationId, {
         messages: currConversation
           ? [...currConversation.messages, newMessage]
           : [newMessage]

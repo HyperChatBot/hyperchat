@@ -10,7 +10,11 @@ import {
   useTextCompletion
 } from 'src/hooks'
 import { TEXTAREA_MAX_ROWS } from 'src/shared/constants'
-import { generateHashName, saveFileToAppDataDir } from 'src/shared/utils'
+import {
+  generateHashName,
+  isAudioProduct,
+  saveFileToAppDataDir
+} from 'src/shared/utils'
 import { summaryInputVisibleState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { HashFile, Products } from 'src/types/global'
@@ -88,12 +92,7 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
 
   const handleRequest = () => {
     if (summaryInputVisible) return
-    if (
-      currProduct !== Products.AudioTranscription &&
-      currProduct !== Products.AudioTranslation &&
-      question.trim().length === 0
-    )
-      return
+    if (!isAudioProduct(currProduct) && question.trim().length === 0) return
 
     requests[currProduct]()
   }
@@ -109,8 +108,7 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
 
   return (
     <section className="absolute bottom-6 left-6 flex w-[calc(100%_-_3rem)] items-center bg-white pt-6 dark:bg-gray-800">
-      {(currProduct === Products.AudioTranscription ||
-        currProduct === Products.AudioTranslation) && (
+      {isAudioProduct(currProduct) && (
         <label htmlFor="$$video-input" className="relative flex items-center">
           <input
             type="file"
