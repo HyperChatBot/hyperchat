@@ -16,11 +16,18 @@ const ConversationItem: FC<Props> = ({ active, conversation, onClick }) => {
 
   return (
     <ItemWrapper onClick={onClick} active={active}>
-      <img
-        src={ChatGPTLogoImg}
-        alt="avatar"
-        className="mr-4 h-12 w-12 rounded-xl"
-      />
+      {conversation.avatar ? (
+        <div className="mr-4 flex items-center justify-center text-5xl">
+          {conversation.avatar}
+        </div>
+      ) : (
+        <img
+          src={ChatGPTLogoImg}
+          alt="avatar"
+          className="mr-4 h-12 w-12 rounded-xl"
+        />
+      )}
+
       <div className="flex w-full flex-col">
         <p className="flex justify-between">
           <span

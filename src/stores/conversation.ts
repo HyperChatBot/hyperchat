@@ -16,6 +16,12 @@ export const summaryInputVisibleState = atom({
   default: false
 })
 
+export const avatarPickerVisibleState = atom({
+  key: 'avatarPickerVisibleState',
+  default: false
+})
+
+
 export const tempMessageState = atom<Message | null>({
   key: 'tempMessageState',
   default: null

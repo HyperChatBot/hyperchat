@@ -38,3 +38,13 @@ export interface HashFile {
   file: File
   hashName: string
 }
+
+export interface EmojiPickerProps {
+  emoticons: string[]
+  id: string
+  keywords: string[]
+  name: string
+  native: string
+  shortcodes: string
+  unified: string
+}

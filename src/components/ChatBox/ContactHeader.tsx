@@ -4,10 +4,15 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
 import { db } from 'src/models/db'
 import { EMPTY_CHAT_HINT } from 'src/shared/constants'
-import { summaryInputVisibleState } from 'src/stores/conversation'
+import {
+  avatarPickerVisibleState,
+  summaryInputVisibleState
+} from 'src/stores/conversation'
 import { currProductState, onlineState } from 'src/stores/global'
 import { Conversation } from 'src/types/conversation'
+import { EmojiPickerProps } from 'src/types/global'
 import Avatar from '../Avatar'
+import EmojiPicker from '../EmojiPicker'
 import { LinearCheckIcon, LinearDeleteIcon, LinearEditIcon } from '../Icons'
 
 interface Props {
@@ -16,14 +21,17 @@ interface Props {
 
 const ContactHeader: FC<Props> = ({ currConversation }) => {
   const currProduct = useRecoilValue(currProductState)
-  const [summaryInputVisible, setSummaryInputVisibleState] = useRecoilState(
+  const [summaryInputVisible, setSummaryInputVisible] = useRecoilState(
     summaryInputVisibleState
   )
-
+  const [avatarPickerVisible, setAvatarPickerVisible] = useRecoilState(
+    avatarPickerVisibleState
+  )
   const isOnline = useRecoilValue(onlineState)
   const [summaryValue, setSummaryValue] = useState(
     currConversation?.summary || ''
   )
+
   const summary =
     currConversation?.summary ||
     currConversation?.conversation_id ||
@@ -37,13 +45,13 @@ const ContactHeader: FC<Props> = ({ currConversation }) => {
         summary: summaryValue
       })
 
-      setSummaryInputVisibleState(false)
+      setSummaryInputVisible(false)
     }
   }
 
   const saveSummaryWithKeyboard = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Escape') {
-      setSummaryInputVisibleState(false)
+      setSummaryInputVisible(false)
     }
 
     if (e.key === 'Enter') {
@@ -51,14 +59,43 @@ const ContactHeader: FC<Props> = ({ currConversation }) => {
     }
   }
 
+  const saveAvatar = async (data: EmojiPickerProps) => {
+    if (currConversation) {
+      await db[currProduct].update(currConversation.conversation_id, {
+        avatar: data.native
+      })
+
+      setAvatarPickerVisible(false)
+    }
+  }
+
+  
+
   useEffect(() => {
-    setSummaryInputVisibleState(false)
+    setSummaryInputVisible(false)
+    setAvatarPickerVisible(false)
   }, [currConversation])
 
   return (
-    <section className="flex items-start justify-between pb-5 pl-6 pr-6 pt-5">
-      <section className="flex items-center">
-        <Avatar size="xs" src={ChatGPTLogoImg} />
+    <section className="relative flex items-start justify-between pb-5 pl-6 pr-6 pt-5">
+      <section
+        className="flex cursor-pointer items-center"
+        onClick={() => setAvatarPickerVisible(true)}
+      >
+        {currConversation?.avatar ? (
+          <div className="flex items-center justify-center text-5xl">
+            {currConversation?.avatar}
+          </div>
+        ) : (
+          <Avatar size="xs" src={ChatGPTLogoImg} />
+        )}
+
+        {avatarPickerVisible && (
+          <EmojiPicker
+            onEmojiSelect={saveAvatar}
+          />
+        )}
+
         <section className="ml-4 flex flex-col">
           <div className="mb-1 flex items-center font-semibold text-black dark:text-dark-text">
             {summaryInputVisible ? (
@@ -77,7 +114,7 @@ const ContactHeader: FC<Props> = ({ currConversation }) => {
               </>
             ) : (
               <div
-                onClick={() => setSummaryInputVisibleState(true)}
+                onClick={() => setSummaryInputVisible(true)}
                 className="flex cursor-pointer items-center"
               >
                 <p className="mr-4 text-base">{summary}</p>

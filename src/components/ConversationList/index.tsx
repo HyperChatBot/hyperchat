@@ -26,6 +26,7 @@ const ConversationList: FC = () => {
     const chatId = v4()
 
     const conversation: Conversation = {
+      avatar: '',
       conversation_id: chatId,
       summary: '',
       messages: [],
