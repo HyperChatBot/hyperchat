@@ -2,7 +2,8 @@ import classNames from 'classnames'
 import { ChangeEvent, FC, useRef, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import {
-  useAudio,
+  useAudioTranscription,
+  useAudioTranslation,
   useChatCompletionStream,
   useEnterKey,
   useImage,
@@ -63,7 +64,14 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
     showScrollToBottomBtn
   )
 
-  const { createTranscription } = useAudio(
+  const { createTranscription } = useAudioTranscription(
+    question,
+    clearTextarea,
+    hashFile,
+    showScrollToBottomBtn
+  )
+
+  const { createTranslation } = useAudioTranslation(
     question,
     clearTextarea,
     hashFile,
@@ -73,13 +81,19 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
   const requests = {
     [Products.ChatCompletion]: createChatCompletion,
     [Products.TextCompletion]: createTextCompletion,
-    [Products.Audio]: createTranscription,
+    [Products.AudioTranscription]: createTranscription,
+    [Products.AudioTranslation]: createTranslation,
     [Products.Image]: createImage
   }
 
   const handleRequest = () => {
     if (summaryInputVisible) return
-    if (currProduct !== Products.Audio && question.trim().length === 0) return
+    if (
+      currProduct !== Products.AudioTranscription &&
+      currProduct !== Products.AudioTranslation &&
+      question.trim().length === 0
+    )
+      return
 
     requests[currProduct]()
   }
@@ -94,8 +108,9 @@ const InputBox: FC<Props> = ({ showScrollToBottomBtn }) => {
   }
 
   return (
-    <section className="items-centerbg-white absolute bottom-6 left-6 flex w-[calc(100%_-_3rem)] pt-6 dark:bg-gray-800">
-      {currProduct === Products.Audio && (
+    <section className="absolute bottom-6 left-6 flex w-[calc(100%_-_3rem)] items-center bg-white pt-6 dark:bg-gray-800">
+      {(currProduct === Products.AudioTranscription ||
+        currProduct === Products.AudioTranslation) && (
         <label htmlFor="$$video-input" className="relative flex items-center">
           <input
             type="file"

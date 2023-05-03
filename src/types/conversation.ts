@@ -5,7 +5,6 @@ export interface Message {
   question_created_at: number
   answer_created_at: number
   file_name?: string
-  type?: AudioType
 }
 
 export interface Conversation {
@@ -15,9 +14,4 @@ export interface Conversation {
   created_at: number
   updated_at: number
   messages: Message[]
-}
-
-export enum AudioType {
-  Transcription,
-  Translation
 }

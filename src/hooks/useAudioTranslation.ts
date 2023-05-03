@@ -11,11 +11,10 @@ import {
   tempMessageState
 } from 'src/stores/conversation'
 import { errorAlertState } from 'src/stores/global'
-import { AudioType } from 'src/types/conversation'
 import { HashFile, OpenAIError } from 'src/types/global'
 import { v4 } from 'uuid'
 
-const useAudio = (
+const useAudioTranslation = (
   question: string,
   clearTextarea: () => void,
   hashFile: HashFile | null,
@@ -25,26 +24,25 @@ const useAudio = (
   const setErrorAlertState = useSetRecoilState(errorAlertState)
   const currConversationId = useRecoilValue(currConversationIdState)
   const currConversation = useLiveQuery(
-    () => db.audio.get(currConversationId),
+    () => db.audio_transcription.get(currConversationId),
     [currConversationId]
   )
   const setTempMessage = useSetRecoilState(tempMessageState)
 
-  const createTranscription = async () => {
+  const createTranslation = async () => {
     if (loading) return
     if (!hashFile) return
 
     setLoading(true)
     const tempMessage = {
       ...generateEmptyMessage(question),
-      type: AudioType.Transcription,
       file_name: hashFile.hashName
     }
     setTempMessage(tempMessage)
     clearTextarea()
 
     try {
-      const transcription = await openai.createTranscription(
+      const transcription = await openai.createTranslation(
         hashFile.file,
         'whisper-1',
         question
@@ -56,7 +54,7 @@ const useAudio = (
         draft.message_id = v4()
       })
 
-      await db.audio.update(currConversationId, {
+      await db.audio_transcription.update(currConversationId, {
         messages: currConversation
           ? [...currConversation.messages, newMessage]
           : [newMessage]
@@ -76,7 +74,7 @@ const useAudio = (
     }
   }
 
-  return { loading, createTranscription }
+  return { loading, createTranslation }
 }
 
-export default useAudio
+export default useAudioTranslation

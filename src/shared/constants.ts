@@ -13,8 +13,9 @@ export const EMPTY_CHAT_HINT = 'Create your first conversation!'
 export const conversationTitles = {
   [Products.ChatCompletion]: 'Chat Completion',
   [Products.TextCompletion]: 'Text Completion',
-  [Products.Audio]: 'Audio Transcription',
-  [Products.Image]: 'Images'
+  [Products.AudioTranscription]: 'Audio Transcription',
+  [Products.AudioTranslation]: 'Audio Translation',
+  [Products.Image]: 'Image Generation'
 }
 
 export const TEXTAREA_MAX_ROWS = 8

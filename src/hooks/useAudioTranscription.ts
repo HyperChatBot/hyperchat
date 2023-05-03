@@ -11,47 +11,50 @@ import {
   tempMessageState
 } from 'src/stores/conversation'
 import { errorAlertState } from 'src/stores/global'
-import { OpenAIError } from 'src/types/global'
+import { HashFile, OpenAIError } from 'src/types/global'
 import { v4 } from 'uuid'
 
-const useImage = (
+const useAudioTranscription = (
   question: string,
   clearTextarea: () => void,
+  hashFile: HashFile | null,
   showScrollToBottomBtn: () => void
 ) => {
   const [loading, setLoading] = useState(false)
   const setErrorAlertState = useSetRecoilState(errorAlertState)
   const currConversationId = useRecoilValue(currConversationIdState)
   const currConversation = useLiveQuery(
-    () => db.image.get(currConversationId),
+    () => db.audio_transcription.get(currConversationId),
     [currConversationId]
   )
   const setTempMessage = useSetRecoilState(tempMessageState)
 
-  const createImage = async () => {
+  const createTranscription = async () => {
     if (loading) return
+    if (!hashFile) return
 
     setLoading(true)
-    const tempMessage = generateEmptyMessage(question)
+    const tempMessage = {
+      ...generateEmptyMessage(question),
+      file_name: hashFile.hashName
+    }
     setTempMessage(tempMessage)
     clearTextarea()
 
     try {
-      const image = await openai.createImage({
-        prompt: question
-      })
-
-      const content = image.data.data
-        .map((val, key) => `![${question}-${key}](${val.url})\n`)
-        .join('')
+      const transcription = await openai.createTranscription(
+        hashFile.file,
+        'whisper-1',
+        question
+      )
 
       const newMessage = produce(tempMessage, (draft) => {
         draft.answer_created_at = +new Date()
-        draft.answer = content
+        draft.answer = transcription.data.text
         draft.message_id = v4()
       })
 
-      await db.image.update(currConversationId, {
+      await db.audio_transcription.update(currConversationId, {
         messages: currConversation
           ? [...currConversation.messages, newMessage]
           : [newMessage]
@@ -71,7 +74,7 @@ const useImage = (
     }
   }
 
-  return { loading, createImage }
+  return { loading, createTranscription }
 }
 
-export default useImage
+export default useAudioTranscription

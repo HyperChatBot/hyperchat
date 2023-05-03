@@ -8,7 +8,7 @@ export const onlineState = atom({
 
 export const currProductState = atom({
   key: 'currProductState',
-  default: window.localStorage.getItem('currProductState') || Products.ChatCompletion
+  default: window.localStorage.getItem('currProductState') as Products || Products.ChatCompletion
 })
 
 export const errorAlertState = atom<AlertError | false>({
