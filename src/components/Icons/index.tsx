@@ -24,6 +24,7 @@ import LinearSendIcon from './LinearSendIcon'
 import LinearSettingIcon from './LinearSettingIcon'
 import OutlineTranslationIcon from './OutlineTranslationIcon'
 import SolidTranslationIcon from './SolidTranslationIcon'
+import SolidSettingsBrightnessIcon from './SolidSettingsBrightnessIcon'
 
 export {
   BoldAndCircleIcon,
@@ -51,5 +52,6 @@ export {
   LinearDeleteIcon,
   LinearEditIcon,
   OutlineTranslationIcon,
-  SolidTranslationIcon
+  SolidTranslationIcon,
+  SolidSettingsBrightnessIcon
 }

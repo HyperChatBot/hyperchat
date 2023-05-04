@@ -1,4 +1,4 @@
-import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { ThemeProvider } from '@mui/material/styles'
 import { SnackbarProvider } from 'notistack'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
@@ -12,18 +12,13 @@ import {
   SNACKBAR_MAX_NUM
 } from './shared/constants'
 import './styles.css'
-
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark'
-  }
-})
+import theme from './themes'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>
     <RecoilRoot>
       <BrowserRouter>
-        <ThemeProvider theme={darkTheme}>
+        <ThemeProvider theme={theme}>
           <SnackbarProvider
             maxSnack={SNACKBAR_MAX_NUM}
             anchorOrigin={SNACKBAR_ANCHOR_ORIGIN}
