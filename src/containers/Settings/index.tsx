@@ -52,25 +52,24 @@ const Settings: FC = () => {
 
             <TextField
               required
-              id="outlined-basic"
+              id="openai-secret-key-input"
               label="Secret Key"
               size="small"
               type="password"
-              placeholder="Enter OpenAI Secret Key"
               helperText={
-                <p>
+                <span>
                   <strong>
                     Your secret key will only be stored in IndexedDB!
                   </strong>{' '}
                   Do not share it with others or expose it in any client-side
                   code.
-                </p>
+                </span>
               }
               className="w-160"
             />
 
             <TextField
-              id="outlined-basic"
+              id="openai-organization-id-input"
               label="Organization ID"
               size="small"
               type="text"
@@ -79,7 +78,7 @@ const Settings: FC = () => {
             />
 
             <TextField
-              id="outlined-basic"
+              id="openai-author-name-input"
               label="Author Name"
               size="small"
               type="text"
@@ -151,13 +150,11 @@ const Settings: FC = () => {
             <header className="text-xl font-medium">Chat</header>
 
             <FormControl size="small">
-              <InputLabel id="chat-completion-model-select-label">
-                Model
-              </InputLabel>
+              <InputLabel id="chat-model-select-label">Model</InputLabel>
               <Select
                 className="w-80"
-                labelId="chat-completion-model-select-label"
-                id="chat-completion-model-select"
+                labelId="chat-model-select-label"
+                id="chat-model-select"
                 value={chatCompletions[0]}
                 label="Model"
                 onChange={() => {}}
@@ -189,14 +186,14 @@ const Settings: FC = () => {
             <header className="text-xl font-medium">Text Completions</header>
 
             <FormControl size="small">
-              <InputLabel id="chat-completion-model-select-label">
+              <InputLabel id="text-completion-model-select-label">
                 Model
               </InputLabel>
               <Select
                 className="w-80"
-                labelId="chat-completion-model-select-label"
-                id="chat-completion-model-select"
-                value={chatCompletions[0]}
+                labelId="text-completion-model-select-label"
+                id="text-completion-model-select"
+                value={textCompletions[0]}
                 label="Model"
                 onChange={() => {}}
               >
@@ -227,12 +224,12 @@ const Settings: FC = () => {
             <header className="text-xl font-medium">Edit</header>
 
             <FormControl size="small">
-              <InputLabel id="demo-select-small-label">Model</InputLabel>
+              <InputLabel id="edit-model-select-label">Model</InputLabel>
               <Select
                 className="w-80"
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                value={10}
+                labelId="edit-model-select-label"
+                id="edit-model-select"
+                value={edits[0]}
                 label="Model"
                 onChange={() => {}}
               >
@@ -251,13 +248,13 @@ const Settings: FC = () => {
             <header className="text-xl font-medium">Audio</header>
 
             <FormControl size="small">
-              <InputLabel id="demo-select-small-label">
+              <InputLabel id="audio-transcription-model-select-label">
                 Transcription Model
               </InputLabel>
               <Select
                 className="w-80"
-                labelId="demo-select-small-label"
-                id="demo-select-small"
+                labelId="audio-transcription-model-select-label"
+                id="audio-transcription-model-select"
                 value={audios[0]}
                 disabled
                 label="Transcription Model"
@@ -275,13 +272,13 @@ const Settings: FC = () => {
             </FormControl>
 
             <FormControl size="small">
-              <InputLabel id="demo-select-small-label">
+              <InputLabel id="audio-translation-model-select-label">
                 Translation Model
               </InputLabel>
               <Select
                 className="w-80"
-                labelId="demo-select-small-label"
-                id="demo-select-small"
+                labelId="audio-translation-model-select-label"
+                id="audio-translation-model-select"
                 value={audios[0]}
                 disabled
                 label="Translation Model"
@@ -299,14 +296,14 @@ const Settings: FC = () => {
             </FormControl>
 
             <FormControl size="small">
-              <InputLabel id="demo-select-small-label">
+              <InputLabel id="audio-response-type-model-select-label">
                 Audio Response Type
               </InputLabel>
               <Select
                 className="w-80"
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                value={10}
+                labelId="audio-response-type-model-select-label"
+                id="audio-response-type-model-select"
+                value={audioResponseTypes[0]}
                 label="Audio Response Type"
                 onChange={() => {}}
               >
@@ -324,12 +321,14 @@ const Settings: FC = () => {
               <header className="text-xl font-medium">Image Generations</header>
 
               <FormControl size="small">
-                <InputLabel id="demo-select-small-label">Size</InputLabel>
+                <InputLabel id="iamge-generation-model-select-label">
+                  Size
+                </InputLabel>
                 <Select
                   className="w-80"
-                  labelId="demo-select-small-label"
-                  id="demo-select-small"
-                  value={10}
+                  labelId="iamge-generation-model-select-label"
+                  id="iamge-generation-model-select"
+                  value={imageSizes[0]}
                   label="Size"
                   onChange={() => {}}
                 >
@@ -347,12 +346,14 @@ const Settings: FC = () => {
             <section className="flex flex-col gap-6">
               <header className="text-xl font-medium">Moderations</header>
               <FormControl size="small">
-                <InputLabel id="demo-select-small-label">Model</InputLabel>
+                <InputLabel id="moderation-model-select-label">
+                  Model
+                </InputLabel>
                 <Select
                   className="w-80"
-                  labelId="demo-select-small-label"
-                  id="demo-select-small"
-                  value={10}
+                  labelId="moderation-model-select-label"
+                  id="moderation-model-select"
+                  value={moderations[0]}
                   label="Model"
                   onChange={() => {}}
                 >
