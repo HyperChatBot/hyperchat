@@ -1,5 +1,5 @@
 import { atom } from 'recoil'
-import { Products } from 'src/types/global'
+import { Products, ThemeMode } from 'src/types/global'
 
 export const onlineState = atom({
   key: 'onlineState',
@@ -11,4 +11,9 @@ export const currProductState = atom({
   default:
     (window.localStorage.getItem('currProductState') as Products) ||
     Products.ChatCompletion
+})
+
+export const themeModeState = atom({
+  key: 'themeModeState',
+  default: localStorage.theme || ThemeMode.system
 })

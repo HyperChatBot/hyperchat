@@ -7,6 +7,7 @@ import useImage from './useImage'
 import useModeration from './useModeration'
 import useOnline from './useOnline'
 import useTextCompletion from './useTextCompletion'
+import useTheme from './useTheme'
 
 export {
   useEnterKey,
@@ -17,5 +18,6 @@ export {
   useAudioTranscription,
   useImage,
   useModeration,
-  useEdit
+  useEdit,
+  useTheme
 }

@@ -6,7 +6,7 @@ export interface Settings {
   organization_id: string
   author_name: string
   theme: ThemeMode
-  assistant_avatar_filename: string
+  assistant_avatar_filenamee: string
   chat_model: string
   chat_stream: boolean
   text_completion_model: string

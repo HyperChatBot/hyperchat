@@ -25,7 +25,7 @@ export class HyperChatDB extends Dexie {
 
   constructor() {
     super('hyperchat')
-    this.version(4).stores({
+    this.version(1).stores({
       [Products.ChatCompletion]:
         '&conversation_id, summary, created_at, updated_at, *messages',
       [Products.TextCompletion]:
@@ -41,7 +41,7 @@ export class HyperChatDB extends Dexie {
       [Products.Edit]:
         '&conversation_id, summary, created_at, updated_at, *messages',
       settings:
-        '&&settings_id, secret_key, organization_id, author_name, theme, assistant_avatar_filenam, chat_model, text_completion_model, edit_model, audio_transcription_model, audio_translation_model, audio_response_type, image_generation_type, moderation_type, chat_stream, text_completion_stream'
+        '&&settings_id, secret_key, organization_id, author_name, theme, assistant_avatar_filename, chat_model, text_completion_model, edit_model, audio_transcription_model, audio_translation_model, audio_response_type, image_generation_type, moderation_type, chat_stream, text_completion_stream'
     })
   }
 
@@ -55,7 +55,7 @@ export class HyperChatDB extends Dexie {
         organization_id: '',
         author_name: '',
         theme: ThemeMode.system,
-        assistant_avatar_filename: '',
+        assistant_avatar_filenamee: '',
         chat_model: chatCompletions[0],
         text_completion_model: textCompletions[0],
         chat_stream: true,

@@ -20,6 +20,8 @@ import { useFormik } from 'formik'
 import { FC, useEffect, useState } from 'react'
 import ChatGPTImg from 'src/assets/chatgpt-avatar.png'
 import { SolidSettingsBrightnessIcon } from 'src/components/Icons'
+import Usage from 'src/components/Usage'
+import { useTheme } from 'src/hooks'
 import { db } from 'src/models/db'
 import {
   audioResponseTypes,
@@ -37,6 +39,7 @@ const Settings: FC = () => {
   const [showPassword, setShowPassword] = useState(false)
   const handleShowPassword = () => setShowPassword(!showPassword)
   const settings = useLiveQuery(() => db.settings.toCollection().first(), [])
+  const { toggleTheme } = useTheme()
 
   const initialValues: SettingsProps = {
     settings_id: '',
@@ -44,7 +47,7 @@ const Settings: FC = () => {
     organization_id: '',
     author_name: '',
     theme: ThemeMode.system,
-    assistant_avatar_filename: '',
+    assistant_avatar_filenamee: '',
     chat_model: '',
     text_completion_model: '',
     edit_model: '',
@@ -65,8 +68,6 @@ const Settings: FC = () => {
       alert(JSON.stringify(values, null, 2))
     }
   })
-
-  console.log(formik)
 
   const onSubmit = async () => {
     if (!settings) return
@@ -100,7 +101,9 @@ const Settings: FC = () => {
           className="flex flex-col gap-8"
         >
           <section className="flex flex-col gap-6">
-            <header className="text-xl font-medium">OpenAI Account</header>
+            <header className="text-xl font-medium dark:text-white">
+              OpenAI Account
+            </header>
 
             <TextField
               required
@@ -149,10 +152,14 @@ const Settings: FC = () => {
           <Divider />
 
           <section className="flex flex-col gap-6">
-            <header className="text-xl font-medium">Customization</header>
+            <header className="text-xl font-medium dark:text-white">
+              Customization
+            </header>
 
             <section>
-              <Typography variant="body1">Theme</Typography>
+              <Typography variant="body1" className="dark:text-white">
+                Theme
+              </Typography>
               <ToggleButtonGroup
                 color="primary"
                 exclusive
@@ -161,10 +168,16 @@ const Settings: FC = () => {
                   marginTop: 1,
                   '& .Mui-selected': {
                     borderColor: '#615ef0'
+                  },
+                  '& .Mui-selected.MuiToggleButtonGroup-grouped': {
+                    borderLeftColor: '#615ef0'
                   }
                 }}
-                value={formik.values.theme}
-                onChange={(_, newVal) => formik.setFieldValue('theme', newVal)}
+                value={localStorage.theme}
+                onChange={(_, newVal) => {
+                  formik.setFieldValue('theme', newVal)
+                  toggleTheme(newVal)
+                }}
               >
                 <ToggleButton disableRipple value={ThemeMode.light}>
                   <SunIcon className="mr-2 h-6 w-6" /> Light
@@ -180,7 +193,9 @@ const Settings: FC = () => {
             </section>
 
             <section>
-              <Typography variant="body1">Assistant Avatar</Typography>
+              <Typography variant="body1" className="dark:text-white">
+                Assistant Avatar
+              </Typography>
               <FormHelperText>
                 Upload your own assistant avatar for a better experience. The
                 avatar will be shown in chat box.
@@ -202,7 +217,9 @@ const Settings: FC = () => {
           <Divider />
 
           <section className="flex flex-col gap-6">
-            <header className="text-xl font-medium">Chat</header>
+            <header className="text-xl font-medium dark:text-white">
+              Chat
+            </header>
 
             <FormControl size="small">
               <InputLabel id="chat-model-select-label">Model</InputLabel>
@@ -243,7 +260,9 @@ const Settings: FC = () => {
           <Divider />
 
           <section className="flex flex-col gap-6">
-            <header className="text-xl font-medium">Text Completions</header>
+            <header className="text-xl font-medium dark:text-white">
+              Text Completions
+            </header>
 
             <FormControl size="small">
               <InputLabel id="text-completion-model-select-label">
@@ -285,7 +304,9 @@ const Settings: FC = () => {
           <Divider />
 
           <section className="flex flex-col gap-6">
-            <header className="text-xl font-medium">Edit</header>
+            <header className="text-xl font-medium dark:text-white">
+              Edit
+            </header>
 
             <FormControl size="small">
               <InputLabel id="edit-model-select-label">Model</InputLabel>
@@ -308,7 +329,9 @@ const Settings: FC = () => {
           <Divider />
 
           <section className="flex flex-col gap-6">
-            <header className="text-xl font-medium">Audio</header>
+            <header className="text-xl font-medium dark:text-white">
+              Audio
+            </header>
 
             <FormControl size="small">
               <InputLabel id="audio-transcription-model-select-label">
@@ -378,7 +401,9 @@ const Settings: FC = () => {
             <Divider />
 
             <section className="flex flex-col gap-6">
-              <header className="text-xl font-medium">Image Generations</header>
+              <header className="text-xl font-medium dark:text-white">
+                Image Generations
+              </header>
 
               <FormControl size="small">
                 <InputLabel id="iamge-generation-model-select-label">
@@ -403,7 +428,9 @@ const Settings: FC = () => {
             <Divider />
 
             <section className="flex flex-col gap-6">
-              <header className="text-xl font-medium">Moderations</header>
+              <header className="text-xl font-medium dark:text-white">
+                Moderations
+              </header>
               <FormControl size="small">
                 <InputLabel id="moderation-model-select-label">
                   Model
@@ -422,6 +449,15 @@ const Settings: FC = () => {
                   ))}
                 </Select>
               </FormControl>
+            </section>
+
+            <Divider />
+
+            <section className="flex flex-col gap-6">
+              <header className="text-xl font-medium dark:text-white">
+                Data and Usages
+              </header>
+              <Usage />
             </section>
           </section>
         </Box>

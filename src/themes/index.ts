@@ -1,8 +1,9 @@
 import { createTheme } from '@mui/material/styles'
+import { ThemeMode } from 'src/types/global'
 
-const theme = createTheme({
+const theme = (theme: Exclude<ThemeMode, 'system'>) => createTheme({
   palette: {
-    mode: 'light',
+    mode: theme,
     primary: {
       main: '#615ef0'
     }
