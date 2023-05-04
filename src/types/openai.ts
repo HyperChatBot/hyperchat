@@ -16,3 +16,14 @@ export interface OpenAIChatResponse {
   model: string
   choices: OpenAIChatChoice[]
 }
+
+export interface OpenAIErrorDetail {
+  message: string
+  type: string
+  code: number
+  param: string
+}
+
+export interface OpenAIError extends Error {
+  error: OpenAIErrorDetail
+}

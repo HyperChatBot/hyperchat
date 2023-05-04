@@ -11,7 +11,7 @@ import {
   currConversationIdState,
   tempMessageState
 } from 'src/stores/conversation'
-import { OpenAIError } from 'src/types/global'
+import { OpenAIError } from 'src/types/openai'
 import { v4 } from 'uuid'
 
 const useEdit = (question: string, clearTextarea: () => void) => {

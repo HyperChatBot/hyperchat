@@ -15,9 +15,9 @@ import {
   currConversationIdState,
   tempMessageState
 } from 'src/stores/conversation'
-import { OpenAIChatResponse } from 'src/types/chatCompletion'
 import { Message } from 'src/types/conversation'
-import { ErrorType, OpenAIError } from 'src/types/global'
+import { ErrorType } from 'src/types/global'
+import { OpenAIChatResponse, OpenAIError } from 'src/types/openai'
 
 const useConversationCompletionStream = (
   question: string,

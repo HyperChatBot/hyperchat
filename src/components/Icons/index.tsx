@@ -23,8 +23,8 @@ import LinearSearchNormalIcon from './LinearSearchNormalIcon'
 import LinearSendIcon from './LinearSendIcon'
 import LinearSettingIcon from './LinearSettingIcon'
 import OutlineTranslationIcon from './OutlineTranslationIcon'
-import SolidTranslationIcon from './SolidTranslationIcon'
 import SolidSettingsBrightnessIcon from './SolidSettingsBrightnessIcon'
+import SolidTranslationIcon from './SolidTranslationIcon'
 
 export {
   BoldAndCircleIcon,

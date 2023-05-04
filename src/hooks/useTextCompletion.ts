@@ -11,7 +11,7 @@ import {
   currConversationIdState,
   tempMessageState
 } from 'src/stores/conversation'
-import { OpenAIError } from 'src/types/global'
+import { OpenAIError } from 'src/types/openai'
 
 const useTextCompletion = (question: string, clearTextarea: () => void) => {
   const [loading, setLoading] = useState(false)
