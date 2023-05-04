@@ -4,6 +4,7 @@ import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { RecoilRoot } from 'recoil'
+import { db } from 'src/models/db'
 import { SnackbarUtilsConfig } from './components/Snackbar'
 import Layouts from './layouts'
 import {
@@ -13,6 +14,8 @@ import {
 } from './shared/constants'
 import './styles.css'
 import theme from './themes'
+
+await db.setDefaultSettings()
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>

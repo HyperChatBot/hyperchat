@@ -40,3 +40,9 @@ export interface EmojiPickerProps {
   shortcodes: string
   unified: string
 }
+
+export enum ThemeMode {
+  light = 'light',
+  system = 'system',
+  dark = 'dark'
+}

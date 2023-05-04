@@ -15,9 +15,12 @@ import TextField from '@mui/material/TextField'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import Typography from '@mui/material/Typography'
-import { FC, useState } from 'react'
+import { useLiveQuery } from 'dexie-react-hooks'
+import { useFormik } from 'formik'
+import { FC, useEffect, useState } from 'react'
 import ChatGPTImg from 'src/assets/chatgpt-avatar.png'
 import { SolidSettingsBrightnessIcon } from 'src/components/Icons'
+import { db } from 'src/models/db'
 import {
   audioResponseTypes,
   audios,
@@ -27,10 +30,59 @@ import {
   moderations,
   textCompletions
 } from 'src/openai/models'
+import { ThemeMode } from 'src/types/global'
+import { Settings as SettingsProps } from 'src/types/settings'
 
 const Settings: FC = () => {
   const [showPassword, setShowPassword] = useState(false)
   const handleShowPassword = () => setShowPassword(!showPassword)
+  const settings = useLiveQuery(() => db.settings.toCollection().first(), [])
+
+  const initialValues: SettingsProps = {
+    settings_id: '',
+    secret_key: '',
+    organization_id: '',
+    author_name: '',
+    theme: ThemeMode.system,
+    assistant_avatar_filename: '',
+    chat_model: '',
+    text_completion_model: '',
+    edit_model: '',
+    audio_transcription_model: '',
+    audio_translation_model: '',
+    audio_response_type: '',
+    image_generation_size: '',
+    moderation_model: '',
+    chat_stream: true,
+    text_completion_stream: false
+  }
+
+  const formik = useFormik<SettingsProps>({
+    initialValues,
+    enableReinitialize: true,
+    // validationSchema: validationSchema,
+    onSubmit: (values) => {
+      alert(JSON.stringify(values, null, 2))
+    }
+  })
+
+  console.log(formik)
+
+  const onSubmit = async () => {
+    if (!settings) return
+
+    await db.settings
+      .where({ settings_id: settings.settings_id })
+      .modify(formik.values)
+  }
+
+  useEffect(() => {
+    if (settings) {
+      formik.setValues(settings)
+    }
+  }, [settings])
+
+  if (!settings) return null
 
   return (
     <section className="w-full">
@@ -66,6 +118,7 @@ const Settings: FC = () => {
                 </span>
               }
               className="w-160"
+              {...formik.getFieldProps('secret_key')}
             />
 
             <TextField
@@ -75,6 +128,7 @@ const Settings: FC = () => {
               type="text"
               className="w-160"
               helperText="For users who belong to multiple organizations, you can pass a header to specify which organization is used for an API request. Usage from these API requests will count against the specified organization's subscription quota."
+              {...formik.getFieldProps('organization_id')}
             />
 
             <TextField
@@ -84,6 +138,7 @@ const Settings: FC = () => {
               type="text"
               className="w-160"
               helperText="The name of the author of this message. May contain a-z, A-Z, 0-9, and underscores, with a maximum length of 64 characters."
+              {...formik.getFieldProps('author_name')}
             />
 
             <Button variant="contained" sx={{ width: 'max-content' }}>
@@ -100,25 +155,25 @@ const Settings: FC = () => {
               <Typography variant="body1">Theme</Typography>
               <ToggleButtonGroup
                 color="primary"
-                value={'web'}
                 exclusive
-                onChange={() => {}}
-                aria-label="Platform"
+                aria-label="Theme"
                 sx={{
                   marginTop: 1,
                   '& .Mui-selected': {
                     borderColor: '#615ef0'
                   }
                 }}
+                value={formik.values.theme}
+                onChange={(_, newVal) => formik.setFieldValue('theme', newVal)}
               >
-                <ToggleButton disableRipple value="web">
+                <ToggleButton disableRipple value={ThemeMode.light}>
                   <SunIcon className="mr-2 h-6 w-6" /> Light
                 </ToggleButton>
-                <ToggleButton disableRipple value="android">
+                <ToggleButton disableRipple value={ThemeMode.system}>
                   <SolidSettingsBrightnessIcon className="mr-2 h-6 w-6" />{' '}
                   System
                 </ToggleButton>
-                <ToggleButton disableRipple value="ios">
+                <ToggleButton disableRipple value={ThemeMode.dark}>
                   <MoonIcon className="mr-2 h-6 w-6" /> Dark
                 </ToggleButton>
               </ToggleButtonGroup>
@@ -155,9 +210,8 @@ const Settings: FC = () => {
                 className="w-80"
                 labelId="chat-model-select-label"
                 id="chat-model-select"
-                value={chatCompletions[0]}
                 label="Model"
-                onChange={() => {}}
+                {...formik.getFieldProps('chat_model')}
               >
                 {chatCompletions.map((chatCompletion) => (
                   <MenuItem key={chatCompletion} value={chatCompletion}>
@@ -169,7 +223,13 @@ const Settings: FC = () => {
 
             <section>
               <FormControlLabel
-                control={<Switch defaultChecked disabled />}
+                control={
+                  <Switch
+                    defaultChecked
+                    disabled
+                    {...formik.getFieldProps('chat_stream')}
+                  />
+                }
                 label="Stream Mode"
                 labelPlacement="start"
                 sx={{ marginLeft: 0 }}
@@ -193,9 +253,8 @@ const Settings: FC = () => {
                 className="w-80"
                 labelId="text-completion-model-select-label"
                 id="text-completion-model-select"
-                value={textCompletions[0]}
                 label="Model"
-                onChange={() => {}}
+                {...formik.getFieldProps('text_completion_model')}
               >
                 {textCompletions.map((textCompletion) => (
                   <MenuItem key={textCompletion} value={textCompletion}>
@@ -207,7 +266,12 @@ const Settings: FC = () => {
 
             <section>
               <FormControlLabel
-                control={<Switch disabled defaultChecked={false} />}
+                control={
+                  <Switch
+                    disabled
+                    {...formik.getFieldProps('text_completion_stream')}
+                  />
+                }
                 label="Stream Mode"
                 labelPlacement="start"
                 sx={{ marginLeft: 0 }}
@@ -229,9 +293,8 @@ const Settings: FC = () => {
                 className="w-80"
                 labelId="edit-model-select-label"
                 id="edit-model-select"
-                value={edits[0]}
                 label="Model"
-                onChange={() => {}}
+                {...formik.getFieldProps('edit_model')}
               >
                 {edits.map((edit) => (
                   <MenuItem key={edit} value={edit}>
@@ -255,10 +318,9 @@ const Settings: FC = () => {
                 className="w-80"
                 labelId="audio-transcription-model-select-label"
                 id="audio-transcription-model-select"
-                value={audios[0]}
                 disabled
                 label="Transcription Model"
-                onChange={() => {}}
+                {...formik.getFieldProps('audio_transcription_model')}
               >
                 {audios.map((audio) => (
                   <MenuItem key={audio} value={audio}>
@@ -267,7 +329,7 @@ const Settings: FC = () => {
                 ))}
               </Select>
               <FormHelperText>
-                Only {audios[0]} is currently available.
+                Only <strong>{audios[0]}</strong> is currently available.
               </FormHelperText>
             </FormControl>
 
@@ -279,10 +341,9 @@ const Settings: FC = () => {
                 className="w-80"
                 labelId="audio-translation-model-select-label"
                 id="audio-translation-model-select"
-                value={audios[0]}
                 disabled
                 label="Translation Model"
-                onChange={() => {}}
+                {...formik.getFieldProps('audio_translation_model')}
               >
                 {audios.map((audio) => (
                   <MenuItem key={audio} value={audio}>
@@ -291,7 +352,7 @@ const Settings: FC = () => {
                 ))}
               </Select>
               <FormHelperText>
-                Only {audios[0]} is currently available.
+                Only <strong>{audios[0]}</strong> is currently available.
               </FormHelperText>
             </FormControl>
 
@@ -303,9 +364,8 @@ const Settings: FC = () => {
                 className="w-80"
                 labelId="audio-response-type-model-select-label"
                 id="audio-response-type-model-select"
-                value={audioResponseTypes[0]}
                 label="Audio Response Type"
-                onChange={() => {}}
+                {...formik.getFieldProps('audio_response_type')}
               >
                 {audioResponseTypes.map((audioResponseType) => (
                   <MenuItem key={audioResponseType} value={audioResponseType}>
@@ -328,9 +388,8 @@ const Settings: FC = () => {
                   className="w-80"
                   labelId="iamge-generation-model-select-label"
                   id="iamge-generation-model-select"
-                  value={imageSizes[0]}
                   label="Size"
-                  onChange={() => {}}
+                  {...formik.getFieldProps('image_generation_size')}
                 >
                   {imageSizes.map((imageSize) => (
                     <MenuItem key={imageSize} value={imageSize}>
@@ -353,9 +412,8 @@ const Settings: FC = () => {
                   className="w-80"
                   labelId="moderation-model-select-label"
                   id="moderation-model-select"
-                  value={moderations[0]}
                   label="Model"
-                  onChange={() => {}}
+                  {...formik.getFieldProps('moderation_model')}
                 >
                   {moderations.map((moderation) => (
                     <MenuItem key={moderation} value={moderation}>
