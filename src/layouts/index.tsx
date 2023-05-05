@@ -1,10 +1,11 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { SnackbarProvider } from 'notistack'
-import { FC, useMemo } from 'react'
+import { FC, Suspense, useMemo } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import Loading from 'src/components/Loading'
 import Sidebar from 'src/components/Sidebar'
 import { SnackbarUtilsConfig } from 'src/components/Snackbar'
-import { useOnline, useTheme } from 'src/hooks'
+import { useOnline, useSettings, useTheme } from 'src/hooks'
 import { routers } from 'src/routers'
 import {
   SNACKBAR_ANCHOR_ORIGIN,
@@ -14,6 +15,7 @@ import {
 
 const Layouts: FC = () => {
   const { theme } = useTheme()
+  const { settings } = useSettings()
   useOnline()
 
   const muiTheme = useMemo(
@@ -38,30 +40,32 @@ const Layouts: FC = () => {
   )
 
   return (
-    <ThemeProvider theme={muiTheme}>
-      <SnackbarProvider
-        maxSnack={SNACKBAR_MAX_NUM}
-        anchorOrigin={SNACKBAR_ANCHOR_ORIGIN}
-        autoHideDuration={SNACKBAR_AUTO_HIDE_DURATION}
-        preventDuplicate
-      >
-        <SnackbarUtilsConfig />
-        <section className="container flex w-screen flex-row overflow-x-hidden dark:bg-gray-800">
-          <BrowserRouter>
-            <Sidebar />
-            <Routes>
-              {routers.map((router) => (
-                <Route
-                  key={router.path}
-                  path={router.path}
-                  element={<router.element />}
-                />
-              ))}
-            </Routes>
-          </BrowserRouter>
-        </section>
-      </SnackbarProvider>
-    </ThemeProvider>
+    <Suspense fallback={<Loading />}>
+      <ThemeProvider theme={muiTheme}>
+        <SnackbarProvider
+          maxSnack={SNACKBAR_MAX_NUM}
+          anchorOrigin={SNACKBAR_ANCHOR_ORIGIN}
+          autoHideDuration={SNACKBAR_AUTO_HIDE_DURATION}
+          preventDuplicate
+        >
+          <SnackbarUtilsConfig />
+          <section className="container flex w-screen flex-row overflow-x-hidden dark:bg-gray-800">
+            <BrowserRouter>
+              <Sidebar />
+              <Routes>
+                {routers.map((router) => (
+                  <Route
+                    key={router.path}
+                    path={router.path}
+                    element={<router.element />}
+                  />
+                ))}
+              </Routes>
+            </BrowserRouter>
+          </section>
+        </SnackbarProvider>
+      </ThemeProvider>
+    </Suspense>
   )
 }
 

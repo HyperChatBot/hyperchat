@@ -1,10 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: 'class',
-  content: [
-    './index.html',
-    './src/**/*.{js,ts,jsx,tsx}',
-  ],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     screens: {
       '3xl': '1920px'
@@ -67,7 +64,16 @@ export default {
       },
       transitionDuration: {
         250: '250ms'
+      },
+      keyframes: {
+        wiggle: {
+          '0%': { backgroundPosition: 0 },
+          '100%': { backgroundPosition: '400%' }
+        },
+      },
+      animation: {
+        wiggle: 'wiggle 10s linear infinite',
       }
     }
-  },
+  }
 }

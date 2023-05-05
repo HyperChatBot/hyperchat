@@ -15,5 +15,5 @@ export const currProductState = atom({
 
 export const themeModeState = atom({
   key: 'themeModeState',
-  default: localStorage.theme || ThemeMode.system
+  default: ThemeMode.dark
 })

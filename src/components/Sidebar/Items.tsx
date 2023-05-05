@@ -3,16 +3,14 @@ import {
   ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconOutline,
   MicrophoneIcon as MicrophoneIconOutline,
   PencilIcon as PencilIconOutline,
-  PhotoIcon as PhotoIconOutline,
-  ShieldCheckIcon as ShieldCheckIconOutline
+  PhotoIcon as PhotoIconOutline
 } from '@heroicons/react/24/outline'
 import {
   ChatBubbleBottomCenterTextIcon as ChatBubbleBottomCenterTextIconSolid,
   ChatBubbleLeftRightIcon as ChatBubbleLeftRightIconSolid,
   MicrophoneIcon as MicrophoneIconSolid,
   PencilIcon as PencilIconSolid,
-  PhotoIcon as PhotoIconSolid,
-  ShieldCheckIcon as ShieldCheckIconSolid
+  PhotoIcon as PhotoIconSolid
 } from '@heroicons/react/24/solid'
 import {
   OutlineTranslationIcon,
@@ -61,11 +59,5 @@ export default [
     tooltip: conversationTitles[Products.Image],
     inactive: <PhotoIconOutline className={iconClassName} />,
     active: <PhotoIconSolid className={iconClassName} />
-  },
-  {
-    product: Products.Moderation,
-    tooltip: conversationTitles[Products.Moderation],
-    inactive: <ShieldCheckIconOutline className={iconClassName} />,
-    active: <ShieldCheckIconSolid className={iconClassName} />
   }
 ]

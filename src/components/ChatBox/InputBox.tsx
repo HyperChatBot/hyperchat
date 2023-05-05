@@ -8,7 +8,6 @@ import {
   useEdit,
   useEnterKey,
   useImage,
-  useModeration,
   useTextCompletion
 } from 'src/hooks'
 import { TEXTAREA_MAX_ROWS } from 'src/shared/constants'
@@ -69,8 +68,6 @@ const InputBox: FC = () => {
     hashFile
   )
 
-  const { createModeration } = useModeration(question, clearTextarea)
-
   const { createEdit } = useEdit(question, clearTextarea)
 
   const requests = {
@@ -79,7 +76,6 @@ const InputBox: FC = () => {
     [Products.AudioTranscription]: createTranscription,
     [Products.AudioTranslation]: createTranslation,
     [Products.Image]: createImage,
-    [Products.Moderation]: createModeration,
     [Products.Edit]: createEdit
   }
 

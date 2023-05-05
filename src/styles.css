@@ -13,4 +13,15 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
   }
+
+  .brand {
+    background: radial-gradient(
+      circle,
+      rgba(42, 148, 244, 1) 0%,
+      rgba(204, 233, 255, 1) 100%
+    );
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 400%;
+  }
 }

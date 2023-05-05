@@ -1,4 +1,9 @@
-import { BaseDirectory, createDir, writeBinaryFile } from '@tauri-apps/api/fs'
+import {
+  BaseDirectory,
+  createDir,
+  exists,
+  writeBinaryFile
+} from '@tauri-apps/api/fs'
 import { appDataDir, join } from '@tauri-apps/api/path'
 import { convertFileSrc } from '@tauri-apps/api/tauri'
 import { WritableDraft } from 'immer/dist/internal'
@@ -76,11 +81,17 @@ export const saveFileToAppDataDir = async (hashFile: HashFile) => {
 
 export const generateFileSrc = async (fileName: string) => {
   try {
-    const appDataDirPath = await appDataDir()
-    const filePath = await join(appDataDirPath, `data/${fileName}`)
-    const assetUrl = convertFileSrc(filePath)
+    const isExist = await exists(fileName, { dir: BaseDirectory.AppData })
 
-    return assetUrl
+    if (isExist) {
+      const appDataDirPath = await appDataDir()
+      const filePath = await join(appDataDirPath, `data/${fileName}`)
+      const assetUrl = convertFileSrc(filePath)
+
+      return assetUrl
+    } else {
+      throw new Error('')
+    }
   } catch {}
 }
 

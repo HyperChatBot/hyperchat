@@ -12,7 +12,6 @@ export enum Products {
   AudioTranscription = 'audio_transcription',
   AudioTranslation = 'audio_translation',
   Image = 'image',
-  Moderation = 'moderation',
   Edit = 'edit'
 }
 

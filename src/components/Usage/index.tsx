@@ -20,7 +20,9 @@ const Usage: FC = () => {
     <>
       {' '}
       {usage === 0 || (
-        <Typography variant="body1" className='dark:text-white'>Usage: {formatBytes(usage)}</Typography>
+        <Typography variant="body1" className="dark:text-white">
+          Usage: {formatBytes(usage)}
+        </Typography>
       )}
     </>
   )

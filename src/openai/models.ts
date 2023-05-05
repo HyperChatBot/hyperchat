@@ -12,8 +12,6 @@ export const edits = ['text-davinci-edit-001', 'code-davinci-edit-001']
 
 export const audios = ['whisper-1']
 
-export const moderations = ['text-moderation-latest', 'text-moderation-stable']
-
 export const audioResponseTypes = ['json', 'text', 'srt', 'verbose_json', 'vtt']
 
 export const imageSizes = ['1024x1024', '256x256', '512x512']
