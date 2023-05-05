@@ -69,6 +69,7 @@ const Settings: FC = () => {
                 </header>
 
                 <TextField
+                  autoComplete="current-password"
                   required
                   id="openai-secret-key-input"
                   label="Secret Key"
@@ -121,12 +122,12 @@ const Settings: FC = () => {
 
                 <section>
                   <Typography variant="body1" className="dark:text-white">
-                    Theme
+                    Theme Mode
                   </Typography>
                   <ToggleButtonGroup
                     color="primary"
                     exclusive
-                    aria-label="Theme"
+                    aria-label="Theme Mode"
                     sx={{
                       marginTop: 1,
                       '& .Mui-selected': {
@@ -136,9 +137,9 @@ const Settings: FC = () => {
                         borderLeftColor: '#615ef0'
                       }
                     }}
-                    value={localStorage.theme}
+                    value={formik.values.theme_mode}
                     onChange={(_, newVal) => {
-                      formik.setFieldValue('theme', newVal)
+                      formik.setFieldValue('theme_mode', newVal)
                       toggleTheme(newVal)
                     }}
                   >

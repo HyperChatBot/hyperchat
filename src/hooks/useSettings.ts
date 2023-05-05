@@ -40,7 +40,7 @@ const useSettings = () => {
           secret_key: '',
           organization_id: '',
           author_name: '',
-          theme: window.localStorage.theme || ThemeMode.system,
+          theme_mode: ThemeMode.system,
           assistant_avatar_filename: '',
           chat_model: chatCompletions[0],
           text_completion_model: textCompletions[0],
@@ -63,7 +63,6 @@ const useSettings = () => {
             setSettings({ ...currSettings, assistant_avatar_filename: src })
           }
         } else {
-          console.log(currSettings)
           setSettings(currSettings)
         }
       }

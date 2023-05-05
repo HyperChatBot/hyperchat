@@ -1,4 +1,5 @@
 import { atom } from 'recoil'
+import { themeModeToTheme } from 'src/shared/utils'
 import { Products, ThemeMode } from 'src/types/global'
 
 export const onlineState = atom({
@@ -13,7 +14,7 @@ export const currProductState = atom({
     Products.ChatCompletion
 })
 
-export const themeModeState = atom({
-  key: 'themeModeState',
-  default: ThemeMode.dark
+export const themeState = atom<ThemeMode.dark | ThemeMode.light>({
+  key: 'themeState',
+  default: themeModeToTheme()
 })

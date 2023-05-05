@@ -9,7 +9,7 @@ import { convertFileSrc } from '@tauri-apps/api/tauri'
 import { WritableDraft } from 'immer/dist/internal'
 import { DateTime } from 'luxon'
 import { Message } from 'src/types/conversation'
-import { ErrorType, HashFile, Products } from 'src/types/global'
+import { ErrorType, HashFile, Products, ThemeMode } from 'src/types/global'
 import { v4 } from 'uuid'
 import { getFileExtension } from 'yancey-js-util'
 import { EMPTY_MESSAGE_ID } from './constants'
@@ -115,3 +115,10 @@ export const formatBytes = (bytes: number) => {
   const i = Math.floor(Math.log(bytes) / Math.log(k))
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`
 }
+
+export const themeModeToTheme = (themeMode?: ThemeMode) =>
+  themeMode === ThemeMode.system || !themeMode
+    ? window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? ThemeMode.dark
+      : ThemeMode.light
+    : themeMode

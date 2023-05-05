@@ -1,53 +1,43 @@
 import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
-import { themeModeState } from 'src/stores/global'
+import { themeModeToTheme } from 'src/shared/utils'
+import { themeState } from 'src/stores/global'
 import { ThemeMode } from 'src/types/global'
+import useSettings from './useSettings'
 
 const useTheme = () => {
-  const [theme, setTheme] = useRecoilState(themeModeState)
+  const { settings, updateSettings } = useSettings()
+  const [theme, setTheme] = useRecoilState(themeState)
 
-  const setLight = () => {
-    setTheme(ThemeMode.light)
-    document.documentElement.classList.remove(ThemeMode.dark)
-  }
-
-  const setDark = () => {
-    setTheme(ThemeMode.dark)
-    document.documentElement.classList.add(ThemeMode.dark)
-  }
-
-  const setThemeBySystem = (isDark: boolean) => {
-    if (isDark) {
-      setDark()
-    } else {
-      setLight()
-    }
-  }
-
-  const setStateAndClassList = (currTheme: ThemeMode) => {
+  const setThemeClass = (currTheme: ThemeMode.light | ThemeMode.dark) => {
     if (currTheme === ThemeMode.dark) {
-      setDark()
-    } else if (currTheme === ThemeMode.light) {
-      setLight()
+      document.documentElement.classList.add(ThemeMode.dark)
     } else {
-      setThemeBySystem(
-        window.matchMedia('(prefers-color-scheme: dark)').matches
-      )
+      document.documentElement.classList.remove(ThemeMode.dark)
     }
+  }
+
+  const setThemeStateAndClass = (newTheme?: ThemeMode) => {
+    const currTheme = themeModeToTheme(newTheme || settings?.theme_mode)
+    setTheme(currTheme)
+    setThemeClass(currTheme)
   }
 
   const toggleTheme = (newTheme: ThemeMode) => {
-    localStorage.theme = newTheme
-    setStateAndClassList(newTheme)
+    setThemeStateAndClass(newTheme)
+
+    if (settings) {
+      updateSettings({ ...settings, theme_mode: newTheme })
+    }
   }
 
   const onSystemThemeChange = (e: MediaQueryListEvent) => {
-    if (localStorage.theme !== ThemeMode.system) return
-    setThemeBySystem(e.matches)
+    if (settings?.theme_mode !== ThemeMode.system) return
+    setThemeStateAndClass()
   }
 
   useEffect(() => {
-    setStateAndClassList(localStorage.theme)
+    setThemeStateAndClass()
   }, [])
 
   useEffect(() => {

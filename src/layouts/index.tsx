@@ -39,6 +39,8 @@ const Layouts: FC = () => {
     [theme]
   )
 
+  if (!settings) return <Loading />
+
   return (
     <Suspense fallback={<Loading />}>
       <ThemeProvider theme={muiTheme}>

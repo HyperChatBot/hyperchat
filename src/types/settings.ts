@@ -5,7 +5,7 @@ export interface Settings {
   secret_key: string
   organization_id: string
   author_name: string
-  theme: ThemeMode
+  theme_mode: ThemeMode
   assistant_avatar_filename: string
   chat_model: string
   chat_stream: boolean
