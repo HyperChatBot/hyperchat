@@ -1,3 +1,9 @@
+import {
+  CheckIcon,
+  PencilSquareIcon,
+  TrashIcon
+} from '@heroicons/react/24/solid'
+import Input from '@mui/material/Input'
 import classNames from 'classnames'
 import { FC, KeyboardEvent, useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -13,7 +19,6 @@ import { Conversation } from 'src/types/conversation'
 import { EmojiPickerProps } from 'src/types/global'
 import Avatar from '../Avatar'
 import EmojiPicker from '../EmojiPicker'
-import { LinearCheckIcon, LinearDeleteIcon, LinearEditIcon } from '../Icons'
 
 interface Props {
   currConversation?: Conversation
@@ -36,6 +41,11 @@ const ContactHeader: FC<Props> = ({ currConversation }) => {
     currConversation?.summary ||
     currConversation?.conversation_id ||
     EMPTY_CHAT_HINT
+
+  const openSummaryInput = () => {
+    setSummaryValue(currConversation?.summary || '')
+    setSummaryInputVisible(true)
+  }
 
   const saveSummary = async () => {
     if (summaryValue.trim().length === 0) return
@@ -98,25 +108,27 @@ const ContactHeader: FC<Props> = ({ currConversation }) => {
           <div className="mb-1 flex items-center font-semibold text-black dark:text-dark-text">
             {summaryInputVisible ? (
               <>
-                <input
-                  type="text"
+                <Input
                   autoFocus
+                  value={summaryValue}
                   onKeyUp={saveSummaryWithKeyboard}
                   onChange={(e) => setSummaryValue(e.target.value)}
-                  className="w-96 border-b-2 border-l-0 border-r-0 border-t-0 border-main-purple p-0 focus:border-b-2 focus:border-main-purple focus:ring-0 dark:bg-gray-800"
-                ></input>
-                <LinearCheckIcon
-                  className="cursor-pointer fill-current text-black dark:text-dark-text"
-                  onClick={saveSummary}
+                  className="w-80"
+                  sx={{
+                    '.MuiInput-input': {
+                      padding: 0
+                    }
+                  }}
                 />
+                <CheckIcon className="h-4 w-4" onClick={saveSummary} />
               </>
             ) : (
               <div
-                onClick={() => setSummaryInputVisible(true)}
+                onClick={openSummaryInput}
                 className="flex cursor-pointer items-center"
               >
                 <p className="mr-4 text-base">{summary}</p>
-                <LinearEditIcon className="h-4 w-4" />
+                <PencilSquareIcon className="h-4 w-4" />
               </div>
             )}
           </div>
@@ -136,7 +148,7 @@ const ContactHeader: FC<Props> = ({ currConversation }) => {
       </section>
       {currConversation && (
         <section className="flex cursor-pointer rounded-lg bg-main-purple bg-opacity-10 pb-2.5 pl-4 pr-4 pt-2.5 text-main-purple">
-          <LinearDeleteIcon className="h-4 w-4" />
+          <TrashIcon className="h-4 w-4" />
         </section>
       )}
     </section>

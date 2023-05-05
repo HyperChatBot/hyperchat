@@ -64,31 +64,34 @@ const Markdown: FC<Props> = ({ raw }) => {
           )
         },
         ol({ className, children, ...props }) {
+          const _props = { ...props, ordered: props.ordered.toString() }
           return (
             <ol
               className={classNames('mb-3 list-disc pl-3 last:mb-0', className)}
-              {...props}
+              {..._props}
             >
               {children}
             </ol>
           )
         },
         ul({ className, children, ...props }) {
+          const _props = { ...props, ordered: props.ordered.toString() }
           return (
             <ul
               className={classNames(
                 'mb-3 list-decimal pl-3 last:mb-0',
                 className
               )}
-              {...props}
+              {..._props}
             >
               {children}
             </ul>
           )
         },
         li({ className, children, ...props }) {
+          const _props = { ...props, ordered: props.ordered.toString() }
           return (
-            <li className={classNames('mb-3 last:mb-0', className)} {...props}>
+            <li className={classNames('mb-3 last:mb-0', className)} {..._props}>
               {children}
             </li>
           )
