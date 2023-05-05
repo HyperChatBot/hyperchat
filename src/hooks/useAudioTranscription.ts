@@ -4,8 +4,8 @@ import produce from 'immer'
 import { useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import toast from 'src/components/Snackbar'
+import { useOpenAI } from 'src/hooks'
 import { db } from 'src/models/db'
-import { openai } from 'src/openai'
 import { generateEmptyMessage } from 'src/shared/utils'
 import {
   currConversationIdState,
@@ -15,12 +15,9 @@ import { HashFile } from 'src/types/global'
 import { OpenAIError } from 'src/types/openai'
 import { v4 } from 'uuid'
 
-const useAudioTranscription = (
-  question: string,
-  clearTextarea: () => void,
-  hashFile: HashFile | null
-) => {
+const useAudioTranscription = (question: string, hashFile: HashFile | null) => {
   const [loading, setLoading] = useState(false)
+  const openai = useOpenAI()
   const currConversationId = useRecoilValue(currConversationIdState)
   const currConversation = useLiveQuery(
     () => db.audio_transcription.get(currConversationId),
@@ -38,7 +35,6 @@ const useAudioTranscription = (
       file_name: hashFile.hashName
     }
     setTempMessage(tempMessage)
-    clearTextarea()
 
     try {
       const transcription = await openai.createTranscription(

@@ -1,4 +1,5 @@
-import { useEffect } from 'react'
+import { createTheme } from '@mui/material/styles'
+import { useEffect, useMemo } from 'react'
 import { useRecoilState } from 'recoil'
 import { themeModeToTheme } from 'src/shared/utils'
 import { themeState } from 'src/stores/global'
@@ -8,6 +9,27 @@ import useSettings from './useSettings'
 const useTheme = () => {
   const { settings, updateSettings } = useSettings()
   const [theme, setTheme] = useRecoilState(themeState)
+
+  const muiTheme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: theme,
+          primary: {
+            main: '#615ef0'
+          }
+        },
+        typography: {
+          button: {
+            textTransform: 'none'
+          }
+        },
+        shape: {
+          borderRadius: 8
+        }
+      }),
+    [theme]
+  )
 
   const setThemeClass = (currTheme: ThemeMode.light | ThemeMode.dark) => {
     if (currTheme === ThemeMode.dark) {
@@ -52,7 +74,7 @@ const useTheme = () => {
     }
   }, [])
 
-  return { theme, toggleTheme }
+  return { theme, muiTheme, toggleTheme }
 }
 
 export default useTheme

@@ -47,28 +47,12 @@ const InputBox: FC = () => {
     }
   }
 
-  const { createChatCompletion } = useChatCompletionStream(
-    question,
-    clearTextarea
-  )
-
-  const { createTextCompletion } = useTextCompletion(question, clearTextarea)
-
-  const { createImage } = useImage(question, clearTextarea)
-
-  const { createTranscription } = useAudioTranscription(
-    question,
-    clearTextarea,
-    hashFile
-  )
-
-  const { createTranslation } = useAudioTranslation(
-    question,
-    clearTextarea,
-    hashFile
-  )
-
-  const { createEdit } = useEdit(question, clearTextarea)
+  const { createChatCompletion } = useChatCompletionStream(question)
+  const { createTextCompletion } = useTextCompletion(question)
+  const { createImage } = useImage(question)
+  const { createTranscription } = useAudioTranscription(question, hashFile)
+  const { createTranslation } = useAudioTranslation(question, hashFile)
+  const { createEdit } = useEdit(question)
 
   const requests = {
     [Products.ChatCompletion]: createChatCompletion,
@@ -83,6 +67,7 @@ const InputBox: FC = () => {
     if (summaryInputVisible) return
     if (!isAudioProduct(currProduct) && question.trim().length === 0) return
 
+    clearTextarea()
     requests[currProduct]()
   }
 

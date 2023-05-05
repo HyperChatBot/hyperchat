@@ -3,6 +3,7 @@ import { FC, Fragment, RefObject } from 'react'
 import { useRecoilValue } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
 import NoDataIllustration from 'src/assets/illustrations/no-data.svg'
+import { useSettings } from 'src/hooks'
 import { EMPTY_MESSAGE_ID } from 'src/shared/constants'
 import { isAudioProduct } from 'src/shared/utils'
 import { tempMessageState } from 'src/stores/conversation'
@@ -19,6 +20,7 @@ interface Props {
 }
 
 const ChatList: FC<Props> = ({ currConversation, chatBoxRef }) => {
+  const { settings } = useSettings()
   const currProduct = useRecoilValue(currProductState)
   const tempMessage = useRecoilValue(tempMessageState)
   const hasMessages = currConversation && currConversation.messages.length > 0
@@ -47,7 +49,11 @@ const ChatList: FC<Props> = ({ currConversation, chatBoxRef }) => {
               </ChatBubble>
               <ChatBubble
                 role="assistant"
-                avatar={ChatGPTLogoImg}
+                avatar={
+                  settings?.assistant_avatar_filename
+                    ? settings.assistant_avatar_filename
+                    : ChatGPTLogoImg
+                }
                 date={message.answer_created_at}
               >
                 <Markdown raw={message.answer} />
@@ -69,7 +75,11 @@ const ChatList: FC<Props> = ({ currConversation, chatBoxRef }) => {
               </ChatBubble>
               <ChatBubble
                 role="assistant"
-                avatar={ChatGPTLogoImg}
+                avatar={
+                  settings?.assistant_avatar_filename
+                    ? settings.assistant_avatar_filename
+                    : ChatGPTLogoImg
+                }
                 date={tempMessage.answer_created_at}
               >
                 {tempMessage.message_id === EMPTY_MESSAGE_ID ? (

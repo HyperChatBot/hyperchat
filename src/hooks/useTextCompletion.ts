@@ -4,8 +4,8 @@ import produce from 'immer'
 import { useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import toast from 'src/components/Snackbar'
+import { useOpenAI } from 'src/hooks'
 import { db } from 'src/models/db'
-import { openai } from 'src/openai'
 import { generateEmptyMessage } from 'src/shared/utils'
 import {
   currConversationIdState,
@@ -13,8 +13,9 @@ import {
 } from 'src/stores/conversation'
 import { OpenAIError } from 'src/types/openai'
 
-const useTextCompletion = (question: string, clearTextarea: () => void) => {
+const useTextCompletion = (question: string) => {
   const [loading, setLoading] = useState(false)
+  const openai = useOpenAI()
   const currConversationId = useRecoilValue(currConversationIdState)
   const currConversation = useLiveQuery(
     () => db.text.get(currConversationId),
@@ -28,7 +29,6 @@ const useTextCompletion = (question: string, clearTextarea: () => void) => {
     setLoading(true)
     const tempMessage = generateEmptyMessage(question)
     setTempMessage(tempMessage)
-    clearTextarea()
 
     try {
       const {

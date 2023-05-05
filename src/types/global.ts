@@ -28,6 +28,7 @@ export enum ErrorType {
 export interface HashFile {
   file: File
   hashName: string
+  src?: string
 }
 
 export interface EmojiPickerProps {

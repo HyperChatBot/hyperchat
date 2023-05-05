@@ -18,3 +18,8 @@ export const themeState = atom<ThemeMode.dark | ThemeMode.light>({
   key: 'themeState',
   default: themeModeToTheme()
 })
+
+export const initialDialogVisibleState = atom({
+  key: 'initialDialogVisibleState',
+  default: false
+})

@@ -81,7 +81,9 @@ export const saveFileToAppDataDir = async (hashFile: HashFile) => {
 
 export const generateFileSrc = async (fileName: string) => {
   try {
-    const isExist = await exists(fileName, { dir: BaseDirectory.AppData })
+    const isExist = await exists(`data/${fileName}`, {
+      dir: BaseDirectory.AppData
+    })
 
     if (isExist) {
       const appDataDirPath = await appDataDir()

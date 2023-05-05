@@ -16,12 +16,11 @@ import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import Typography from '@mui/material/Typography'
 import { Formik } from 'formik'
-import { FC } from 'react'
+import { ChangeEvent, FC } from 'react'
 import ChatGPTImg from 'src/assets/chatgpt-avatar.png'
 import { SolidSettingsBrightnessIcon } from 'src/components/Icons'
-import Loading from 'src/components/Loading'
 import Usage from 'src/components/Usage'
-import { useSettings, useTheme } from 'src/hooks'
+import { useAppData, useSettings, useTheme } from 'src/hooks'
 import {
   audioResponseTypes,
   audios,
@@ -29,14 +28,26 @@ import {
   edits,
   imageSizes,
   textCompletions
-} from 'src/openai/models'
+} from 'src/shared/constants'
 import { ThemeMode } from 'src/types/global'
 
 const Settings: FC = () => {
-  const { settings } = useSettings()
+  const { settings, updateSettings } = useSettings()
   const { toggleTheme } = useTheme()
+  const { saveFileToAppDataDir } = useAppData()
 
-  if (!settings) return <Loading />
+  const handleUploadChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0]
+
+    if (file && settings) {
+      const filename = await saveFileToAppDataDir(file)
+      if (filename) {
+        updateSettings({ ...settings, assistant_avatar_filename: filename })
+      }
+    }
+  }
+
+  if (!settings) return null
 
   return (
     <section className="w-full">
@@ -169,10 +180,19 @@ const Settings: FC = () => {
                     <label className="cursor-pointer">
                       <Avatar
                         alt="assistant avatar"
-                        src={ChatGPTImg}
+                        src={
+                          settings.assistant_avatar_filename
+                            ? settings.assistant_avatar_filename
+                            : ChatGPTImg
+                        }
                         sx={{ width: 128, height: 128 }}
                       />
-                      <input hidden accept="image/*" type="file" />
+                      <input
+                        hidden
+                        accept="image/*"
+                        type="file"
+                        onChange={handleUploadChange}
+                      />
                     </label>
                   </section>
                 </section>

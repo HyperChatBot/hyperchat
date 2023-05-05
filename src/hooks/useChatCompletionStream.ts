@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import toast from 'src/components/Snackbar'
 import { db } from 'src/models/db'
-import { OPENAI_API_KEY, OPENAI_CHAT_COMPLTION_URL } from 'src/shared/constants'
+import { OPENAI_CHAT_COMPLETION_URL } from 'src/shared/constants'
 import {
   generateEmptyMessage,
   generateErrorMessage,
@@ -18,11 +18,10 @@ import {
 import { Message } from 'src/types/conversation'
 import { ErrorType } from 'src/types/global'
 import { OpenAIChatResponse, OpenAIError } from 'src/types/openai'
+import useSettings from './useSettings'
 
-const useConversationCompletionStream = (
-  question: string,
-  clearTextarea: () => void
-) => {
+const useConversationCompletionStream = (question: string) => {
+  const { settings } = useSettings()
   const [isStreaming, setIsStreaming] = useState(false)
   const currConversationId = useRecoilValue(currConversationIdState)
   const currConversation = useLiveQuery(
@@ -35,14 +34,12 @@ const useConversationCompletionStream = (
     if (isStreaming) return
 
     setIsStreaming(true)
-    clearTextarea()
-    // Append an empty message object to show loading spin.
     setTempMessage(generateEmptyMessage(question))
 
-    const chat = await fetch(OPENAI_CHAT_COMPLTION_URL, {
+    const chat = await fetch(OPENAI_CHAT_COMPLETION_URL, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: OPENAI_API_KEY
+        Authorization: `Bearer ${settings?.secret_key as string}`
       },
       method: 'POST',
       body: JSON.stringify({
@@ -68,7 +65,13 @@ const useConversationCompletionStream = (
     }
 
     if (chat.status !== 200) {
-      toast.error(generateErrorMessage(ErrorType.OpenAI, chat.statusText))
+      const { value } = await reader.read()
+      const decoder = new TextDecoder('utf-8')
+      const chunk = decoder.decode(value, { stream: true })
+      const errorData: OpenAIError = JSON.parse(chunk)
+      toast.error(
+        generateErrorMessage(ErrorType.OpenAI, errorData.error.message)
+      )
       return
     }
 
