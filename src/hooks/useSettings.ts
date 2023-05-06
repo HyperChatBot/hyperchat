@@ -75,7 +75,7 @@ const useSettings = () => {
     try {
       const currSettings = await db.settings.toCollection().first()
 
-      if (!currSettings) {
+      if (!currSettings || !currSettings.secret_key) {
         setInitialDialogVisible(true)
         return
       }
