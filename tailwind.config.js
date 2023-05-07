@@ -19,6 +19,9 @@ export default {
         22: '5.5rem', // 88px
         50: '12.5rem' // 200px
       },
+      minHeight: {
+        6: '1.5rem' // 24px
+      },
       maxWidth: {
         160: '40rem' // 640px
       },
@@ -69,10 +72,10 @@ export default {
         wiggle: {
           '0%': { backgroundPosition: 0 },
           '100%': { backgroundPosition: '400%' }
-        },
+        }
       },
       animation: {
-        wiggle: 'wiggle 10s linear infinite',
+        wiggle: 'wiggle 10s linear infinite'
       }
     }
   }

@@ -10,7 +10,6 @@ import {
   useImage,
   useTextCompletion
 } from 'src/hooks'
-import { TEXTAREA_MAX_ROWS } from 'src/shared/constants'
 import {
   generateHashName,
   isAudioProduct,
@@ -25,14 +24,8 @@ const InputBox: FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const summaryInputVisible = useRecoilValue(summaryInputVisibleState)
   const currProduct = useRecoilValue(currProductState)
-  const [rows, setRows] = useState(1)
   const [question, setQuestion] = useState('')
   const [hashFile, setHashFile] = useState<HashFile | null>(null)
-
-  const clearTextarea = () => {
-    setRows(1)
-    setQuestion('')
-  }
 
   const onFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
@@ -67,17 +60,14 @@ const InputBox: FC = () => {
     if (summaryInputVisible) return
     if (!isAudioProduct(currProduct) && question.trim().length === 0) return
 
-    clearTextarea()
     requests[currProduct]()
+    setQuestion('')
   }
 
   useEnterKey(() => handleRequest())
 
   const onTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setQuestion(e.target.value)
-
-    const currRow = Math.floor(e.target.scrollHeight / e.target.clientHeight)
-    setRows(currRow > TEXTAREA_MAX_ROWS ? TEXTAREA_MAX_ROWS : currRow)
   }
 
   return (
@@ -96,17 +86,24 @@ const InputBox: FC = () => {
         </label>
       )}
       <section className="relative flex w-full">
-        <textarea
-          tabIndex={0}
-          rows={rows}
-          value={question}
-          className="z-10 flex-1 resize-none rounded-xl border-2 pb-3.5 pl-5 pr-14 pt-3.5 text-sm text-black placeholder:text-black placeholder:text-opacity-50 dark:bg-gray-800 dark:text-white dark:placeholder:text-white dark:placeholder:text-opacity-50"
-          placeholder="Send a message."
-          onChange={onTextareaChange}
-        />
+        <div className="relative flex w-full flex-grow flex-col rounded-md border border-black/10 bg-white py-3 pl-4 shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:border-gray-900/50 dark:bg-gray-700 dark:text-white dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
+          <div className='after:content-[" "] invisible relative -left-4 max-h-52 min-h-6 whitespace-pre-wrap pl-4 pr-7'>
+            {question}
+          </div>
+          <textarea
+            tabIndex={0}
+            rows={1}
+            value={question}
+            className={
+              'absolute bottom-0 left-0 right-0 top-3 m-0 max-h-52 w-full resize-none border-0 bg-transparent p-0 px-4 pr-7 outline-none '
+            }
+            placeholder="Send a message."
+            onChange={onTextareaChange}
+          />
+        </div>
         <BoldSendIcon
           onClick={handleRequest}
-          className="absolute bottom-3.5 right-5 z-10"
+          className="absolute bottom-3.5 right-4 z-10"
           pathClassName={classNames('text-black dark:text-white fill-current', {
             'text-opacity-30': question.trim().length === 0,
             'text-main-purple dark:text-main-purple': question.trim().length > 0
