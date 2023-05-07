@@ -26,7 +26,7 @@ const InitialDialog: FC<Props> = ({ visible }) => {
   }
 
   return (
-    <Dialog open={visible} onClose={() => setInitialDialogVisible(false)}>
+    <Dialog open={visible}>
       <DialogTitle>Welcome to Hyper Chat!</DialogTitle>
       <DialogContent>
         <DialogContentText>
