@@ -75,7 +75,6 @@ const useChatCompletionStream = (question: string) => {
         if (done) {
           setLoading(false)
           saveMessageToDbAndUpdateConversationState(emptyMessage, _content)
-
           return reader.releaseLock()
         }
 
@@ -89,13 +88,12 @@ const useChatCompletionStream = (question: string) => {
             return JSON.parse(data.trim())
           })
           .filter((data) => data)
-
         chunks.forEach((data) => {
           const token = data.choices[0].delta.content
 
           if (token !== undefined) {
             const content = updateStreamState(token)
-            _content = content
+            _content += content
           }
         })
 
@@ -106,6 +104,7 @@ const useChatCompletionStream = (question: string) => {
     } catch (error) {
       showErrorToast(error)
     } finally {
+      setLoading(false)
     }
 
     reader.releaseLock()

@@ -1,3 +1,4 @@
+import Input from '@mui/material/Input'
 import classNames from 'classnames'
 import { ChangeEvent, FC, useRef, useState } from 'react'
 import { useRecoilValue } from 'recoil'
@@ -14,15 +15,17 @@ import {
   isAudioProduct,
   saveFileToAppDataDir
 } from 'src/shared/utils'
-import { summaryInputVisibleState } from 'src/stores/conversation'
+import { loadingState, summaryInputVisibleState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { HashFile, Products } from 'src/types/global'
 import { BoldSendIcon, LinearPaperclipIcon } from '../Icons'
 
 const InputBox: FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
   const summaryInputVisible = useRecoilValue(summaryInputVisibleState)
   const currProduct = useRecoilValue(currProductState)
+  const loading = useRecoilValue(loadingState)
   const [question, setQuestion] = useState('')
   const [hashFile, setHashFile] = useState<HashFile | null>(null)
 
@@ -58,18 +61,20 @@ const InputBox: FC = () => {
   }
 
   const handleRequest = () => {
+    if (loading) return
     if (summaryInputVisible) return
     if (!isAudioProduct(currProduct) && question.trim().length === 0) return
 
     requests[currProduct]()
+
     setQuestion('')
+
+    if (textareaRef.current) {
+      textareaRef.current.blur()
+    }
   }
 
   useEnterKey(() => handleRequest())
-
-  const onTextareaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setQuestion(e.target.value)
-  }
 
   return (
     <section className="absolute bottom-6 left-6 flex w-[calc(100%_-_3rem)] items-center bg-white pt-6 dark:bg-gray-800">
@@ -81,27 +86,29 @@ const InputBox: FC = () => {
             accept="audio/mp3,video/mp4,video/mpeg,video/mpea,video/m4a,video/wav,video/webm"
             className="absolute h-6 w-6 opacity-0"
             ref={fileInputRef}
-            onChange={onFileChange}
+            onInput={onFileChange}
           />
           <LinearPaperclipIcon className="mr-6" />
         </label>
       )}
       <section className="relative flex w-full">
-        <div className="relative flex w-full flex-grow flex-col rounded-md border border-black/10 bg-white py-3 pl-4 shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:border-gray-900/50 dark:bg-gray-700 dark:text-white dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
-          <div className='after:content-[" "] invisible relative -left-4 max-h-52 min-h-6 whitespace-pre-wrap pl-4 pr-7'>
-            {question}
-          </div>
-          <textarea
-            tabIndex={0}
-            rows={1}
-            value={question}
-            className={
-              'absolute bottom-0 left-0 right-0 top-3 m-0 max-h-52 w-full resize-none border-0 bg-transparent p-0 px-4 pr-7 outline-none '
-            }
-            placeholder="Send a message."
-            onChange={onTextareaChange}
-          />
-        </div>
+        <Input
+          inputRef={textareaRef}
+          className="max-h-52 overflow-scroll rounded-md border border-black/10 bg-white text-sm shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:border-gray-900/50 dark:bg-gray-700 dark:text-white dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]"
+          placeholder="Send a message."
+          multiline
+          value={question}
+          onChange={(e) => setQuestion(e.target.value)}
+          disableUnderline
+          fullWidth
+          sx={{
+            paddingTop: 1.5,
+            paddingRight: 2,
+            paddingBottom: 1.5,
+            paddingLeft: 2
+          }}
+        />
+
         <BoldSendIcon
           onClick={handleRequest}
           className="absolute bottom-3.5 right-4 z-10"
