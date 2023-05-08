@@ -18,7 +18,7 @@ const useChatCompletionStream = (question: string) => {
   } = useConversationChatMessage()
 
   const createChatCompletion = async () => {
-    if (loading) return
+    if (!settings) return
 
     setLoading(true)
 
@@ -29,7 +29,8 @@ const useChatCompletionStream = (question: string) => {
     const chat = await fetch(OPENAI_CHAT_COMPLETION_URL, {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${settings?.secret_key as string}`
+        Authorization: `Bearer ${settings.secret_key}`,
+        'OpenAI-Organization': settings.organization_id
       },
       method: 'POST',
       body: JSON.stringify({
@@ -39,9 +40,9 @@ const useChatCompletionStream = (question: string) => {
             content: question
           }
         ],
-        model: 'gpt-3.5-turbo',
-        stream: true,
-        user: ''
+        model: settings.chat_model,
+        stream: settings.chat_stream,
+        user: settings.author_name
       })
     })
 

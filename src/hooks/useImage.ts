@@ -1,16 +1,18 @@
-import { useRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { useConversationChatMessage, useOpenAI } from 'src/hooks'
 import { showErrorToast } from 'src/shared/utils'
 import { loadingState } from 'src/stores/conversation'
+import { settingsState } from 'src/stores/settings'
 
 const useImage = (question: string) => {
-  const [loading, setLoading] = useRecoilState(loadingState)
+  const setLoading = useSetRecoilState(loadingState)
+  const settings = useRecoilValue(settingsState)
   const openai = useOpenAI()
   const { pushEmptyMessage, saveMessageToDbAndUpdateConversationState } =
     useConversationChatMessage()
 
   const createImage = async () => {
-    if (loading) return
+    if (!settings) return
 
     try {
       setLoading(true)
@@ -20,7 +22,8 @@ const useImage = (question: string) => {
       })
 
       const image = await openai.createImage({
-        prompt: question
+        prompt: question,
+        size: settings.image_generation_size
       })
 
       const content = image.data.data

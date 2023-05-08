@@ -1,3 +1,4 @@
+import { CreateImageRequestSizeEnum } from 'openai'
 import { ThemeMode } from './global'
 
 export interface Settings {
@@ -15,5 +16,5 @@ export interface Settings {
   audio_transcription_model: string
   audio_translation_model: string
   audio_response_type: string
-  image_generation_size: string
+  image_generation_size: CreateImageRequestSizeEnum
 }

@@ -1,16 +1,18 @@
-import { useRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { useConversationChatMessage, useOpenAI } from 'src/hooks'
 import { showErrorToast } from 'src/shared/utils'
 import { loadingState } from 'src/stores/conversation'
+import { settingsState } from 'src/stores/settings'
 
 const useEdit = (question: string) => {
-  const [loading, setLoading] = useRecoilState(loadingState)
+  const setLoading = useSetRecoilState(loadingState)
+  const settings = useRecoilValue(settingsState)
   const openai = useOpenAI()
   const { pushEmptyMessage, saveMessageToDbAndUpdateConversationState } =
     useConversationChatMessage()
 
   const createEdit = async () => {
-    if (loading) return
+    if (!settings) return
 
     try {
       setLoading(true)
@@ -22,8 +24,8 @@ const useEdit = (question: string) => {
       const {
         data: { choices }
       } = await openai.createEdit({
-        model: 'text-davinci-edit-001',
-        input: 'What day of the wek is it?',
+        model: settings.edit_model,
+        input: question,
         instruction: 'Fix the spelling mistakes'
       })
 

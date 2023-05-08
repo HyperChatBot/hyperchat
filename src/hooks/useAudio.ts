@@ -1,18 +1,20 @@
-import { useRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { useConversationChatMessage, useOpenAI } from 'src/hooks'
 import { showErrorToast } from 'src/shared/utils'
 import { loadingState } from 'src/stores/conversation'
+import { settingsState } from 'src/stores/settings'
 import { HashFile } from 'src/types/global'
 
 const useAudio = (question: string, hashFile: HashFile | null) => {
-  const [loading, setLoading] = useRecoilState(loadingState)
+  const setLoading = useSetRecoilState(loadingState)
+  const settings = useRecoilValue(settingsState)
   const openai = useOpenAI()
   const { pushEmptyMessage, saveMessageToDbAndUpdateConversationState } =
     useConversationChatMessage()
 
   const createTranscription = async () => {
-    if (loading) return
     if (!hashFile) return
+    if (!settings) return
 
     try {
       setLoading(true)
@@ -24,8 +26,9 @@ const useAudio = (question: string, hashFile: HashFile | null) => {
 
       const transcription = await openai.createTranscription(
         hashFile.file,
-        'whisper-1',
-        question
+        settings.audio_transcription_model,
+        question,
+        settings.audio_response_type
       )
 
       saveMessageToDbAndUpdateConversationState(
@@ -40,7 +43,7 @@ const useAudio = (question: string, hashFile: HashFile | null) => {
   }
 
   const createTranslation = async () => {
-    if (loading) return
+    if (!settings) return
     if (!hashFile) return
 
     try {
@@ -51,15 +54,15 @@ const useAudio = (question: string, hashFile: HashFile | null) => {
         file_name: hashFile.hashName
       })
 
-      const transcription = await openai.createTranslation(
+      const translation = await openai.createTranslation(
         hashFile.file,
-        'whisper-1',
+        settings.audio_translation_model,
         question
       )
 
       saveMessageToDbAndUpdateConversationState(
         emptyMessage,
-        transcription.data.text
+        translation.data.text
       )
     } catch (error) {
       showErrorToast(error)

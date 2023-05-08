@@ -1,16 +1,18 @@
-import { useRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { useConversationChatMessage, useOpenAI } from 'src/hooks'
 import { showErrorToast } from 'src/shared/utils'
 import { loadingState } from 'src/stores/conversation'
+import { settingsState } from 'src/stores/settings'
 
 const useTextCompletion = (question: string) => {
-  const [loading, setLoading] = useRecoilState(loadingState)
+  const setLoading = useSetRecoilState(loadingState)
+  const settings = useRecoilValue(settingsState)
   const openai = useOpenAI()
   const { pushEmptyMessage, saveMessageToDbAndUpdateConversationState } =
     useConversationChatMessage()
 
   const createTextCompletion = async () => {
-    if (loading) return
+    if (!settings) return
 
     try {
       setLoading(true)
@@ -20,10 +22,11 @@ const useTextCompletion = (question: string) => {
       })
 
       const {
-        data: { id, choices }
+        data: { choices }
       } = await openai.createCompletion({
-        model: 'text-davinci-003',
-        prompt: question
+        model: settings.text_completion_model,
+        prompt: question,
+        stream: settings.text_completion_stream
       })
 
       saveMessageToDbAndUpdateConversationState(
