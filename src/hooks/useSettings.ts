@@ -17,7 +17,7 @@ import { v4 } from 'uuid'
 import useAppData from './useAppData'
 
 const useSettings = () => {
-  const { saveFileToAppDataDir, transformFilenameToSrc } = useAppData()
+  const { transformFilenameToSrc } = useAppData()
   const [loading, setLoading] = useState(false)
   const [settings, setSettings] = useRecoilState(settingsState)
   const setInitialDialogVisible = useSetRecoilState(initialDialogVisibleState)

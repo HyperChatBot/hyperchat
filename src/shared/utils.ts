@@ -1,15 +1,7 @@
-import {
-  BaseDirectory,
-  createDir,
-  exists,
-  writeBinaryFile
-} from '@tauri-apps/api/fs'
-import { appDataDir, join } from '@tauri-apps/api/path'
-import { convertFileSrc } from '@tauri-apps/api/tauri'
 import { isAxiosError } from 'axios'
 import { DateTime } from 'luxon'
 import toast from 'src/components/Snackbar'
-import { ErrorType, HashFile, Products, ThemeMode } from 'src/types/global'
+import { ErrorType, Products, ThemeMode } from 'src/types/global'
 import { OpenAIError } from 'src/types/openai'
 import { v4 } from 'uuid'
 import { getFileExtension } from 'yancey-js-util'
@@ -36,37 +28,6 @@ export const generateHashName = (fileName: string) => {
   const hashName = `${v4()}_${+new Date()}.${extension}`
 
   return hashName
-}
-
-export const saveFileToAppDataDir = async (hashFile: HashFile) => {
-  try {
-    await createDir('data', { dir: BaseDirectory.AppData, recursive: true })
-    await writeBinaryFile(
-      `data/${hashFile.hashName}`,
-      await hashFile.file.arrayBuffer(),
-      {
-        dir: BaseDirectory.AppData
-      }
-    )
-  } catch {}
-}
-
-export const generateFileSrc = async (fileName: string) => {
-  try {
-    const isExist = await exists(`data/${fileName}`, {
-      dir: BaseDirectory.AppData
-    })
-
-    if (isExist) {
-      const appDataDirPath = await appDataDir()
-      const filePath = await join(appDataDirPath, `data/${fileName}`)
-      const assetUrl = convertFileSrc(filePath)
-
-      return assetUrl
-    } else {
-      throw new Error('')
-    }
-  } catch {}
 }
 
 export const isAudioProduct = (product: Products) =>

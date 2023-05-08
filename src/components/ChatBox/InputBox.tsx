@@ -3,6 +3,7 @@ import classNames from 'classnames'
 import { ChangeEvent, FC, useRef, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import {
+  useAppData,
   useAudio,
   useChatCompletionStream,
   useEdit,
@@ -10,11 +11,7 @@ import {
   useImage,
   useTextCompletion
 } from 'src/hooks'
-import {
-  generateHashName,
-  isAudioProduct,
-  saveFileToAppDataDir
-} from 'src/shared/utils'
+import { isAudioProduct } from 'src/shared/utils'
 import { loadingState, summaryInputVisibleState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { HashFile, Products } from 'src/types/global'
@@ -26,6 +23,7 @@ const InputBox: FC = () => {
   const summaryInputVisible = useRecoilValue(summaryInputVisibleState)
   const currProduct = useRecoilValue(currProductState)
   const loading = useRecoilValue(loadingState)
+  const { saveFileToAppDataDir } = useAppData()
   const [question, setQuestion] = useState('')
   const [hashFile, setHashFile] = useState<HashFile | null>(null)
 
@@ -33,12 +31,11 @@ const InputBox: FC = () => {
     const file = e.target.files && e.target.files[0]
 
     if (file) {
-      const hashFile = {
+      const hashName = await saveFileToAppDataDir(file)
+      setHashFile({
         file,
-        hashName: generateHashName(file.name)
-      }
-      setHashFile(hashFile)
-      await saveFileToAppDataDir(hashFile)
+        hashName
+      })
     }
   }
 

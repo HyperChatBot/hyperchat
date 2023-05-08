@@ -1,7 +1,7 @@
 import { PauseCircleIcon, PlayCircleIcon } from '@heroicons/react/24/outline'
 import { FC, useEffect, useRef, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { generateFileSrc } from 'src/shared/utils'
+import { useAppData } from 'src/hooks'
 import { currPlayingAudioIdState } from 'src/stores/conversation'
 import WaveSurfer from 'wavesurfer.js'
 
@@ -13,6 +13,7 @@ const Waveform: FC<Props> = ({ filename }) => {
   const [currPlayingAudioId, setCurrPlayingAudioId] = useRecoilState(
     currPlayingAudioIdState
   )
+  const { transformFilenameToSrc } = useAppData()
   const [src, setSrc] = useState('')
   const [isPlaying, toggleIsPlaying] = useState(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -29,7 +30,7 @@ const Waveform: FC<Props> = ({ filename }) => {
   }
 
   const createFileSrc = async () => {
-    const currSrc = await generateFileSrc(filename)
+    const currSrc = await transformFilenameToSrc(filename)
     setSrc(currSrc || '')
   }
 
