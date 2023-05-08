@@ -14,7 +14,7 @@ const Avatar: FC<Props> = ({ src, size, className, onClick }) => (
     alt="avatar"
     onClick={onClick}
     className={classNames(
-      'h-12 w-12 rounded-xl',
+      'h-12 w-12 rounded-xl object-cover',
       {
         'h-10 w-10': size === 'xs'
       },
