@@ -1,8 +1,6 @@
 import { SnackbarOrigin } from '@mui/material'
 import { Products } from 'src/types/global'
 
-export const EMPTY_MESSAGE_ID = '$$EMPTY_MESSAGE_ID'
-
 export const OPENAI_BASE_URL = 'https://api.openai.com/v1'
 
 export const OPENAI_CHAT_COMPLETION_URL = OPENAI_BASE_URL + '/chat/completions'

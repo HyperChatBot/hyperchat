@@ -1,36 +1,24 @@
-import { isAxiosError } from 'axios'
-import { useLiveQuery } from 'dexie-react-hooks'
-import produce from 'immer'
-import { useState } from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import toast from 'src/components/Snackbar'
-import { useOpenAI } from 'src/hooks'
-import { db } from 'src/models/db'
-import { generateEmptyMessage } from 'src/shared/utils'
-import {
-  currConversationIdState,
-  tempMessageState
-} from 'src/stores/conversation'
-import { OpenAIError } from 'src/types/openai'
+import { useRecoilState } from 'recoil'
+import { useConversationChatMessage, useOpenAI } from 'src/hooks'
+import { showErrorToast } from 'src/shared/utils'
+import { loadingState } from 'src/stores/conversation'
 
 const useTextCompletion = (question: string) => {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useRecoilState(loadingState)
   const openai = useOpenAI()
-  const currConversationId = useRecoilValue(currConversationIdState)
-  const currConversation = useLiveQuery(
-    () => db.text.get(currConversationId),
-    [currConversationId]
-  )
-  const setTempMessage = useSetRecoilState(tempMessageState)
+  const { pushEmptyMessage, saveMessageToDbAndUpdateConversationState } =
+    useConversationChatMessage()
 
   const createTextCompletion = async () => {
     if (loading) return
 
-    setLoading(true)
-    const tempMessage = generateEmptyMessage(question)
-    setTempMessage(tempMessage)
-
     try {
+      setLoading(true)
+
+      const emptyMessage = pushEmptyMessage({
+        question
+      })
+
       const {
         data: { id, choices }
       } = await openai.createCompletion({
@@ -38,28 +26,18 @@ const useTextCompletion = (question: string) => {
         prompt: question
       })
 
-      const newMessage = produce(tempMessage, (draft) => {
-        draft.answer_created_at = +new Date()
-        draft.answer = choices[0].text || ''
-        draft.message_id = id
-      })
-
-      await db.text.update(currConversationId, {
-        messages: currConversation
-          ? [...currConversation.messages, newMessage]
-          : [newMessage]
-      })
-    } catch (error: unknown) {
-      if (isAxiosError<OpenAIError, Record<string, unknown>>(error)) {
-        toast.error(error.response?.data.error.message || '')
-      }
+      saveMessageToDbAndUpdateConversationState(
+        emptyMessage,
+        choices[0].text || ''
+      )
+    } catch (error) {
+      showErrorToast(error)
     } finally {
-      setTempMessage(null)
       setLoading(false)
     }
   }
 
-  return { loading, createTextCompletion }
+  return { createTextCompletion }
 }
 
 export default useTextCompletion

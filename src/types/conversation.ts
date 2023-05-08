@@ -15,3 +15,5 @@ export interface Conversation {
   updated_at: number
   messages: Message[]
 }
+
+export type EmptyMessageParams = Pick<Message, 'question' | 'file_name'>

@@ -1,9 +1,9 @@
 import { atom } from 'recoil'
-import { Message } from 'src/types/conversation'
+import { Conversation } from 'src/types/conversation'
 
-export const currConversationIdState = atom<string>({
-  key: 'currConversationIdState',
-  default: ''
+export const currConversationState = atom<Conversation | undefined>({
+  key: 'currConversationState',
+  default: undefined
 })
 
 export const summaryInputVisibleState = atom({
@@ -16,12 +16,12 @@ export const avatarPickerVisibleState = atom({
   default: false
 })
 
-export const tempMessageState = atom<Message | null>({
-  key: 'tempMessageState',
-  default: null
-})
-
 export const currPlayingAudioIdState = atom<string | null>({
   key: 'currPlayingAudioIdState',
   default: null
+})
+
+export const loadingState = atom({
+  key: 'loadingState',
+  default: false
 })

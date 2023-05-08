@@ -3,7 +3,7 @@ import { FC, useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { db } from 'src/models/db'
 import { conversationTitles } from 'src/shared/constants'
-import { currConversationIdState } from 'src/stores/conversation'
+import { currConversationState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { Conversation } from 'src/types/conversation'
 import { v4 } from 'uuid'
@@ -18,8 +18,8 @@ const ConversationList: FC = () => {
     () => db[currProduct].orderBy('updated_at').reverse().toArray(),
     [currProduct]
   )
-  const [currConversationId, setCurrConversationId] = useRecoilState(
-    currConversationIdState
+  const [currConversation, setCurrConversation] = useRecoilState(
+    currConversationState
   )
 
   const addConversation = async () => {
@@ -34,17 +34,17 @@ const ConversationList: FC = () => {
       updated_at: +new Date()
     }
 
-    setCurrConversationId(chatId)
+    setCurrConversation(conversation)
     db[currProduct].add(conversation)
   }
 
-  const switchChat = (id: string) => {
-    setCurrConversationId(id)
+  const switchChat = (conversation: Conversation) => {
+    setCurrConversation(conversation)
   }
 
   useEffect(() => {
-    if (conversations && conversations.length > 0) {
-      setCurrConversationId(conversations[0].conversation_id)
+    if (conversations && conversations.length > 0 && !currConversation) {
+      setCurrConversation(conversations[0])
     }
   }, [conversations])
 
@@ -66,9 +66,12 @@ const ConversationList: FC = () => {
           conversations.map((conversation) => (
             <ConversationItem
               key={conversation.conversation_id}
-              active={conversation.conversation_id === currConversationId}
+              active={
+                conversation.conversation_id ===
+                currConversation?.conversation_id
+              }
               conversation={conversation}
-              onClick={() => switchChat(conversation.conversation_id)}
+              onClick={() => switchChat(conversation)}
             />
           ))
         ) : (

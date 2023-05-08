@@ -11,7 +11,7 @@ const useOpenAI = () => {
   const { settings } = useSettings()
 
   const configuration = new Configuration({
-    apiKey: settings?.secret_key,
+    apiKey: settings?.secret_key + 'xxx',
     formDataCtor: CustomFormData
   })
 

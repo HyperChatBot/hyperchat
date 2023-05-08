@@ -1,22 +1,14 @@
-import { useLiveQuery } from 'dexie-react-hooks'
 import { FC, useEffect, useRef } from 'react'
 import { useRecoilValue } from 'recoil'
-import { db } from 'src/models/db'
-import { currConversationIdState } from 'src/stores/conversation'
-import { currProductState } from 'src/stores/global'
+import { currConversationState } from 'src/stores/conversation'
 import Divider from '../Divider'
 import ChatList from './ChatList'
 import ContractHeader from './ContactHeader'
 import InputBox from './InputBox'
 
 const ChatBox: FC = () => {
-  const currProduct = useRecoilValue(currProductState)
   const chatBoxRef = useRef<HTMLDivElement>(null)
-  const currConversationId = useRecoilValue(currConversationIdState)
-  const currConversation = useLiveQuery(
-    () => db[currProduct].get(currConversationId),
-    [currConversationId, currProduct]
-  )
+  const currConversation = useRecoilValue(currConversationState)
 
   const scrollToBottom = () => {
     if (!chatBoxRef.current) return
@@ -32,11 +24,11 @@ const ChatBox: FC = () => {
 
   useEffect(() => {
     scrollToBottom()
-  }, [currConversationId])
+  }, [currConversation])
 
   return (
     <section className="relative flex-1">
-      <ContractHeader currConversation={currConversation} />
+      <ContractHeader />
       <Divider />
       <ChatList chatBoxRef={chatBoxRef} currConversation={currConversation} />
       {currConversation && <InputBox />}

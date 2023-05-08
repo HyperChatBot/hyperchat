@@ -2,8 +2,7 @@ import classNames from 'classnames'
 import { ChangeEvent, FC, useRef, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import {
-  useAudioTranscription,
-  useAudioTranslation,
+  useAudio,
   useChatCompletionStream,
   useEdit,
   useEnterKey,
@@ -43,9 +42,11 @@ const InputBox: FC = () => {
   const { createChatCompletion } = useChatCompletionStream(question)
   const { createTextCompletion } = useTextCompletion(question)
   const { createImage } = useImage(question)
-  const { createTranscription } = useAudioTranscription(question, hashFile)
-  const { createTranslation } = useAudioTranslation(question, hashFile)
   const { createEdit } = useEdit(question)
+  const { createTranscription, createTranslation } = useAudio(
+    question,
+    hashFile
+  )
 
   const requests = {
     [Products.ChatCompletion]: createChatCompletion,

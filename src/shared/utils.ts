@@ -6,13 +6,13 @@ import {
 } from '@tauri-apps/api/fs'
 import { appDataDir, join } from '@tauri-apps/api/path'
 import { convertFileSrc } from '@tauri-apps/api/tauri'
-import { WritableDraft } from 'immer/dist/internal'
+import { isAxiosError } from 'axios'
 import { DateTime } from 'luxon'
-import { Message } from 'src/types/conversation'
+import toast from 'src/components/Snackbar'
 import { ErrorType, HashFile, Products, ThemeMode } from 'src/types/global'
+import { OpenAIError } from 'src/types/openai'
 import { v4 } from 'uuid'
 import { getFileExtension } from 'yancey-js-util'
-import { EMPTY_MESSAGE_ID } from './constants'
 
 export const formatDate = (millis: number) => {
   const now = DateTime.now()
@@ -30,34 +30,6 @@ export const formatDate = (millis: number) => {
 
 export const generateErrorMessage = (type: ErrorType, message: string) =>
   type + message
-
-export const generateEmptyMessage = (question: string) => ({
-  message_id: EMPTY_MESSAGE_ID,
-  answer: '',
-  question,
-  question_created_at: +new Date(),
-  answer_created_at: +new Date()
-})
-
-export const updateMessageState = (
-  draft: WritableDraft<Message>,
-  id: string,
-  answer: string,
-  stream?: boolean
-) => {
-  const isFirstChuck = draft.message_id === EMPTY_MESSAGE_ID
-  if (isFirstChuck) {
-    draft.message_id = id
-  }
-
-  if (stream) {
-    draft.answer += answer
-  } else {
-    draft.answer = answer
-  }
-
-  draft.answer_created_at = +new Date()
-}
 
 export const generateHashName = (fileName: string) => {
   const extension = getFileExtension(fileName)
@@ -124,3 +96,9 @@ export const themeModeToTheme = (themeMode?: ThemeMode) =>
       ? ThemeMode.dark
       : ThemeMode.light
     : themeMode
+
+export const showErrorToast = (error: unknown) => {
+  if (isAxiosError<OpenAIError, Record<string, unknown>>(error)) {
+    toast.error(error.response?.data.error.message || '')
+  }
+}

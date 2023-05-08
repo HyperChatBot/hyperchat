@@ -1,40 +1,30 @@
-import { isAxiosError } from 'axios'
-import { useLiveQuery } from 'dexie-react-hooks'
-import produce from 'immer'
-import { useState } from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 import toast from 'src/components/Snackbar'
-import { db } from 'src/models/db'
 import { OPENAI_CHAT_COMPLETION_URL } from 'src/shared/constants'
-import {
-  generateEmptyMessage,
-  generateErrorMessage,
-  updateMessageState
-} from 'src/shared/utils'
-import {
-  currConversationIdState,
-  tempMessageState
-} from 'src/stores/conversation'
-import { Message } from 'src/types/conversation'
+import { generateErrorMessage, showErrorToast } from 'src/shared/utils'
+import { loadingState } from 'src/stores/conversation'
 import { ErrorType } from 'src/types/global'
 import { OpenAIChatResponse, OpenAIError } from 'src/types/openai'
+import useConversationChatMessage from './useConversationChatMessage'
 import useSettings from './useSettings'
 
-const useConversationCompletionStream = (question: string) => {
+const useChatCompletionStream = (question: string) => {
   const { settings } = useSettings()
-  const [isStreaming, setIsStreaming] = useState(false)
-  const currConversationId = useRecoilValue(currConversationIdState)
-  const currConversation = useLiveQuery(
-    () => db.chat.get(currConversationId),
-    [currConversationId]
-  )
-  const setTempMessage = useSetRecoilState(tempMessageState)
+  const [loading, setLoading] = useRecoilState(loadingState)
+  const {
+    pushEmptyMessage,
+    saveMessageToDbAndUpdateConversationState,
+    updateStreamState
+  } = useConversationChatMessage()
 
   const createChatCompletion = async () => {
-    if (isStreaming) return
+    if (loading) return
 
-    setIsStreaming(true)
-    setTempMessage(generateEmptyMessage(question))
+    setLoading(true)
+
+    const emptyMessage = pushEmptyMessage({
+      question
+    })
 
     const chat = await fetch(OPENAI_CHAT_COMPLETION_URL, {
       headers: {
@@ -51,7 +41,7 @@ const useConversationCompletionStream = (question: string) => {
         ],
         model: 'gpt-3.5-turbo',
         stream: true,
-        user: currConversationId
+        user: ''
       })
     })
 
@@ -75,7 +65,7 @@ const useConversationCompletionStream = (question: string) => {
       return
     }
 
-    let _currMessage: Message | null = null
+    let _content = ''
 
     const decoder = new TextDecoder('utf-8')
     try {
@@ -83,15 +73,8 @@ const useConversationCompletionStream = (question: string) => {
         const { done, value } = await reader.read()
 
         if (done) {
-          setIsStreaming(false)
-
-          if (_currMessage) {
-            await db.chat.update(currConversationId, {
-              messages: currConversation
-                ? [...currConversation.messages, _currMessage]
-                : [_currMessage]
-            })
-          }
+          setLoading(false)
+          saveMessageToDbAndUpdateConversationState(emptyMessage, _content)
 
           return reader.releaseLock()
         }
@@ -111,16 +94,8 @@ const useConversationCompletionStream = (question: string) => {
           const token = data.choices[0].delta.content
 
           if (token !== undefined) {
-            setTempMessage((prevState) => {
-              const currState = produce(prevState, (draft) => {
-                if (draft) {
-                  updateMessageState(draft, data.id, token, true)
-                }
-              })
-
-              _currMessage = currState
-              return currState
-            })
+            const content = updateStreamState(token)
+            _content = content
           }
         })
 
@@ -129,11 +104,8 @@ const useConversationCompletionStream = (question: string) => {
 
       await read()
     } catch (error) {
-      if (isAxiosError<OpenAIError, Record<string, unknown>>(error)) {
-        toast.error(error.response?.data.error.message || '')
-      }
+      showErrorToast(error)
     } finally {
-      setTempMessage(null)
     }
 
     reader.releaseLock()
@@ -142,4 +114,4 @@ const useConversationCompletionStream = (question: string) => {
   return { createChatCompletion }
 }
 
-export default useConversationCompletionStream
+export default useChatCompletionStream

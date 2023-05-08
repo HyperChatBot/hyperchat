@@ -4,9 +4,8 @@ import { useRecoilValue } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
 import NoDataIllustration from 'src/assets/illustrations/no-data.svg'
 import { useSettings } from 'src/hooks'
-import { EMPTY_MESSAGE_ID } from 'src/shared/constants'
 import { isAudioProduct } from 'src/shared/utils'
-import { tempMessageState } from 'src/stores/conversation'
+import { loadingState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { Conversation } from 'src/types/conversation'
 import Waveform from '../Waveform'
@@ -20,20 +19,20 @@ interface Props {
 }
 
 const ChatList: FC<Props> = ({ currConversation, chatBoxRef }) => {
+  const loading = useRecoilValue(loadingState)
   const { settings } = useSettings()
   const currProduct = useRecoilValue(currProductState)
-  const tempMessage = useRecoilValue(tempMessageState)
   const hasMessages = currConversation && currConversation.messages.length > 0
 
   return (
     <section
       className={classNames(
         'no-scrollbar relative h-[calc(100vh_-_10.25rem)] overflow-y-scroll p-6',
-        { 'flex items-center justify-center': !(hasMessages || tempMessage) }
+        { 'flex items-center justify-center': !hasMessages }
       )}
       ref={chatBoxRef}
     >
-      {hasMessages || tempMessage ? (
+      {hasMessages ? (
         <>
           {currConversation?.messages.map((message) => (
             <Fragment key={message.message_id}>
@@ -56,40 +55,14 @@ const ChatList: FC<Props> = ({ currConversation, chatBoxRef }) => {
                 }
                 date={message.answer_created_at}
               >
-                <Markdown raw={message.answer} />
+                {loading && !message.answer ? (
+                  <MessageSpinner />
+                ) : (
+                  <Markdown raw={message.answer} />
+                )}
               </ChatBubble>
             </Fragment>
           ))}
-
-          {tempMessage && (
-            <>
-              <ChatBubble
-                role="user"
-                avatar=""
-                date={tempMessage.question_created_at}
-              >
-                {isAudioProduct(currProduct) && tempMessage?.file_name && (
-                  <Waveform filename={tempMessage.file_name} />
-                )}
-                {tempMessage.question}
-              </ChatBubble>
-              <ChatBubble
-                role="assistant"
-                avatar={
-                  settings?.assistant_avatar_filename
-                    ? settings.assistant_avatar_filename
-                    : ChatGPTLogoImg
-                }
-                date={tempMessage.answer_created_at}
-              >
-                {tempMessage.message_id === EMPTY_MESSAGE_ID ? (
-                  <MessageSpinner />
-                ) : (
-                  <Markdown raw={tempMessage.answer} />
-                )}
-              </ChatBubble>
-            </>
-          )}
         </>
       ) : (
         <img
