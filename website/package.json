@@ -1,0 +1,42 @@
+{
+  "name": "nextly-template",
+  "version": "0.1.0",
+  "description": "Nextly Landing Page Template",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 2999",
+    "build": "next build",
+    "start": "next start -p 2999"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gituhb.com/web3templates/nextly-template"
+  },
+  "keywords": [
+    "nextjs",
+    "tailwindcss",
+    "free"
+  ],
+  "author": "Surjith S M",
+  "license": "ISC",
+  "dependencies": {
+    "@emotion/css": "^11.10.6",
+    "@emotion/react": "^11.10.6",
+    "@emotion/server": "^11.10.0",
+    "@emotion/styled": "^11.10.6",
+    "@headlessui/react": "^1.7.14",
+    "@heroicons/react": "^2.0.17",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "next": "^13.3.1",
+    "next-themes": "^0.2.1",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-hook-form": "^7.43.9"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.14",
+    "eslint-config-prettier": "^8.8.0",
+    "postcss": "^8.4.23",
+    "tailwindcss": "^3.3.1"
+  }
+}
