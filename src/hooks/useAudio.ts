@@ -13,6 +13,7 @@ const useAudio = (question: string, hashFile: HashFile | null) => {
     useConversationChatMessage()
 
   const createTranscription = async () => {
+    console.log(settings)
     if (!hashFile) return
     if (!settings) return
 

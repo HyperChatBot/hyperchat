@@ -19,7 +19,6 @@ import { Formik } from 'formik'
 import { ChangeEvent, FC } from 'react'
 import ChatGPTImg from 'src/assets/chatgpt-avatar.png'
 import { SolidSettingsBrightnessIcon } from 'src/components/Icons'
-import Usage from 'src/components/Usage'
 import { useAppData, useSettings, useTheme } from 'src/hooks'
 import {
   audioResponseTypes,
@@ -30,6 +29,7 @@ import {
   textCompletions
 } from 'src/shared/constants'
 import { ThemeMode } from 'src/types/global'
+import { Settings as SettingsParams } from 'src/types/settings'
 
 const Settings: FC = () => {
   const { settings, updateSettings } = useSettings()
@@ -39,7 +39,8 @@ const Settings: FC = () => {
   const handleUploadChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
 
-    if (file && settings) {
+    // FIXME: Even if I set accept="image/*" on the input file tag, non-image files can still be selected in tauri.
+    if (file && file.type.startsWith('image/') && settings) {
       const filename = await saveFileToAppDataDir(file)
       if (filename) {
         updateSettings({ ...settings, assistant_avatar_filename: filename })
@@ -58,14 +59,9 @@ const Settings: FC = () => {
       <Divider />
 
       <div className="no-scrollbar h-[calc(100vh_-_3.8125rem)] w-full overflow-y-scroll p-6">
-        <Formik
+        <Formik<SettingsParams>
           initialValues={settings}
-          onSubmit={(values, actions) => {
-            setTimeout(() => {
-              alert(JSON.stringify(values, null, 2))
-              actions.setSubmitting(false)
-            }, 1000)
-          }}
+          onSubmit={updateSettings}
         >
           {(formik) => (
             <Box
@@ -119,7 +115,11 @@ const Settings: FC = () => {
                   {...formik.getFieldProps('author_name')}
                 />
 
-                <Button variant="contained" sx={{ width: 'max-content' }}>
+                <Button
+                  variant="contained"
+                  sx={{ width: 'max-content' }}
+                  onClick={() => updateSettings(formik.values)}
+                >
                   Save
                 </Button>
               </section>
@@ -410,15 +410,6 @@ const Settings: FC = () => {
                       ))}
                     </Select>
                   </FormControl>
-                </section>
-
-                <Divider />
-
-                <section className="flex flex-col gap-6">
-                  <header className="text-xl font-medium dark:text-white">
-                    Data and Usages
-                  </header>
-                  <Usage />
                 </section>
               </section>
             </Box>

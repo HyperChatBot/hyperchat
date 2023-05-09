@@ -84,8 +84,12 @@ const useSettings = () => {
         const src = await transformFilenameToSrc(
           currSettings.assistant_avatar_filename
         )
+
         if (src) {
           setSettings({ ...currSettings, assistant_avatar_filename: src })
+        } else {
+          // if transform is error
+          setSettings(currSettings)
         }
       } else {
         setSettings(currSettings)

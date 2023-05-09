@@ -12,7 +12,11 @@ import {
   useTextCompletion
 } from 'src/hooks'
 import { isAudioProduct } from 'src/shared/utils'
-import { loadingState, summaryInputVisibleState } from 'src/stores/conversation'
+import {
+  currConversationState,
+  loadingState,
+  summaryInputVisibleState
+} from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { HashFile, Products } from 'src/types/global'
 import { BoldSendIcon, LinearPaperclipIcon } from '../Icons'
@@ -20,6 +24,7 @@ import { BoldSendIcon, LinearPaperclipIcon } from '../Icons'
 const InputBox: FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const currConversation = useRecoilValue(currConversationState)
   const summaryInputVisible = useRecoilValue(summaryInputVisibleState)
   const currProduct = useRecoilValue(currProductState)
   const loading = useRecoilValue(loadingState)
@@ -72,6 +77,8 @@ const InputBox: FC = () => {
   }
 
   useEnterKey(() => handleRequest())
+
+  if (!currConversation) return null
 
   return (
     <section className="absolute bottom-6 left-6 flex w-[calc(100%_-_3rem)] items-center bg-white pt-6 dark:bg-gray-800">

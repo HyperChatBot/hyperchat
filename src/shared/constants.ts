@@ -1,4 +1,5 @@
 import { SnackbarOrigin } from '@mui/material'
+import { CreateImageRequestSizeEnum } from 'openai'
 import { Products } from 'src/types/global'
 
 export const OPENAI_BASE_URL = 'https://api.openai.com/v1'
@@ -43,4 +44,8 @@ export const audios = ['whisper-1']
 
 export const audioResponseTypes = ['json', 'text', 'srt', 'verbose_json', 'vtt']
 
-export const imageSizes = ['1024x1024', '256x256', '512x512']
+export const imageSizes: CreateImageRequestSizeEnum[] = [
+  '1024x1024',
+  '256x256',
+  '512x512'
+]

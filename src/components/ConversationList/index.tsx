@@ -1,4 +1,3 @@
-import { useLiveQuery } from 'dexie-react-hooks'
 import { FC, useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { db } from 'src/models/db'
@@ -12,12 +11,12 @@ import { BoldAddIcon } from '../Icons'
 import ConversationItem from './ConversationItem'
 import ChatEmpty from './EmptyItem'
 
-const ConversationList: FC = () => {
+interface Props {
+  conversations: Conversation[]
+}
+
+const ConversationList: FC<Props> = ({ conversations }) => {
   const currProduct = useRecoilValue(currProductState)
-  const conversations = useLiveQuery(
-    () => db[currProduct].orderBy('updated_at').reverse().toArray(),
-    [currProduct]
-  )
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
   )
@@ -43,12 +42,8 @@ const ConversationList: FC = () => {
   }
 
   useEffect(() => {
-    if (conversations && conversations.length > 0 && !currConversation) {
-      setCurrConversation(conversations[0])
-    }
-  }, [conversations])
-
-  if (!conversations) return null
+    setCurrConversation(conversations[0])
+  }, [])
 
   return (
     <section className="w-87.75">

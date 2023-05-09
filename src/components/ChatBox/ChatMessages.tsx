@@ -1,28 +1,40 @@
 import classNames from 'classnames'
-import { FC, Fragment, RefObject } from 'react'
+import { FC, Fragment, useEffect, useRef } from 'react'
 import { useRecoilValue } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
 import NoDataIllustration from 'src/assets/illustrations/no-data.svg'
 import { useSettings } from 'src/hooks'
 import { isAudioProduct } from 'src/shared/utils'
-import { loadingState } from 'src/stores/conversation'
+import { currConversationState, loadingState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
-import { Conversation } from 'src/types/conversation'
 import Waveform from '../Waveform'
 import ChatBubble from './ChatBubble'
 import Markdown from './Markdown'
 import MessageSpinner from './MessageSpinner'
 
-interface Props {
-  currConversation?: Conversation
-  chatBoxRef: RefObject<HTMLDivElement>
-}
-
-const ChatList: FC<Props> = ({ currConversation, chatBoxRef }) => {
+const ChatMessages: FC = () => {
+  const chatBoxRef = useRef<HTMLDivElement>(null)
   const loading = useRecoilValue(loadingState)
   const { settings } = useSettings()
   const currProduct = useRecoilValue(currProductState)
+  const currConversation = useRecoilValue(currConversationState)
   const hasMessages = currConversation && currConversation.messages.length > 0
+
+  const scrollToBottom = () => {
+    if (!chatBoxRef.current) return
+    const $el = chatBoxRef.current
+
+    if ($el.scrollHeight > $el.scrollTop + $el.clientHeight + 24) {
+      $el.scrollTo({
+        top: $el.scrollHeight,
+        left: 0
+      })
+    }
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [currConversation])
 
   return (
     <section
@@ -75,4 +87,4 @@ const ChatList: FC<Props> = ({ currConversation, chatBoxRef }) => {
   )
 }
 
-export default ChatList
+export default ChatMessages

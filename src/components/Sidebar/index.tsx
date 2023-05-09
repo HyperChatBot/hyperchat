@@ -3,8 +3,10 @@ import { Cog6ToothIcon as Cog6ToothIconSolid } from '@heroicons/react/24/solid'
 import Tooltip from '@mui/material/Tooltip'
 import { FC } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import LogoImg from 'src/assets/chatbot.png'
+import { db } from 'src/models/db'
+import { currConversationState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { Products } from 'src/types/global'
 import Avatar from '../Avatar'
@@ -13,10 +15,17 @@ import items, { iconClassName } from './Items'
 const Sidebar: FC = () => {
   const [currProduct, setCurrProduct] = useRecoilState(currProductState)
   const location = useLocation()
+  const setCurrConversation = useSetRecoilState(currConversationState)
 
-  const setProduct = (product: Products) => {
+  const onProductChange = async (product: Products) => {
     window.localStorage.setItem('currProductState', product)
     setCurrProduct(product)
+
+    const conversations = await db[product]
+      .orderBy('updated_at')
+      .reverse()
+      .toArray()
+    setCurrConversation(conversations[0])
   }
 
   return (
@@ -30,7 +39,7 @@ const Sidebar: FC = () => {
                 <Link
                   to="/"
                   className="cursor-pointer"
-                  onClick={() => setProduct(item.product)}
+                  onClick={() => onProductChange(item.product)}
                 >
                   {currProduct === item.product && location.pathname === '/'
                     ? item.active
