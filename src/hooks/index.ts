@@ -1,10 +1,10 @@
 import useAppData from './useAppData'
 import useAudio from './useAudio'
-import useChatCompletionStream from './useChatCompletionStream'
-import useConversationChatMessage from './useConversationChatMessage'
+import useChatStream from './useChatStream'
 import useEdit from './useEdit'
 import useEnterKey from './useEnterKey'
 import useImage from './useImage'
+import useMessages from './useMessages'
 import useOnline from './useOnline'
 import useOpenAI from './useOpenAI'
 import useSettings from './useSettings'
@@ -13,7 +13,7 @@ import useTheme from './useTheme'
 
 export {
   useEnterKey,
-  useChatCompletionStream,
+  useChatStream,
   useTextCompletion,
   useOnline,
   useAudio,
@@ -23,5 +23,5 @@ export {
   useSettings,
   useAppData,
   useOpenAI,
-  useConversationChatMessage
+  useMessages
 }

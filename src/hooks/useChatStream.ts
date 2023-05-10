@@ -1,21 +1,22 @@
-import { useRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
 import toast from 'src/components/Snackbar'
 import { OPENAI_CHAT_COMPLETION_URL } from 'src/shared/constants'
-import { generateErrorMessage, showErrorToast } from 'src/shared/utils'
+import { generateErrorMessage } from 'src/shared/utils'
 import { loadingState } from 'src/stores/conversation'
 import { ErrorType } from 'src/types/global'
 import { OpenAIChatResponse, OpenAIError } from 'src/types/openai'
-import useConversationChatMessage from './useConversationChatMessage'
+import useMessages from './useMessages'
 import useSettings from './useSettings'
 
-const useChatCompletionStream = (question: string) => {
+const useChatStream = (question: string) => {
   const { settings } = useSettings()
-  const [loading, setLoading] = useRecoilState(loadingState)
+  const setLoading = useSetRecoilState(loadingState)
   const {
     pushEmptyMessage,
     saveMessageToDbAndUpdateConversationState,
-    updateStreamState
-  } = useConversationChatMessage()
+    updateStreamState,
+    rollBackEmptyMessage
+  } = useMessages()
 
   const createChatCompletion = async () => {
     if (!settings) return
@@ -26,35 +27,43 @@ const useChatCompletionStream = (question: string) => {
       question
     })
 
-    const chat = await fetch(OPENAI_CHAT_COMPLETION_URL, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${settings.secret_key}`,
-        'OpenAI-Organization': settings.organization_id
-      },
-      method: 'POST',
-      body: JSON.stringify({
-        messages: [
-          {
-            role: 'user',
-            content: question
-          }
-        ],
-        model: settings.chat_model,
-        stream: settings.chat_stream,
-        user: settings.author_name
+    let chat: Response | undefined
+
+    try {
+      chat = await fetch(OPENAI_CHAT_COMPLETION_URL, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${settings.secret_key}`,
+          'OpenAI-Organization': settings.organization_id
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          messages: [
+            {
+              role: 'user',
+              content: question
+            }
+          ],
+          model: settings.chat_model,
+          stream: settings.chat_stream,
+          user: settings.author_name
+        })
       })
-    })
+    } catch {
+      // Do nothing, the error will be catched by the following `chat.status !== 200` phrase.
+      return
+    }
 
     const reader = chat.body?.getReader()
 
     if (!reader) {
       toast.error(
-        generateErrorMessage(ErrorType.Unknown, 'Cannot read ReadableStream.')
+        generateErrorMessage(ErrorType.Unknown, 'Cannot get ReadableStream.')
       )
       return
     }
 
+    // The error which is throwing by OpenAI API.
     if (chat.status !== 200) {
       const { value } = await reader.read()
       const decoder = new TextDecoder('utf-8')
@@ -63,14 +72,15 @@ const useChatCompletionStream = (question: string) => {
       toast.error(
         generateErrorMessage(ErrorType.OpenAI, errorData.error.message)
       )
+      rollBackEmptyMessage()
       return
     }
 
     let _content = ''
 
     const decoder = new TextDecoder('utf-8')
-    try {
-      const read = async (): Promise<any> => {
+    const read = async (): Promise<void> => {
+      try {
         const { done, value } = await reader.read()
 
         if (done) {
@@ -99,19 +109,16 @@ const useChatCompletionStream = (question: string) => {
         })
 
         return read()
+      } catch {
+        generateErrorMessage(ErrorType.Unknown, 'Stream data parsing error.')
       }
-
-      await read()
-    } catch (error) {
-      showErrorToast(error)
-    } finally {
-      setLoading(false)
     }
 
+    await read()
     reader.releaseLock()
   }
 
   return { createChatCompletion }
 }
 
-export default useChatCompletionStream
+export default useChatStream

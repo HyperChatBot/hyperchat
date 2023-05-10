@@ -1,19 +1,21 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { useConversationChatMessage, useOpenAI } from 'src/hooks'
+import { useMessages, useOpenAI } from 'src/hooks'
 import { showErrorToast } from 'src/shared/utils'
 import { loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 import { HashFile } from 'src/types/global'
 
 const useAudio = (question: string, hashFile: HashFile | null) => {
-  const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
+  const setLoading = useSetRecoilState(loadingState)
   const openai = useOpenAI()
-  const { pushEmptyMessage, saveMessageToDbAndUpdateConversationState } =
-    useConversationChatMessage()
+  const {
+    pushEmptyMessage,
+    saveMessageToDbAndUpdateConversationState,
+    rollBackEmptyMessage
+  } = useMessages()
 
   const createTranscription = async () => {
-    console.log(settings)
     if (!hashFile) return
     if (!settings) return
 
@@ -38,6 +40,7 @@ const useAudio = (question: string, hashFile: HashFile | null) => {
       )
     } catch (error) {
       showErrorToast(error)
+      rollBackEmptyMessage()
     } finally {
       setLoading(false)
     }

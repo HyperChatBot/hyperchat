@@ -18,7 +18,7 @@ const generateEmptyMessage = (params: EmptyMessageParams): Message => ({
   ...params
 })
 
-const useConversationChatMessage = () => {
+const useMessages = () => {
   const currProduct = useRecoilValue(currProductState)
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
@@ -32,6 +32,14 @@ const useConversationChatMessage = () => {
     })
 
     return emptyMessage
+  }
+
+  const rollBackEmptyMessage = () => {
+    setCurrConversation((prevState) =>
+      produce(prevState, (draft) => {
+        draft?.messages.pop()
+      })
+    )
   }
 
   const updateStreamState = (token: string) => {
@@ -78,8 +86,9 @@ const useConversationChatMessage = () => {
   return {
     pushEmptyMessage,
     saveMessageToDbAndUpdateConversationState,
-    updateStreamState
+    updateStreamState,
+    rollBackEmptyMessage
   }
 }
 
-export default useConversationChatMessage
+export default useMessages

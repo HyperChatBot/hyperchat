@@ -1,5 +1,5 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { useConversationChatMessage, useOpenAI } from 'src/hooks'
+import { useMessages, useOpenAI } from 'src/hooks'
 import { showErrorToast } from 'src/shared/utils'
 import { loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
@@ -8,8 +8,11 @@ const useTextCompletion = (question: string) => {
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
   const openai = useOpenAI()
-  const { pushEmptyMessage, saveMessageToDbAndUpdateConversationState } =
-    useConversationChatMessage()
+  const {
+    pushEmptyMessage,
+    saveMessageToDbAndUpdateConversationState,
+    rollBackEmptyMessage
+  } = useMessages()
 
   const createTextCompletion = async () => {
     if (!settings) return
@@ -35,6 +38,7 @@ const useTextCompletion = (question: string) => {
       )
     } catch (error) {
       showErrorToast(error)
+      rollBackEmptyMessage()
     } finally {
       setLoading(false)
     }

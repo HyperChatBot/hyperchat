@@ -5,7 +5,7 @@ import { useRecoilValue } from 'recoil'
 import {
   useAppData,
   useAudio,
-  useChatCompletionStream,
+  useChatStream,
   useEdit,
   useEnterKey,
   useImage,
@@ -44,7 +44,7 @@ const InputBox: FC = () => {
     }
   }
 
-  const { createChatCompletion } = useChatCompletionStream(question)
+  const { createChatCompletion } = useChatStream(question)
   const { createTextCompletion } = useTextCompletion(question)
   const { createImage } = useImage(question)
   const { createEdit } = useEdit(question)

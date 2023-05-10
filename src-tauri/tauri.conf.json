@@ -18,7 +18,9 @@
         "open": true
       },
       "fs": {
-        "scope": ["**"],
+        "scope": [
+          "**"
+        ],
         "all": true
       },
       "path": {
@@ -27,7 +29,9 @@
       "protocol": {
         "all": true,
         "asset": true,
-        "assetScope": ["**"]
+        "assetScope": [
+          "**"
+        ]
       }
     },
     "bundle": {
@@ -52,7 +56,7 @@
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "HyperChat",
+        "title": "Hyper Chat",
         "width": 1280,
         "height": 900,
         "minWidth": 1280,
