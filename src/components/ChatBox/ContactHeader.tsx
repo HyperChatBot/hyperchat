@@ -78,6 +78,14 @@ const ContactHeader: FC = () => {
     }
   }
 
+  const deleteCurrConversation = async () => {
+    if (currConversation) {
+      await db[currProduct].delete(currConversation.conversation_id)
+      const conversations = await db[currProduct].toArray()
+      setCurrConversation(conversations[0])
+    }
+  }
+
   useEffect(() => {
     setSummaryInputVisible(false)
     setAvatarPickerVisible(false)
@@ -147,7 +155,7 @@ const ContactHeader: FC = () => {
       </section>
       {currConversation && (
         <section className="flex cursor-pointer rounded-lg bg-main-purple bg-opacity-10 pb-2.5 pl-4 pr-4 pt-2.5 text-main-purple">
-          <TrashIcon className="h-4 w-4" />
+          <TrashIcon className="h-4 w-4" onClick={deleteCurrConversation} />
         </section>
       )}
     </section>

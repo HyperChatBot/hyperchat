@@ -7,9 +7,9 @@ import { currProductState } from 'src/stores/global'
 import { Conversation } from 'src/types/conversation'
 import { v4 } from 'uuid'
 import Divider from '../Divider'
+import { OutlinePlusIcon } from '../Icons'
 import ConversationItem from './ConversationItem'
 import ChatEmpty from './EmptyItem'
-import { OutlinePlusIcon } from '../Icons'
 
 interface Props {
   conversations: Conversation[]
