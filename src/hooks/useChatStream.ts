@@ -60,6 +60,7 @@ const useChatStream = (question: string) => {
       toast.error(
         generateErrorMessage(ErrorType.Unknown, 'Cannot get ReadableStream.')
       )
+      setLoading(false)
       return
     }
 
@@ -73,6 +74,7 @@ const useChatStream = (question: string) => {
         generateErrorMessage(ErrorType.OpenAI, errorData.error.message)
       )
       rollBackEmptyMessage()
+      setLoading(false)
       return
     }
 
@@ -111,6 +113,8 @@ const useChatStream = (question: string) => {
         return read()
       } catch {
         generateErrorMessage(ErrorType.Unknown, 'Stream data parsing error.')
+      } finally {
+        setLoading(false)
       }
     }
 

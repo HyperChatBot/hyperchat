@@ -67,6 +67,8 @@ const InputBox: FC = () => {
     if (summaryInputVisible) return
     if (!isAudioProduct(currProduct) && question.trim().length === 0) return
 
+    console.log('caonima')
+
     requests[currProduct]()
 
     setQuestion('')
