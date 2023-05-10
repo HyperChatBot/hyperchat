@@ -28,7 +28,7 @@ const useTheme = () => {
           borderRadius: 8
         }
       }),
-    [theme]
+    [theme, settings]
   )
 
   const setThemeClass = (currTheme: ThemeMode.light | ThemeMode.dark) => {
@@ -60,7 +60,7 @@ const useTheme = () => {
 
   useEffect(() => {
     setThemeStateAndClass()
-  }, [])
+  }, [settings])
 
   useEffect(() => {
     window
