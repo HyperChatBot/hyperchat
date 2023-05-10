@@ -2,7 +2,7 @@ import classNames from 'classnames'
 import { FC } from 'react'
 import { SvgIconProps } from 'src/types/global'
 
-const BoldSendIcon: FC<SvgIconProps> = ({
+const SolidSendIcon: FC<SvgIconProps> = ({
   className,
   pathClassName,
   onClick
@@ -24,4 +24,4 @@ const BoldSendIcon: FC<SvgIconProps> = ({
   </svg>
 )
 
-export default BoldSendIcon
+export default SolidSendIcon

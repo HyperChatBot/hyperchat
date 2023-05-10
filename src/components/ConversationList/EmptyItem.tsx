@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { BoldAddIcon } from 'src/components/Icons'
+import { OutlinePlusIcon } from 'src/components/Icons'
 import { EMPTY_CHAT_HINT } from 'src/shared/constants'
 import MesssageItemWrapper from './ItemWrapper'
 
@@ -17,7 +17,7 @@ const EmptyItem: FC<Props> = ({ onClick }) => {
       <p className="mr-4 font-semibold dark:text-dark-text">
         {EMPTY_CHAT_HINT}
       </p>
-      <BoldAddIcon />
+      <OutlinePlusIcon />
     </MesssageItemWrapper>
   )
 }

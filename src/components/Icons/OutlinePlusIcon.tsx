@@ -2,7 +2,7 @@ import classNames from 'classnames'
 import { FC } from 'react'
 import { SvgIconProps } from 'src/types/global'
 
-const BoldAddIcon: FC<SvgIconProps> = ({
+const OutlinePlusIcon: FC<SvgIconProps> = ({
   className,
   pathClassName,
   onClick
@@ -24,4 +24,4 @@ const BoldAddIcon: FC<SvgIconProps> = ({
   </svg>
 )
 
-export default BoldAddIcon
+export default OutlinePlusIcon

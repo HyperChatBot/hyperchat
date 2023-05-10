@@ -7,9 +7,9 @@ import { currProductState } from 'src/stores/global'
 import { Conversation } from 'src/types/conversation'
 import { v4 } from 'uuid'
 import Divider from '../Divider'
-import { BoldAddIcon } from '../Icons'
 import ConversationItem from './ConversationItem'
 import ChatEmpty from './EmptyItem'
+import { OutlinePlusIcon } from '../Icons'
 
 interface Props {
   conversations: Conversation[]
@@ -51,7 +51,7 @@ const ConversationList: FC<Props> = ({ conversations }) => {
         <span className="mr-4 text-xl font-semibold dark:text-dark-text">
           {conversationTitles[currProduct]}
         </span>
-        <BoldAddIcon onClick={addConversation} />
+        <OutlinePlusIcon onClick={addConversation} />
       </section>
 
       <Divider />

@@ -2,7 +2,7 @@ import classNames from 'classnames'
 import { FC } from 'react'
 import { SvgIconProps } from 'src/types/global'
 
-const LinearChatIcon: FC<SvgIconProps> = ({
+const SolidPaperclipIcon: FC<SvgIconProps> = ({
   className,
   pathClassName,
   onClick
@@ -21,7 +21,7 @@ const LinearChatIcon: FC<SvgIconProps> = ({
         'dark:stroke-current dark:text-dark-bubble-assistant-text',
         pathClassName
       )}
-      d="M7 10.74V13.94M12 9V15.68M17 10.74V13.94M9 22H15C20 22 22 20 22 15V9C22 4 20 2 15 2H9C4 2 2 4 2 9V15C2 20 4 22 9 22Z"
+      d="M11.97 12V15.5C11.97 17.43 13.54 19 15.47 19C17.4 19 18.97 17.43 18.97 15.5V10C18.97 6.13 15.84 3 11.97 3C8.1 3 4.97 6.13 4.97 10V16C4.97 19.31 7.66 22 10.97 22"
       stroke="black"
       strokeWidth="1.5"
       strokeLinecap="round"
@@ -30,4 +30,4 @@ const LinearChatIcon: FC<SvgIconProps> = ({
   </svg>
 )
 
-export default LinearChatIcon
+export default SolidPaperclipIcon

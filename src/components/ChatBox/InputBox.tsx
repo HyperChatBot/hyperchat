@@ -19,7 +19,7 @@ import {
 } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { HashFile, Products } from 'src/types/global'
-import { BoldSendIcon, LinearPaperclipIcon } from '../Icons'
+import { SolidSendIcon, SolidPaperclipIcon } from '../Icons'
 
 const InputBox: FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -94,7 +94,7 @@ const InputBox: FC = () => {
             ref={fileInputRef}
             onInput={onFileChange}
           />
-          <LinearPaperclipIcon className="mr-6" />
+          <SolidPaperclipIcon className="mr-6" />
         </label>
       )}
       <section className="relative flex w-full">
@@ -115,7 +115,7 @@ const InputBox: FC = () => {
           }}
         />
 
-        <BoldSendIcon
+        <SolidSendIcon
           onClick={handleRequest}
           className="absolute bottom-3.5 right-4 z-10"
           pathClassName={classNames('text-black dark:text-white fill-current', {
