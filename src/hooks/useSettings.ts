@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRecoilState, useSetRecoilState } from 'recoil'
+import toast from 'src/components/Snackbar'
 import { db } from 'src/models/db'
 import {
   audioResponseTypes,
@@ -15,7 +16,6 @@ import { ThemeMode } from 'src/types/global'
 import { Settings } from 'src/types/settings'
 import { v4 } from 'uuid'
 import useAppData from './useAppData'
-import toast from 'src/components/Snackbar'
 
 const useSettings = () => {
   const { transformFilenameToSrc } = useAppData()

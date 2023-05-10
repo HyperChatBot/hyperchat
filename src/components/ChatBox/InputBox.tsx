@@ -11,6 +11,7 @@ import {
   useImage,
   useTextCompletion
 } from 'src/hooks'
+import { inputPlaceholders } from 'src/shared/constants'
 import { isAudioProduct } from 'src/shared/utils'
 import {
   currConversationState,
@@ -99,7 +100,7 @@ const InputBox: FC = () => {
         <Input
           inputRef={textareaRef}
           className="max-h-52 overflow-scroll rounded-md border border-black/10 bg-white text-sm shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:border-gray-900/50 dark:bg-gray-700 dark:text-white dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]"
-          placeholder="Send a message."
+          placeholder={inputPlaceholders[currProduct]}
           multiline
           value={question}
           onChange={(e) => setQuestion(e.target.value)}

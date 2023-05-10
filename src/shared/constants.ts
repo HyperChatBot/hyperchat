@@ -49,3 +49,12 @@ export const imageSizes: CreateImageRequestSizeEnum[] = [
   '256x256',
   '512x512'
 ]
+
+export const inputPlaceholders = {
+  [Products.Image]: 'Creates an image given a prompt.',
+  [Products.Edit]: 'Creates a new edit for the provided input, instruction.',
+  [Products.AudioTranscription]: 'Transcribes audio into the input language.',
+  [Products.AudioTranslation]: 'Translates audio into into English.',
+  [Products.TextCompletion]: 'Creates a completion for the provided prompt.',
+  [Products.ChatCompletion]: 'Send a message.'
+}
