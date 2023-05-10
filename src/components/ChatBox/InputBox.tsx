@@ -19,7 +19,7 @@ import {
 } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { HashFile, Products } from 'src/types/global'
-import { SolidSendIcon, SolidPaperclipIcon } from '../Icons'
+import { SolidPaperclipIcon, SolidSendIcon } from '../Icons'
 
 const InputBox: FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -66,8 +66,6 @@ const InputBox: FC = () => {
     if (loading) return
     if (summaryInputVisible) return
     if (!isAudioProduct(currProduct) && question.trim().length === 0) return
-
-    console.log('caonima')
 
     requests[currProduct]()
 

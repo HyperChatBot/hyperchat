@@ -15,6 +15,7 @@ import { ThemeMode } from 'src/types/global'
 import { Settings } from 'src/types/settings'
 import { v4 } from 'uuid'
 import useAppData from './useAppData'
+import toast from 'src/components/Snackbar'
 
 const useSettings = () => {
   const { transformFilenameToSrc } = useAppData()
@@ -66,6 +67,8 @@ const useSettings = () => {
     } else {
       setSettings(newSettings)
     }
+
+    toast.success('Settings updated successfully.')
   }
 
   const getSettings = async () => {

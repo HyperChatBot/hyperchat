@@ -15,10 +15,11 @@ import TextField from '@mui/material/TextField'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import Typography from '@mui/material/Typography'
-import { Formik } from 'formik'
-import { ChangeEvent, FC } from 'react'
+import { Formik, useFormikContext } from 'formik'
+import { ChangeEvent, FC, useEffect } from 'react'
 import ChatGPTImg from 'src/assets/chatgpt-avatar.png'
 import { SolidSettingsBrightnessIcon } from 'src/components/Icons'
+import toast from 'src/components/Snackbar'
 import { useAppData, useSettings, useTheme } from 'src/hooks'
 import {
   audioResponseTypes,
@@ -44,8 +45,22 @@ const Settings: FC = () => {
       const filename = await saveFileToAppDataDir(file)
       if (filename) {
         updateSettings({ ...settings, assistant_avatar_filename: filename })
+        toast.success('Assistant avatar updated successfully.')
       }
     }
+  }
+
+  const AutoSubmitToken = () => {
+    const { initialValues, values, submitForm } =
+      useFormikContext<SettingsParams>()
+
+    useEffect(() => {
+      if (initialValues !== values) {
+        updateSettings(values)
+      }
+    }, [initialValues, values, submitForm])
+
+    return null
   }
 
   if (!settings) return null
@@ -68,7 +83,7 @@ const Settings: FC = () => {
               component="form"
               noValidate
               autoComplete="off"
-              className="flex flex-col gap-8"
+              className="my-8"
             >
               <section className="flex flex-col gap-6">
                 <header className="text-xl font-medium dark:text-white">
@@ -123,9 +138,23 @@ const Settings: FC = () => {
                   Save
                 </Button>
               </section>
+            </Box>
+          )}
+        </Formik>
 
-              <Divider />
+        <Divider />
 
+        <Formik<SettingsParams>
+          initialValues={settings}
+          onSubmit={updateSettings}
+        >
+          {(formik) => (
+            <Box
+              component="form"
+              noValidate
+              autoComplete="off"
+              className="my-8"
+            >
               <section className="flex flex-col gap-6">
                 <header className="text-xl font-medium dark:text-white">
                   Customization
@@ -197,9 +226,23 @@ const Settings: FC = () => {
                   </section>
                 </section>
               </section>
+            </Box>
+          )}
+        </Formik>
 
-              <Divider />
+        <Divider />
 
+        <Formik<SettingsParams>
+          initialValues={settings}
+          onSubmit={updateSettings}
+        >
+          {(formik) => (
+            <Box
+              component="form"
+              noValidate
+              autoComplete="off"
+              className="flex flex-col gap-8"
+            >
               <section className="flex flex-col gap-6">
                 <header className="text-xl font-medium dark:text-white">
                   Chat
@@ -412,6 +455,7 @@ const Settings: FC = () => {
                   </FormControl>
                 </section>
               </section>
+              <AutoSubmitToken />
             </Box>
           )}
         </Formik>
