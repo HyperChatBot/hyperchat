@@ -37,12 +37,12 @@ jobs:
       - name: Sync node version and setup cache
         uses: actions/setup-node@v3
         with:
-          node-version: 'lts/*'
+          node-version: '16.x'
 
       - name: Install Pnpm
         uses: pnpm/action-setup@v2.0.1
         with:
-          version: 8
+          version: 6
 
       - name: Install frontend dependencies
         # If you don't have `beforeBuildCommand` configured you may want to build your frontend here too.
