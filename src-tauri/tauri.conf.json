@@ -7,7 +7,7 @@
     "withGlobalTauri": true
   },
   "package": {
-    "productName": "HyperChat",
+    "productName": "Hyper Chat",
     "version": "0.0.0"
   },
   "tauri": {
