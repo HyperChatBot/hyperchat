@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: '16.x'
 
-      - name: Install Pnpm
+      - name: Install pnpm
         uses: pnpm/action-setup@v2.0.1
         with:
           version: 6.22.2
@@ -40,7 +40,7 @@ jobs:
         if: success()
         uses: rtCamp/action-slack-notify@v2
         env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOKS }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: github-actions
           SLACK_TITLE: Test Success
           SLACK_COLOR: good
@@ -51,7 +51,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         if: failure()
         env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOKS }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: github-actions
           SLACK_TITLE: Test Failure
           SLACK_COLOR: danger
@@ -76,7 +76,7 @@ jobs:
         if: success()
         uses: rtCamp/action-slack-notify@v2
         env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOKS }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: github-actions
           SLACK_TITLE: Deploy Success
           SLACK_COLOR: good
@@ -87,7 +87,7 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         if: failure()
         env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOKS }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: github-actions
           SLACK_TITLE: Deploy Failure
           SLACK_COLOR: danger
