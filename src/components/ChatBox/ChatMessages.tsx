@@ -39,7 +39,7 @@ const ChatMessages: FC = () => {
   return (
     <section
       className={classNames(
-        'no-scrollbar relative h-[calc(100vh_-_10.25rem)] overflow-y-scroll p-6',
+        'no-scrollbar relative h-[calc(100vh_-_8.25rem)] overflow-y-scroll p-6 pb-0',
         { 'flex items-center justify-center': !hasMessages }
       )}
       ref={chatBoxRef}
