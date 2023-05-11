@@ -63,10 +63,14 @@ const InputBox: FC = () => {
     [Products.Edit]: createEdit
   }
 
+  // Prompt is optional in audio products.
+  const inputValueIsNotEmptyOrAudioProducts =
+    !isAudioProduct(currProduct) && question.trim().length === 0
+
   const handleRequest = () => {
     if (loading) return
     if (summaryInputVisible) return
-    if (!isAudioProduct(currProduct) && question.trim().length === 0) return
+    if (inputValueIsNotEmptyOrAudioProducts) return
 
     requests[currProduct]()
 
@@ -117,9 +121,11 @@ const InputBox: FC = () => {
         <SolidSendIcon
           onClick={handleRequest}
           className="absolute bottom-3.5 right-4 z-10"
-          pathClassName={classNames('text-black dark:text-white fill-current', {
-            'text-opacity-30': question.trim().length === 0,
-            'text-main-purple dark:text-main-purple': question.trim().length > 0
+          pathClassName={classNames('fill-current', {
+            'text-black dark:text-white text-opacity-30':
+              inputValueIsNotEmptyOrAudioProducts,
+            'text-main-purple dark:text-main-purple':
+              !inputValueIsNotEmptyOrAudioProducts
           })}
         />
       </section>
