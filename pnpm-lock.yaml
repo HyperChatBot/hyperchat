@@ -11,13 +11,13 @@ specifiers:
   '@tauri-apps/cli': ^1.2.2
   '@types/lodash.throttle': ^4.1.7
   '@types/luxon': ^3.3.0
-  '@types/node': ^18.7.10
+  '@types/node': ^20.1.2
   '@types/react': ^18.0.15
   '@types/react-dom': ^18.0.6
   '@types/react-syntax-highlighter': ^15.5.6
   '@types/uuid': ^9.0.1
   '@types/wavesurfer.js': ^6.0.5
-  '@vitejs/plugin-react': ^3.0.0
+  '@vitejs/plugin-react': ^4.0.0
   autoprefixer: ^10.4.14
   axios: ^1.3.6
   classnames: ^2.3.2
@@ -26,7 +26,7 @@ specifiers:
   dexie-react-hooks: ^1.1.3
   emoji-mart: ^5.5.2
   formik: ^2.2.9
-  immer: ^9.0.21
+  immer: ^10.0.2
   luxon: ^3.3.0
   notistack: ^3.0.1
   openai: ^3.2.1
@@ -43,7 +43,7 @@ specifiers:
   recoil: ^0.7.7
   remark-gfm: ^3.0.1
   tailwindcss: ^3.3.1
-  typescript: ^4.9.5
+  typescript: ^5.0.4
   uuid: ^9.0.0
   vite: ^4.2.1
   wavesurfer.js: ^6.6.3
@@ -64,7 +64,7 @@ dependencies:
   dexie-react-hooks: 1.1.3_e228a2d4ec309ad3f07d69fad21af85e
   emoji-mart: 5.5.2
   formik: 2.2.9_react@18.2.0
-  immer: 9.0.21
+  immer: 10.0.2
   luxon: 3.3.0
   notistack: 3.0.1_97d8638a3e40ce1e0fae72bbc32f8de7
   openai: 3.2.1
@@ -83,22 +83,22 @@ devDependencies:
   '@tauri-apps/cli': 1.2.3
   '@types/lodash.throttle': 4.1.7
   '@types/luxon': 3.3.0
-  '@types/node': 18.15.11
+  '@types/node': 20.1.2
   '@types/react': 18.0.33
   '@types/react-dom': 18.0.11
   '@types/react-syntax-highlighter': 15.5.6
   '@types/uuid': 9.0.1
   '@types/wavesurfer.js': 6.0.5
-  '@vitejs/plugin-react': 3.1.0_vite@4.2.1
+  '@vitejs/plugin-react': 4.0.0_vite@4.2.1
   autoprefixer: 10.4.14_postcss@8.4.21
   postcss: 8.4.21
   postcss-import: 15.1.0_postcss@8.4.21
   prettier: 2.8.7
-  prettier-plugin-organize-imports: 3.2.2_prettier@2.8.7+typescript@4.9.5
+  prettier-plugin-organize-imports: 3.2.2_prettier@2.8.7+typescript@5.0.4
   prettier-plugin-tailwindcss: 0.2.7_3e3c2f4f89f4d118d5a42f349c7f1929
   tailwindcss: 3.3.1
-  typescript: 4.9.5
-  vite: 4.2.1_@types+node@18.15.11
+  typescript: 5.0.4
+  vite: 4.2.1_@types+node@20.1.2
 
 packages:
 
@@ -1031,8 +1031,8 @@ packages:
     resolution: {integrity: sha512-iiUgKzV9AuaEkZqkOLDIvlQiL6ltuZd9tGcW3gwpnX8JbuiuhFlEGmmFXEXkN50Cvq7Os88IY2v0dkDqXYWVgA==}
     dev: false
 
-  /@types/node/18.15.11:
-    resolution: {integrity: sha512-E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==}
+  /@types/node/20.1.2:
+    resolution: {integrity: sha512-CTO/wa8x+rZU626cL2BlbCDzydgnFNgc19h4YvizpTO88MFQxab8wqisxaofQJ/9bLGugRdWIuX/TbIs6VVF6g==}
     dev: true
 
   /@types/parse-json/4.0.0:
@@ -1098,18 +1098,17 @@ packages:
       '@types/debounce': 1.2.1
     dev: true
 
-  /@vitejs/plugin-react/3.1.0_vite@4.2.1:
-    resolution: {integrity: sha512-AfgcRL8ZBhAlc3BFdigClmTUMISmmzHn7sB2h9U1odvc5U/MjWXsAaz18b/WoppUTDBzxOJwo2VdClfUcItu9g==}
+  /@vitejs/plugin-react/4.0.0_vite@4.2.1:
+    resolution: {integrity: sha512-HX0XzMjL3hhOYm+0s95pb0Z7F8O81G7joUHgfDd/9J/ZZf5k4xX6QAMFkKsHFxaHlf6X7GD7+XuaZ66ULiJuhQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
-      vite: ^4.1.0-beta.0
+      vite: ^4.2.0
     dependencies:
       '@babel/core': 7.21.4
       '@babel/plugin-transform-react-jsx-self': 7.21.0_@babel+core@7.21.4
       '@babel/plugin-transform-react-jsx-source': 7.19.6_@babel+core@7.21.4
-      magic-string: 0.27.0
       react-refresh: 0.14.0
-      vite: 4.2.1_@types+node@18.15.11
+      vite: 4.2.1_@types+node@20.1.2
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -1667,8 +1666,8 @@ packages:
       react-is: 16.13.1
     dev: false
 
-  /immer/9.0.21:
-    resolution: {integrity: sha512-bc4NBHqOqSfRW7POMkHd51LvClaeMXpm8dx0e8oE2GORbq5aRK7Bxl4FyzVLdGtLmvLKL7BTDBG5ACQm4HWjTA==}
+  /immer/10.0.2:
+    resolution: {integrity: sha512-Rx3CqeqQ19sxUtYV9CU911Vhy8/721wRFnJv3REVGWUmoAcIwzifTsdmJte/MV+0/XpM35LZdQMBGkRIoLPwQA==}
     dev: false
 
   /import-fresh/3.3.0:
@@ -1829,13 +1828,6 @@ packages:
     resolution: {integrity: sha512-An0UCfG/rSiqtAIiBPO0Y9/zAnHUZxAMiCpTd5h2smgsj7GGmcenvrvww2cqNA8/4A5ZrD1gJpHN2mIHZQF+Mg==}
     engines: {node: '>=12'}
     dev: false
-
-  /magic-string/0.27.0:
-    resolution: {integrity: sha512-8UnnX2PeRAPZuN12svgR9j7M1uWMovg/CEnIwIG0LFkXSJJe4PdfUGiTGl8V9bsBHFUtfVINcSyYxd7q+kx9fA==}
-    engines: {node: '>=12'}
-    dependencies:
-      '@jridgewell/sourcemap-codec': 1.4.15
-    dev: true
 
   /markdown-table/3.0.3:
     resolution: {integrity: sha512-Z1NL3Tb1M9wH4XESsCDEksWoKTdlUafKc4pt0GRwjUyXaCFZ+dc3g2erqB6zm3szA2IUSi7VnPI+o/9jnxh9hw==}
@@ -2469,7 +2461,7 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
-  /prettier-plugin-organize-imports/3.2.2_prettier@2.8.7+typescript@4.9.5:
+  /prettier-plugin-organize-imports/3.2.2_prettier@2.8.7+typescript@5.0.4:
     resolution: {integrity: sha512-e97lE6odGSiHonHJMTYC0q0iLXQyw0u5z/PJpvP/3vRy6/Zi9kLBwFAbEGjDzIowpjQv8b+J04PDamoUSQbzGA==}
     peerDependencies:
       '@volar/vue-language-plugin-pug': ^1.0.4
@@ -2483,7 +2475,7 @@ packages:
         optional: true
     dependencies:
       prettier: 2.8.7
-      typescript: 4.9.5
+      typescript: 5.0.4
     dev: true
 
   /prettier-plugin-tailwindcss/0.2.7_3e3c2f4f89f4d118d5a42f349c7f1929:
@@ -2539,7 +2531,7 @@ packages:
         optional: true
     dependencies:
       prettier: 2.8.7
-      prettier-plugin-organize-imports: 3.2.2_prettier@2.8.7+typescript@4.9.5
+      prettier-plugin-organize-imports: 3.2.2_prettier@2.8.7+typescript@5.0.4
     dev: true
 
   /prettier/2.8.7:
@@ -2951,9 +2943,9 @@ packages:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
     dev: false
 
-  /typescript/4.9.5:
-    resolution: {integrity: sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==}
-    engines: {node: '>=4.2.0'}
+  /typescript/5.0.4:
+    resolution: {integrity: sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==}
+    engines: {node: '>=12.20'}
     hasBin: true
     dev: true
 
@@ -3053,7 +3045,7 @@ packages:
       vfile-message: 3.1.4
     dev: false
 
-  /vite/4.2.1_@types+node@18.15.11:
+  /vite/4.2.1_@types+node@20.1.2:
     resolution: {integrity: sha512-7MKhqdy0ISo4wnvwtqZkjke6XN4taqQ2TBaTccLIpOKv7Vp2h4Y+NpmWCnGDeSvvn45KxvWgGyb0MkHvY1vgbg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -3078,7 +3070,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 18.15.11
+      '@types/node': 20.1.2
       esbuild: 0.17.16
       postcss: 8.4.21
       resolve: 1.22.2
