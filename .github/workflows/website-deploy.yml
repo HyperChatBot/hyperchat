@@ -1,0 +1,94 @@
+name: landing-website
+
+on:
+  push:
+    paths:
+      - "website/**"
+    branches: 
+      - "**"
+  pull_request:
+    paths:
+      - "website/**"
+    branches:
+      - "**"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+
+      - name: Install Pnpm
+        uses: pnpm/action-setup@v2.0.1
+        with:
+          version: 6.22.2
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Pre compilation
+        run: pnpm run build
+
+      # テスト成功時はこちらのステップが実行される
+      - name: Slack Notification on Success at Testing Stage
+        if: success()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOKS }}
+          SLACK_CHANNEL: github-actions
+          SLACK_TITLE: Test Success
+          SLACK_COLOR: good
+          SLACK_FOOTER: 'Powered by Yancey Inc. and its affiliates.'
+
+      # テスト失敗時はこちらのステップが実行される
+      - name: Slack Notification on Failure at Testing Stage
+        uses: rtCamp/action-slack-notify@v2
+        if: failure()
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOKS }}
+          SLACK_CHANNEL: github-actions
+          SLACK_TITLE: Test Failure
+          SLACK_COLOR: danger
+          SLACK_FOOTER: 'Powered by Yancey Inc. and its affiliates.'
+
+  deployment:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    needs: test
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          script: sh ./hyperchat-deploy.sh
+
+      # テスト成功時はこちらのステップが実行される
+      - name: Slack Notification on Success at Deployment Stage
+        if: success()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOKS }}
+          SLACK_CHANNEL: github-actions
+          SLACK_TITLE: Deploy Success
+          SLACK_COLOR: good
+          SLACK_FOOTER: 'Powered by Yancey Inc. and its affiliates.'
+
+      # テスト失敗時はこちらのステップが実行される
+      - name: Slack Notification on Failure at Deployment Stage
+        uses: rtCamp/action-slack-notify@v2
+        if: failure()
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOKS }}
+          SLACK_CHANNEL: github-actions
+          SLACK_TITLE: Deploy Failure
+          SLACK_COLOR: danger
+          SLACK_FOOTER: 'Powered by Yancey Inc. and its affiliates.'

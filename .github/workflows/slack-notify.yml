@@ -1,0 +1,17 @@
+on: [push, pull_request]
+name: Slack Notification on Pushing or Pull Requesting
+jobs:
+  slackNotification:
+    name: Slack Notification when Pushing
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Slack Notification when Pushing
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOKS }}
+          SLACK_CHANNEL: github-actions
+          SLACK_TITLE: '${{ github.actor }} is ${{ github.event_name }}ing the ${{ github.ref }} to ${{ github.repository }}.'
+          SLACK_FOOTER: 'Powered by Yancey Inc. and its affiliates.'
+          SLACK_COLOR: ${{ job.status }}
+          SLACK_MESSAGE: 'Commit: ${{ github.event.head_commit.message }}.' 
