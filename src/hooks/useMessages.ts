@@ -1,4 +1,4 @@
-import produce from 'immer'
+import { produce } from 'immer'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { db } from 'src/models/db'
 import { currConversationState } from 'src/stores/conversation'
