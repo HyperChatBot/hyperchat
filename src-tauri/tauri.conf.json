@@ -50,7 +50,15 @@
       "csp": "default-src 'self'; img-src 'self' asset: https://asset.localhost; style-src 'self' 'unsafe-inline'"
     },
     "updater": {
-      "active": false
+      "active": true,
+      "endpoints": [
+        "https://gist.githubusercontent.com/YanceyOfficial/b4b04701ba6f2a1d76363b970e5d70e3/raw/25efe751c67209e840965798378cc8e9fc176202/hyperchat.json"
+      ],
+      "dialog": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQxREEzQTNDNjY5MjJENDcKUldSSExaSm1QRHJhMFFwQ3I5dWI4ZmJKNG9CSG1kVE90M3pHajZ5TWhCMUhaejJBbDNWNFVZbkgK",
+      "windows": {
+        "installMode": "passive"
+      }
     },
     "windows": [
       {
