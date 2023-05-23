@@ -1,3 +1,6 @@
+import AnthropicLogoIcon from './AnthropicLogoIcon'
+import AzureLogoIcon from './AzureLogoIcon'
+import ChatGPTLogoIcon from './ChatGPTLogoIcon'
 import OutlinePlusIcon from './OutlinePlusIcon'
 import OutlineTranslationIcon from './OutlineTranslationIcon'
 import SolidPaperclipIcon from './SolidPaperclipIcon'
@@ -11,5 +14,8 @@ export {
   SolidTranslationIcon,
   SolidSettingsBrightnessIcon,
   SolidSendIcon,
-  SolidPaperclipIcon
+  SolidPaperclipIcon,
+  AzureLogoIcon,
+  ChatGPTLogoIcon,
+  AnthropicLogoIcon
 }

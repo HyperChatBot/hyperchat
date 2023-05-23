@@ -12,7 +12,6 @@ export interface Settings {
   chat_stream: boolean
   text_completion_model: string
   text_completion_stream: boolean
-  edit_model: string
   audio_transcription_model: string
   audio_translation_model: string
   audio_response_type: string

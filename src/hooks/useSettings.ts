@@ -6,7 +6,6 @@ import {
   audioResponseTypes,
   audios,
   chatCompletions,
-  edits,
   imageSizes,
   textCompletions
 } from 'src/shared/constants'
@@ -35,7 +34,6 @@ const useSettings = () => {
       text_completion_model: textCompletions[0],
       chat_stream: true,
       text_completion_stream: false,
-      edit_model: edits[0],
       audio_transcription_model: audios[0],
       audio_translation_model: audios[0],
       audio_response_type: audioResponseTypes[0],

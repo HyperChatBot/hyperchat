@@ -25,7 +25,6 @@ import {
   audioResponseTypes,
   audios,
   chatCompletions,
-  edits,
   imageSizes,
   textCompletions
 } from 'src/shared/constants'
@@ -326,31 +325,6 @@ const Settings: FC = () => {
                     Currently, stream mode is not supported in text completion.
                   </FormHelperText>
                 </section>
-              </section>
-
-              <Divider />
-
-              <section className="flex flex-col gap-6">
-                <header className="text-xl font-medium dark:text-white">
-                  Edit
-                </header>
-
-                <FormControl size="small">
-                  <InputLabel id="edit-model-select-label">Model</InputLabel>
-                  <Select
-                    className="w-80"
-                    labelId="edit-model-select-label"
-                    id="edit-model-select"
-                    label="Model"
-                    {...formik.getFieldProps('edit_model')}
-                  >
-                    {edits.map((edit) => (
-                      <MenuItem key={edit} value={edit}>
-                        {edit}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
               </section>
 
               <Divider />

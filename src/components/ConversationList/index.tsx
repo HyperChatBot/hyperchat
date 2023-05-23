@@ -48,7 +48,7 @@ const ConversationList: FC<Props> = ({ conversations }) => {
   return (
     <section className="w-87.75">
       <section className="flex items-center justify-between p-6">
-        <span className="mr-4 text-xl font-semibold dark:text-dark-text">
+        <span className="mr-4 truncate text-xl font-semibold dark:text-dark-text">
           {conversationTitles[currProduct]}
         </span>
         <OutlinePlusIcon onClick={addConversation} />

@@ -9,7 +9,6 @@ import {
   useAzureImageGeneration,
   useAzureTextCompletion,
   useChatStream,
-  useEdit,
   useEnterKey,
   useImage,
   useTextCompletion
@@ -56,7 +55,6 @@ const InputBox: FC = () => {
     useAzureTextCompletion(question)
   const { createImage } = useImage(question)
   const { createImage: createAzureImage } = useAzureImageGeneration(question)
-  const { createEdit } = useEdit(question)
   const { createTranscription, createTranslation } = useAudio(
     question,
     hashFile
@@ -67,8 +65,7 @@ const InputBox: FC = () => {
     [Products.TextCompletion]: createAzureTextCompletion,
     [Products.AudioTranscription]: createTranscription,
     [Products.AudioTranslation]: createTranslation,
-    [Products.Image]: createAzureImage,
-    [Products.Edit]: createEdit
+    [Products.Image]: createAzureImage
   }
 
   // Prompt is optional in audio products.

@@ -10,6 +10,7 @@ import { currConversationState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { Products } from 'src/types/global'
 import Avatar from '../Avatar'
+import Divider from '../Divider'
 import items, { iconClassName } from './Items'
 
 const Sidebar: FC = () => {
@@ -32,24 +33,32 @@ const Sidebar: FC = () => {
     <section className="flex h-screen w-22 min-w-22 flex-col items-center justify-between p-4 shadow-sidebar dark:shadow-dark-sidebar">
       <div className="flex flex-col items-center">
         <Avatar size="xs" src={LogoImg} />
-        <section className="mt-12">
+        <section className="mt-12 w-full">
           {items.map((item, key) => (
-            <div key={key} className="mb-8">
-              <Tooltip title={item.tooltip} placement="right">
-                <Link
-                  to="/"
-                  className="cursor-pointer"
-                  onClick={() => onProductChange(item.product)}
-                >
-                  {currProduct === item.product && location.pathname === '/'
-                    ? item.active
-                    : item.inactive}
-                </Link>
-              </Tooltip>
+            <div key={key} className="mb-6 flex flex-col items-center">
+              {item.companyLogo}
+
+              <div className="mt-6">
+                {item.products.map((product) => (
+                  <Tooltip title={product.tooltip} placement="right">
+                    <Link
+                      to="/"
+                      className="mb-6 block cursor-pointer"
+                      onClick={() => onProductChange(product.product)}
+                    >
+                      {currProduct === product.product &&
+                      location.pathname === '/'
+                        ? product.active
+                        : product.inactive}
+                    </Link>
+                  </Tooltip>
+                ))}
+              </div>
+              <Divider className="my-2" />
             </div>
           ))}
 
-          <div className="mb-8">
+          <div className="mb-6 flex justify-center">
             <Tooltip title="Settings" placement="right">
               <Link to="/settings">
                 {location.pathname === '/settings' ? (

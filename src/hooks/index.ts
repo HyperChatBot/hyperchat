@@ -4,7 +4,6 @@ import useAzureChatStream from './useAzureChatStream'
 import useAzureImageGeneration from './useAzureImageGeneration'
 import useAzureTextCompletion from './useAzureTextCompletion'
 import useChatStream from './useChatStream'
-import useEdit from './useEdit'
 import useEnterKey from './useEnterKey'
 import useImage from './useImage'
 import useMessages from './useMessages'
@@ -21,7 +20,6 @@ export {
   useOnline,
   useAudio,
   useImage,
-  useEdit,
   useTheme,
   useSettings,
   useAppData,

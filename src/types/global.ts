@@ -11,8 +11,7 @@ export enum Products {
   TextCompletion = 'text',
   AudioTranscription = 'audio_transcription',
   AudioTranslation = 'audio_translation',
-  Image = 'image',
-  Edit = 'edit'
+  Image = 'image'
 }
 
 export interface AlertError {

@@ -13,8 +13,7 @@ export const conversationTitles = {
   [Products.TextCompletion]: 'OpenAI Completions',
   [Products.AudioTranscription]: 'OpenAI Audio Transcription',
   [Products.AudioTranslation]: 'OpenAI Audio Translation',
-  [Products.Image]: 'OpenAI Image Generation',
-  [Products.Edit]: 'Edit'
+  [Products.Image]: 'OpenAI Image Generation'
 }
 
 export const TEXTAREA_MAX_ROWS = 8
@@ -38,8 +37,6 @@ export const textCompletions = [
 
 export const chatCompletions = ['gpt-3.5-turbo', 'gpt-4']
 
-export const edits = ['text-davinci-edit-001', 'code-davinci-edit-001']
-
 export const audios = ['whisper-1']
 
 export const audioResponseTypes = ['json', 'text', 'srt', 'verbose_json', 'vtt']
@@ -52,7 +49,6 @@ export const imageSizes: CreateImageRequestSizeEnum[] = [
 
 export const inputPlaceholders = {
   [Products.Image]: 'Creates an image given a prompt.',
-  [Products.Edit]: 'Creates a new edit for the provided input, instruction.',
   [Products.AudioTranscription]: 'Transcribes audio into the input language.',
   [Products.AudioTranslation]: 'Translates audio into into English.',
   [Products.TextCompletion]: 'Creates a completion for the provided prompt.',

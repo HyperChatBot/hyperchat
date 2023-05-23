@@ -8,8 +8,7 @@ export class HyperChatDB extends Dexie {
   [Products.TextCompletion]!: Table<Conversation>;
   [Products.AudioTranscription]!: Table<Conversation>;
   [Products.AudioTranslation]!: Table<Conversation>;
-  [Products.Image]!: Table<Conversation>;
-  [Products.Edit]!: Table<Conversation>
+  [Products.Image]!: Table<Conversation>
   settings!: Table<Settings>
 
   constructor() {
@@ -25,10 +24,8 @@ export class HyperChatDB extends Dexie {
         '&conversation_id, summary, created_at, updated_at, file_name, *messages',
       [Products.Image]:
         '&conversation_id, summary, created_at, updated_at, *messages',
-      [Products.Edit]:
-        '&conversation_id, summary, created_at, updated_at, *messages',
       settings:
-        '&&settings_id, secret_key, organization_id, author_name, theme_mode, assistant_avatar_filename, chat_model, text_completion_model, edit_model, audio_transcription_model, audio_translation_model, audio_response_type, image_generation_type, chat_stream, text_completion_stream'
+        '&&settings_id, secret_key, organization_id, author_name, theme_mode, assistant_avatar_filename, chat_model, text_completion_model, audio_transcription_model, audio_translation_model, audio_response_type, image_generation_type, chat_stream, text_completion_stream'
     })
   }
 }
