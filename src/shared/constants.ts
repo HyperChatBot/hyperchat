@@ -9,11 +9,11 @@ export const OPENAI_CHAT_COMPLETION_URL = OPENAI_BASE_URL + '/chat/completions'
 export const EMPTY_CHAT_HINT = 'Create your first conversation!'
 
 export const conversationTitles = {
-  [Products.ChatCompletion]: 'Chat Completion',
-  [Products.TextCompletion]: 'Text Completion',
-  [Products.AudioTranscription]: 'Audio Transcription',
-  [Products.AudioTranslation]: 'Audio Translation',
-  [Products.Image]: 'Image Generation',
+  [Products.ChatCompletion]: 'OpenAI Chat',
+  [Products.TextCompletion]: 'OpenAI Completions',
+  [Products.AudioTranscription]: 'OpenAI Audio Transcription',
+  [Products.AudioTranslation]: 'OpenAI Audio Translation',
+  [Products.Image]: 'OpenAI Image Generation',
   [Products.Edit]: 'Edit'
 }
 

@@ -1,5 +1,8 @@
 import useAppData from './useAppData'
 import useAudio from './useAudio'
+import useAzureChatStream from './useAzureChatStream'
+import useAzureImageGeneration from './useAzureImageGeneration'
+import useAzureTextCompletion from './useAzureTextCompletion'
 import useChatStream from './useChatStream'
 import useEdit from './useEdit'
 import useEnterKey from './useEnterKey'
@@ -23,5 +26,8 @@ export {
   useSettings,
   useAppData,
   useOpenAI,
-  useMessages
+  useMessages,
+  useAzureChatStream,
+  useAzureImageGeneration,
+  useAzureTextCompletion
 }

@@ -5,6 +5,9 @@ import { useRecoilValue } from 'recoil'
 import {
   useAppData,
   useAudio,
+  useAzureChatStream,
+  useAzureImageGeneration,
+  useAzureTextCompletion,
   useChatStream,
   useEdit,
   useEnterKey,
@@ -46,8 +49,13 @@ const InputBox: FC = () => {
   }
 
   const { createChatCompletion } = useChatStream(question)
+  const { createChatCompletion: createAzureChatCompletion } =
+    useAzureChatStream(question)
   const { createTextCompletion } = useTextCompletion(question)
+  const { createTextCompletion: createAzureTextCompletion } =
+    useAzureTextCompletion(question)
   const { createImage } = useImage(question)
+  const { createImage: createAzureImage } = useAzureImageGeneration(question)
   const { createEdit } = useEdit(question)
   const { createTranscription, createTranslation } = useAudio(
     question,
@@ -55,11 +63,11 @@ const InputBox: FC = () => {
   )
 
   const requests = {
-    [Products.ChatCompletion]: createChatCompletion,
-    [Products.TextCompletion]: createTextCompletion,
+    [Products.ChatCompletion]: createAzureChatCompletion,
+    [Products.TextCompletion]: createAzureTextCompletion,
     [Products.AudioTranscription]: createTranscription,
     [Products.AudioTranslation]: createTranslation,
-    [Products.Image]: createImage,
+    [Products.Image]: createAzureImage,
     [Products.Edit]: createEdit
   }
 
