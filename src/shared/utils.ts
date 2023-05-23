@@ -31,8 +31,8 @@ export const generateHashName = (fileName: string) => {
 }
 
 export const isAudioProduct = (product: Products) =>
-  product === Products.AudioTranscription ||
-  product === Products.AudioTranslation
+  product === Products.OpenAIAudioTranscription ||
+  product === Products.OpenAIAudioTranslation
 
 export const formatBytes = (bytes: number) => {
   const k = 1024

@@ -9,11 +9,28 @@ export const OPENAI_CHAT_COMPLETION_URL = OPENAI_BASE_URL + '/chat/completions'
 export const EMPTY_CHAT_HINT = 'Create your first conversation!'
 
 export const conversationTitles = {
-  [Products.ChatCompletion]: 'OpenAI Chat',
-  [Products.TextCompletion]: 'OpenAI Completions',
-  [Products.AudioTranscription]: 'OpenAI Audio Transcription',
-  [Products.AudioTranslation]: 'OpenAI Audio Translation',
-  [Products.Image]: 'OpenAI Image Generation'
+  [Products.OpenAIChat]: 'OpenAI Chat',
+  [Products.OpenAICompletion]: 'OpenAI Completions',
+  [Products.OpenAIAudioTranscription]: 'OpenAI Audio Transcription',
+  [Products.OpenAIAudioTranslation]: 'OpenAI Audio Translation',
+  [Products.OpenAIImageGeneration]: 'OpenAI Image Generation',
+  [Products.AzureChat]: 'Azure Chat',
+  [Products.AzureCompletion]: 'Azure Completions',
+  [Products.AzureImageGeneration]: 'Azure Image Generation',
+  [Products.ClaudeChat]: 'Claude Chat'
+}
+
+export const inputPlaceholders = {
+  [Products.OpenAIImageGeneration]: 'Creates an image given a prompt.',
+  [Products.AzureImageGeneration]: 'Creates an image given a prompt.',
+  [Products.OpenAIAudioTranscription]:
+    'Transcribes audio into the input language.',
+  [Products.OpenAIAudioTranslation]: 'Translates audio into into English.',
+  [Products.OpenAICompletion]: 'Creates a completion for the provided prompt.',
+  [Products.AzureCompletion]: 'Creates a completion for the provided prompt.',
+  [Products.OpenAIChat]: 'Send a message.',
+  [Products.AzureChat]: 'Send a message.',
+  [Products.ClaudeChat]: 'Send a message.'
 }
 
 export const TEXTAREA_MAX_ROWS = 8
@@ -46,11 +63,3 @@ export const imageSizes: CreateImageRequestSizeEnum[] = [
   '256x256',
   '512x512'
 ]
-
-export const inputPlaceholders = {
-  [Products.Image]: 'Creates an image given a prompt.',
-  [Products.AudioTranscription]: 'Transcribes audio into the input language.',
-  [Products.AudioTranslation]: 'Translates audio into into English.',
-  [Products.TextCompletion]: 'Creates a completion for the provided prompt.',
-  [Products.ChatCompletion]: 'Send a message.'
-}

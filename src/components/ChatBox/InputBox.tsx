@@ -61,11 +61,15 @@ const InputBox: FC = () => {
   )
 
   const requests = {
-    [Products.ChatCompletion]: createAzureChatCompletion,
-    [Products.TextCompletion]: createAzureTextCompletion,
-    [Products.AudioTranscription]: createTranscription,
-    [Products.AudioTranslation]: createTranslation,
-    [Products.Image]: createAzureImage
+    [Products.OpenAIChat]: createChatCompletion,
+    [Products.OpenAICompletion]: createTextCompletion,
+    [Products.OpenAIAudioTranscription]: createTranscription,
+    [Products.OpenAIAudioTranslation]: createTranslation,
+    [Products.OpenAIImageGeneration]: createImage,
+    [Products.AzureChat]: createAzureChatCompletion,
+    [Products.AzureCompletion]: createAzureTextCompletion,
+    [Products.AzureImageGeneration]: createAzureImage,
+    [Products.ClaudeChat]: createChatCompletion
   }
 
   // Prompt is optional in audio products.

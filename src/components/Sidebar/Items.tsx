@@ -29,14 +29,14 @@ export default [
     companyLogo: <ChatGPTLogoIcon className={companyClassName} />,
     products: [
       {
-        product: Products.ChatCompletion,
-        tooltip: conversationTitles[Products.ChatCompletion],
+        product: Products.OpenAIChat,
+        tooltip: conversationTitles[Products.OpenAIChat],
         inactive: <ChatBubbleLeftRightIconOutline className={iconClassName} />,
         active: <ChatBubbleLeftRightIconSolid className={iconClassName} />
       },
       {
-        product: Products.TextCompletion,
-        tooltip: conversationTitles[Products.TextCompletion],
+        product: Products.OpenAICompletion,
+        tooltip: conversationTitles[Products.OpenAICompletion],
         inactive: (
           <ChatBubbleBottomCenterTextIconOutline className={iconClassName} />
         ),
@@ -45,20 +45,20 @@ export default [
         )
       },
       {
-        product: Products.AudioTranscription,
-        tooltip: conversationTitles[Products.AudioTranscription],
+        product: Products.OpenAIAudioTranscription,
+        tooltip: conversationTitles[Products.OpenAIAudioTranscription],
         inactive: <MicrophoneIconOutline className={iconClassName} />,
         active: <MicrophoneIconSolid className={iconClassName} />
       },
       {
-        product: Products.AudioTranslation,
-        tooltip: conversationTitles[Products.AudioTranslation],
+        product: Products.OpenAIAudioTranslation,
+        tooltip: conversationTitles[Products.OpenAIAudioTranslation],
         inactive: <OutlineTranslationIcon className={iconClassName} />,
         active: <SolidTranslationIcon className={iconClassName} />
       },
       {
-        product: Products.Image,
-        tooltip: conversationTitles[Products.Image],
+        product: Products.OpenAIImageGeneration,
+        tooltip: conversationTitles[Products.OpenAIImageGeneration],
         inactive: <PhotoIconOutline className={iconClassName} />,
         active: <PhotoIconSolid className={iconClassName} />
       }
@@ -69,14 +69,14 @@ export default [
     companyLogo: <AzureLogoIcon className={companyClassName} />,
     products: [
       {
-        product: Products.ChatCompletion,
-        tooltip: conversationTitles[Products.ChatCompletion],
+        product: Products.AzureChat,
+        tooltip: conversationTitles[Products.AzureChat],
         inactive: <ChatBubbleLeftRightIconOutline className={iconClassName} />,
         active: <ChatBubbleLeftRightIconSolid className={iconClassName} />
       },
       {
-        product: Products.TextCompletion,
-        tooltip: conversationTitles[Products.TextCompletion],
+        product: Products.AzureCompletion,
+        tooltip: conversationTitles[Products.AzureCompletion],
         inactive: (
           <ChatBubbleBottomCenterTextIconOutline className={iconClassName} />
         ),
@@ -85,8 +85,8 @@ export default [
         )
       },
       {
-        product: Products.Image,
-        tooltip: conversationTitles[Products.Image],
+        product: Products.AzureImageGeneration,
+        tooltip: conversationTitles[Products.AzureImageGeneration],
         inactive: <PhotoIconOutline className={iconClassName} />,
         active: <PhotoIconSolid className={iconClassName} />
       }
@@ -97,8 +97,8 @@ export default [
     companyLogo: <AnthropicLogoIcon className={companyClassName} />,
     products: [
       {
-        product: Products.ChatCompletion,
-        tooltip: conversationTitles[Products.ChatCompletion],
+        product: Products.ClaudeChat,
+        tooltip: conversationTitles[Products.ClaudeChat],
         inactive: <ChatBubbleLeftRightIconOutline className={iconClassName} />,
         active: <ChatBubbleLeftRightIconSolid className={iconClassName} />
       }

@@ -7,11 +7,15 @@ export interface SvgIconProps {
 }
 
 export enum Products {
-  ChatCompletion = 'chat',
-  TextCompletion = 'text',
-  AudioTranscription = 'audio_transcription',
-  AudioTranslation = 'audio_translation',
-  Image = 'image'
+  OpenAIChat = 'openai_chat',
+  OpenAICompletion = 'openai_completion',
+  OpenAIAudioTranscription = 'openai_audio_transcription',
+  OpenAIAudioTranslation = 'openai_audio_translation',
+  OpenAIImageGeneration = 'openai_image_generation',
+  AzureChat = 'azure_chat',
+  AzureCompletion = 'azure_completion',
+  AzureImageGeneration = 'azure_image_generation',
+  ClaudeChat = 'claude_chat'
 }
 
 export interface AlertError {

@@ -34,13 +34,17 @@ const Sidebar: FC = () => {
       <div className="flex flex-col items-center">
         <Avatar size="xs" src={LogoImg} />
         <section className="mt-12 w-full">
-          {items.map((item, key) => (
-            <div key={key} className="mb-6 flex flex-col items-center">
+          {items.map((item) => (
+            <div key={item.company} className="mb-6 flex flex-col items-center">
               {item.companyLogo}
 
               <div className="mt-6">
                 {item.products.map((product) => (
-                  <Tooltip title={product.tooltip} placement="right">
+                  <Tooltip
+                    title={product.tooltip}
+                    placement="right"
+                    key={product.product}
+                  >
                     <Link
                       to="/"
                       className="mb-6 block cursor-pointer"
@@ -54,7 +58,7 @@ const Sidebar: FC = () => {
                   </Tooltip>
                 ))}
               </div>
-              <Divider className="my-2" />
+              <Divider className="my-2 bg-opacity-20" />
             </div>
           ))}
 
