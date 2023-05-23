@@ -30,7 +30,7 @@ const Sidebar: FC = () => {
   }
 
   return (
-    <section className="flex h-screen w-22 min-w-22 flex-col items-center justify-between p-4 shadow-sidebar dark:shadow-dark-sidebar">
+    <section className="no-scrollbar flex h-screen w-22 min-w-22 flex-col items-center justify-between overflow-y-scroll p-4 shadow-sidebar dark:shadow-dark-sidebar">
       <div className="flex flex-col items-center">
         <Avatar size="xs" src={LogoImg} />
         <section className="mt-12 w-full">
