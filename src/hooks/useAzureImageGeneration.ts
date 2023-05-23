@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { useMessages } from 'src/hooks'
 import { showErrorToast } from 'src/shared/utils'
@@ -60,7 +61,13 @@ const useImage = (question: string) => {
 
       saveMessageToDbAndUpdateConversationState(
         emptyMessage,
-        `![${question}](${image.result.contentUrl})`
+        `![${question}](${
+          image.result.contentUrl
+        })\n\n(Warning: The expiration date of this image is **${DateTime.fromISO(
+          image.result.contentUrlExpiresAt
+        ).toLocaleString(
+          DateTime.DATETIME_SHORT_WITH_SECONDS
+        )}**, please download as soon as possible.)`
       )
     } catch (error) {
       showErrorToast(error)

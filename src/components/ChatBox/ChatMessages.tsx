@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { FC, Fragment, useEffect, useRef } from 'react'
 import { useRecoilValue } from 'recoil'
-import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
+import ChatGPTLogoImg from 'src/assets/chatbot.png'
 import NoDataIllustration from 'src/assets/illustrations/no-data.svg'
 import { useSettings } from 'src/hooks'
 import { isAudioProduct } from 'src/shared/utils'

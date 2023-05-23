@@ -7,7 +7,7 @@ import Input from '@mui/material/Input'
 import classNames from 'classnames'
 import { FC, KeyboardEvent, useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
+import ChatGPTLogoImg from 'src/assets/chatbot.png'
 import { db } from 'src/models/db'
 import { EMPTY_CHAT_HINT } from 'src/shared/constants'
 import {

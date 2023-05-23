@@ -22,12 +22,14 @@ const useSettings = () => {
   const [settings, setSettings] = useRecoilState(settingsState)
   const setInitialDialogVisible = useSetRecoilState(initialDialogVisibleState)
 
-  const initialSettings = async (secret_key: string) => {
+  const initialSettings = async (openai_secret_key: string) => {
     const defaultData = {
       settings_id: v4(),
-      secret_key,
-      organization_id: '',
-      author_name: '',
+      openai_secret_key,
+      openai_organization_id: '',
+      openai_author_name: '',
+      azure_secret_key: '',
+      azure_endpoint: '',
       theme_mode: ThemeMode.system,
       assistant_avatar_filename: '',
       chat_model: chatCompletions[0],
@@ -76,7 +78,7 @@ const useSettings = () => {
     try {
       const currSettings = await db.settings.toCollection().first()
 
-      if (!currSettings || !currSettings.secret_key) {
+      if (!currSettings || !currSettings.openai_secret_key) {
         setInitialDialogVisible(true)
         return
       }

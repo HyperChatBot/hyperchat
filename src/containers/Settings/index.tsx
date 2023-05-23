@@ -17,7 +17,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import Typography from '@mui/material/Typography'
 import { Formik, useFormikContext } from 'formik'
 import { ChangeEvent, FC, useEffect } from 'react'
-import ChatGPTImg from 'src/assets/chatgpt-avatar.png'
+import ChatGPTImg from 'src/assets/chatbot.png'
 import { SolidSettingsBrightnessIcon } from 'src/components/Icons'
 import toast from 'src/components/Snackbar'
 import { useAppData, useSettings, useTheme } from 'src/hooks'
@@ -106,7 +106,7 @@ const Settings: FC = () => {
                     </span>
                   }
                   className="w-160"
-                  {...formik.getFieldProps('secret_key')}
+                  {...formik.getFieldProps('openai_secret_key')}
                 />
 
                 <TextField
@@ -116,7 +116,7 @@ const Settings: FC = () => {
                   type="text"
                   className="w-160"
                   helperText="For users who belong to multiple organizations, you can pass a header to specify which organization is used for an API request. Usage from these API requests will count against the specified organization's subscription quota."
-                  {...formik.getFieldProps('organization_id')}
+                  {...formik.getFieldProps('openai_organization_id')}
                 />
 
                 <TextField
@@ -126,7 +126,67 @@ const Settings: FC = () => {
                   type="text"
                   className="w-160"
                   helperText="The name of the author of this message. May contain a-z, A-Z, 0-9, and underscores, with a maximum length of 64 characters."
-                  {...formik.getFieldProps('author_name')}
+                  {...formik.getFieldProps('openai_author_name')}
+                />
+
+                <Button
+                  variant="contained"
+                  sx={{ width: 'max-content' }}
+                  onClick={() => updateSettings(formik.values)}
+                >
+                  Save
+                </Button>
+              </section>
+            </Box>
+          )}
+        </Formik>
+
+        <Divider />
+
+        <Formik<SettingsParams>
+          initialValues={settings}
+          onSubmit={updateSettings}
+        >
+          {(formik) => (
+            <Box
+              component="form"
+              noValidate
+              autoComplete="off"
+              className="my-8"
+            >
+              <section className="flex flex-col gap-6">
+                <header className="text-xl font-medium dark:text-white">
+                  Azure Account
+                </header>
+
+                <TextField
+                  autoComplete="current-password"
+                  required
+                  id="azure-secret-key-input"
+                  label="Secret Key"
+                  size="small"
+                  type="password"
+                  helperText={
+                    <span>
+                      <strong>
+                        Your secret key will only be stored in IndexedDB!
+                      </strong>{' '}
+                      Do not share it with others or expose it in any
+                      client-side code.
+                    </span>
+                  }
+                  className="w-160"
+                  {...formik.getFieldProps('azure_secret_key')}
+                />
+
+                <TextField
+                  id="azure-organization-id-input"
+                  label="Endpoint"
+                  size="small"
+                  type="text"
+                  className="w-160"
+                  helperText="Use this endpoint to make calls to the service."
+                  {...formik.getFieldProps('azure_endpoint')}
                 />
 
                 <Button
@@ -240,7 +300,7 @@ const Settings: FC = () => {
               component="form"
               noValidate
               autoComplete="off"
-              className="flex flex-col gap-8"
+              className="mt-8 flex flex-col gap-8"
             >
               <section className="flex flex-col gap-6">
                 <header className="text-xl font-medium dark:text-white">

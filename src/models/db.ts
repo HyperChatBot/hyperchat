@@ -37,7 +37,7 @@ export class HyperChatDB extends Dexie {
       [Products.ClaudeChat]:
         '&conversation_id, summary, created_at, updated_at, *messages',
       settings:
-        '&&settings_id, secret_key, organization_id, author_name, theme_mode, assistant_avatar_filename, chat_model, text_completion_model, audio_transcription_model, audio_translation_model, audio_response_type, image_generation_type, chat_stream, text_completion_stream'
+        '&&settings_id, openai_secret_key, openai_organization_id, openai_author_name, theme_mode, assistant_avatar_filename, chat_model, text_completion_model, audio_transcription_model, audio_translation_model, audio_response_type, image_generation_type, chat_stream, text_completion_stream'
     })
   }
 }

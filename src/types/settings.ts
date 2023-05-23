@@ -3,9 +3,11 @@ import { ThemeMode } from './global'
 
 export interface Settings {
   settings_id: string
-  secret_key: string
-  organization_id: string
-  author_name: string
+  openai_secret_key: string
+  openai_organization_id: string
+  openai_author_name: string
+  azure_secret_key: string
+  azure_endpoint: string
   theme_mode: ThemeMode
   assistant_avatar_filename: string
   chat_model: string

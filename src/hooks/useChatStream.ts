@@ -33,8 +33,8 @@ const useChatStream = (question: string) => {
       chat = await fetch(OPENAI_CHAT_COMPLETION_URL, {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${settings.secret_key}`,
-          'OpenAI-Organization': settings.organization_id
+          Authorization: `Bearer ${settings.openai_secret_key}`,
+          'OpenAI-Organization': settings.openai_organization_id
         },
         method: 'POST',
         body: JSON.stringify({
@@ -46,7 +46,7 @@ const useChatStream = (question: string) => {
           ],
           model: settings.chat_model,
           stream: settings.chat_stream,
-          user: settings.author_name
+          user: settings.openai_author_name
         })
       })
     } catch {
