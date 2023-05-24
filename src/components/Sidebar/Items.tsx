@@ -18,14 +18,14 @@ import {
   SolidTranslationIcon
 } from 'src/components/Icons'
 import { snakeCaseToTitleCase } from 'src/shared/utils'
-import { Products } from 'src/types/global'
+import { Companies, Products } from 'src/types/global'
 
 export const iconClassName = 'h-6 w-6 text-black dark:text-white'
 export const companyClassName = 'h-8 w-8'
 
 export default [
   {
-    company: 'OpenAI',
+    company: Companies.OpenAI,
     companyLogo: <ChatGPTLogoIcon className={companyClassName} />,
     products: [
       {
@@ -65,7 +65,7 @@ export default [
     ]
   },
   {
-    company: 'Azure',
+    company: Companies.Azure,
     companyLogo: <AzureLogoIcon className={companyClassName} />,
     products: [
       {
@@ -87,13 +87,13 @@ export default [
       {
         product: Products.AzureImageGeneration,
         tooltip: snakeCaseToTitleCase(Products.AzureImageGeneration),
-        inactive: <PhotoIconOutline className={iconClassName} />,
+        inasctive: <PhotoIconOutline className={iconClassName} />,
         active: <PhotoIconSolid className={iconClassName} />
       }
     ]
   },
   {
-    company: 'Anthropic',
+    company: Companies.Anthropic,
     companyLogo: <AnthropicLogoIcon className={companyClassName} />,
     products: [
       {

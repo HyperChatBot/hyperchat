@@ -2,7 +2,6 @@ import { ThemeProvider } from '@mui/material/styles'
 import { SnackbarProvider } from 'notistack'
 import { FC, lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
 import InitialDialog from 'src/components/InitialDialog'
 import Loading from 'src/components/Loading'
 import { SnackbarUtilsConfig } from 'src/components/Snackbar'
@@ -13,12 +12,10 @@ import {
   SNACKBAR_AUTO_HIDE_DURATION,
   SNACKBAR_MAX_NUM
 } from 'src/shared/constants'
-import { initialDialogVisibleState } from 'src/stores/global'
 
 const Sidebar = lazy(() => import('src/components/Sidebar'))
 
 const Layouts: FC = () => {
-  const initialDialogVisible = useRecoilValue(initialDialogVisibleState)
   const { muiTheme } = useTheme()
   useOnline()
 
@@ -35,9 +32,10 @@ const Layouts: FC = () => {
 
           <section className="container flex w-screen flex-row overflow-x-hidden dark:bg-gray-800">
             <BrowserRouter>
-              <InitialDialog visible={initialDialogVisible} />
+            <InitialDialog />
               <Sidebar />
               <Routes>
+            
                 {routers.map((router) => (
                   <Route
                     key={router.path}
