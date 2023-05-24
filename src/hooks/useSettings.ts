@@ -78,7 +78,11 @@ const useSettings = () => {
     try {
       const currSettings = await db.settings.toCollection().first()
 
-      if (!currSettings || !currSettings.openai_secret_key) {
+      if (
+        !currSettings ||
+        !currSettings.openai_secret_key ||
+        !(currSettings.azure_endpoint && currSettings.azure_secret_key)
+      ) {
         setInitialDialogVisible(true)
         return
       }

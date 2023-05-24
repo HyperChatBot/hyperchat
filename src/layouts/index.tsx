@@ -32,9 +32,10 @@ const Layouts: FC = () => {
           preventDuplicate
         >
           <SnackbarUtilsConfig />
-          <InitialDialog visible={initialDialogVisible} />
+
           <section className="container flex w-screen flex-row overflow-x-hidden dark:bg-gray-800">
             <BrowserRouter>
+              <InitialDialog visible={initialDialogVisible} />
               <Sidebar />
               <Routes>
                 {routers.map((router) => (

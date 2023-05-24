@@ -4,11 +4,9 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
-import Link from '@mui/material/Link'
-import TextField from '@mui/material/TextField'
-import { FC, useState } from 'react'
+import { FC } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
-import { useSettings } from 'src/hooks'
 import { initialDialogVisibleState } from 'src/stores/global'
 
 interface Props {
@@ -16,45 +14,30 @@ interface Props {
 }
 
 const InitialDialog: FC<Props> = ({ visible }) => {
-  const [secretKey, setSecretKey] = useState('')
-  const { initialSettings } = useSettings()
+  const history = useNavigate()
   const setInitialDialogVisible = useSetRecoilState(initialDialogVisibleState)
 
-  const submitSecretKey = async () => {
-    await initialSettings(secretKey)
+  const goToSettings = async () => {
+    history('/settings')
     setInitialDialogVisible(false)
   }
 
   return (
     <Dialog open={visible}>
       <DialogTitle>Welcome to Hyper Chat!</DialogTitle>
-      <DialogContent>
+      <DialogContent className="flex flex-col gap-2">
         <DialogContentText>
-          The OpenAI API uses API keys for authentication. Visit your{' '}
-          <Link
-            target="_blank"
-            rel="noreferrer"
-            href="https://platform.openai.com/account/api-keys"
-            underline="none"
-          >
-            API Keys
-          </Link>{' '}
-          page to retrieve the API key you'll use in your requests.
+          We currently support OpenAI, Azure OpenAI service, and Claude. Store
+          your API key in the settings to start your journey with Hyper Chat.
         </DialogContentText>
-        <TextField
-          value={secretKey}
-          onChange={(e) => setSecretKey(e.target.value)}
-          required
-          autoFocus
-          margin="dense"
-          label="Secret Key"
-          type="password"
-          fullWidth
-          variant="standard"
-        />
+        <DialogContentText className="mt-4">
+          Hyper Chat will not store and use your secret key, it will only be
+          stored in IndexedDB! Do not share it with others or expose it in any
+          client-side code.
+        </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={submitSecretKey}>Submit</Button>
+        <Button onClick={goToSettings}>Go</Button>
       </DialogActions>
     </Dialog>
   )
