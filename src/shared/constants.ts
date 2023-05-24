@@ -1,6 +1,5 @@
 import { SnackbarOrigin } from '@mui/material'
 import { CreateImageRequestSizeEnum } from 'openai'
-import { Products } from 'src/types/global'
 
 export const OPENAI_BASE_URL = 'https://api.openai.com/v1'
 

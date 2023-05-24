@@ -9,7 +9,7 @@ import {
 } from 'src/hooks'
 import { HashFile, Products } from 'src/types/global'
 
- const useModelApis = (question: string, hashFile: HashFile) => {
+const useModelApis = (question: string, hashFile: HashFile) => {
   const { createChatCompletion } = useChatStream(question)
   const { createChatCompletion: createAzureChatCompletion } =
     useAzureChatStream(question)
