@@ -1,5 +1,6 @@
 import { SnackbarOrigin } from '@mui/material'
 import { CreateImageRequestSizeEnum } from 'openai'
+import { Products } from 'src/types/global'
 
 export const OPENAI_BASE_URL = 'https://api.openai.com/v1'
 
@@ -12,6 +13,18 @@ export const TEXTAREA_MAX_ROWS = 8
 export const SNACKBAR_ANCHOR_ORIGIN: SnackbarOrigin = {
   vertical: 'bottom',
   horizontal: 'left'
+}
+
+export const conversationTitles = {
+  [Products.OpenAIChat]: 'OpenAI Chat Completion',
+  [Products.OpenAICompletion]: 'OpenAI Text Completion',
+  [Products.OpenAIAudioTranscription]: 'OpenAI Audio Transcription',
+  [Products.OpenAIAudioTranslation]: 'OpenAI Audio Translation',
+  [Products.OpenAIImageGeneration]: 'OpenAI Image Generation',
+  [Products.AzureChat]: 'Azure Chat',
+  [Products.AzureCompletion]: 'Azure Completion',
+  [Products.AzureImageGeneration]: 'Azure Image Generation',
+  [Products.ClaudeChat]: 'Claude Chat'
 }
 
 export const SNACKBAR_MAX_NUM = 1

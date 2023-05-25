@@ -77,8 +77,3 @@ export const checkApiKey = (settings: Settings) => {
 
   return unregisters
 }
-
-export const snakeCaseToTitleCase = (s: string) =>
-  s.replace(/^_*(.)|_+(.)/g, (s, c, d) =>
-    c ? c.toUpperCase() : ' ' + d.toUpperCase()
-  )
