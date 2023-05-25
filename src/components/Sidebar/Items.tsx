@@ -10,22 +10,23 @@ import {
   MicrophoneIcon as MicrophoneIconSolid,
   PhotoIcon as PhotoIconSolid
 } from '@heroicons/react/24/solid'
+import classNames from 'classNames'
+import AnthropicLogoImg from 'src/assets/anthropic-logo.png'
 import {
-  AnthropicLogoIcon,
   AzureLogoIcon,
   ChatGPTLogoIcon,
   OutlineTranslationIcon,
   SolidTranslationIcon
 } from 'src/components/Icons'
 import { conversationTitles } from 'src/shared/constants'
-import { Products } from 'src/types/global'
+import { Companies, Products } from 'src/types/global'
 
 export const iconClassName = 'h-6 w-6 text-black dark:text-white'
 export const companyClassName = 'h-8 w-8'
 
 export default [
   {
-    company: 'OpenAI',
+    company: Companies.OpenAI,
     companyLogo: <ChatGPTLogoIcon className={companyClassName} />,
     products: [
       {
@@ -65,7 +66,7 @@ export default [
     ]
   },
   {
-    company: 'Azure',
+    company: Companies.Azure,
     companyLogo: <AzureLogoIcon className={companyClassName} />,
     products: [
       {
@@ -93,8 +94,14 @@ export default [
     ]
   },
   {
-    company: 'Anthropic',
-    companyLogo: <AnthropicLogoIcon className={companyClassName} />,
+    company: Companies.Anthropic,
+    companyLogo: (
+      <img
+        src={AnthropicLogoImg}
+        alt={Companies.Anthropic}
+        className={classNames(companyClassName, 'rounded-md')}
+      />
+    ),
     products: [
       {
         product: Products.ClaudeChat,

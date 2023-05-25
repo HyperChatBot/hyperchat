@@ -1,7 +1,5 @@
-import { lazy } from 'react'
-
-const Conversation = lazy(() => import('src/containers/Conversation'))
-const Settings = lazy(() => import('src/containers/Settings'))
+import Conversation from 'src/containers/Conversation'
+import Settings from 'src/containers/Settings'
 
 export const routers = [
   {

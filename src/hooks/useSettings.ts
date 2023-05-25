@@ -78,9 +78,15 @@ const useSettings = () => {
     try {
       const currSettings = await db.settings.toCollection().first()
 
-      if (!currSettings || !currSettings.openai_secret_key) {
-        setInitialDialogVisible(true)
+      if (!currSettings) {
         return
+      }
+
+      if (
+        !currSettings.openai_secret_key &&
+        !(currSettings.azure_endpoint && currSettings.azure_secret_key)
+      ) {
+        setInitialDialogVisible(true)
       }
 
       if (currSettings.assistant_avatar_filename) {

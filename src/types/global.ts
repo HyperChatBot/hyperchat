@@ -49,3 +49,9 @@ export enum ThemeMode {
   system = 'system',
   dark = 'dark'
 }
+
+export enum Companies {
+  OpenAI = 'OpenAI',
+  Azure = 'Azure',
+  Anthropic = 'Anthropic'
+}
