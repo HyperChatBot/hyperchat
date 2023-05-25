@@ -186,7 +186,7 @@ const Settings: FC = () => {
                   size="small"
                   type="text"
                   className="w-160"
-                  helperText="Use this endpoint to make calls to the service. The format likes: https://YOUR_DOMAIM.openai.azure.com"
+                  helperText="Use this endpoint to make calls to the service. The format likes: https://YOUR_DOMAIN.openai.azure.com"
                   {...formik.getFieldProps('azure_endpoint')}
                 />
 

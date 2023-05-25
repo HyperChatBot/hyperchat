@@ -159,7 +159,7 @@ const InitialDialog: FC = () => {
                       label="Endpoint"
                       size="small"
                       type="text"
-                      helperText="Use this endpoint to make calls to the service. The format likes: https://YOUR_DOMAIM.openai.azure.com"
+                      helperText="Use this endpoint to make calls to the service. The format likes: https://YOUR_DOMAIN.openai.azure.com"
                       {...formik.getFieldProps('azure_endpoint')}
                     />
 
