@@ -6,6 +6,12 @@ export interface SvgIconProps {
   onClick?: () => void
 }
 
+export enum Companies {
+  OpenAI = 'OpenAI',
+  Azure = 'Azure',
+  Anthropic = 'Anthropic'
+}
+
 export enum Products {
   OpenAIChat = 'openai_chat',
   OpenAICompletion = 'openai_completion',

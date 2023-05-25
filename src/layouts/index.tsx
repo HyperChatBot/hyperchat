@@ -1,9 +1,8 @@
 import { ThemeProvider } from '@mui/material/styles'
 import { SnackbarProvider } from 'notistack'
-import { FC } from 'react'
+import { FC, lazy } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import InitialDialog from 'src/components/InitialDialog'
-import Sidebar from 'src/components/Sidebar'
 import { SnackbarUtilsConfig } from 'src/components/Snackbar'
 import { useOnline, useTheme } from 'src/hooks'
 import { routers } from 'src/routers'
@@ -12,6 +11,8 @@ import {
   SNACKBAR_AUTO_HIDE_DURATION,
   SNACKBAR_MAX_NUM
 } from 'src/shared/constants'
+
+const Sidebar = lazy(() => import('src/components/Sidebar'))
 
 const Layouts: FC = () => {
   const { muiTheme } = useTheme()
