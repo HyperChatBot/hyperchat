@@ -31,7 +31,7 @@ export const generateHashName = (fileName: string) => {
   return hashName
 }
 
-export const isAudioProduct = (product: Products) =>
+export const isOpenAIAudioProduct = (product: Products) =>
   product === Products.OpenAIAudioTranscription ||
   product === Products.OpenAIAudioTranslation
 
@@ -77,3 +77,8 @@ export const checkApiKey = (settings: Settings) => {
 
   return unregisters
 }
+
+export const snakeCaseToTitleCase = (s: string) =>
+  s.replace(/^_*(.)|_+(.)/g, (s, c, d) =>
+    c ? c.toUpperCase() : ' ' + d.toUpperCase()
+  )

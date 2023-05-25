@@ -1,37 +1,11 @@
 import { SnackbarOrigin } from '@mui/material'
 import { CreateImageRequestSizeEnum } from 'openai'
-import { Products } from 'src/types/global'
 
 export const OPENAI_BASE_URL = 'https://api.openai.com/v1'
 
 export const OPENAI_CHAT_COMPLETION_URL = OPENAI_BASE_URL + '/chat/completions'
 
 export const EMPTY_CHAT_HINT = 'Create your first conversation!'
-
-export const conversationTitles = {
-  [Products.OpenAIChat]: 'OpenAI Chat',
-  [Products.OpenAICompletion]: 'OpenAI Completions',
-  [Products.OpenAIAudioTranscription]: 'OpenAI Audio Transcription',
-  [Products.OpenAIAudioTranslation]: 'OpenAI Audio Translation',
-  [Products.OpenAIImageGeneration]: 'OpenAI Image Generation',
-  [Products.AzureChat]: 'Azure Chat',
-  [Products.AzureCompletion]: 'Azure Completions',
-  [Products.AzureImageGeneration]: 'Azure Image Generation',
-  [Products.ClaudeChat]: 'Claude Chat'
-}
-
-export const inputPlaceholders = {
-  [Products.OpenAIImageGeneration]: 'Creates an image given a prompt.',
-  [Products.AzureImageGeneration]: 'Creates an image given a prompt.',
-  [Products.OpenAIAudioTranscription]:
-    'Transcribes audio into the input language.',
-  [Products.OpenAIAudioTranslation]: 'Translates audio into into English.',
-  [Products.OpenAICompletion]: 'Creates a completion for the provided prompt.',
-  [Products.AzureCompletion]: 'Creates a completion for the provided prompt.',
-  [Products.OpenAIChat]: 'Send a message.',
-  [Products.AzureChat]: 'Send a message.',
-  [Products.ClaudeChat]: 'Send a message.'
-}
 
 export const TEXTAREA_MAX_ROWS = 8
 

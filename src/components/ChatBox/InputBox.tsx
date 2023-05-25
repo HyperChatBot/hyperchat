@@ -2,26 +2,15 @@ import Input from '@mui/material/Input'
 import classNames from 'classnames'
 import { ChangeEvent, FC, useRef, useState } from 'react'
 import { useRecoilValue } from 'recoil'
-import {
-  useAppData,
-  useAudio,
-  useAzureChatStream,
-  useAzureImageGeneration,
-  useAzureTextCompletion,
-  useChatStream,
-  useEnterKey,
-  useImage,
-  useTextCompletion
-} from 'src/hooks'
-import { inputPlaceholders } from 'src/shared/constants'
-import { isAudioProduct } from 'src/shared/utils'
+import { useAppData, useEnterKey, useModelApis } from 'src/hooks'
+import { isOpenAIAudioProduct } from 'src/shared/utils'
 import {
   currConversationState,
   loadingState,
   summaryInputVisibleState
 } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
-import { HashFile, Products } from 'src/types/global'
+import { HashFile } from 'src/types/global'
 import { SolidPaperclipIcon, SolidSendIcon } from '../Icons'
 
 const InputBox: FC = () => {
@@ -34,6 +23,7 @@ const InputBox: FC = () => {
   const { saveFileToAppDataDir } = useAppData()
   const [question, setQuestion] = useState('')
   const [hashFile, setHashFile] = useState<HashFile | null>(null)
+  const requests = useModelApis(question, hashFile as HashFile)
 
   const onFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
@@ -47,34 +37,9 @@ const InputBox: FC = () => {
     }
   }
 
-  const { createChatCompletion } = useChatStream(question)
-  const { createChatCompletion: createAzureChatCompletion } =
-    useAzureChatStream(question)
-  const { createTextCompletion } = useTextCompletion(question)
-  const { createTextCompletion: createAzureTextCompletion } =
-    useAzureTextCompletion(question)
-  const { createImage } = useImage(question)
-  const { createImage: createAzureImage } = useAzureImageGeneration(question)
-  const { createTranscription, createTranslation } = useAudio(
-    question,
-    hashFile
-  )
-
-  const requests = {
-    [Products.OpenAIChat]: createChatCompletion,
-    [Products.OpenAICompletion]: createTextCompletion,
-    [Products.OpenAIAudioTranscription]: createTranscription,
-    [Products.OpenAIAudioTranslation]: createTranslation,
-    [Products.OpenAIImageGeneration]: createImage,
-    [Products.AzureChat]: createAzureChatCompletion,
-    [Products.AzureCompletion]: createAzureTextCompletion,
-    [Products.AzureImageGeneration]: createAzureImage,
-    [Products.ClaudeChat]: createChatCompletion
-  }
-
   // Prompt is optional in audio products.
   const inputValueIsNotEmptyOrAudioProducts =
-    !isAudioProduct(currProduct) && question.trim().length === 0
+    !isOpenAIAudioProduct(currProduct) && question.trim().length === 0
 
   const handleRequest = () => {
     if (loading) return
@@ -96,7 +61,7 @@ const InputBox: FC = () => {
 
   return (
     <section className="absolute bottom-6 left-6 flex w-[calc(100%_-_3rem)] items-center bg-white pt-6 dark:bg-gray-800">
-      {isAudioProduct(currProduct) && (
+      {isOpenAIAudioProduct(currProduct) && (
         <label htmlFor="$$video-input" className="relative flex items-center">
           <input
             type="file"
@@ -113,7 +78,7 @@ const InputBox: FC = () => {
         <Input
           inputRef={textareaRef}
           className="max-h-52 overflow-scroll rounded-md border border-black/10 bg-white text-sm shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:border-gray-900/50 dark:bg-gray-700 dark:text-white dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]"
-          placeholder={inputPlaceholders[currProduct]}
+          placeholder="Send a message."
           multiline
           value={question}
           onChange={(e) => setQuestion(e.target.value)}

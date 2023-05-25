@@ -7,6 +7,7 @@ import useChatStream from './useChatStream'
 import useEnterKey from './useEnterKey'
 import useImage from './useImage'
 import useMessages from './useMessages'
+import useModelApis from './useModelApis'
 import useOnline from './useOnline'
 import useOpenAI from './useOpenAI'
 import useSettings from './useSettings'
@@ -27,5 +28,6 @@ export {
   useMessages,
   useAzureChatStream,
   useAzureImageGeneration,
-  useAzureTextCompletion
+  useAzureTextCompletion,
+  useModelApis
 }

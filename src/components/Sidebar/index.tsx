@@ -25,7 +25,7 @@ const Sidebar: FC = () => {
   const { settings } = useSettings()
 
   const onProductChange = async (
-    e: MouseEvent<HTMLAnchorElement, MouseEvent>,
+    e: MouseEvent,
     company: Companies,
     product: Products
   ) => {

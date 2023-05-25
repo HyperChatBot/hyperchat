@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatbot.png'
 import NoDataIllustration from 'src/assets/illustrations/no-data.svg'
 import { useSettings } from 'src/hooks'
-import { isAudioProduct } from 'src/shared/utils'
+import { isOpenAIAudioProduct } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import Waveform from '../Waveform'
@@ -53,7 +53,7 @@ const ChatMessages: FC = () => {
                 avatar=""
                 date={message.question_created_at}
               >
-                {isAudioProduct(currProduct) && message.file_name && (
+                {isOpenAIAudioProduct(currProduct) && message.file_name && (
                   <Waveform filename={message.file_name} />
                 )}
                 {message.question}
