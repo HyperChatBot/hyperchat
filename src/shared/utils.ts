@@ -71,8 +71,16 @@ export const checkApiKey = (settings: Settings) => {
     unregisters.push(Companies.OpenAI)
   }
 
-  if (!settings.azure_endpoint && !settings.azure_secret_key) {
+  if (
+    !settings.azure_endpoint &&
+    !settings.azure_secret_key &&
+    !settings.azure_deployment_name
+  ) {
     unregisters.push(Companies.Azure)
+  }
+
+  if (!settings.anthropic_secret_key) {
+    unregisters.push(Companies.Anthropic)
   }
 
   return unregisters

@@ -8,6 +8,8 @@ export interface Settings {
   openai_author_name: string
   azure_secret_key: string
   azure_endpoint: string
+  azure_deployment_name: string
+  anthropic_secret_key: string
   theme_mode: ThemeMode
   assistant_avatar_filename: string
   chat_model: string

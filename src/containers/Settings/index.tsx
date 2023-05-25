@@ -180,13 +180,75 @@ const Settings: FC = () => {
                 />
 
                 <TextField
-                  id="azure-organization-id-input"
+                  required
+                  id="azure-endpoint-input"
                   label="Endpoint"
                   size="small"
                   type="text"
                   className="w-160"
-                  helperText="Use this endpoint to make calls to the service."
+                  helperText="Use this endpoint to make calls to the service. The format likes: https://YOUR_DOMAIM.openai.azure.com"
                   {...formik.getFieldProps('azure_endpoint')}
+                />
+
+                <TextField
+                  required
+                  id="azure-deployment-name-input"
+                  label="Deployment Name"
+                  size="small"
+                  type="text"
+                  className="w-160"
+                  helperText="Deployments enable you to make completions and search calls against a provided base model or your fine-tuned model. You can also scale up and down your deployments easily by modifying the scale unit."
+                  {...formik.getFieldProps('azure_deployment_name')}
+                />
+
+                <Button
+                  variant="contained"
+                  sx={{ width: 'max-content' }}
+                  onClick={() => updateSettings(formik.values)}
+                >
+                  Save
+                </Button>
+              </section>
+            </Box>
+          )}
+        </Formik>
+
+        <Divider />
+
+        <Formik<SettingsParams>
+          initialValues={settings}
+          onSubmit={updateSettings}
+        >
+          {(formik) => (
+            <Box
+              component="form"
+              noValidate
+              autoComplete="off"
+              className="my-8"
+            >
+              <section className="flex flex-col gap-6">
+                <header className="text-xl font-medium dark:text-white">
+                  Anthropic Account
+                </header>
+
+                <TextField
+                  autoComplete="current-password"
+                  required
+                  id="azure-secret-key-input"
+                  label="Secret Key"
+                  size="small"
+                  type="password"
+                  helperText={
+                    <span>
+                      <strong>
+                        Your secret key will only be stored in IndexedDB!
+                      </strong>{' '}
+                      Do not share it with others or expose it in any
+                      client-side code.
+                    </span>
+                  }
+                  className="w-160"
+                  {...formik.getFieldProps('anthropic_secret_key')}
                 />
 
                 <Button

@@ -31,6 +31,8 @@ const useSettings = () => {
       openai_author_name: '',
       azure_secret_key: '',
       azure_endpoint: '',
+      azure_deployment_name: '',
+      anthropic_secret_key: '',
       theme_mode: ThemeMode.system,
       assistant_avatar_filename: '',
       chat_model: chatCompletions[0],

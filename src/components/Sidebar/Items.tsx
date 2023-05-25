@@ -88,7 +88,7 @@ export default [
       {
         product: Products.AzureImageGeneration,
         tooltip: conversationTitles[Products.AzureImageGeneration],
-        inasctive: <PhotoIconOutline className={iconClassName} />,
+        inactive: <PhotoIconOutline className={iconClassName} />,
         active: <PhotoIconSolid className={iconClassName} />
       }
     ]

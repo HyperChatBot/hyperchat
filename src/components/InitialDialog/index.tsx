@@ -76,10 +76,10 @@ const InitialDialog: FC = () => {
               </DialogContentText>
 
               <FormControl size="small">
-                <InputLabel id="demo-simple-select-label">Company</InputLabel>
+                <InputLabel id="company-select-label">Company</InputLabel>
                 <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
+                  labelId="company-select-label"
+                  id="company-select"
                   value={company}
                   label="Company"
                   onChange={(e) => setCompany(e.target.value as Companies)}
@@ -152,15 +152,26 @@ const InitialDialog: FC = () => {
                     />
 
                     <TextField
-                      sx={{ marginTop: 2 }}
+                      sx={{ marginTop: 2, marginBottom: 2 }}
                       required
                       fullWidth
-                      id="azure-organization-id-input"
+                      id="azure-endpoint-input"
                       label="Endpoint"
                       size="small"
                       type="text"
-                      helperText="Use this endpoint to make calls to the service."
+                      helperText="Use this endpoint to make calls to the service. The format likes: https://YOUR_DOMAIM.openai.azure.com"
                       {...formik.getFieldProps('azure_endpoint')}
+                    />
+
+                    <TextField
+                      required
+                      fullWidth
+                      id="azure-deployment-name-input"
+                      label="Deployment Name"
+                      size="small"
+                      type="text"
+                      helperText="Deployments enable you to make completions and search calls against a provided base model or your fine-tuned model. You can also scale up and down your deployments easily by modifying the scale unit."
+                      {...formik.getFieldProps('azure_deployment_name')}
                     />
                   </>
                 )}
@@ -184,7 +195,7 @@ const InitialDialog: FC = () => {
                         client-side code.
                       </span>
                     }
-                    {...formik.getFieldProps('claude_secret_key')}
+                    {...formik.getFieldProps('anthropic_secret_key')}
                   />
                 )}
               </>

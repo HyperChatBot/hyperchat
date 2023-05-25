@@ -30,11 +30,11 @@ const useAzureChatStream = (question: string) => {
 
     try {
       chat = await fetch(
-        'https://yancey-openai.openai.azure.com/openai/deployments/hyper-chat/chat/completions?api-version=2023-03-15-preview',
+        `${settings.azure_endpoint}/openai/deployments/${settings.azure_deployment_name}/chat/completions?api-version=2023-03-15-preview`,
         {
           headers: {
             'Content-Type': 'application/json',
-            'api-key': import.meta.env.VITE_AZURE
+            'api-key': settings.azure_secret_key
           },
           method: 'POST',
           body: JSON.stringify({
@@ -45,8 +45,7 @@ const useAzureChatStream = (question: string) => {
               }
             ],
             model: settings.chat_model,
-            stream: settings.chat_stream,
-            user: settings.author_name
+            stream: settings.chat_stream
           })
         }
       )

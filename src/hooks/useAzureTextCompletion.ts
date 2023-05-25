@@ -25,11 +25,11 @@ const useTextCompletion = (question: string) => {
       })
 
       const response = await fetch(
-        'https://yancey-openai.openai.azure.com/openai/deployments/hyper-chat/completions?api-version=2022-12-01',
+        `${settings.azure_endpoint}/openai/deployments/${settings.azure_deployment_name}/completions?api-version=2022-12-01`,
         {
           headers: {
             'Content-Type': 'application/json',
-            'api-key': import.meta.env.VITE_AZURE
+            'api-key': settings.azure_secret_key
           },
           method: 'POST',
           body: JSON.stringify({

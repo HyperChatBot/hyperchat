@@ -28,11 +28,11 @@ const useImage = (question: string) => {
 
       const headers = {
         'Content-Type': 'application/json',
-        'api-key': import.meta.env.VITE_AZURE
+        'api-key': settings.azure_secret_key
       }
 
       const submission = await fetch(
-        'https://yancey-openai.openai.azure.com/dalle/text-to-image?api-version=2022-08-03-preview',
+        `${settings.azure_endpoint}/dalle/text-to-image?api-version=2022-08-03-preview`,
         {
           headers,
           method: 'POST',
