@@ -1,24 +1,44 @@
 import { Cog6ToothIcon as Cog6ToothIconOutline } from '@heroicons/react/24/outline'
 import { Cog6ToothIcon as Cog6ToothIconSolid } from '@heroicons/react/24/solid'
 import Tooltip from '@mui/material/Tooltip'
-import { FC } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { FC, MouseEvent } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 import LogoImg from 'src/assets/chatbot.png'
+import { useSettings } from 'src/hooks'
 import { db } from 'src/models/db'
+import { checkApiKey } from 'src/shared/utils'
 import { currConversationState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
-import { Products } from 'src/types/global'
+import { Companies, Products } from 'src/types/global'
+import { Settings } from 'src/types/settings'
 import Avatar from '../Avatar'
 import Divider from '../Divider'
+import toast from '../Snackbar'
 import items, { iconClassName } from './Items'
 
 const Sidebar: FC = () => {
+  const navigate = useNavigate()
   const [currProduct, setCurrProduct] = useRecoilState(currProductState)
   const location = useLocation()
   const setCurrConversation = useSetRecoilState(currConversationState)
+  const { settings } = useSettings()
 
-  const onProductChange = async (product: Products) => {
+  const onProductChange = async (
+    e: MouseEvent<HTMLAnchorElement, MouseEvent>,
+    company: Companies,
+    product: Products
+  ) => {
+    const unregisters = checkApiKey(settings as Settings)
+    if (unregisters.includes(company)) {
+      e.preventDefault()
+      navigate('/settings')
+      toast.error(
+        `You haven't registered an API key for ${company} yet. Filling them in settings`
+      )
+      return
+    }
+
     window.localStorage.setItem('currProductState', product)
     setCurrProduct(product)
 
@@ -48,7 +68,9 @@ const Sidebar: FC = () => {
                     <Link
                       to="/"
                       className="mb-6 block cursor-pointer"
-                      onClick={() => onProductChange(product.product)}
+                      onClick={(e) =>
+                        onProductChange(e, item.company, product.product)
+                      }
                     >
                       {currProduct === product.product &&
                       location.pathname === '/'

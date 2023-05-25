@@ -9,9 +9,10 @@ import {
   imageSizes,
   textCompletions
 } from 'src/shared/constants'
+import { checkApiKey } from 'src/shared/utils'
 import { initialDialogVisibleState } from 'src/stores/global'
 import { settingsState } from 'src/stores/settings'
-import { ThemeMode } from 'src/types/global'
+import { Companies, ThemeMode } from 'src/types/global'
 import { Settings } from 'src/types/settings'
 import { v4 } from 'uuid'
 import useAppData from './useAppData'
@@ -82,10 +83,8 @@ const useSettings = () => {
         return
       }
 
-      if (
-        !currSettings.openai_secret_key &&
-        !(currSettings.azure_endpoint && currSettings.azure_secret_key)
-      ) {
+      const unregisters = checkApiKey(currSettings)
+      if (unregisters.length === Object.keys(Companies).length) {
         setInitialDialogVisible(true)
       }
 
