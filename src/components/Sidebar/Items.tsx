@@ -10,7 +10,7 @@ import {
   MicrophoneIcon as MicrophoneIconSolid,
   PhotoIcon as PhotoIconSolid
 } from '@heroicons/react/24/solid'
-import classNames from 'classNames'
+import classNames from 'classnames'
 import AnthropicLogoImg from 'src/assets/anthropic-logo.png'
 import {
   AzureLogoIcon,
