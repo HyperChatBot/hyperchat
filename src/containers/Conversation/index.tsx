@@ -4,6 +4,7 @@ import { useRecoilValue } from 'recoil'
 import ChatBox from 'src/components/ChatBox'
 import ConversationList from 'src/components/ConversationList'
 import Divider from 'src/components/Divider'
+import Loading from 'src/components/Loading'
 import { db } from 'src/models/db'
 import { currProductState } from 'src/stores/global'
 
@@ -14,7 +15,7 @@ const Conversation: FC = () => {
     [currProduct]
   )
 
-  if (!conversations) return null
+  if (!conversations) return <Loading />
 
   return (
     <>
