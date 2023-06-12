@@ -14,14 +14,14 @@ export enum Companies {
 
 export enum Products {
   OpenAIChat = 'openai_chat',
-  OpenAICompletion = 'openai_completion',
+  OpenAITextCompletion = 'openai_text_completion',
   OpenAIAudioTranscription = 'openai_audio_transcription',
   OpenAIAudioTranslation = 'openai_audio_translation',
   OpenAIImageGeneration = 'openai_image_generation',
   AzureChat = 'azure_chat',
-  AzureCompletion = 'azure_completion',
+  AzureTextCompletion = 'azure_text_completion',
   AzureImageGeneration = 'azure_image_generation',
-  ClaudeChat = 'claude_chat'
+  AnthropicChat = 'anthropic_chat'
 }
 
 export interface AlertError {
@@ -31,6 +31,8 @@ export interface AlertError {
 
 export enum ErrorType {
   OpenAI = '[OpenAI] ',
+  Azure = '[Azure] ',
+  Anthropic = '[Anthropic] ',
   Unknown = '[Unknown] '
 }
 

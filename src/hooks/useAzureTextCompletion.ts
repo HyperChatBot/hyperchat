@@ -5,7 +5,7 @@ import { showErrorToast } from 'src/shared/utils'
 import { loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 
-const useTextCompletion = (question: string) => {
+const useAzureTextCompletion = (question: string) => {
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
   const {
@@ -54,4 +54,4 @@ const useTextCompletion = (question: string) => {
   return { createTextCompletion }
 }
 
-export default useTextCompletion
+export default useAzureTextCompletion

@@ -7,7 +7,7 @@ import { settingsState } from 'src/stores/settings'
 import { AzureImageGeneration } from 'src/types/azure'
 import { sleep } from 'yancey-js-util'
 
-const useImage = (question: string) => {
+const useAzureImageGeneration = (question: string) => {
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
   const {
@@ -16,7 +16,7 @@ const useImage = (question: string) => {
     rollBackEmptyMessage
   } = useMessages()
 
-  const createImage = async () => {
+  const createImageGeneration = async () => {
     if (!settings) return
 
     try {
@@ -77,7 +77,7 @@ const useImage = (question: string) => {
     }
   }
 
-  return { createImage }
+  return { createImageGeneration }
 }
 
-export default useImage
+export default useAzureImageGeneration

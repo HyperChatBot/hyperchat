@@ -17,14 +17,14 @@ export const SNACKBAR_ANCHOR_ORIGIN: SnackbarOrigin = {
 
 export const conversationTitles = {
   [Products.OpenAIChat]: 'OpenAI Chat Completion',
-  [Products.OpenAICompletion]: 'OpenAI Text Completion',
+  [Products.OpenAITextCompletion]: 'OpenAI Text Completion',
   [Products.OpenAIAudioTranscription]: 'OpenAI Audio Transcription',
   [Products.OpenAIAudioTranslation]: 'OpenAI Audio Translation',
   [Products.OpenAIImageGeneration]: 'OpenAI Image Generation',
   [Products.AzureChat]: 'Azure Chat',
-  [Products.AzureCompletion]: 'Azure Completion',
+  [Products.AzureTextCompletion]: 'Azure Completion',
   [Products.AzureImageGeneration]: 'Azure Image Generation',
-  [Products.ClaudeChat]: 'Claude Chat'
+  [Products.AnthropicChat]: 'Anthropic Chat'
 }
 
 export const SNACKBAR_MAX_NUM = 1

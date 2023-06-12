@@ -36,8 +36,8 @@ export default [
         active: <ChatBubbleLeftRightIconSolid className={iconClassName} />
       },
       {
-        product: Products.OpenAICompletion,
-        tooltip: conversationTitles[Products.OpenAICompletion],
+        product: Products.OpenAITextCompletion,
+        tooltip: conversationTitles[Products.OpenAITextCompletion],
         inactive: (
           <ChatBubbleBottomCenterTextIconOutline className={iconClassName} />
         ),
@@ -76,8 +76,8 @@ export default [
         active: <ChatBubbleLeftRightIconSolid className={iconClassName} />
       },
       {
-        product: Products.AzureCompletion,
-        tooltip: conversationTitles[Products.AzureCompletion],
+        product: Products.AzureTextCompletion,
+        tooltip: conversationTitles[Products.AzureTextCompletion],
         inactive: (
           <ChatBubbleBottomCenterTextIconOutline className={iconClassName} />
         ),
@@ -104,8 +104,8 @@ export default [
     ),
     products: [
       {
-        product: Products.ClaudeChat,
-        tooltip: conversationTitles[Products.ClaudeChat],
+        product: Products.AnthropicChat,
+        tooltip: conversationTitles[Products.AnthropicChat],
         inactive: <ChatBubbleLeftRightIconOutline className={iconClassName} />,
         active: <ChatBubbleLeftRightIconSolid className={iconClassName} />
       }

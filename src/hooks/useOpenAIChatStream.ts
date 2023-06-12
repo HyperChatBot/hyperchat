@@ -8,7 +8,7 @@ import { OpenAIChatResponse, OpenAIError } from 'src/types/openai'
 import useMessages from './useMessages'
 import useSettings from './useSettings'
 
-const useChatStream = (question: string) => {
+const useOpenAIChatStream = (question: string) => {
   const { settings } = useSettings()
   const setLoading = useSetRecoilState(loadingState)
   const {
@@ -125,4 +125,4 @@ const useChatStream = (question: string) => {
   return { createChatCompletion }
 }
 
-export default useChatStream
+export default useOpenAIChatStream

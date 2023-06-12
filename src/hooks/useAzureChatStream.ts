@@ -58,7 +58,7 @@ const useAzureChatStream = (question: string) => {
 
     if (!reader) {
       toast.error(
-        generateErrorMessage(ErrorType.Unknown, 'Cannot get ReadableStream.')
+        generateErrorMessage(ErrorType.Azure, 'Cannot get ReadableStream.')
       )
       setLoading(false)
       return
@@ -71,7 +71,7 @@ const useAzureChatStream = (question: string) => {
       const chunk = decoder.decode(value, { stream: true })
       const errorData: OpenAIError = JSON.parse(chunk)
       toast.error(
-        generateErrorMessage(ErrorType.OpenAI, errorData.error.message)
+        generateErrorMessage(ErrorType.Azure, errorData.error.message)
       )
       rollBackEmptyMessage()
       setLoading(false)
@@ -112,7 +112,7 @@ const useAzureChatStream = (question: string) => {
 
         return read()
       } catch {
-        generateErrorMessage(ErrorType.Unknown, 'Stream data parsing error.')
+        generateErrorMessage(ErrorType.Azure, 'Stream data parsing error.')
       } finally {
         setLoading(false)
       }

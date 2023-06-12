@@ -11,7 +11,7 @@ export const currProductState = atom({
   key: 'currProductState',
   default:
     (window.localStorage.getItem('currProductState') as Products) ||
-    Products.OpenAICompletion
+    Products.OpenAIChat
 })
 
 export const themeState = atom<ThemeMode.dark | ThemeMode.light>({

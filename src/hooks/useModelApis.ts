@@ -1,38 +1,45 @@
 import {
-  useAudio,
+  useAnthropicChatStream,
   useAzureChatStream,
   useAzureImageGeneration,
   useAzureTextCompletion,
-  useChatStream,
-  useImage,
-  useTextCompletion
+  useOpenAIAudio,
+  useOpenAIChatStream,
+  useOpenAIImage,
+  useOpenAITextCompletion
 } from 'src/hooks'
 import { HashFile, Products } from 'src/types/global'
 
 const useModelApis = (question: string, hashFile: HashFile) => {
-  const { createChatCompletion } = useChatStream(question)
+  const { createChatCompletion: createOpenAIChatCompletion } =
+    useOpenAIChatStream(question)
+  const { createChatCompletion: createAnthropicChatStream } =
+    useAnthropicChatStream(question)
   const { createChatCompletion: createAzureChatCompletion } =
     useAzureChatStream(question)
-  const { createTextCompletion } = useTextCompletion(question)
+  const { createTextCompletion: createOpenAITextCompletion } =
+    useOpenAITextCompletion(question)
   const { createTextCompletion: createAzureTextCompletion } =
     useAzureTextCompletion(question)
-  const { createImage } = useImage(question)
-  const { createImage: createAzureImage } = useAzureImageGeneration(question)
-  const { createTranscription, createTranslation } = useAudio(
-    question,
-    hashFile
-  )
+  const { createImageGeneration: createOpenAIImageGeneration } =
+    useOpenAIImage(question)
+  const { createImageGeneration: createAzureImageGeneration } =
+    useAzureImageGeneration(question)
+  const {
+    createTranscription: createOpenAITranscription,
+    createTranslation: createOpenAITranslation
+  } = useOpenAIAudio(question, hashFile)
 
   const requests = {
-    [Products.OpenAIChat]: createChatCompletion,
-    [Products.OpenAICompletion]: createTextCompletion,
-    [Products.OpenAIAudioTranscription]: createTranscription,
-    [Products.OpenAIAudioTranslation]: createTranslation,
-    [Products.OpenAIImageGeneration]: createImage,
+    [Products.OpenAIChat]: createOpenAIChatCompletion,
+    [Products.OpenAITextCompletion]: createOpenAITextCompletion,
+    [Products.OpenAIAudioTranscription]: createOpenAITranscription,
+    [Products.OpenAIAudioTranslation]: createOpenAITranslation,
+    [Products.OpenAIImageGeneration]: createOpenAIImageGeneration,
     [Products.AzureChat]: createAzureChatCompletion,
-    [Products.AzureCompletion]: createAzureTextCompletion,
-    [Products.AzureImageGeneration]: createAzureImage,
-    [Products.ClaudeChat]: createChatCompletion
+    [Products.AzureTextCompletion]: createAzureTextCompletion,
+    [Products.AzureImageGeneration]: createAzureImageGeneration,
+    [Products.AnthropicChat]: createAnthropicChatStream
   }
 
   return requests

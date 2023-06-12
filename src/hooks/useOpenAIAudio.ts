@@ -5,7 +5,7 @@ import { loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 import { HashFile } from 'src/types/global'
 
-const useAudio = (question: string, hashFile: HashFile | null) => {
+const useOpenAIAudio = (question: string, hashFile: HashFile | null) => {
   const settings = useRecoilValue(settingsState)
   const setLoading = useSetRecoilState(loadingState)
   const openai = useOpenAI()
@@ -78,4 +78,4 @@ const useAudio = (question: string, hashFile: HashFile | null) => {
   return { createTranslation, createTranscription }
 }
 
-export default useAudio
+export default useOpenAIAudio

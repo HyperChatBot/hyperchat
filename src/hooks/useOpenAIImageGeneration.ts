@@ -4,7 +4,7 @@ import { showErrorToast } from 'src/shared/utils'
 import { loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 
-const useImage = (question: string) => {
+const useOpenAIImageGeneration = (question: string) => {
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
   const openai = useOpenAI()
@@ -14,7 +14,7 @@ const useImage = (question: string) => {
     rollBackEmptyMessage
   } = useMessages()
 
-  const createImage = async () => {
+  const createImageGeneration = async () => {
     if (!settings) return
 
     try {
@@ -42,7 +42,7 @@ const useImage = (question: string) => {
     }
   }
 
-  return { createImage }
+  return { createImageGeneration }
 }
 
-export default useImage
+export default useOpenAIImageGeneration
