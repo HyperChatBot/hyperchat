@@ -19,7 +19,7 @@ export const themeState = atom<ThemeMode.dark | ThemeMode.light>({
   default: themeModeToTheme()
 })
 
-export const initialDialogVisibleState = atom({
-  key: 'initialDialogVisibleState',
+export const configurationDrawerVisibleState = atom({
+  key: 'configurationDrawerVisibleState',
   default: false
 })

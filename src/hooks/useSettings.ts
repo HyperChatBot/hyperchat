@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 import toast from 'src/components/Snackbar'
 import { db } from 'src/models/db'
 import {
@@ -9,8 +9,6 @@ import {
   imageSizes,
   textCompletions
 } from 'src/shared/constants'
-import { checkApiKey } from 'src/shared/utils'
-import { initialDialogVisibleState } from 'src/stores/global'
 import { settingsState } from 'src/stores/settings'
 import { Companies, ThemeMode } from 'src/types/global'
 import { Settings } from 'src/types/settings'
@@ -21,18 +19,17 @@ const useSettings = () => {
   const { transformFilenameToSrc } = useAppData()
   const [loading, setLoading] = useState(false)
   const [settings, setSettings] = useRecoilState(settingsState)
-  const setInitialDialogVisible = useSetRecoilState(initialDialogVisibleState)
 
-  const initialSettings = async (openai_secret_key: string) => {
+  const initialSettings = async () => {
     const defaultData = {
       settings_id: v4(),
-      openai_secret_key,
+      company: Companies.OpenAI,
+      openai_secret_key: '',
       openai_organization_id: '',
       openai_author_name: '',
       azure_secret_key: '',
       azure_endpoint: '',
       azure_deployment_name: '',
-      anthropic_secret_key: '',
       theme_mode: ThemeMode.system,
       assistant_avatar_filename: '',
       chat_model: chatCompletions[0],
@@ -75,19 +72,13 @@ const useSettings = () => {
   }
 
   const getSettings = async () => {
-    if (settings) return
-
     setLoading(true)
     try {
       const currSettings = await db.settings.toCollection().first()
 
       if (!currSettings) {
+        initialSettings()
         return
-      }
-
-      const unregisters = checkApiKey(currSettings)
-      if (unregisters.length === Object.keys(Companies).length) {
-        setInitialDialogVisible(true)
       }
 
       if (currSettings.assistant_avatar_filename) {
@@ -111,7 +102,9 @@ const useSettings = () => {
   }
 
   useEffect(() => {
-    getSettings()
+    if (!settings) {
+      getSettings()
+    }
   }, [settings])
 
   return { settings, loading, initialSettings, updateSettings }

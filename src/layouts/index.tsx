@@ -2,7 +2,6 @@ import { ThemeProvider } from '@mui/material/styles'
 import { SnackbarProvider } from 'notistack'
 import { FC, lazy } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import InitialDialog from 'src/components/InitialDialog'
 import { SnackbarUtilsConfig } from 'src/components/Snackbar'
 import { useOnline, useTheme } from 'src/hooks'
 import { routers } from 'src/routers'
@@ -27,7 +26,6 @@ const Layouts: FC = () => {
         preventDuplicate
       >
         <SnackbarUtilsConfig />
-        <InitialDialog />
         <section className="container flex w-screen flex-row overflow-x-hidden dark:bg-gray-800">
           <BrowserRouter>
             <Sidebar />

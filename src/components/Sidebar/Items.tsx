@@ -10,8 +10,6 @@ import {
   MicrophoneIcon as MicrophoneIconSolid,
   PhotoIcon as PhotoIconSolid
 } from '@heroicons/react/24/solid'
-import classNames from 'classnames'
-import AnthropicLogoImg from 'src/assets/anthropic-logo.png'
 import {
   AzureLogoIcon,
   ChatGPTLogoIcon,
@@ -90,24 +88,6 @@ export default [
         tooltip: conversationTitles[Products.AzureImageGeneration],
         inactive: <PhotoIconOutline className={iconClassName} />,
         active: <PhotoIconSolid className={iconClassName} />
-      }
-    ]
-  },
-  {
-    company: Companies.Anthropic,
-    companyLogo: (
-      <img
-        src={AnthropicLogoImg}
-        alt={Companies.Anthropic}
-        className={classNames(companyClassName, 'rounded-md')}
-      />
-    ),
-    products: [
-      {
-        product: Products.AnthropicChat,
-        tooltip: conversationTitles[Products.AnthropicChat],
-        inactive: <ChatBubbleLeftRightIconOutline className={iconClassName} />,
-        active: <ChatBubbleLeftRightIconSolid className={iconClassName} />
       }
     ]
   }

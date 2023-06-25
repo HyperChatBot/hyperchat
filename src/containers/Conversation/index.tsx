@@ -2,6 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
 import ChatBox from 'src/components/ChatBox'
+import Configuration from 'src/components/Configuration'
 import ConversationList from 'src/components/ConversationList'
 import Divider from 'src/components/Divider'
 import Loading from 'src/components/Loading'
@@ -22,6 +23,7 @@ const Conversation: FC = () => {
       <ConversationList conversations={conversations} />
       <Divider direction="vertical" />
       <ChatBox />
+      <Configuration />
     </>
   )
 }

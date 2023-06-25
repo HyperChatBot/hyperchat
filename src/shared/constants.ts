@@ -23,8 +23,7 @@ export const conversationTitles = {
   [Products.OpenAIImageGeneration]: 'OpenAI Image Generation',
   [Products.AzureChat]: 'Azure Chat',
   [Products.AzureTextCompletion]: 'Azure Completion',
-  [Products.AzureImageGeneration]: 'Azure Image Generation',
-  [Products.AnthropicChat]: 'Anthropic Chat'
+  [Products.AzureImageGeneration]: 'Azure Image Generation'
 }
 
 export const SNACKBAR_MAX_NUM = 1

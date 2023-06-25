@@ -1,5 +1,4 @@
 import {
-  useAnthropicChatStream,
   useAzureChatStream,
   useAzureImageGeneration,
   useAzureTextCompletion,
@@ -13,8 +12,6 @@ import { HashFile, Products } from 'src/types/global'
 const useModelApis = (question: string, hashFile: HashFile) => {
   const { createChatCompletion: createOpenAIChatCompletion } =
     useOpenAIChatStream(question)
-  const { createChatCompletion: createAnthropicChatStream } =
-    useAnthropicChatStream(question)
   const { createChatCompletion: createAzureChatCompletion } =
     useAzureChatStream(question)
   const { createTextCompletion: createOpenAITextCompletion } =
@@ -38,8 +35,7 @@ const useModelApis = (question: string, hashFile: HashFile) => {
     [Products.OpenAIImageGeneration]: createOpenAIImageGeneration,
     [Products.AzureChat]: createAzureChatCompletion,
     [Products.AzureTextCompletion]: createAzureTextCompletion,
-    [Products.AzureImageGeneration]: createAzureImageGeneration,
-    [Products.AnthropicChat]: createAnthropicChatStream
+    [Products.AzureImageGeneration]: createAzureImageGeneration
   }
 
   return requests

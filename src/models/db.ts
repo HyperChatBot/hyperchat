@@ -11,8 +11,7 @@ export class HyperChatDB extends Dexie {
   [Products.OpenAIImageGeneration]!: Table<Conversation>;
   [Products.AzureChat]!: Table<Conversation>;
   [Products.AzureTextCompletion]!: Table<Conversation>;
-  [Products.AzureImageGeneration]!: Table<Conversation>;
-  [Products.AnthropicChat]!: Table<Conversation>
+  [Products.AzureImageGeneration]!: Table<Conversation>
   settings!: Table<Settings>
 
   constructor() {
@@ -34,10 +33,8 @@ export class HyperChatDB extends Dexie {
         '&conversation_id, summary, created_at, updated_at, *messages',
       [Products.AzureImageGeneration]:
         '&conversation_id, summary, created_at, updated_at, *messages',
-      [Products.AnthropicChat]:
-        '&conversation_id, summary, created_at, updated_at, *messages',
       settings:
-        '&&settings_id, openai_secret_key, openai_organization_id, openai_author_name, azure_endpoint, azure_secret_key, azure_deployment_name, anthropic_secret_key, theme_mode, assistant_avatar_filename, chat_model, text_completion_model, audio_transcription_model, audio_translation_model, audio_response_type, image_generation_type, chat_stream, text_completion_stream'
+        '&&settings_id, company, openai_secret_key, openai_organization_id, openai_author_name, azure_endpoint, azure_secret_key, azure_deployment_name, theme_mode, assistant_avatar_filename, chat_model, text_completion_model, audio_transcription_model, audio_translation_model, audio_response_type, image_generation_type, chat_stream, text_completion_stream'
     })
   }
 }

@@ -1,4 +1,3 @@
-import AnthropicLogoIcon from './AnthropicLogoIcon'
 import AzureLogoIcon from './AzureLogoIcon'
 import ChatGPTLogoIcon from './ChatGPTLogoIcon'
 import OutlinePlusIcon from './OutlinePlusIcon'
@@ -16,6 +15,5 @@ export {
   SolidSendIcon,
   SolidPaperclipIcon,
   AzureLogoIcon,
-  ChatGPTLogoIcon,
-  AnthropicLogoIcon
+  ChatGPTLogoIcon
 }

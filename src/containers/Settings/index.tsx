@@ -28,7 +28,7 @@ import {
   imageSizes,
   textCompletions
 } from 'src/shared/constants'
-import { ThemeMode } from 'src/types/global'
+import { Companies, ThemeMode } from 'src/types/global'
 import { Settings as SettingsParams } from 'src/types/settings'
 
 const Settings: FC = () => {
@@ -86,178 +86,131 @@ const Settings: FC = () => {
             >
               <section className="flex flex-col gap-6">
                 <header className="text-xl font-medium dark:text-white">
-                  OpenAI Account
+                  Account
                 </header>
 
-                <TextField
-                  autoComplete="current-password"
-                  required
-                  id="openai-secret-key-input"
-                  label="Secret Key"
-                  size="small"
-                  type="password"
-                  helperText={
-                    <span>
-                      <strong>
-                        Your secret key will only be stored in IndexedDB!
-                      </strong>{' '}
-                      Do not share it with others or expose it in any
-                      client-side code.
-                    </span>
-                  }
-                  className="w-160"
-                  {...formik.getFieldProps('openai_secret_key')}
-                />
+                <FormControl size="small">
+                  <InputLabel id="company-select-label">Company</InputLabel>
+                  <Select
+                    className="w-80"
+                    labelId="company-select-label"
+                    id="company-select"
+                    label="Company"
+                    {...formik.getFieldProps('company')}
+                  >
+                    {Object.values(Companies).map((company) => (
+                      <MenuItem key={company} value={company}>
+                        {company}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
 
-                <TextField
-                  id="openai-organization-id-input"
-                  label="Organization ID"
-                  size="small"
-                  type="text"
-                  className="w-160"
-                  helperText="For users who belong to multiple organizations, you can pass a header to specify which organization is used for an API request. Usage from these API requests will count against the specified organization's subscription quota."
-                  {...formik.getFieldProps('openai_organization_id')}
-                />
+                {formik.values.company === Companies.OpenAI && (
+                  <>
+                    <TextField
+                      autoComplete="current-password"
+                      required
+                      id="openai-secret-key-input"
+                      label="Secret Key"
+                      size="small"
+                      type="password"
+                      helperText={
+                        <span>
+                          <strong>
+                            Your secret key will only be stored in IndexedDB!
+                          </strong>{' '}
+                          Do not share it with others or expose it in any
+                          client-side code.
+                        </span>
+                      }
+                      className="w-160"
+                      {...formik.getFieldProps('openai_secret_key')}
+                    />
 
-                <TextField
-                  id="openai-author-name-input"
-                  label="Author Name"
-                  size="small"
-                  type="text"
-                  className="w-160"
-                  helperText="The name of the author of this message. May contain a-z, A-Z, 0-9, and underscores, with a maximum length of 64 characters."
-                  {...formik.getFieldProps('openai_author_name')}
-                />
+                    <TextField
+                      id="openai-organization-id-input"
+                      label="Organization ID"
+                      size="small"
+                      type="text"
+                      className="w-160"
+                      helperText="For users who belong to multiple organizations, you can pass a header to specify which organization is used for an API request. Usage from these API requests will count against the specified organization's subscription quota."
+                      {...formik.getFieldProps('openai_organization_id')}
+                    />
 
-                <Button
-                  variant="contained"
-                  sx={{ width: 'max-content' }}
-                  onClick={() => updateSettings(formik.values)}
-                >
-                  Save
-                </Button>
-              </section>
-            </Box>
-          )}
-        </Formik>
+                    <TextField
+                      id="openai-author-name-input"
+                      label="Author Name"
+                      size="small"
+                      type="text"
+                      className="w-160"
+                      helperText="The name of the author of this message. May contain a-z, A-Z, 0-9, and underscores, with a maximum length of 64 characters."
+                      {...formik.getFieldProps('openai_author_name')}
+                    />
 
-        <Divider />
+                    <Button
+                      variant="contained"
+                      sx={{ width: 'max-content' }}
+                      onClick={() => updateSettings(formik.values)}
+                    >
+                      Save
+                    </Button>
+                  </>
+                )}
 
-        <Formik<SettingsParams>
-          initialValues={settings}
-          onSubmit={updateSettings}
-        >
-          {(formik) => (
-            <Box
-              component="form"
-              noValidate
-              autoComplete="off"
-              className="my-8"
-            >
-              <section className="flex flex-col gap-6">
-                <header className="text-xl font-medium dark:text-white">
-                  Azure Account
-                </header>
+                {formik.values.company === Companies.Azure && (
+                  <>
+                    <TextField
+                      autoComplete="current-password"
+                      required
+                      id="azure-secret-key-input"
+                      label="Secret Key"
+                      size="small"
+                      type="password"
+                      helperText={
+                        <span>
+                          <strong>
+                            Your secret key will only be stored in IndexedDB!
+                          </strong>{' '}
+                          Do not share it with others or expose it in any
+                          client-side code.
+                        </span>
+                      }
+                      className="w-160"
+                      {...formik.getFieldProps('azure_secret_key')}
+                    />
 
-                <TextField
-                  autoComplete="current-password"
-                  required
-                  id="azure-secret-key-input"
-                  label="Secret Key"
-                  size="small"
-                  type="password"
-                  helperText={
-                    <span>
-                      <strong>
-                        Your secret key will only be stored in IndexedDB!
-                      </strong>{' '}
-                      Do not share it with others or expose it in any
-                      client-side code.
-                    </span>
-                  }
-                  className="w-160"
-                  {...formik.getFieldProps('azure_secret_key')}
-                />
+                    <TextField
+                      required
+                      id="azure-endpoint-input"
+                      label="Endpoint"
+                      size="small"
+                      type="text"
+                      className="w-160"
+                      helperText="Use this endpoint to make calls to the service. The format likes: https://YOUR_DOMAIN.openai.azure.com"
+                      {...formik.getFieldProps('azure_endpoint')}
+                    />
 
-                <TextField
-                  required
-                  id="azure-endpoint-input"
-                  label="Endpoint"
-                  size="small"
-                  type="text"
-                  className="w-160"
-                  helperText="Use this endpoint to make calls to the service. The format likes: https://YOUR_DOMAIN.openai.azure.com"
-                  {...formik.getFieldProps('azure_endpoint')}
-                />
+                    <TextField
+                      required
+                      id="azure-deployment-name-input"
+                      label="Deployment Name"
+                      size="small"
+                      type="text"
+                      className="w-160"
+                      helperText="Deployments enable you to make completions and search calls against a provided base model or your fine-tuned model. You can also scale up and down your deployments easily by modifying the scale unit."
+                      {...formik.getFieldProps('azure_deployment_name')}
+                    />
 
-                <TextField
-                  required
-                  id="azure-deployment-name-input"
-                  label="Deployment Name"
-                  size="small"
-                  type="text"
-                  className="w-160"
-                  helperText="Deployments enable you to make completions and search calls against a provided base model or your fine-tuned model. You can also scale up and down your deployments easily by modifying the scale unit."
-                  {...formik.getFieldProps('azure_deployment_name')}
-                />
-
-                <Button
-                  variant="contained"
-                  sx={{ width: 'max-content' }}
-                  onClick={() => updateSettings(formik.values)}
-                >
-                  Save
-                </Button>
-              </section>
-            </Box>
-          )}
-        </Formik>
-
-        <Divider />
-
-        <Formik<SettingsParams>
-          initialValues={settings}
-          onSubmit={updateSettings}
-        >
-          {(formik) => (
-            <Box
-              component="form"
-              noValidate
-              autoComplete="off"
-              className="my-8"
-            >
-              <section className="flex flex-col gap-6">
-                <header className="text-xl font-medium dark:text-white">
-                  Anthropic Account
-                </header>
-
-                <TextField
-                  autoComplete="current-password"
-                  required
-                  id="azure-secret-key-input"
-                  label="Secret Key"
-                  size="small"
-                  type="password"
-                  helperText={
-                    <span>
-                      <strong>
-                        Your secret key will only be stored in IndexedDB!
-                      </strong>{' '}
-                      Do not share it with others or expose it in any
-                      client-side code.
-                    </span>
-                  }
-                  className="w-160"
-                  {...formik.getFieldProps('anthropic_secret_key')}
-                />
-
-                <Button
-                  variant="contained"
-                  sx={{ width: 'max-content' }}
-                  onClick={() => updateSettings(formik.values)}
-                >
-                  Save
-                </Button>
+                    <Button
+                      variant="contained"
+                      sx={{ width: 'max-content' }}
+                      onClick={() => updateSettings(formik.values)}
+                    >
+                      Save
+                    </Button>
+                  </>
+                )}
               </section>
             </Box>
           )}

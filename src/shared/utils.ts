@@ -1,9 +1,8 @@
 import { isAxiosError } from 'axios'
 import { DateTime } from 'luxon'
 import toast from 'src/components/Snackbar'
-import { Companies, ErrorType, Products, ThemeMode } from 'src/types/global'
+import { ErrorType, Products, ThemeMode } from 'src/types/global'
 import { OpenAIError } from 'src/types/openai'
-import { Settings } from 'src/types/settings'
 import { v4 } from 'uuid'
 import { getFileExtension } from 'yancey-js-util'
 
@@ -63,25 +62,4 @@ export const showErrorToast = (error: unknown) => {
   if (isAxiosError<OpenAIError, Record<string, unknown>>(error)) {
     toast.error(error.response?.data.error.message || '')
   }
-}
-
-export const checkApiKey = (settings: Settings) => {
-  const unregisters = []
-  if (!settings.openai_secret_key) {
-    unregisters.push(Companies.OpenAI)
-  }
-
-  if (
-    !settings.azure_endpoint &&
-    !settings.azure_secret_key &&
-    !settings.azure_deployment_name
-  ) {
-    unregisters.push(Companies.Azure)
-  }
-
-  if (!settings.anthropic_secret_key) {
-    unregisters.push(Companies.Anthropic)
-  }
-
-  return unregisters
 }

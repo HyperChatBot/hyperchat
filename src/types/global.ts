@@ -8,8 +8,7 @@ export interface SvgIconProps {
 
 export enum Companies {
   OpenAI = 'OpenAI',
-  Azure = 'Azure',
-  Anthropic = 'Anthropic'
+  Azure = 'Azure'
 }
 
 export enum Products {
@@ -20,8 +19,7 @@ export enum Products {
   OpenAIImageGeneration = 'openai_image_generation',
   AzureChat = 'azure_chat',
   AzureTextCompletion = 'azure_text_completion',
-  AzureImageGeneration = 'azure_image_generation',
-  AnthropicChat = 'anthropic_chat'
+  AzureImageGeneration = 'azure_image_generation'
 }
 
 export interface AlertError {
@@ -32,7 +30,6 @@ export interface AlertError {
 export enum ErrorType {
   OpenAI = '[OpenAI] ',
   Azure = '[Azure] ',
-  Anthropic = '[Anthropic] ',
   Unknown = '[Unknown] '
 }
 

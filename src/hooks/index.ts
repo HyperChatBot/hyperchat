@@ -1,4 +1,3 @@
-import useAnthropicChatStream from './useAnthropicChatStream'
 import useAppData from './useAppData'
 import useAzureChatStream from './useAzureChatStream'
 import useAzureImageGeneration from './useAzureImageGeneration'
@@ -30,6 +29,5 @@ export {
   useAzureChatStream,
   useAzureImageGeneration,
   useAzureTextCompletion,
-  useModelApis,
-  useAnthropicChatStream
+  useModelApis
 }

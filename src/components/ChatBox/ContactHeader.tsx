@@ -1,12 +1,13 @@
 import {
   CheckIcon,
+  FaceSmileIcon,
   PencilSquareIcon,
   TrashIcon
 } from '@heroicons/react/24/solid'
 import Input from '@mui/material/Input'
 import classNames from 'classnames'
 import { FC, KeyboardEvent, useEffect, useState } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatbot.png'
 import { db } from 'src/models/db'
 import { EMPTY_CHAT_HINT } from 'src/shared/constants'
@@ -15,7 +16,11 @@ import {
   currConversationState,
   summaryInputVisibleState
 } from 'src/stores/conversation'
-import { currProductState, onlineState } from 'src/stores/global'
+import {
+  configurationDrawerVisibleState,
+  currProductState,
+  onlineState
+} from 'src/stores/global'
 import { EmojiPickerProps } from 'src/types/global'
 import Avatar from '../Avatar'
 import EmojiPicker from '../EmojiPicker'
@@ -32,6 +37,9 @@ const ContactHeader: FC = () => {
     avatarPickerVisibleState
   )
   const isOnline = useRecoilValue(onlineState)
+  const setConfigurationDrawerVisible = useSetRecoilState(
+    configurationDrawerVisibleState
+  )
   const [summaryValue, setSummaryValue] = useState(
     currConversation?.summary || ''
   )
@@ -154,9 +162,20 @@ const ContactHeader: FC = () => {
         </section>
       </section>
       {currConversation && (
-        <section className="flex cursor-pointer rounded-lg bg-main-purple bg-opacity-10 pb-2.5 pl-4 pr-4 pt-2.5 text-main-purple">
-          <TrashIcon className="h-4 w-4" onClick={deleteCurrConversation} />
-        </section>
+        <>
+          <section
+            className="flex cursor-pointer rounded-lg bg-main-purple bg-opacity-10 pb-2.5 pl-4 pr-4 pt-2.5 text-main-purple"
+            onClick={deleteCurrConversation}
+          >
+            <TrashIcon className="h-4 w-4" />
+          </section>
+          <section
+            className="flex cursor-pointer rounded-lg bg-main-purple bg-opacity-10 pb-2.5 pl-4 pr-4 pt-2.5 text-main-purple"
+            onClick={() => setConfigurationDrawerVisible(true)}
+          >
+            <FaceSmileIcon className="h-4 w-4" />
+          </section>
+        </>
       )}
     </section>
   )
