@@ -2,10 +2,10 @@ import { useLiveQuery } from 'dexie-react-hooks'
 import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
 import ChatBox from 'src/components/ChatBox'
-import Configuration from 'src/components/Configuration'
 import ConversationList from 'src/components/ConversationList'
 import Divider from 'src/components/Divider'
 import Loading from 'src/components/Loading'
+import { configurations } from 'src/configurations'
 import { db } from 'src/models/db'
 import { currProductState } from 'src/stores/global'
 
@@ -15,6 +15,7 @@ const Conversation: FC = () => {
     () => db[currProduct].orderBy('updated_at').reverse().toArray(),
     [currProduct]
   )
+  const Configuration = configurations[currProduct].component()
 
   if (!conversations) return <Loading />
 

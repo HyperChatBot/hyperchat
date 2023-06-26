@@ -3,7 +3,7 @@ import IconButton from '@mui/material/IconButton'
 import Slider from '@mui/material/Slider'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
-import { ChangeEvent, FC, useState } from 'react'
+import { ChangeEvent, FC, SyntheticEvent, useState } from 'react'
 
 interface Props {
   title: string
@@ -12,6 +12,7 @@ interface Props {
   max: number
   step: number
   defaultValue: number
+  setFieldValue: (value: number) => void
 }
 
 const InputSlider: FC<Props> = ({
@@ -20,12 +21,24 @@ const InputSlider: FC<Props> = ({
   min,
   max,
   step,
-  defaultValue
+  defaultValue,
+  setFieldValue
 }) => {
   const [value, setValue] = useState<number>(defaultValue)
 
-  const handleSliderChange = (event: Event, newValue: number) => {
-    setValue(newValue)
+  const handleSliderChange = (_: Event, newValue: number | number[]) => {
+    if (typeof newValue === 'number') {
+      setValue(newValue)
+    }
+  }
+
+  const handleSliderChangeCommitted = (
+    _: Event | SyntheticEvent<Element, Event>,
+    newValue: number | number[]
+  ) => {
+    if (typeof newValue === 'number') {
+      setFieldValue(newValue)
+    }
   }
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -35,11 +48,17 @@ const InputSlider: FC<Props> = ({
   }
 
   const handleBlur = () => {
+    let newValue = value
+
     if (value < min) {
+      newValue = min
       setValue(min)
     } else if (value > max) {
+      newValue = max
       setValue(max)
     }
+
+    setFieldValue(newValue)
   }
 
   return (
@@ -78,6 +97,7 @@ const InputSlider: FC<Props> = ({
         max={max}
         step={step}
         value={typeof value === 'number' ? value : defaultValue}
+        onChangeCommitted={handleSliderChangeCommitted}
         onChange={handleSliderChange}
       />
     </section>

@@ -18,21 +18,21 @@ export class HyperChatDB extends Dexie {
     super('hyperchat')
     this.version(1).stores({
       [Products.OpenAIChat]:
-        '&conversation_id, summary, created_at, updated_at, *messages',
+        '&conversation_id, summary, created_at, updated_at, *messages, *configuration',
       [Products.OpenAITextCompletion]:
-        '&conversation_id, summary, created_at, updated_at, *messages',
+        '&conversation_id, summary, created_at, updated_at, *messages, *configuration',
       [Products.OpenAIAudioTranscription]:
-        '&conversation_id, summary, created_at, updated_at, file_name, *messages',
+        '&conversation_id, summary, created_at, updated_at, file_name, *messages, *configuration',
       [Products.OpenAIAudioTranslation]:
-        '&conversation_id, summary, created_at, updated_at, file_name, *messages',
+        '&conversation_id, summary, created_at, updated_at, file_name, *messages, *configuration',
       [Products.OpenAIImageGeneration]:
-        '&conversation_id, summary, created_at, updated_at, *messages',
+        '&conversation_id, summary, created_at, updated_at, *messages, *configuration',
       [Products.AzureChat]:
-        '&conversation_id, summary, created_at, updated_at, *messages',
+        '&conversation_id, summary, created_at, updated_at, *messages, *configuration',
       [Products.AzureTextCompletion]:
-        '&conversation_id, summary, created_at, updated_at, *messages',
+        '&conversation_id, summary, created_at, updated_at, *messages, *configuration',
       [Products.AzureImageGeneration]:
-        '&conversation_id, summary, created_at, updated_at, *messages',
+        '&conversation_id, summary, created_at, updated_at, *messages, *configuration',
       settings:
         '&&settings_id, company, openai_secret_key, openai_organization_id, openai_author_name, azure_endpoint, azure_secret_key, azure_deployment_name, theme_mode, assistant_avatar_filename, chat_model, text_completion_model, audio_transcription_model, audio_translation_model, audio_response_type, image_generation_type, chat_stream, text_completion_stream'
     })

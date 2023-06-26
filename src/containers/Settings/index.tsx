@@ -5,12 +5,10 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import FormControl from '@mui/material/FormControl'
-import FormControlLabel from '@mui/material/FormControlLabel'
 import FormHelperText from '@mui/material/FormHelperText'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
-import Switch from '@mui/material/Switch'
 import TextField from '@mui/material/TextField'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
@@ -21,13 +19,6 @@ import ChatGPTImg from 'src/assets/chatbot.png'
 import { SolidSettingsBrightnessIcon } from 'src/components/Icons'
 import toast from 'src/components/Snackbar'
 import { useAppData, useSettings, useTheme } from 'src/hooks'
-import {
-  audioResponseTypes,
-  audios,
-  chatCompletions,
-  imageSizes,
-  textCompletions
-} from 'src/shared/constants'
 import { Companies, ThemeMode } from 'src/types/global'
 import { Settings as SettingsParams } from 'src/types/settings'
 
@@ -300,211 +291,6 @@ const Settings: FC = () => {
                   </section>
                 </section>
               </section>
-            </Box>
-          )}
-        </Formik>
-
-        <Divider />
-
-        <Formik<SettingsParams>
-          initialValues={settings}
-          onSubmit={updateSettings}
-        >
-          {(formik) => (
-            <Box
-              component="form"
-              noValidate
-              autoComplete="off"
-              className="mt-8 flex flex-col gap-8"
-            >
-              <section className="flex flex-col gap-6">
-                <header className="text-xl font-medium dark:text-white">
-                  Chat
-                </header>
-
-                <FormControl size="small">
-                  <InputLabel id="chat-model-select-label">Model</InputLabel>
-                  <Select
-                    className="w-80"
-                    labelId="chat-model-select-label"
-                    id="chat-model-select"
-                    label="Model"
-                    {...formik.getFieldProps('chat_model')}
-                  >
-                    {chatCompletions.map((chatCompletion) => (
-                      <MenuItem key={chatCompletion} value={chatCompletion}>
-                        {chatCompletion}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-
-                <section>
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        defaultChecked
-                        disabled
-                        {...formik.getFieldProps('chat_stream')}
-                      />
-                    }
-                    label="Stream Mode"
-                    labelPlacement="start"
-                    sx={{ marginLeft: 0 }}
-                  />
-                  <FormHelperText>
-                    Only stream mode is currently supported in chat completion.
-                  </FormHelperText>
-                </section>
-              </section>
-
-              <Divider />
-
-              <section className="flex flex-col gap-6">
-                <header className="text-xl font-medium dark:text-white">
-                  Text Completions
-                </header>
-
-                <FormControl size="small">
-                  <InputLabel id="text-completion-model-select-label">
-                    Model
-                  </InputLabel>
-                  <Select
-                    className="w-80"
-                    labelId="text-completion-model-select-label"
-                    id="text-completion-model-select"
-                    label="Model"
-                    {...formik.getFieldProps('text_completion_model')}
-                  >
-                    {textCompletions.map((textCompletion) => (
-                      <MenuItem key={textCompletion} value={textCompletion}>
-                        {textCompletion}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-
-                <section>
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        disabled
-                        {...formik.getFieldProps('text_completion_stream')}
-                      />
-                    }
-                    label="Stream Mode"
-                    labelPlacement="start"
-                    sx={{ marginLeft: 0 }}
-                  />
-                  <FormHelperText>
-                    Currently, stream mode is not supported in text completion.
-                  </FormHelperText>
-                </section>
-              </section>
-
-              <Divider />
-
-              <section className="flex flex-col gap-6">
-                <header className="text-xl font-medium dark:text-white">
-                  Audio
-                </header>
-
-                <FormControl size="small">
-                  <InputLabel id="audio-transcription-model-select-label">
-                    Transcription Model
-                  </InputLabel>
-                  <Select
-                    className="w-80"
-                    labelId="audio-transcription-model-select-label"
-                    id="audio-transcription-model-select"
-                    disabled
-                    label="Transcription Model"
-                    {...formik.getFieldProps('audio_transcription_model')}
-                  >
-                    {audios.map((audio) => (
-                      <MenuItem key={audio} value={audio}>
-                        {audio}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <FormHelperText>
-                    Only <strong>{audios[0]}</strong> is currently available.
-                  </FormHelperText>
-                </FormControl>
-
-                <FormControl size="small">
-                  <InputLabel id="audio-translation-model-select-label">
-                    Translation Model
-                  </InputLabel>
-                  <Select
-                    className="w-80"
-                    labelId="audio-translation-model-select-label"
-                    id="audio-translation-model-select"
-                    disabled
-                    label="Translation Model"
-                    {...formik.getFieldProps('audio_translation_model')}
-                  >
-                    {audios.map((audio) => (
-                      <MenuItem key={audio} value={audio}>
-                        {audio}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <FormHelperText>
-                    Only <strong>{audios[0]}</strong> is currently available.
-                  </FormHelperText>
-                </FormControl>
-
-                <FormControl size="small">
-                  <InputLabel id="audio-response-type-model-select-label">
-                    Audio Response Type
-                  </InputLabel>
-                  <Select
-                    className="w-80"
-                    labelId="audio-response-type-model-select-label"
-                    id="audio-response-type-model-select"
-                    label="Audio Response Type"
-                    {...formik.getFieldProps('audio_response_type')}
-                  >
-                    {audioResponseTypes.map((audioResponseType) => (
-                      <MenuItem
-                        key={audioResponseType}
-                        value={audioResponseType}
-                      >
-                        {audioResponseType}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-
-                <Divider />
-
-                <section className="flex flex-col gap-6">
-                  <header className="text-xl font-medium dark:text-white">
-                    Image Generations
-                  </header>
-
-                  <FormControl size="small">
-                    <InputLabel id="iamge-generation-model-select-label">
-                      Size
-                    </InputLabel>
-                    <Select
-                      className="w-80"
-                      labelId="iamge-generation-model-select-label"
-                      id="iamge-generation-model-select"
-                      label="Size"
-                      {...formik.getFieldProps('image_generation_size')}
-                    >
-                      {imageSizes.map((imageSize) => (
-                        <MenuItem key={imageSize} value={imageSize}>
-                          {imageSize}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </section>
-              </section>
-              <AutoSubmitToken />
             </Box>
           )}
         </Formik>

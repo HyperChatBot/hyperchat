@@ -1,5 +1,4 @@
 import { SnackbarOrigin } from '@mui/material'
-import { CreateImageRequestSizeEnum } from 'openai'
 import { Products } from 'src/types/global'
 
 export const OPENAI_BASE_URL = 'https://api.openai.com/v1'
@@ -29,23 +28,3 @@ export const conversationTitles = {
 export const SNACKBAR_MAX_NUM = 1
 
 export const SNACKBAR_AUTO_HIDE_DURATION = 3000
-
-export const textCompletions = [
-  'text-davinci-003',
-  'text-davinci-002',
-  'text-curie-001',
-  'text-babbage-001',
-  'text-ada-001'
-]
-
-export const chatCompletions = ['gpt-3.5-turbo', 'gpt-4']
-
-export const audios = ['whisper-1']
-
-export const audioResponseTypes = ['json', 'text', 'srt', 'verbose_json', 'vtt']
-
-export const imageSizes: CreateImageRequestSizeEnum[] = [
-  '1024x1024',
-  '256x256',
-  '512x512'
-]

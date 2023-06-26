@@ -1,5 +1,6 @@
 import { FC, useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
+import { configurations } from 'src/configurations'
 import { db } from 'src/models/db'
 import { conversationTitles } from 'src/shared/constants'
 import { currConversationState } from 'src/stores/conversation'
@@ -30,7 +31,8 @@ const ConversationList: FC<Props> = ({ conversations }) => {
       summary: '',
       messages: [],
       created_at: +new Date(),
-      updated_at: +new Date()
+      updated_at: +new Date(),
+      configuration: configurations[currProduct].default
     }
 
     setCurrConversation(conversation)
