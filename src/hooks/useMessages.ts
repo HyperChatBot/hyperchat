@@ -1,6 +1,6 @@
 import { produce } from 'immer'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { db } from 'src/models/db'
+import { db } from 'src/db'
 import { currConversationState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import {

@@ -4,7 +4,7 @@ import { FC, ReactElement, cloneElement, useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import Divider from 'src/components/Divider'
 import { ChatConfiguration } from 'src/configurations/chat'
-import { db } from 'src/models/db'
+import { db } from 'src/db'
 import { currConversationState } from 'src/stores/conversation'
 import {
   configurationDrawerVisibleState,

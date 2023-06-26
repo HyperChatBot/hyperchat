@@ -13,8 +13,8 @@ import TextField from '@mui/material/TextField'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import Typography from '@mui/material/Typography'
-import { Formik, useFormikContext } from 'formik'
-import { ChangeEvent, FC, useEffect } from 'react'
+import { Formik } from 'formik'
+import { ChangeEvent, FC } from 'react'
 import ChatGPTImg from 'src/assets/chatbot.png'
 import { SolidSettingsBrightnessIcon } from 'src/components/Icons'
 import toast from 'src/components/Snackbar'
@@ -38,19 +38,6 @@ const Settings: FC = () => {
         toast.success('Assistant avatar updated successfully.')
       }
     }
-  }
-
-  const AutoSubmitToken = () => {
-    const { initialValues, values, submitForm } =
-      useFormikContext<SettingsParams>()
-
-    useEffect(() => {
-      if (initialValues !== values) {
-        updateSettings(values)
-      }
-    }, [initialValues, values, submitForm])
-
-    return null
   }
 
   if (!settings) return null

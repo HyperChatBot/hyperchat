@@ -6,7 +6,7 @@ import ConversationList from 'src/components/ConversationList'
 import Divider from 'src/components/Divider'
 import Loading from 'src/components/Loading'
 import { configurations } from 'src/configurations'
-import { db } from 'src/models/db'
+import { db } from 'src/db'
 import { currProductState } from 'src/stores/global'
 
 const Conversation: FC = () => {

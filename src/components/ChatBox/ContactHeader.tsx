@@ -9,7 +9,7 @@ import classNames from 'classnames'
 import { FC, KeyboardEvent, useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatbot.png'
-import { db } from 'src/models/db'
+import { db } from 'src/db'
 import { EMPTY_CHAT_HINT } from 'src/shared/constants'
 import {
   avatarPickerVisibleState,

@@ -8,7 +8,7 @@ import { FC, useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { models, responseFormats } from 'src/configurations/audioTranscription'
 import { AudioTranslationConfiguration } from 'src/configurations/audioTranslation'
-import { db } from 'src/models/db'
+import { db } from 'src/db'
 import { currConversationState } from 'src/stores/conversation'
 import {
   configurationDrawerVisibleState,

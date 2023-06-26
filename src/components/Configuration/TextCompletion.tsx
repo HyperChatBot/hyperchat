@@ -11,7 +11,7 @@ import {
   TextCompletionConfiguration,
   models
 } from 'src/configurations/textCompletion'
-import { db } from 'src/models/db'
+import { db } from 'src/db'
 import { currConversationState } from 'src/stores/conversation'
 import {
   configurationDrawerVisibleState,

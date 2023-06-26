@@ -12,7 +12,7 @@ import {
   responseFormats,
   sizes
 } from 'src/configurations/imageGeneration'
-import { db } from 'src/models/db'
+import { db } from 'src/db'
 import { currConversationState } from 'src/stores/conversation'
 import {
   configurationDrawerVisibleState,

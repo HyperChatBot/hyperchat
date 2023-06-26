@@ -8,7 +8,7 @@ import { Formik, useFormikContext } from 'formik'
 import { FC, useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { ChatConfiguration, models } from 'src/configurations/chat'
-import { db } from 'src/models/db'
+import { db } from 'src/db'
 import { currConversationState } from 'src/stores/conversation'
 import {
   configurationDrawerVisibleState,

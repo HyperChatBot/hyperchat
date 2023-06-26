@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { configurations } from 'src/configurations'
-import { db } from 'src/models/db'
+import { db } from 'src/db'
 import { conversationTitles } from 'src/shared/constants'
 import { currConversationState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'

@@ -14,7 +14,7 @@ import {
   models,
   responseFormats
 } from 'src/configurations/audioTranscription'
-import { db } from 'src/models/db'
+import { db } from 'src/db'
 import { countries } from 'src/shared/countries'
 import { currConversationState } from 'src/stores/conversation'
 import {

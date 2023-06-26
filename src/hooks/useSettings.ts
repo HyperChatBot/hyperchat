@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import toast from 'src/components/Snackbar'
-import { db } from 'src/models/db'
+import { db } from 'src/db'
 import { settingsState } from 'src/stores/settings'
 import { Companies, ThemeMode } from 'src/types/global'
 import { Settings } from 'src/types/settings'
