@@ -1,14 +1,14 @@
 import Drawer from '@mui/material/Drawer'
-import { Formik,useFormikContext } from 'formik'
-import { FC,ReactElement,cloneElement,useEffect } from 'react'
-import { useRecoilState,useRecoilValue } from 'recoil'
+import { Formik, useFormikContext } from 'formik'
+import { FC, ReactElement, cloneElement, useEffect } from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import Divider from 'src/components/Divider'
 import { ChatConfiguration } from 'src/configurations/chat'
 import { db } from 'src/models/db'
 import { currConversationState } from 'src/stores/conversation'
 import {
-configurationDrawerVisibleState,
-currProductState
+  configurationDrawerVisibleState,
+  currProductState
 } from 'src/stores/global'
 
 interface Props {

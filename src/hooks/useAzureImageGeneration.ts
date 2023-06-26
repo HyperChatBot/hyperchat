@@ -37,8 +37,7 @@ const useAzureImageGeneration = (question: string) => {
           headers,
           method: 'POST',
           body: JSON.stringify({
-            caption: question,
-            resolution: settings.image_generation_size
+            caption: question
           })
         }
       )

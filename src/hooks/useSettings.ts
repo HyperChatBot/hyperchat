@@ -2,13 +2,6 @@ import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import toast from 'src/components/Snackbar'
 import { db } from 'src/models/db'
-import {
-  audioResponseTypes,
-  audios,
-  chatCompletions,
-  imageSizes,
-  textCompletions
-} from 'src/shared/constants'
 import { settingsState } from 'src/stores/settings'
 import { Companies, ThemeMode } from 'src/types/global'
 import { Settings } from 'src/types/settings'
@@ -31,15 +24,7 @@ const useSettings = () => {
       azure_endpoint: '',
       azure_deployment_name: '',
       theme_mode: ThemeMode.system,
-      assistant_avatar_filename: '',
-      chat_model: chatCompletions[0],
-      text_completion_model: textCompletions[0],
-      chat_stream: true,
-      text_completion_stream: false,
-      audio_transcription_model: audios[0],
-      audio_translation_model: audios[0],
-      audio_response_type: audioResponseTypes[0],
-      image_generation_size: imageSizes[0]
+      assistant_avatar_filename: ''
     }
 
     await db.settings.add(defaultData)

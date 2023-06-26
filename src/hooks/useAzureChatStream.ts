@@ -44,8 +44,8 @@ const useAzureChatStream = (question: string) => {
                 content: question
               }
             ],
-            model: settings.chat_model,
-            stream: settings.chat_stream
+            model: '',
+            stream: true
           })
         }
       )

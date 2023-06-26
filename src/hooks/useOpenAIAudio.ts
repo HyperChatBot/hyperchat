@@ -29,9 +29,9 @@ const useOpenAIAudio = (question: string, hashFile: HashFile | null) => {
 
       const transcription = await openai.createTranscription(
         hashFile.file,
-        settings.audio_transcription_model,
+        'whisper-1',
         question,
-        settings.audio_response_type
+        'json'
       )
 
       saveMessageToDbAndUpdateConversationState(
@@ -60,7 +60,7 @@ const useOpenAIAudio = (question: string, hashFile: HashFile | null) => {
 
       const translation = await openai.createTranslation(
         hashFile.file,
-        settings.audio_translation_model,
+        'whisper-1',
         question
       )
 

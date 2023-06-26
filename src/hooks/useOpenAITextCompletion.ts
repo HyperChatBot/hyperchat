@@ -27,9 +27,9 @@ const useOpenAITextCompletion = (question: string) => {
       const {
         data: { choices }
       } = await openai.createCompletion({
-        model: settings.text_completion_model,
+        model: '',
         prompt: question,
-        stream: settings.text_completion_stream
+        stream: false
       })
 
       saveMessageToDbAndUpdateConversationState(

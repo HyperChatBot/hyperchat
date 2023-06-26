@@ -7,7 +7,10 @@ import TextField from '@mui/material/TextField'
 import { Formik, useFormikContext } from 'formik'
 import { FC, useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { TextCompletionConfiguration, models } from 'src/configurations/textCompletion'
+import {
+  TextCompletionConfiguration,
+  models
+} from 'src/configurations/textCompletion'
 import { db } from 'src/models/db'
 import { currConversationState } from 'src/stores/conversation'
 import {
@@ -63,7 +66,9 @@ const Configuration: FC = () => {
         <Divider />
 
         <Formik<TextCompletionConfiguration>
-          initialValues={currConversation.configuration as TextCompletionConfiguration}
+          initialValues={
+            currConversation.configuration as TextCompletionConfiguration
+          }
           onSubmit={updateConfiguration}
         >
           {(formik) => (
@@ -102,8 +107,9 @@ const Configuration: FC = () => {
                 max={4000}
                 step={1}
                 defaultValue={
-                  (currConversation.configuration as TextCompletionConfiguration)
-                    .max_response
+                  (
+                    currConversation.configuration as TextCompletionConfiguration
+                  ).max_response
                 }
                 setFieldValue={(value: number) =>
                   formik.setFieldValue('max_response', value)
@@ -116,8 +122,9 @@ const Configuration: FC = () => {
                 max={1}
                 step={0.01}
                 defaultValue={
-                  (currConversation.configuration as TextCompletionConfiguration)
-                    .temperature
+                  (
+                    currConversation.configuration as TextCompletionConfiguration
+                  ).temperature
                 }
                 setFieldValue={(value: number) =>
                   formik.setFieldValue('temperature', value)
@@ -130,7 +137,9 @@ const Configuration: FC = () => {
                 max={1}
                 step={0.01}
                 defaultValue={
-                  (currConversation.configuration as TextCompletionConfiguration).top_p
+                  (
+                    currConversation.configuration as TextCompletionConfiguration
+                  ).top_p
                 }
                 setFieldValue={(value: number) =>
                   formik.setFieldValue('top_p', value)
@@ -143,8 +152,9 @@ const Configuration: FC = () => {
                 max={2}
                 step={0.01}
                 defaultValue={
-                  (currConversation.configuration as TextCompletionConfiguration)
-                    .frequency_penalty
+                  (
+                    currConversation.configuration as TextCompletionConfiguration
+                  ).frequency_penalty
                 }
                 setFieldValue={(value: number) =>
                   formik.setFieldValue('frequency_penalty', value)
@@ -157,8 +167,9 @@ const Configuration: FC = () => {
                 max={2}
                 step={0.01}
                 defaultValue={
-                  (currConversation.configuration as TextCompletionConfiguration)
-                    .presence_penalty
+                  (
+                    currConversation.configuration as TextCompletionConfiguration
+                  ).presence_penalty
                 }
                 setFieldValue={(value: number) =>
                   formik.setFieldValue('frequency_penalty', value)

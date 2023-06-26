@@ -34,7 +34,7 @@ export class HyperChatDB extends Dexie {
       [Products.AzureImageGeneration]:
         '&conversation_id, summary, created_at, updated_at, *messages, *configuration',
       settings:
-        '&&settings_id, company, openai_secret_key, openai_organization_id, openai_author_name, azure_endpoint, azure_secret_key, azure_deployment_name, theme_mode, assistant_avatar_filename, chat_model, text_completion_model, audio_transcription_model, audio_translation_model, audio_response_type, image_generation_type, chat_stream, text_completion_stream'
+        '&&settings_id, company, openai_secret_key, openai_organization_id, openai_author_name, azure_endpoint, azure_secret_key, azure_deployment_name, theme_mode, assistant_avatar_filename'
     })
   }
 }

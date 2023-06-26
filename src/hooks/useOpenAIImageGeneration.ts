@@ -25,8 +25,7 @@ const useOpenAIImageGeneration = (question: string) => {
       })
 
       const image = await openai.createImage({
-        prompt: question,
-        size: settings.image_generation_size
+        prompt: question
       })
 
       const content = image.data.data
