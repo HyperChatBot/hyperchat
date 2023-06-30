@@ -1,6 +1,6 @@
+import { AdjustmentsVerticalIcon } from '@heroicons/react/24/outline'
 import {
   CheckIcon,
-  FaceSmileIcon,
   PencilSquareIcon,
   TrashIcon
 } from '@heroicons/react/24/solid'
@@ -162,7 +162,7 @@ const ContactHeader: FC = () => {
         </section>
       </section>
       {currConversation && (
-        <>
+        <section className="flex flex-row gap-2">
           <section
             className="flex cursor-pointer rounded-lg bg-main-purple bg-opacity-10 pb-2.5 pl-4 pr-4 pt-2.5 text-main-purple"
             onClick={deleteCurrConversation}
@@ -173,9 +173,9 @@ const ContactHeader: FC = () => {
             className="flex cursor-pointer rounded-lg bg-main-purple bg-opacity-10 pb-2.5 pl-4 pr-4 pt-2.5 text-main-purple"
             onClick={() => setConfigurationDrawerVisible(true)}
           >
-            <FaceSmileIcon className="h-4 w-4" />
+            <AdjustmentsVerticalIcon className="h-4 w-4" />
           </section>
-        </>
+        </section>
       )}
     </section>
   )

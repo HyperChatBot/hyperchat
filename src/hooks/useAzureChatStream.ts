@@ -1,13 +1,15 @@
-import { useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import toast from 'src/components/Snackbar'
+import { ChatConfiguration } from 'src/configurations/chat'
 import { generateErrorMessage } from 'src/shared/utils'
-import { loadingState } from 'src/stores/conversation'
+import { currConversationState, loadingState } from 'src/stores/conversation'
 import { ErrorType } from 'src/types/global'
 import { OpenAIChatResponse, OpenAIError } from 'src/types/openai'
 import useMessages from './useMessages'
 import useSettings from './useSettings'
 
 const useAzureChatStream = (question: string) => {
+  const currConversation = useRecoilValue(currConversationState)
   const { settings } = useSettings()
   const setLoading = useSetRecoilState(loadingState)
   const {
@@ -18,7 +20,17 @@ const useAzureChatStream = (question: string) => {
   } = useMessages()
 
   const createChatCompletion = async () => {
-    if (!settings) return
+    if (!settings || !currConversation) return
+
+    const {
+      model,
+      system_message,
+      max_response,
+      temperature,
+      top_p,
+      frequency_penalty,
+      presence_penalty
+    } = currConversation.configuration as ChatConfiguration
 
     setLoading(true)
 
@@ -40,11 +52,20 @@ const useAzureChatStream = (question: string) => {
           body: JSON.stringify({
             messages: [
               {
+                role: 'system',
+                content: system_message
+              },
+              {
                 role: 'user',
                 content: question
               }
             ],
-            model: '',
+            model,
+            max_response,
+            temperature,
+            top_p,
+            frequency_penalty,
+            presence_penalty,
             stream: true
           })
         }

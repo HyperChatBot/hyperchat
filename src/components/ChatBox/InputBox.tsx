@@ -25,6 +25,18 @@ const InputBox: FC = () => {
   const [hashFile, setHashFile] = useState<HashFile | null>(null)
   const requests = useModelApis(question, hashFile as HashFile)
 
+  const insertShiftEnter = (event) => {
+    if ((event.keyCode === 13 || event.key === 'Enter') && event.shiftKey) {
+      const start = event.target.selectionStart
+      const end = event.target.selectionEnd
+      const value = event.target.value
+
+      setQuestion(value.substring(0, start) + '\n' + value.substring(end))
+      event.target.selectionStart = event.target.selectionEnd = start + 1
+      event.preventDefault()
+    }
+  }
+
   const onFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
 
@@ -82,6 +94,7 @@ const InputBox: FC = () => {
           multiline
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
+          onKeyDown={insertShiftEnter}
           disableUnderline
           fullWidth
           sx={{
