@@ -11,7 +11,7 @@ import {
   TextCompletionConfiguration,
   models
 } from 'src/configurations/textCompletion'
-import { db } from 'src/db'
+import { useDB } from 'src/hooks'
 import { currConversationState } from 'src/stores/conversation'
 import {
   configurationDrawerVisibleState,
@@ -26,13 +26,13 @@ const Configuration: FC = () => {
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
   )
+  const { updateOneById } = useDB(currProduct)
 
   const updateConfiguration = async (values: TextCompletionConfiguration) => {
     if (!currConversation) {
       return
     }
-
-    await db[currProduct].update(currConversation.conversation_id, {
+    await updateOneById(currConversation.conversation_id, {
       configuration: values
     })
 

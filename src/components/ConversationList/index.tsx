@@ -1,7 +1,7 @@
-import { FC, useEffect } from 'react'
+import { FC } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { configurations } from 'src/configurations'
-import { db } from 'src/db'
+import { useDB } from 'src/hooks'
 import { conversationTitles } from 'src/shared/constants'
 import { currConversationState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
@@ -21,6 +21,7 @@ const ConversationList: FC<Props> = ({ conversations }) => {
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
   )
+  const { insertOne } = useDB(currProduct)
 
   const addConversation = async () => {
     const chatId = v4()
@@ -36,16 +37,12 @@ const ConversationList: FC<Props> = ({ conversations }) => {
     }
 
     setCurrConversation(conversation)
-    db[currProduct].add(conversation)
+    insertOne(conversation)
   }
 
   const switchChat = (conversation: Conversation) => {
     setCurrConversation(conversation)
   }
-
-  useEffect(() => {
-    setCurrConversation(conversations[0])
-  }, [])
 
   return (
     <section className="w-87.75">

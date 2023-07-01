@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import toast from 'src/components/Snackbar'
-import { db } from 'src/db'
+import { useDB } from 'src/hooks'
 import { settingsState } from 'src/stores/settings'
 import { Companies, ThemeMode } from 'src/types/global'
 import { Settings } from 'src/types/settings'
@@ -12,6 +12,7 @@ const useSettings = () => {
   const { transformFilenameToSrc } = useAppData()
   const [loading, setLoading] = useState(false)
   const [settings, setSettings] = useRecoilState(settingsState)
+  const { updateOneById, insertOne, toArray } = useDB('settings')
 
   const initialSettings = async () => {
     const defaultData = {
@@ -27,16 +28,14 @@ const useSettings = () => {
       assistant_avatar_filename: ''
     }
 
-    await db.settings.add(defaultData)
+    await insertOne(defaultData)
     setSettings(defaultData)
   }
 
   const updateSettings = async (newSettings: Settings) => {
     if (!settings) return
 
-    await db.settings
-      .where({ settings_id: settings.settings_id })
-      .modify(newSettings)
+    await updateOneById(settings.settings_id, newSettings)
 
     if (
       !settings.assistant_avatar_filename.endsWith(
@@ -59,7 +58,8 @@ const useSettings = () => {
   const getSettings = async () => {
     setLoading(true)
     try {
-      const currSettings = await db.settings.toCollection().first()
+      const settings = (await toArray()) as Settings[]
+      const currSettings = settings[0]
 
       if (!currSettings) {
         initialSettings()

@@ -2,6 +2,7 @@ import useAppData from './useAppData'
 import useAzureChatStream from './useAzureChatStream'
 import useAzureImageGeneration from './useAzureImageGeneration'
 import useAzureTextCompletion from './useAzureTextCompletion'
+import useDB from './useDB'
 import useEnterKey from './useEnterKey'
 import useMessages from './useMessages'
 import useModelApis from './useModelApis'
@@ -22,6 +23,7 @@ export {
   useOpenAIAudio,
   useOpenAIImage,
   useTheme,
+  useDB,
   useSettings,
   useAppData,
   useOpenAI,

@@ -3,11 +3,9 @@ import { Cog6ToothIcon as Cog6ToothIconSolid } from '@heroicons/react/24/solid'
 import Tooltip from '@mui/material/Tooltip'
 import { FC, MouseEvent } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useRecoilState } from 'recoil'
 import LogoImg from 'src/assets/chatbot.png'
 import { useSettings } from 'src/hooks'
-import { db } from 'src/db'
-import { currConversationState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { Products } from 'src/types/global'
 import Avatar from '../Avatar'
@@ -18,17 +16,10 @@ const Sidebar: FC = () => {
   const { settings } = useSettings()
   const [currProduct, setCurrProduct] = useRecoilState(currProductState)
   const location = useLocation()
-  const setCurrConversation = useSetRecoilState(currConversationState)
 
   const onProductChange = async (e: MouseEvent, product: Products) => {
     window.localStorage.setItem('currProductState', product)
     setCurrProduct(product)
-
-    const conversations = await db[product]
-      .orderBy('updated_at')
-      .reverse()
-      .toArray()
-    setCurrConversation(conversations[0])
   }
 
   return (

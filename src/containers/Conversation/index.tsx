@@ -1,21 +1,27 @@
 import { useLiveQuery } from 'dexie-react-hooks'
-import { FC } from 'react'
-import { useRecoilValue } from 'recoil'
+import { FC, useEffect } from 'react'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import ChatBox from 'src/components/ChatBox'
 import ConversationList from 'src/components/ConversationList'
 import Divider from 'src/components/Divider'
 import Loading from 'src/components/Loading'
 import { configurations } from 'src/configurations'
-import { db } from 'src/db'
+import { useDB } from 'src/hooks'
+import { currConversationState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 
 const Conversation: FC = () => {
   const currProduct = useRecoilValue(currProductState)
-  const conversations = useLiveQuery(
-    () => db[currProduct].orderBy('updated_at').reverse().toArray(),
-    [currProduct]
-  )
+  const { getCurrConversations } = useDB(currProduct)
+  const conversations = useLiveQuery(getCurrConversations, [currProduct])
+  const setCurrConversation = useSetRecoilState(currConversationState)
   const Configuration = configurations[currProduct].component()
+
+  useEffect(() => {
+    if (conversations) {
+      setCurrConversation(conversations[0])
+    }
+  }, [conversations, currProduct])
 
   if (!conversations) return <Loading />
 

@@ -9,7 +9,7 @@ import classNames from 'classnames'
 import { FC, KeyboardEvent, useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatbot.png'
-import { db } from 'src/db'
+import { useDB } from 'src/hooks'
 import { EMPTY_CHAT_HINT } from 'src/shared/constants'
 import {
   avatarPickerVisibleState,
@@ -21,6 +21,7 @@ import {
   currProductState,
   onlineState
 } from 'src/stores/global'
+import { Conversation } from 'src/types/conversation'
 import { EmojiPickerProps } from 'src/types/global'
 import Avatar from '../Avatar'
 import EmojiPicker from '../EmojiPicker'
@@ -43,6 +44,7 @@ const ContactHeader: FC = () => {
   const [summaryValue, setSummaryValue] = useState(
     currConversation?.summary || ''
   )
+  const { updateOneById, deleteOneById, toArray } = useDB(currProduct)
 
   const summary =
     currConversation?.summary ||
@@ -58,7 +60,7 @@ const ContactHeader: FC = () => {
     if (summaryValue.trim().length === 0) return
 
     if (currConversation) {
-      await db[currProduct].update(currConversation.conversation_id, {
+      await updateOneById(currConversation.conversation_id, {
         summary: summaryValue
       })
       setCurrConversation({ ...currConversation, summary: summaryValue })
@@ -78,7 +80,7 @@ const ContactHeader: FC = () => {
 
   const saveAvatar = async (data: EmojiPickerProps) => {
     if (currConversation) {
-      await db[currProduct].update(currConversation.conversation_id, {
+      await updateOneById(currConversation.conversation_id, {
         avatar: data.native
       })
       setCurrConversation({ ...currConversation, avatar: data.native })
@@ -88,9 +90,11 @@ const ContactHeader: FC = () => {
 
   const deleteCurrConversation = async () => {
     if (currConversation) {
-      await db[currProduct].delete(currConversation.conversation_id)
-      const conversations = await db[currProduct].toArray()
-      setCurrConversation(conversations[0])
+      await deleteOneById(currConversation.conversation_id)
+      const conversations = await toArray<Conversation[]>()
+      if (conversations) {
+        setCurrConversation(conversations[0])
+      }
     }
   }
 

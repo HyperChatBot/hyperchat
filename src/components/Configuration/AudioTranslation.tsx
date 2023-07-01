@@ -8,7 +8,7 @@ import { FC, useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { models, responseFormats } from 'src/configurations/audioTranscription'
 import { AudioTranslationConfiguration } from 'src/configurations/audioTranslation'
-import { db } from 'src/db'
+import { useDB } from 'src/hooks'
 import { currConversationState } from 'src/stores/conversation'
 import {
   configurationDrawerVisibleState,
@@ -23,13 +23,14 @@ const Configuration: FC = () => {
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
   )
+  const { updateOneById } = useDB(currProduct)
 
   const updateConfiguration = async (values: AudioTranslationConfiguration) => {
     if (!currConversation) {
       return
     }
 
-    await db[currProduct].update(currConversation.conversation_id, {
+    await updateOneById(currConversation.conversation_id, {
       configuration: values
     })
 

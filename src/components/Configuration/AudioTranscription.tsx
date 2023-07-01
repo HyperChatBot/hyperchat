@@ -14,7 +14,7 @@ import {
   models,
   responseFormats
 } from 'src/configurations/audioTranscription'
-import { db } from 'src/db'
+import { useDB } from 'src/hooks'
 import { countries } from 'src/shared/countries'
 import { currConversationState } from 'src/stores/conversation'
 import {
@@ -30,6 +30,7 @@ const Configuration: FC = () => {
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
   )
+  const { updateOneById } = useDB(currProduct)
 
   const updateConfiguration = async (
     values: AudioTranscriptionConfiguration
@@ -38,7 +39,7 @@ const Configuration: FC = () => {
       return
     }
 
-    await db[currProduct].update(currConversation.conversation_id, {
+    await updateOneById(currConversation.conversation_id, {
       configuration: values
     })
 

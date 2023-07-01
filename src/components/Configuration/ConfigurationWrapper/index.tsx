@@ -4,7 +4,7 @@ import { FC, ReactElement, cloneElement, useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import Divider from 'src/components/Divider'
 import { ChatConfiguration } from 'src/configurations/chat'
-import { db } from 'src/db'
+import { useDB } from 'src/hooks'
 import { currConversationState } from 'src/stores/conversation'
 import {
   configurationDrawerVisibleState,
@@ -21,13 +21,14 @@ const ConfigurationWrapper: FC<Props> = ({ children }) => {
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
   )
+  const { updateOneById } = useDB(currProduct)
 
   const updateConfiguration = async (values: ChatConfiguration) => {
     if (!currConversation) {
       return
     }
 
-    await db[currProduct].update(currConversation.conversation_id, {
+    await updateOneById(currConversation.conversation_id, {
       configuration: values
     })
 

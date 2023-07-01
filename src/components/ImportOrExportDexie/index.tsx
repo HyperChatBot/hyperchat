@@ -7,14 +7,14 @@ const ImportOrExportDexie: FC = () => {
   const [usage, setUsage] = useState(0)
 
   const exportDatabase = async () => {
-    const db = await new Dexie('hyperchat').open()
-    const blob = await exportDB(db)
+    const database = await new Dexie('hyperchat').open()
+    const blob = await exportDB(database)
     return blob
   }
 
   const importDatabase = async (file: File) => {
-    const db = await importDB(file)
-    return db.backendDB()
+    const database = await importDB(file)
+    return database.backendDB()
   }
 
   return (
