@@ -1,10 +1,12 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { ImageGenerationConfiguration } from 'src/configurations/imageGeneration'
 import { useMessages, useOpenAI } from 'src/hooks'
 import { showErrorToast } from 'src/shared/utils'
-import { loadingState } from 'src/stores/conversation'
+import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 
-const useImage = (question: string) => {
+const useOpenAIImageGeneration = (question: string) => {
+  const currConversation = useRecoilValue(currConversationState)
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
   const openai = useOpenAI()
@@ -14,8 +16,11 @@ const useImage = (question: string) => {
     rollBackEmptyMessage
   } = useMessages()
 
-  const createImage = async () => {
-    if (!settings) return
+  const createImageGeneration = async () => {
+    if (!settings || !currConversation) return
+
+    const { n, size, response_format } =
+      currConversation.configuration as ImageGenerationConfiguration
 
     try {
       setLoading(true)
@@ -26,7 +31,9 @@ const useImage = (question: string) => {
 
       const image = await openai.createImage({
         prompt: question,
-        size: settings.image_generation_size
+        n,
+        size,
+        response_format
       })
 
       const content = image.data.data
@@ -42,7 +49,7 @@ const useImage = (question: string) => {
     }
   }
 
-  return { createImage }
+  return { createImageGeneration }
 }
 
-export default useImage
+export default useOpenAIImageGeneration

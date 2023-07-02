@@ -25,3 +25,7 @@
     background-size: 400%;
   }
 }
+
+mjx-container[jax='SVG'] > svg {
+  display: inline-block;
+}

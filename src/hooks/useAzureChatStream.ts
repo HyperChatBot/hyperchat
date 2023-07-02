@@ -1,14 +1,15 @@
-import { useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import toast from 'src/components/Snackbar'
-import { OPENAI_CHAT_COMPLETION_URL } from 'src/shared/constants'
+import { ChatConfiguration } from 'src/configurations/chat'
 import { generateErrorMessage } from 'src/shared/utils'
-import { loadingState } from 'src/stores/conversation'
+import { currConversationState, loadingState } from 'src/stores/conversation'
 import { ErrorType } from 'src/types/global'
 import { OpenAIChatResponse, OpenAIError } from 'src/types/openai'
 import useMessages from './useMessages'
 import useSettings from './useSettings'
 
-const useChatStream = (question: string) => {
+const useAzureChatStream = (question: string) => {
+  const currConversation = useRecoilValue(currConversationState)
   const { settings } = useSettings()
   const setLoading = useSetRecoilState(loadingState)
   const {
@@ -19,7 +20,18 @@ const useChatStream = (question: string) => {
   } = useMessages()
 
   const createChatCompletion = async () => {
-    if (!settings) return
+    if (!settings || !currConversation) return
+
+    const {
+      model,
+      system_message,
+      max_response,
+      temperature,
+      top_p,
+      frequency_penalty,
+      presence_penalty,
+      stop
+    } = currConversation.configuration as ChatConfiguration
 
     setLoading(true)
 
@@ -30,25 +42,36 @@ const useChatStream = (question: string) => {
     let chat: Response | undefined
 
     try {
-      chat = await fetch(OPENAI_CHAT_COMPLETION_URL, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${settings.secret_key}`,
-          'OpenAI-Organization': settings.organization_id
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          messages: [
-            {
-              role: 'user',
-              content: question
-            }
-          ],
-          model: settings.chat_model,
-          stream: settings.chat_stream,
-          user: settings.author_name
-        })
-      })
+      chat = await fetch(
+        `${settings.azure_endpoint}/openai/deployments/${settings.azure_deployment_name}/chat/completions?api-version=2023-03-15-preview`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'api-key': settings.azure_secret_key
+          },
+          method: 'POST',
+          body: JSON.stringify({
+            messages: [
+              {
+                role: 'system',
+                content: system_message
+              },
+              {
+                role: 'user',
+                content: question
+              }
+            ],
+            model,
+            max_tokens: max_response,
+            temperature,
+            top_p,
+            stop,
+            frequency_penalty,
+            presence_penalty,
+            stream: true
+          })
+        }
+      )
     } catch {
       // Do nothing, the error will be catched by the following `chat.status !== 200` phrase.
       return
@@ -58,7 +81,7 @@ const useChatStream = (question: string) => {
 
     if (!reader) {
       toast.error(
-        generateErrorMessage(ErrorType.Unknown, 'Cannot get ReadableStream.')
+        generateErrorMessage(ErrorType.Azure, 'Cannot get ReadableStream.')
       )
       setLoading(false)
       return
@@ -71,7 +94,7 @@ const useChatStream = (question: string) => {
       const chunk = decoder.decode(value, { stream: true })
       const errorData: OpenAIError = JSON.parse(chunk)
       toast.error(
-        generateErrorMessage(ErrorType.OpenAI, errorData.error.message)
+        generateErrorMessage(ErrorType.Azure, errorData.error.message)
       )
       rollBackEmptyMessage()
       setLoading(false)
@@ -112,7 +135,7 @@ const useChatStream = (question: string) => {
 
         return read()
       } catch {
-        generateErrorMessage(ErrorType.Unknown, 'Stream data parsing error.')
+        generateErrorMessage(ErrorType.Azure, 'Stream data parsing error.')
       } finally {
         setLoading(false)
       }
@@ -125,4 +148,4 @@ const useChatStream = (question: string) => {
   return { createChatCompletion }
 }
 
-export default useChatStream
+export default useAzureChatStream

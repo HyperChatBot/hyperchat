@@ -1,10 +1,10 @@
 import classNames from 'classnames'
 import { FC, Fragment, useEffect, useRef } from 'react'
 import { useRecoilValue } from 'recoil'
-import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
+import ChatGPTLogoImg from 'src/assets/chatbot.png'
 import NoDataIllustration from 'src/assets/illustrations/no-data.svg'
 import { useSettings } from 'src/hooks'
-import { isAudioProduct } from 'src/shared/utils'
+import { isOpenAIAudioProduct } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import Waveform from '../Waveform'
@@ -39,7 +39,7 @@ const ChatMessages: FC = () => {
   return (
     <section
       className={classNames(
-        'no-scrollbar relative h-[calc(100vh_-_8.25rem)] overflow-y-scroll p-6 pb-0',
+        'no-scrollbar relative h-[calc(100vh_-_8.25rem)] overflow-y-scroll p-6',
         { 'flex items-center justify-center': !hasMessages }
       )}
       ref={chatBoxRef}
@@ -53,7 +53,7 @@ const ChatMessages: FC = () => {
                 avatar=""
                 date={message.question_created_at}
               >
-                {isAudioProduct(currProduct) && message.file_name && (
+                {isOpenAIAudioProduct(currProduct) && message.file_name && (
                   <Waveform filename={message.file_name} />
                 )}
                 {message.question}

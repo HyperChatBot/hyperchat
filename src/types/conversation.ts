@@ -1,3 +1,9 @@
+import { AudioTranscriptionConfiguration } from '../configurations/audioTranscription'
+import { AudioTranslationConfiguration } from '../configurations/audioTranslation'
+import { ChatConfiguration } from '../configurations/chat'
+import { ImageGenerationConfiguration } from '../configurations/imageGeneration'
+import { TextCompletionConfiguration } from '../configurations/textCompletion'
+
 export interface Message {
   message_id: string
   question: string
@@ -14,6 +20,12 @@ export interface Conversation {
   created_at: number
   updated_at: number
   messages: Message[]
+  configuration:
+    | ChatConfiguration
+    | ImageGenerationConfiguration
+    | AudioTranscriptionConfiguration
+    | AudioTranslationConfiguration
+    | TextCompletionConfiguration
 }
 
 export type EmptyMessageParams = Pick<Message, 'question' | 'file_name'>

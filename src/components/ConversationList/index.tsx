@@ -1,6 +1,7 @@
-import { FC, useEffect } from 'react'
+import { FC } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { db } from 'src/models/db'
+import { configurations } from 'src/configurations'
+import { useDB } from 'src/hooks'
 import { conversationTitles } from 'src/shared/constants'
 import { currConversationState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
@@ -20,6 +21,7 @@ const ConversationList: FC<Props> = ({ conversations }) => {
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
   )
+  const { insertOne } = useDB(currProduct)
 
   const addConversation = async () => {
     const chatId = v4()
@@ -30,25 +32,22 @@ const ConversationList: FC<Props> = ({ conversations }) => {
       summary: '',
       messages: [],
       created_at: +new Date(),
-      updated_at: +new Date()
+      updated_at: +new Date(),
+      configuration: configurations[currProduct].default
     }
 
     setCurrConversation(conversation)
-    db[currProduct].add(conversation)
+    insertOne(conversation)
   }
 
   const switchChat = (conversation: Conversation) => {
     setCurrConversation(conversation)
   }
 
-  useEffect(() => {
-    setCurrConversation(conversations[0])
-  }, [])
-
   return (
     <section className="w-87.75">
       <section className="flex items-center justify-between p-6">
-        <span className="mr-4 text-xl font-semibold dark:text-dark-text">
+        <span className="mr-4 truncate text-xl font-semibold dark:text-dark-text">
           {conversationTitles[currProduct]}
         </span>
         <OutlinePlusIcon onClick={addConversation} />

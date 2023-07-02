@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { FC } from 'react'
-import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
+import ChatGPTLogoImg from 'src/assets/chatbot.png'
 import { formatDate } from 'src/shared/utils'
 import { Conversation } from 'src/types/conversation'
 import ItemWrapper from './ItemWrapper'

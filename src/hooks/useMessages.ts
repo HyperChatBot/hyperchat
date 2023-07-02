@@ -1,6 +1,6 @@
 import { produce } from 'immer'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { db } from 'src/models/db'
+import { useDB } from 'src/hooks'
 import { currConversationState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import {
@@ -23,6 +23,7 @@ const useMessages = () => {
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
   )
+  const { getOneById, updateOneById } = useDB(currProduct)
 
   const pushEmptyMessage = (params: EmptyMessageParams) => {
     const emptyMessage = generateEmptyMessage(params)
@@ -63,7 +64,7 @@ const useMessages = () => {
     emptyMessage: Message,
     answer: string
   ) => {
-    const conversation = await db[currProduct].get(
+    const conversation = await getOneById<Conversation>(
       (currConversation as Conversation).conversation_id
     )
 
@@ -75,7 +76,7 @@ const useMessages = () => {
       })
       conversation.updated_at = +new Date()
 
-      await db[currProduct].update(
+      await updateOneById(
         (currConversation as Conversation).conversation_id,
         conversation
       )

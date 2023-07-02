@@ -3,7 +3,7 @@ import { FC } from 'react'
 
 interface Props {
   src: string
-  size?: 'xs' | 'm'
+  size?: 'xs' | 'md'
   className?: string
   onClick?: () => void
 }

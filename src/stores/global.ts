@@ -11,7 +11,7 @@ export const currProductState = atom({
   key: 'currProductState',
   default:
     (window.localStorage.getItem('currProductState') as Products) ||
-    Products.ChatCompletion
+    Products.OpenAIChat
 })
 
 export const themeState = atom<ThemeMode.dark | ThemeMode.light>({
@@ -19,7 +19,7 @@ export const themeState = atom<ThemeMode.dark | ThemeMode.light>({
   default: themeModeToTheme()
 })
 
-export const initialDialogVisibleState = atom({
-  key: 'initialDialogVisibleState',
+export const configurationDrawerVisibleState = atom({
+  key: 'configurationDrawerVisibleState',
   default: false
 })

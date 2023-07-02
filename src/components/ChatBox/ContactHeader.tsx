@@ -1,3 +1,4 @@
+import { AdjustmentsVerticalIcon } from '@heroicons/react/24/outline'
 import {
   CheckIcon,
   PencilSquareIcon,
@@ -6,16 +7,20 @@ import {
 import Input from '@mui/material/Input'
 import classNames from 'classnames'
 import { FC, KeyboardEvent, useEffect, useState } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import ChatGPTLogoImg from 'src/assets/chatgpt-avatar.png'
-import { db } from 'src/models/db'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import ChatGPTLogoImg from 'src/assets/chatbot.png'
+import { useDB } from 'src/hooks'
 import { EMPTY_CHAT_HINT } from 'src/shared/constants'
 import {
   avatarPickerVisibleState,
   currConversationState,
   summaryInputVisibleState
 } from 'src/stores/conversation'
-import { currProductState, onlineState } from 'src/stores/global'
+import {
+  configurationDrawerVisibleState,
+  currProductState,
+  onlineState
+} from 'src/stores/global'
 import { EmojiPickerProps } from 'src/types/global'
 import Avatar from '../Avatar'
 import EmojiPicker from '../EmojiPicker'
@@ -32,9 +37,13 @@ const ContactHeader: FC = () => {
     avatarPickerVisibleState
   )
   const isOnline = useRecoilValue(onlineState)
+  const setConfigurationDrawerVisible = useSetRecoilState(
+    configurationDrawerVisibleState
+  )
   const [summaryValue, setSummaryValue] = useState(
     currConversation?.summary || ''
   )
+  const { updateOneById, deleteOneById } = useDB(currProduct)
 
   const summary =
     currConversation?.summary ||
@@ -50,10 +59,12 @@ const ContactHeader: FC = () => {
     if (summaryValue.trim().length === 0) return
 
     if (currConversation) {
-      await db[currProduct].update(currConversation.conversation_id, {
-        summary: summaryValue
-      })
-      setCurrConversation({ ...currConversation, summary: summaryValue })
+      const changes = {
+        summary: summaryValue,
+        updated_at: +new Date()
+      }
+      await updateOneById(currConversation.conversation_id, changes)
+      setCurrConversation({ ...currConversation, ...changes })
       setSummaryInputVisible(false)
     }
   }
@@ -70,19 +81,19 @@ const ContactHeader: FC = () => {
 
   const saveAvatar = async (data: EmojiPickerProps) => {
     if (currConversation) {
-      await db[currProduct].update(currConversation.conversation_id, {
-        avatar: data.native
-      })
-      setCurrConversation({ ...currConversation, avatar: data.native })
+      const changes = {
+        avatar: data.native,
+        updated_at: +new Date()
+      }
+      await updateOneById(currConversation.conversation_id, changes)
+      setCurrConversation({ ...currConversation, ...changes })
       setAvatarPickerVisible(false)
     }
   }
 
   const deleteCurrConversation = async () => {
     if (currConversation) {
-      await db[currProduct].delete(currConversation.conversation_id)
-      const conversations = await db[currProduct].toArray()
-      setCurrConversation(conversations[0])
+      await deleteOneById(currConversation.conversation_id)
     }
   }
 
@@ -154,8 +165,19 @@ const ContactHeader: FC = () => {
         </section>
       </section>
       {currConversation && (
-        <section className="flex cursor-pointer rounded-lg bg-main-purple bg-opacity-10 pb-2.5 pl-4 pr-4 pt-2.5 text-main-purple">
-          <TrashIcon className="h-4 w-4" onClick={deleteCurrConversation} />
+        <section className="flex flex-row gap-2">
+          <section
+            className="flex cursor-pointer rounded-lg bg-main-purple bg-opacity-10 pb-2.5 pl-4 pr-4 pt-2.5 text-main-purple"
+            onClick={deleteCurrConversation}
+          >
+            <TrashIcon className="h-4 w-4" />
+          </section>
+          <section
+            className="flex cursor-pointer rounded-lg bg-main-purple bg-opacity-10 pb-2.5 pl-4 pr-4 pt-2.5 text-main-purple"
+            onClick={() => setConfigurationDrawerVisible(true)}
+          >
+            <AdjustmentsVerticalIcon className="h-4 w-4" />
+          </section>
         </section>
       )}
     </section>

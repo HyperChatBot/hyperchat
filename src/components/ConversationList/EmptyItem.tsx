@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { OutlinePlusIcon } from 'src/components/Icons'
 import { EMPTY_CHAT_HINT } from 'src/shared/constants'
-import MesssageItemWrapper from './ItemWrapper'
+import ItemWrapper from './ItemWrapper'
 
 interface Props {
   onClick: () => void
@@ -9,7 +9,7 @@ interface Props {
 
 const EmptyItem: FC<Props> = ({ onClick }) => {
   return (
-    <MesssageItemWrapper
+    <ItemWrapper
       onClick={onClick}
       active
       className="items-center justify-center"
@@ -18,7 +18,7 @@ const EmptyItem: FC<Props> = ({ onClick }) => {
         {EMPTY_CHAT_HINT}
       </p>
       <OutlinePlusIcon />
-    </MesssageItemWrapper>
+    </ItemWrapper>
   )
 }
 

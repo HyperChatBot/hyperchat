@@ -7,6 +7,9 @@ export default {
       '3xl': '1920px'
     },
     extend: {
+      fontSize: {
+        10: 2 / 3 + 'rem' // 10px
+      },
       width: {
         2.5: '0.625rem', // 10px
         14: '3.5rem', // 56px
@@ -27,6 +30,7 @@ export default {
       },
       height: {
         2.5: '0.625rem', // 10px
+        22: '5.5rem', // 88px
         160: '40rem' // 640px
       },
       colors: {
