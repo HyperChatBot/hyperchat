@@ -21,7 +21,6 @@ import {
   currProductState,
   onlineState
 } from 'src/stores/global'
-import { Conversation } from 'src/types/conversation'
 import { EmojiPickerProps } from 'src/types/global'
 import Avatar from '../Avatar'
 import EmojiPicker from '../EmojiPicker'
@@ -44,7 +43,7 @@ const ContactHeader: FC = () => {
   const [summaryValue, setSummaryValue] = useState(
     currConversation?.summary || ''
   )
-  const { updateOneById, deleteOneById, toArray } = useDB(currProduct)
+  const { updateOneById, deleteOneById } = useDB(currProduct)
 
   const summary =
     currConversation?.summary ||
@@ -60,10 +59,12 @@ const ContactHeader: FC = () => {
     if (summaryValue.trim().length === 0) return
 
     if (currConversation) {
-      await updateOneById(currConversation.conversation_id, {
-        summary: summaryValue
-      })
-      setCurrConversation({ ...currConversation, summary: summaryValue })
+      const changes = {
+        summary: summaryValue,
+        updated_at: +new Date()
+      }
+      await updateOneById(currConversation.conversation_id, changes)
+      setCurrConversation({ ...currConversation, ...changes })
       setSummaryInputVisible(false)
     }
   }
@@ -80,10 +81,12 @@ const ContactHeader: FC = () => {
 
   const saveAvatar = async (data: EmojiPickerProps) => {
     if (currConversation) {
-      await updateOneById(currConversation.conversation_id, {
-        avatar: data.native
-      })
-      setCurrConversation({ ...currConversation, avatar: data.native })
+      const changes = {
+        avatar: data.native,
+        updated_at: +new Date()
+      }
+      await updateOneById(currConversation.conversation_id, changes)
+      setCurrConversation({ ...currConversation, ...changes })
       setAvatarPickerVisible(false)
     }
   }
@@ -91,10 +94,6 @@ const ContactHeader: FC = () => {
   const deleteCurrConversation = async () => {
     if (currConversation) {
       await deleteOneById(currConversation.conversation_id)
-      const conversations = await toArray<Conversation[]>()
-      if (conversations) {
-        setCurrConversation(conversations[0])
-      }
     }
   }
 

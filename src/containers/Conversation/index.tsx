@@ -18,7 +18,7 @@ const Conversation: FC = () => {
   const Configuration = configurations[currProduct].component()
 
   useEffect(() => {
-    if (conversations) {
+    if (conversations && currProduct) {
       setCurrConversation(conversations[0])
     }
   }, [conversations, currProduct])
