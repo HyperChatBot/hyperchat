@@ -6,6 +6,7 @@ export interface ChatConfiguration {
   top_p: number
   frequency_penalty: number
   presence_penalty: number
+  stop: string[]
 }
 
 export const models = [
@@ -22,5 +23,6 @@ export const configuration: ChatConfiguration = {
   temperature: 0.7,
   top_p: 0.95,
   frequency_penalty: 0,
-  presence_penalty: 0
+  presence_penalty: 0,
+  stop: []
 }

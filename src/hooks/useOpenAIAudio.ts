@@ -1,11 +1,14 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { AudioTranscriptionConfiguration } from 'src/configurations/audioTranscription'
+import { AudioTranslationConfiguration } from 'src/configurations/audioTranslation'
 import { useMessages, useOpenAI } from 'src/hooks'
 import { showErrorToast } from 'src/shared/utils'
-import { loadingState } from 'src/stores/conversation'
+import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 import { HashFile } from 'src/types/global'
 
 const useOpenAIAudio = (question: string, hashFile: HashFile | null) => {
+  const currConversation = useRecoilValue(currConversationState)
   const settings = useRecoilValue(settingsState)
   const setLoading = useSetRecoilState(loadingState)
   const openai = useOpenAI()
@@ -16,8 +19,10 @@ const useOpenAIAudio = (question: string, hashFile: HashFile | null) => {
   } = useMessages()
 
   const createTranscription = async () => {
-    if (!hashFile) return
-    if (!settings) return
+    if (!hashFile || !settings || !currConversation) return
+
+    const { model, temperature, language, response_format } =
+      currConversation.configuration as AudioTranscriptionConfiguration
 
     try {
       setLoading(true)
@@ -29,9 +34,11 @@ const useOpenAIAudio = (question: string, hashFile: HashFile | null) => {
 
       const transcription = await openai.createTranscription(
         hashFile.file,
-        'whisper-1',
+        model,
         question,
-        'json'
+        response_format,
+        temperature,
+        language
       )
 
       saveMessageToDbAndUpdateConversationState(
@@ -47,8 +54,10 @@ const useOpenAIAudio = (question: string, hashFile: HashFile | null) => {
   }
 
   const createTranslation = async () => {
-    if (!settings) return
-    if (!hashFile) return
+    if (!hashFile || !settings || !currConversation) return
+
+    const { model, temperature, response_format } =
+      currConversation.configuration as AudioTranslationConfiguration
 
     try {
       setLoading(true)
@@ -60,8 +69,10 @@ const useOpenAIAudio = (question: string, hashFile: HashFile | null) => {
 
       const translation = await openai.createTranslation(
         hashFile.file,
-        'whisper-1',
-        question
+        model,
+        question,
+        response_format,
+        temperature
       )
 
       saveMessageToDbAndUpdateConversationState(

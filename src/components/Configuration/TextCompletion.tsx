@@ -1,9 +1,14 @@
+import Autocomplete from '@mui/material/Autocomplete'
+import Checkbox from '@mui/material/Checkbox'
+import Chip from '@mui/material/Chip'
 import Drawer from '@mui/material/Drawer'
 import FormControl from '@mui/material/FormControl'
+import InputAdornment from '@mui/material/InputAdornment'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
 import TextField from '@mui/material/TextField'
+import Tooltip from '@mui/material/Tooltip'
 import { Formik, useFormikContext } from 'formik'
 import { FC, useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -73,7 +78,7 @@ const Configuration: FC = () => {
         >
           {(formik) => (
             <section className="no-scrollbar h-[calc(100vh_-_7.5625rem)] overflow-y-scroll p-6">
-              <FormControl size="small" sx={{ marginBottom: 4 }} fullWidth>
+              <FormControl size="small" fullWidth>
                 <InputLabel id="model-select-label">Model</InputLabel>
                 <Select
                   fullWidth
@@ -90,16 +95,6 @@ const Configuration: FC = () => {
                 </Select>
               </FormControl>
 
-              <TextField
-                fullWidth
-                id="system-message"
-                label="System Message"
-                multiline
-                rows={5}
-                placeholder="Eg: You are an AI assistant that helps people find information."
-                {...formik.getFieldProps('system_message')}
-              />
-
               <InputSlider
                 title="Max response"
                 tooltipTitle="Set a limit on the number of tokens per model response. The API supports a maximum of 4000 tokens shared between the prompt (including system message, examples, message history, and user query) and the model's response. One token is roughly 4 characters for typical English text."
@@ -115,6 +110,39 @@ const Configuration: FC = () => {
                   formik.setFieldValue('max_response', value)
                 }
               />
+
+              <Tooltip
+                title="Make responses stop at a desired point, such as the end of a sentence or list. Specify up to four sequences where the model will stop generating further tokens in a response. The returned text will not contain the stop sequence."
+                placement="top"
+              >
+                <FormControl size="small" fullWidth>
+                  <Autocomplete
+                    multiple
+                    id="stop"
+                    options={[]}
+                    value={formik.values.stop}
+                    freeSolo
+                    renderTags={(value: readonly string[], getTagProps) =>
+                      value.map((option: string, index: number) => (
+                        <Chip
+                          variant="outlined"
+                          label={option}
+                          {...getTagProps({ index })}
+                        />
+                      ))
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Stop sequences"
+                        placeholder="Enter sequence and press Tab"
+                      />
+                    )}
+                    onChange={(_, value) => formik.setFieldValue('stop', value)}
+                  />
+                </FormControl>
+              </Tooltip>
+
               <InputSlider
                 title="Temperature"
                 tooltipTitle="Controls randomness. Lowering the temperature means that the model will produce more repetitive and deterministic responses. Increasing the temperature will result in more unexpected or creative responses. Try adjusting temperature or Top P but not both."
@@ -132,7 +160,7 @@ const Configuration: FC = () => {
               />
               <InputSlider
                 title="Top P"
-                tooltipTitle="Similar to temperature, this controls randomness but uses a different method. Lowering Top P will narrow the model’s token selection to likelier tokens. Increasing Top P will let the model choose from tokens with both high and low likelihood. Try adjusting temperature or Top P but not both."
+                tooltipTitle="Similar to temperature, this controls randomness but uses a different method. Lowering Top P will narrow the model's token selection to likelier tokens. Increasing Top P will let the model choose from tokens with both high and low likelihood. Try adjusting temperature or Top P but not both."
                 min={0}
                 max={1}
                 step={0.01}
@@ -160,6 +188,7 @@ const Configuration: FC = () => {
                   formik.setFieldValue('frequency_penalty', value)
                 }
               />
+
               <InputSlider
                 title="Presence penalty"
                 tooltipTitle="Reduce the chance of repeating any token that has appeared in the text at all so far. This increases the likelihood of introducing new topics in a response."
@@ -175,6 +204,75 @@ const Configuration: FC = () => {
                   formik.setFieldValue('frequency_penalty', value)
                 }
               />
+
+              <Tooltip
+                title="Insert text after the user's input and before the model's response. This can help prepare the model for a response."
+                placement="top"
+              >
+                <FormControl size="small" fullWidth sx={{ marginBottom: 4 }}>
+                  <TextField
+                    label="Pre-response text"
+                    id="pre-response-text"
+                    value={formik.values.pre_response_text.content}
+                    onChange={(event) => {
+                      formik.setFieldValue('pre_response_text', {
+                        ...formik.values.pre_response_text,
+                        content: event?.target.value
+                      })
+                    }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Checkbox
+                            checked={formik.values.pre_response_text.checked}
+                            onChange={(_, checked) =>
+                              formik.setFieldValue('pre_response_text', {
+                                ...formik.values.pre_response_text,
+                                checked
+                              })
+                            }
+                          />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </FormControl>
+              </Tooltip>
+
+              <Tooltip
+                title="Insert text after the model's generated response to encourage further user input, as when modeling a conversation."
+                placement="top"
+              >
+                <FormControl size="small" fullWidth>
+                  <TextField
+                    label="Post-response text"
+                    id="post-response-text"
+                    value={formik.values.post_response_text.content}
+                    onChange={(event) => {
+                      formik.setFieldValue('post_response_text', {
+                        ...formik.values.post_response_text,
+                        content: event?.target.value
+                      })
+                    }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Checkbox
+                            checked={formik.values.post_response_text.checked}
+                            onChange={(_, checked) =>
+                              formik.setFieldValue('post_response_text', {
+                                ...formik.values.post_response_text,
+                                checked
+                              })
+                            }
+                          />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </FormControl>
+              </Tooltip>
+
               <AutoSubmitToken />
             </section>
           )}

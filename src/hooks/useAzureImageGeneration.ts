@@ -1,13 +1,15 @@
 import { DateTime } from 'luxon'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { ImageGenerationConfiguration } from 'src/configurations/imageGeneration'
 import { useMessages } from 'src/hooks'
 import { showErrorToast } from 'src/shared/utils'
-import { loadingState } from 'src/stores/conversation'
+import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 import { AzureImageGeneration } from 'src/types/azure'
 import { sleep } from 'yancey-js-util'
 
 const useAzureImageGeneration = (question: string) => {
+  const currConversation = useRecoilValue(currConversationState)
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
   const {
@@ -17,7 +19,10 @@ const useAzureImageGeneration = (question: string) => {
   } = useMessages()
 
   const createImageGeneration = async () => {
-    if (!settings) return
+    if (!settings || !currConversation) return
+
+    const { n, size } =
+      currConversation.configuration as ImageGenerationConfiguration
 
     try {
       setLoading(true)
@@ -32,12 +37,14 @@ const useAzureImageGeneration = (question: string) => {
       }
 
       const submission = await fetch(
-        `${settings.azure_endpoint}/dalle/text-to-image?api-version=2022-08-03-preview`,
+        `${settings.azure_endpoint}/openai/images/generations:submit?api-version=2023-06-01-preview`,
         {
           headers,
           method: 'POST',
           body: JSON.stringify({
-            caption: question
+            prompt: question,
+            n,
+            size
           })
         }
       )
@@ -47,7 +54,7 @@ const useAzureImageGeneration = (question: string) => {
       let retry_after = Number(submission.headers.get('Retry-after')) * 1000
       let image: AzureImageGeneration | null = null
 
-      while (image?.status !== 'Succeeded') {
+      while (image?.status !== 'succeeded') {
         sleep(retry_after)
 
         const response = await fetch(operation_location, {
@@ -58,16 +65,17 @@ const useAzureImageGeneration = (question: string) => {
         image = (await response.json()) as AzureImageGeneration
       }
 
-      saveMessageToDbAndUpdateConversationState(
-        emptyMessage,
-        `![${question}](${
-          image.result.contentUrl
-        })\n\n(Warning: The expiration date of this image is **${DateTime.fromISO(
-          image.result.contentUrlExpiresAt
-        ).toLocaleString(
-          DateTime.DATETIME_SHORT_WITH_SECONDS
-        )}**, please download as soon as possible.)`
+      let content = ''
+      image.result.data.forEach(
+        (image) => (content += `![${question}](${image.url})\n\n`)
       )
+      content += `(Warning: The expiration date of this image is **${DateTime.fromSeconds(
+        image.expires
+      ).toLocaleString(
+        DateTime.DATETIME_SHORT_WITH_SECONDS
+      )}**, please download as soon as possible.)`
+
+      saveMessageToDbAndUpdateConversationState(emptyMessage, content)
     } catch (error) {
       showErrorToast(error)
       rollBackEmptyMessage()

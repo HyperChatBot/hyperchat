@@ -1,10 +1,12 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { TextCompletionConfiguration } from 'src/configurations/textCompletion'
 import { useMessages, useOpenAI } from 'src/hooks'
 import { showErrorToast } from 'src/shared/utils'
-import { loadingState } from 'src/stores/conversation'
+import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 
 const useOpenAITextCompletion = (question: string) => {
+  const currConversation = useRecoilValue(currConversationState)
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
   const openai = useOpenAI()
@@ -15,7 +17,18 @@ const useOpenAITextCompletion = (question: string) => {
   } = useMessages()
 
   const createTextCompletion = async () => {
-    if (!settings) return
+    if (!settings || !currConversation) return
+
+    const {
+      model,
+      max_response,
+      temperature,
+      top_p,
+      frequency_penalty,
+      presence_penalty,
+      pre_response_text,
+      post_response_text
+    } = currConversation.configuration as TextCompletionConfiguration
 
     try {
       setLoading(true)
@@ -27,14 +40,25 @@ const useOpenAITextCompletion = (question: string) => {
       const {
         data: { choices }
       } = await openai.createCompletion({
-        model: '',
+        model,
         prompt: question,
-        stream: false
+        max_tokens: max_response,
+        temperature,
+        top_p,
+        frequency_penalty,
+        presence_penalty
       })
+
+      const preResponseText = pre_response_text.checked
+        ? pre_response_text.content
+        : ''
+      const postResponseText = post_response_text.checked
+        ? post_response_text.content
+        : ''
 
       saveMessageToDbAndUpdateConversationState(
         emptyMessage,
-        choices[0].text || ''
+        preResponseText + (choices[0].text || '') + postResponseText
       )
     } catch (error) {
       showErrorToast(error)

@@ -29,7 +29,8 @@ const useAzureChatStream = (question: string) => {
       temperature,
       top_p,
       frequency_penalty,
-      presence_penalty
+      presence_penalty,
+      stop
     } = currConversation.configuration as ChatConfiguration
 
     setLoading(true)
@@ -61,9 +62,10 @@ const useAzureChatStream = (question: string) => {
               }
             ],
             model,
-            max_response,
+            max_tokens: max_response,
             temperature,
             top_p,
+            stop,
             frequency_penalty,
             presence_penalty,
             stream: true

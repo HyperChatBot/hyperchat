@@ -1,9 +1,12 @@
+import Autocomplete from '@mui/material/Autocomplete'
+import Chip from '@mui/material/Chip'
 import Drawer from '@mui/material/Drawer'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
 import TextField from '@mui/material/TextField'
+import Tooltip from '@mui/material/Tooltip'
 import { Formik, useFormikContext } from 'formik'
 import { FC, useEffect } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -110,6 +113,7 @@ const Configuration: FC = () => {
                   formik.setFieldValue('max_response', value)
                 }
               />
+
               <InputSlider
                 title="Temperature"
                 tooltipTitle="Controls randomness. Lowering the temperature means that the model will produce more repetitive and deterministic responses. Increasing the temperature will result in more unexpected or creative responses. Try adjusting temperature or Top P but not both."
@@ -124,6 +128,39 @@ const Configuration: FC = () => {
                   formik.setFieldValue('temperature', value)
                 }
               />
+
+              <Tooltip
+                title="Make responses stop at a desired point, such as the end of a sentence or list. Specify up to four sequences where the model will stop generating further tokens in a response. The returned text will not contain the stop sequence."
+                placement="top"
+              >
+                <FormControl size="small" fullWidth>
+                  <Autocomplete
+                    multiple
+                    id="stop"
+                    options={[]}
+                    value={formik.values.stop}
+                    freeSolo
+                    renderTags={(value: readonly string[], getTagProps) =>
+                      value.map((option: string, index: number) => (
+                        <Chip
+                          variant="outlined"
+                          label={option}
+                          {...getTagProps({ index })}
+                        />
+                      ))
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Stop sequences"
+                        placeholder="Enter sequence and press Tab"
+                      />
+                    )}
+                    onChange={(_, value) => formik.setFieldValue('stop', value)}
+                  />
+                </FormControl>
+              </Tooltip>
+
               <InputSlider
                 title="Top P"
                 tooltipTitle="Similar to temperature, this controls randomness but uses a different method. Lowering Top P will narrow the model’s token selection to likelier tokens. Increasing Top P will let the model choose from tokens with both high and low likelihood. Try adjusting temperature or Top P but not both."
