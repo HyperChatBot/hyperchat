@@ -8,7 +8,7 @@ import { OpenAIChatResponse, OpenAIError } from 'src/types/openai'
 import useMessages from './useMessages'
 import useSettings from './useSettings'
 
-const useAzureChatStream = (question: string) => {
+const useAzureChatStream = (prompt: string) => {
   const currConversation = useRecoilValue(currConversationState)
   const { settings } = useSettings()
   const setLoading = useSetRecoilState(loadingState)
@@ -36,7 +36,7 @@ const useAzureChatStream = (question: string) => {
     setLoading(true)
 
     const emptyMessage = pushEmptyMessage({
-      question
+      question: prompt
     })
 
     let chat: Response | undefined
@@ -58,7 +58,7 @@ const useAzureChatStream = (question: string) => {
               },
               {
                 role: 'user',
-                content: question
+                content: prompt
               }
             ],
             model,

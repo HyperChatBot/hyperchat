@@ -9,23 +9,23 @@ import {
 } from 'src/hooks'
 import { HashFile, Products } from 'src/types/global'
 
-const useModelApis = (question: string, hashFile: HashFile) => {
+const useModelApis = (prompt: string, hashFile: HashFile) => {
   const { createChatCompletion: createOpenAIChatCompletion } =
-    useOpenAIChatStream(question)
+    useOpenAIChatStream(prompt)
   const { createChatCompletion: createAzureChatCompletion } =
-    useAzureChatStream(question)
+    useAzureChatStream(prompt)
   const { createTextCompletion: createOpenAITextCompletion } =
-    useOpenAITextCompletion(question)
+    useOpenAITextCompletion(prompt)
   const { createTextCompletion: createAzureTextCompletion } =
-    useAzureTextCompletion(question)
+    useAzureTextCompletion(prompt)
   const { createImageGeneration: createOpenAIImageGeneration } =
-    useOpenAIImage(question)
+    useOpenAIImage(prompt)
   const { createImageGeneration: createAzureImageGeneration } =
-    useAzureImageGeneration(question)
+    useAzureImageGeneration(prompt)
   const {
     createTranscription: createOpenAITranscription,
     createTranslation: createOpenAITranslation
-  } = useOpenAIAudio(question, hashFile)
+  } = useOpenAIAudio(prompt, hashFile)
 
   const requests = {
     [Products.OpenAIChat]: createOpenAIChatCompletion,

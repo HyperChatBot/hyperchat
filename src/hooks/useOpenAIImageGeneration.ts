@@ -5,7 +5,7 @@ import { showErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 
-const useOpenAIImageGeneration = (question: string) => {
+const useOpenAIImageGeneration = (prompt: string) => {
   const currConversation = useRecoilValue(currConversationState)
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
@@ -26,18 +26,18 @@ const useOpenAIImageGeneration = (question: string) => {
       setLoading(true)
 
       const emptyMessage = pushEmptyMessage({
-        question
+        question: prompt
       })
 
       const image = await openai.createImage({
-        prompt: question,
+        prompt: prompt,
         n,
         size,
         response_format
       })
 
       const content = image.data.data
-        .map((val, key) => `![${question}-${key}](${val.url})\n`)
+        .map((val, key) => `![${prompt}-${key}](${val.url})\n`)
         .join('')
 
       saveMessageToDbAndUpdateConversationState(emptyMessage, content)

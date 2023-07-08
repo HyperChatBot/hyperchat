@@ -36,7 +36,7 @@ const ChatBubble: FC<Props> = ({ role, avatar, date, children }) => {
           className={classNames('max-w-160 rounded-2xl p-4 text-sm', {
             'rounded-tl-none bg-main-gray text-black dark:bg-gray-700 dark:text-dark-bubble-assistant-text':
               role === 'assistant',
-            'flex min-h-[20px] flex-col items-start gap-4 whitespace-pre-wrap break-words rounded-br-none bg-main-purple text-white ':
+            'flex min-h-[20px] flex-col items-start gap-4 whitespace-pre-wrap break-words rounded-br-none bg-main-purple text-white':
               role === 'user'
           })}
         >

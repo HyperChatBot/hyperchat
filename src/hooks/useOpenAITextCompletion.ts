@@ -5,7 +5,7 @@ import { showErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 
-const useOpenAITextCompletion = (question: string) => {
+const useOpenAITextCompletion = (prompt: string) => {
   const currConversation = useRecoilValue(currConversationState)
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
@@ -34,14 +34,14 @@ const useOpenAITextCompletion = (question: string) => {
       setLoading(true)
 
       const emptyMessage = pushEmptyMessage({
-        question
+        question: prompt
       })
 
       const {
         data: { choices }
       } = await openai.createCompletion({
         model,
-        prompt: question,
+        prompt: prompt,
         max_tokens: max_response,
         temperature,
         top_p,

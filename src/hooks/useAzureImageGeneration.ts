@@ -8,7 +8,7 @@ import { settingsState } from 'src/stores/settings'
 import { AzureImageGeneration } from 'src/types/azure'
 import { sleep } from 'yancey-js-util'
 
-const useAzureImageGeneration = (question: string) => {
+const useAzureImageGeneration = (prompt: string) => {
   const currConversation = useRecoilValue(currConversationState)
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
@@ -28,7 +28,7 @@ const useAzureImageGeneration = (question: string) => {
       setLoading(true)
 
       const emptyMessage = pushEmptyMessage({
-        question
+        question: prompt
       })
 
       const headers = {
@@ -42,7 +42,7 @@ const useAzureImageGeneration = (question: string) => {
           headers,
           method: 'POST',
           body: JSON.stringify({
-            prompt: question,
+            prompt: prompt,
             n,
             size
           })
@@ -67,7 +67,7 @@ const useAzureImageGeneration = (question: string) => {
 
       let content = ''
       image.result.data.forEach(
-        (image) => (content += `![${question}](${image.url})\n\n`)
+        (image) => (content += `![${prompt}](${image.url})\n\n`)
       )
       content += `(Warning: The expiration date of this image is **${DateTime.fromSeconds(
         image.expires

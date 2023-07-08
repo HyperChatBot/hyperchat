@@ -7,7 +7,7 @@ import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 import { HashFile } from 'src/types/global'
 
-const useOpenAIAudio = (question: string, hashFile: HashFile | null) => {
+const useOpenAIAudio = (prompt: string, hashFile: HashFile | null) => {
   const currConversation = useRecoilValue(currConversationState)
   const settings = useRecoilValue(settingsState)
   const setLoading = useSetRecoilState(loadingState)
@@ -28,17 +28,17 @@ const useOpenAIAudio = (question: string, hashFile: HashFile | null) => {
       setLoading(true)
 
       const emptyMessage = pushEmptyMessage({
-        question,
+        question: prompt,
         file_name: hashFile.hashName
       })
 
       const transcription = await openai.createTranscription(
         hashFile.file,
         model,
-        question,
+        prompt,
         response_format,
         temperature,
-        language
+        language === '' ? undefined : language
       )
 
       saveMessageToDbAndUpdateConversationState(
@@ -63,14 +63,14 @@ const useOpenAIAudio = (question: string, hashFile: HashFile | null) => {
       setLoading(true)
 
       const emptyMessage = pushEmptyMessage({
-        question,
+        question: prompt,
         file_name: hashFile.hashName
       })
 
       const translation = await openai.createTranslation(
         hashFile.file,
         model,
-        question,
+        prompt,
         response_format,
         temperature
       )

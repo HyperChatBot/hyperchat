@@ -6,7 +6,7 @@ import { showErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 
-const useAzureTextCompletion = (question: string) => {
+const useAzureTextCompletion = (prompt: string) => {
   const currConversation = useRecoilValue(currConversationState)
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
@@ -34,7 +34,7 @@ const useAzureTextCompletion = (question: string) => {
       setLoading(true)
 
       const emptyMessage = pushEmptyMessage({
-        question
+        question: prompt
       })
 
       const response = await fetch(
@@ -47,7 +47,7 @@ const useAzureTextCompletion = (question: string) => {
           method: 'POST',
           body: JSON.stringify({
             model,
-            prompt: question,
+            prompt,
             max_tokens: max_response,
             temperature,
             top_p,

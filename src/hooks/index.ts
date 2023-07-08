@@ -3,7 +3,6 @@ import useAzureChatStream from './useAzureChatStream'
 import useAzureImageGeneration from './useAzureImageGeneration'
 import useAzureTextCompletion from './useAzureTextCompletion'
 import useDB from './useDB'
-import useEnterKey from './useEnterKey'
 import useMessages from './useMessages'
 import useModelApis from './useModelApis'
 import useOnline from './useOnline'
@@ -16,7 +15,6 @@ import useSettings from './useSettings'
 import useTheme from './useTheme'
 
 export {
-  useEnterKey,
   useOpenAIChatStream,
   useOpenAITextCompletion,
   useOnline,
