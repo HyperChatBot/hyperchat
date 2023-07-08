@@ -22,7 +22,9 @@ const Markdown: FC<Props> = ({ raw }) => {
           return !inline ? (
             <SyntaxHighlighter
               style={mdCodeTheme}
-              language={match ? match[1] : ''}
+              // FIXME: Azure OpenAI Service does not return the language of block code.
+              // Use `ts` as the temporary default.
+              language={match ? match[1] : 'ts'} 
               PreTag="div"
               customStyle={{ borderRadius: 0, margin: 0 }}
             >

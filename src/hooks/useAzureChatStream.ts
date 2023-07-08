@@ -65,7 +65,7 @@ const useAzureChatStream = (question: string) => {
             max_tokens: max_response,
             temperature,
             top_p,
-            stop,
+            stop: stop.length > 0 ? stop : null,
             frequency_penalty,
             presence_penalty,
             stream: true

@@ -30,8 +30,7 @@ const useOpenAIChatStream = (question: string) => {
       temperature,
       top_p,
       frequency_penalty,
-      presence_penalty,
-      stop
+      presence_penalty
     } = currConversation.configuration as ChatConfiguration
 
     setLoading(true)
@@ -68,7 +67,7 @@ const useOpenAIChatStream = (question: string) => {
           frequency_penalty,
           presence_penalty,
           stream: true,
-          stop,
+          stop: stop.length > 0 ? stop : null,
           user: settings.openai_author_name
         })
       })
