@@ -24,7 +24,7 @@ const Markdown: FC<Props> = ({ raw }) => {
               style={mdCodeTheme}
               // FIXME: Azure OpenAI Service does not return the language of block code.
               // Use `ts` as the temporary default.
-              language={match ? match[1] : 'ts'} 
+              language={match ? match[1] : 'ts'}
               PreTag="div"
               customStyle={{ borderRadius: 0, margin: 0 }}
             >
@@ -92,6 +92,9 @@ const Markdown: FC<Props> = ({ raw }) => {
               {children}
             </li>
           )
+        },
+        img({ className, children, ...props }) {
+          return <img {...props} loading="lazy" />
         }
       }}
     >
