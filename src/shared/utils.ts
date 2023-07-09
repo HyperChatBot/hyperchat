@@ -1,7 +1,7 @@
 import { isAxiosError } from 'axios'
 import { DateTime } from 'luxon'
 import toast from 'src/components/Snackbar'
-import { ErrorType, Products, ThemeMode } from 'src/types/global'
+import { Products, ThemeMode } from 'src/types/global'
 import { OpenAIError } from 'src/types/openai'
 import { v4 } from 'uuid'
 import { getFileExtension } from 'yancey-js-util'
@@ -19,9 +19,6 @@ export const formatDate = (millis: number) => {
 
   return { isSameDay: false, display: date.toLocaleString(DateTime.DATE_FULL) }
 }
-
-export const generateErrorMessage = (type: ErrorType, message: string) =>
-  type + message
 
 export const generateHashName = (fileName: string) => {
   const extension = getFileExtension(fileName)
@@ -61,5 +58,7 @@ export const themeModeToTheme = (themeMode?: ThemeMode) =>
 export const showErrorToast = (error: unknown) => {
   if (isAxiosError<OpenAIError, Record<string, unknown>>(error)) {
     toast.error(error.response?.data.error.message || '')
+  } else {
+    toast.error(JSON.stringify(error))
   }
 }

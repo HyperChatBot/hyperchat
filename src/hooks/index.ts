@@ -4,7 +4,7 @@ import useCompany from './useCompany'
 import useDB from './useDB'
 import useImageGeneration from './useImageGeneration'
 import useMessages from './useMessages'
-import useModelApis from './useModelApis'
+import useRequest from './useRequest'
 import useOnline from './useOnline'
 import useOpenAI from './useOpenAI'
 import useAudio from './useAudio'
@@ -19,7 +19,7 @@ export {
   useDB,
   useImageGeneration,
   useMessages,
-  useModelApis,
+  useRequest,
   useOnline,
   useOpenAI,
   useAudio,

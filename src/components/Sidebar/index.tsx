@@ -1,6 +1,7 @@
 import { Cog6ToothIcon as Cog6ToothIconOutline } from '@heroicons/react/24/outline'
 import { Cog6ToothIcon as Cog6ToothIconSolid } from '@heroicons/react/24/solid'
 import Tooltip from '@mui/material/Tooltip'
+import { capitalCase } from 'change-case'
 import { FC, MouseEvent } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
@@ -45,19 +46,24 @@ const Sidebar: FC = () => {
 
               <div className="mt-6">
                 {items
-                  .filter((product) => product.realm.includes(settings.company))
-                  .map((product) => (
-                    <Link
-                      key={product.product}
-                      to="/"
-                      className="mb-6 block cursor-pointer"
-                      onClick={(e) => onProductChange(e, product.product)}
+                  .filter((item) => item.realm.includes(settings.company))
+                  .map((item) => (
+                    <Tooltip
+                      title={capitalCase(item.product)}
+                      placement="right"
+                      key={item.product}
                     >
-                      {currProduct === product.product &&
-                      location.pathname === '/'
-                        ? product.active
-                        : product.inactive}
-                    </Link>
+                      <Link
+                        to="/"
+                        className="mb-6 block cursor-pointer"
+                        onClick={(e) => onProductChange(e, item.product)}
+                      >
+                        {currProduct === item.product &&
+                        location.pathname === '/'
+                          ? item.active
+                          : item.inactive}
+                      </Link>
+                    </Tooltip>
                   ))}
               </div>
               <Divider className="my-2 bg-opacity-20" />

@@ -87,6 +87,7 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
       )
     } catch (error) {
       showErrorToast(error)
+      rollBackEmptyMessage()
     } finally {
       setLoading(false)
     }

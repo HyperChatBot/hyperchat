@@ -26,12 +26,6 @@ export interface AlertError {
   message: string
 }
 
-export enum ErrorType {
-  OpenAI = '[OpenAI] ',
-  Azure = '[Azure] ',
-  Unknown = '[Unknown] '
-}
-
 export interface HashFile {
   file: File
   hashName: string

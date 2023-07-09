@@ -2,9 +2,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 import toast from 'src/components/Snackbar'
 import { ChatConfiguration } from 'src/configurations/chat'
 import { useCompany, useMessages, useSettings } from 'src/hooks'
-import { generateErrorMessage } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
-import { ErrorType } from 'src/types/global'
 import { OpenAIChatResponse, OpenAIError } from 'src/types/openai'
 
 const useChatCompletion = (prompt: string) => {
@@ -63,16 +61,16 @@ const useChatCompletion = (prompt: string) => {
         stream: true
       })
     } catch {
-      // Do nothing, the error will be catched by the following `chat.status !== 200` phrase.
+      toast.error('Network Error.')
+      rollBackEmptyMessage()
+      setLoading(false)
       return
     }
 
     const reader = chat.body?.getReader()
 
     if (!reader) {
-      toast.error(
-        generateErrorMessage(ErrorType.Azure, 'Cannot get ReadableStream.')
-      )
+      toast.error('Cannot get ReadableStream.')
       setLoading(false)
       return
     }
@@ -83,9 +81,7 @@ const useChatCompletion = (prompt: string) => {
       const decoder = new TextDecoder('utf-8')
       const chunk = decoder.decode(value, { stream: true })
       const errorData: OpenAIError = JSON.parse(chunk)
-      toast.error(
-        generateErrorMessage(ErrorType.Azure, errorData.error.message)
-      )
+      toast.error(errorData.error.message)
       rollBackEmptyMessage()
       setLoading(false)
       return
@@ -125,7 +121,7 @@ const useChatCompletion = (prompt: string) => {
 
         return read()
       } catch {
-        generateErrorMessage(ErrorType.Azure, 'Stream data parsing error.')
+        toast.error('Stream data parsing error.')
       } finally {
         setLoading(false)
       }

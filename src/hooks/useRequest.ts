@@ -6,7 +6,7 @@ import {
 } from 'src/hooks'
 import { HashFile, Products } from 'src/types/global'
 
-const useModelApis = (prompt: string, hashFile: HashFile) => {
+const useRequest = (prompt: string, hashFile: HashFile) => {
   const { createChatCompletion } = useChatCompletion(prompt)
   const { createTextCompletion } = useTextCompletion(prompt)
   const { createImageGeneration } = useImageGeneration(prompt)
@@ -23,4 +23,4 @@ const useModelApis = (prompt: string, hashFile: HashFile) => {
   return requests
 }
 
-export default useModelApis
+export default useRequest

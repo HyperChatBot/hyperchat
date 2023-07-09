@@ -4,7 +4,7 @@ import Tooltip from '@mui/material/Tooltip'
 import classNames from 'classnames'
 import { ChangeEvent, FC, useRef, useState } from 'react'
 import { useRecoilValue } from 'recoil'
-import { useAppData, useModelApis } from 'src/hooks'
+import { useAppData, useRequest } from 'src/hooks'
 import { isAudioProduct } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
@@ -21,7 +21,7 @@ const InputBox: FC = () => {
   const { saveFileToAppDataDir } = useAppData()
   const [prompt, setPrompt] = useState('')
   const [hashFile, setHashFile] = useState<HashFile | null>(null)
-  const requests = useModelApis(prompt, hashFile as HashFile)
+  const requests = useRequest(prompt, hashFile as HashFile)
 
   const onFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
@@ -126,7 +126,11 @@ const InputBox: FC = () => {
                 >
                   <MicrophoneIcon
                     className={classNames(
-                      'relative h-5 w-5 text-black text-opacity-30 dark:text-white',
+                      'relative h-5 w-5',
+                      {
+                        'text-black text-opacity-30 dark:text-white':
+                          !validate()
+                      },
                       {
                         'text-main-purple text-opacity-100 dark:text-main-purple':
                           validate()
@@ -142,7 +146,10 @@ const InputBox: FC = () => {
           <SolidSendIcon
             onClick={handleRequest}
             pathClassName={classNames(
-              'fill-current text-black dark:text-white text-opacity-30',
+              'fill-current',
+              {
+                'text-black dark:text-white text-opacity-30': !validate()
+              },
               {
                 'text-main-purple dark:text-main-purple text-opacity-100':
                   validate()
