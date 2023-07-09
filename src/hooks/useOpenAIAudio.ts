@@ -41,9 +41,13 @@ const useOpenAIAudio = (prompt: string, hashFile: HashFile | null) => {
         language === '' ? undefined : language
       )
 
+      console.log(transcription)
+
       saveMessageToDbAndUpdateConversationState(
         emptyMessage,
-        transcription.data.text
+        // If `response_format` is `json` or `verbose_json`, the result is `transcription.data.text`.
+        // If `response_format` is `text`, `vtt` `or `srt`, the result is `transcription.data`.
+        transcription.data.text || (transcription.data as unknown as string)
       )
     } catch (error) {
       showErrorToast(error)
@@ -77,7 +81,9 @@ const useOpenAIAudio = (prompt: string, hashFile: HashFile | null) => {
 
       saveMessageToDbAndUpdateConversationState(
         emptyMessage,
-        translation.data.text
+        // If `response_format` is `json` or `verbose_json`, the result is `translation.data.text`.
+        // If `response_format` is `text`, `vtt` `or `srt`, the result is `translation.data`.
+        translation.data.text || (translation.data as unknown as string)
       )
     } catch (error) {
       showErrorToast(error)
