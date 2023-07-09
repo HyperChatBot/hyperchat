@@ -1,3 +1,5 @@
+export type Dict = { [index: string]: string }
+
 export interface SvgIconProps {
   width?: number
   height?: number
@@ -12,14 +14,11 @@ export enum Companies {
 }
 
 export enum Products {
-  OpenAIChat = 'openai_chat',
-  OpenAITextCompletion = 'openai_text_completion',
-  OpenAIAudioTranscription = 'openai_audio_transcription',
-  OpenAIAudioTranslation = 'openai_audio_translation',
-  OpenAIImageGeneration = 'openai_image_generation',
-  AzureChat = 'azure_chat',
-  AzureTextCompletion = 'azure_text_completion',
-  AzureImageGeneration = 'azure_image_generation'
+  ChatCompletion = 'chat_completion',
+  TextCompletion = 'text_completion',
+  AudioTranscription = 'audio_transcription',
+  AudioTranslation = 'audio_translation',
+  ImageGeneration = 'image_generation'
 }
 
 export interface AlertError {

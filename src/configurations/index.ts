@@ -13,36 +13,24 @@ import { configuration as imageGenerationConfiguration } from './imageGeneration
 import { configuration as textCompletionConfiguration } from './textCompletion'
 
 export const configurations = {
-  [Products.OpenAIChat]: {
+  [Products.ChatCompletion]: {
     component: () => ChatConfiguration,
     default: chatConfiguration
   },
-  [Products.OpenAIImageGeneration]: {
+  [Products.ImageGeneration]: {
     component: () => ImageGenerationConfiguration,
     default: imageGenerationConfiguration
   },
-  [Products.AzureChat]: {
-    component: () => ChatConfiguration,
-    default: chatConfiguration
-  },
-  [Products.AzureImageGeneration]: {
-    component: () => ImageGenerationConfiguration,
-    default: imageGenerationConfiguration
-  },
-  [Products.AzureTextCompletion]: {
+  [Products.TextCompletion]: {
     component: () => TextCompletionConfiguration,
     default: textCompletionConfiguration
   },
-  [Products.OpenAIAudioTranscription]: {
+  [Products.AudioTranscription]: {
     component: () => AudioTranscriptionConfiguration,
     default: audioTranscriptionConfiguration
   },
-  [Products.OpenAIAudioTranslation]: {
+  [Products.AudioTranslation]: {
     component: () => AudioTranslationConfiguration,
     default: audioTranslationConfiguration
-  },
-  [Products.OpenAITextCompletion]: {
-    component: () => TextCompletionConfiguration,
-    default: textCompletionConfiguration
   }
 }

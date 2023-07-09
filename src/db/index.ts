@@ -4,34 +4,25 @@ import { Products } from 'src/types/global'
 import { Settings } from 'src/types/settings'
 
 export class HyperChatDB extends Dexie {
-  [Products.OpenAIChat]!: Table<Conversation>;
-  [Products.OpenAITextCompletion]!: Table<Conversation>;
-  [Products.OpenAIAudioTranscription]!: Table<Conversation>;
-  [Products.OpenAIAudioTranslation]!: Table<Conversation>;
-  [Products.OpenAIImageGeneration]!: Table<Conversation>;
-  [Products.AzureChat]!: Table<Conversation>;
-  [Products.AzureTextCompletion]!: Table<Conversation>;
-  [Products.AzureImageGeneration]!: Table<Conversation>
+  [Products.ChatCompletion]!: Table<Conversation>;
+  [Products.TextCompletion]!: Table<Conversation>;
+  [Products.AudioTranscription]!: Table<Conversation>;
+  [Products.AudioTranslation]!: Table<Conversation>;
+  [Products.ImageGeneration]!: Table<Conversation>
   settings!: Table<Settings>
 
   constructor() {
     super('hyperchat')
     this.version(1).stores({
-      [Products.OpenAIChat]:
+      [Products.ChatCompletion]:
         '&conversation_id, summary, created_at, updated_at, *messages, *configuration',
-      [Products.OpenAITextCompletion]:
+      [Products.TextCompletion]:
         '&conversation_id, summary, created_at, updated_at, *messages, *configuration',
-      [Products.OpenAIAudioTranscription]:
+      [Products.AudioTranscription]:
         '&conversation_id, summary, created_at, updated_at, file_name, *messages, *configuration',
-      [Products.OpenAIAudioTranslation]:
+      [Products.AudioTranslation]:
         '&conversation_id, summary, created_at, updated_at, file_name, *messages, *configuration',
-      [Products.OpenAIImageGeneration]:
-        '&conversation_id, summary, created_at, updated_at, *messages, *configuration',
-      [Products.AzureChat]:
-        '&conversation_id, summary, created_at, updated_at, *messages, *configuration',
-      [Products.AzureTextCompletion]:
-        '&conversation_id, summary, created_at, updated_at, *messages, *configuration',
-      [Products.AzureImageGeneration]:
+      [Products.ImageGeneration]:
         '&conversation_id, summary, created_at, updated_at, *messages, *configuration',
       settings:
         '&&settings_id, company, openai_secret_key, openai_organization_id, openai_author_name, azure_endpoint, azure_secret_key, azure_deployment_name, theme_mode, assistant_avatar_filename'

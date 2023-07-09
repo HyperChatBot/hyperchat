@@ -107,10 +107,10 @@ const Configuration: FC = () => {
                 step={1}
                 defaultValue={
                   (currConversation.configuration as ChatConfiguration)
-                    .max_response
+                    .max_tokens
                 }
                 setFieldValue={(value: number) =>
-                  formik.setFieldValue('max_response', value)
+                  formik.setFieldValue('max_tokens', value)
                 }
               />
 

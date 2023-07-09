@@ -5,7 +5,7 @@ import classNames from 'classnames'
 import { ChangeEvent, FC, useRef, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { useAppData, useModelApis } from 'src/hooks'
-import { isOpenAIAudioProduct } from 'src/shared/utils'
+import { isAudioProduct } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { HashFile } from 'src/types/global'
@@ -47,7 +47,7 @@ const InputBox: FC = () => {
 
   // Prompt is optional in audio products.
   const validate = () => {
-    if (isOpenAIAudioProduct(currProduct)) {
+    if (isAudioProduct(currProduct)) {
       return Boolean(hashFile)
     } else {
       return prompt.trim().length !== 0
@@ -63,6 +63,7 @@ const InputBox: FC = () => {
   }
 
   // FIXME: I cannot declare the type of `event` correctly.
+  // @ts-ignore
   const handleKeyDown = (event) => {
     if ((event.keyCode === 13 || event.key === 'Enter') && event.shiftKey) {
       const start = event.target.selectionStart
@@ -104,7 +105,7 @@ const InputBox: FC = () => {
         />
 
         <section className="absolute bottom-3.5 right-4 z-10 flex gap-3">
-          {isOpenAIAudioProduct(currProduct) && (
+          {isAudioProduct(currProduct) && (
             <>
               <label
                 htmlFor="$$video-input"
@@ -114,7 +115,7 @@ const InputBox: FC = () => {
                   type="file"
                   id="$$video-input"
                   accept="audio/mp3,video/mp4,video/mpeg,video/mpea,video/m4a,video/wav,video/webm"
-                  className="absolute h-6 w-6 file:w-6 file:h-6 opacity-0"
+                  className="absolute h-6 w-6 opacity-0 file:h-6 file:w-6"
                   ref={fileInputRef}
                   onChange={onFileChange}
                 />

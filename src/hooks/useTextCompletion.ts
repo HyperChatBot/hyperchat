@@ -1,15 +1,16 @@
+import { CreateCompletionResponse } from 'openai'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { TextCompletionConfiguration } from 'src/configurations/textCompletion'
-import { useMessages, useOpenAI } from 'src/hooks'
+import { useCompany, useMessages } from 'src/hooks'
 import { showErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 
-const useOpenAITextCompletion = (prompt: string) => {
+const useTextCompletion = (prompt: string) => {
   const currConversation = useRecoilValue(currConversationState)
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
-  const openai = useOpenAI()
+  const company = useCompany()
   const {
     pushEmptyMessage,
     saveMessageToDbAndUpdateConversationState,
@@ -21,7 +22,7 @@ const useOpenAITextCompletion = (prompt: string) => {
 
     const {
       model,
-      max_response,
+      max_tokens,
       temperature,
       top_p,
       frequency_penalty,
@@ -37,17 +38,16 @@ const useOpenAITextCompletion = (prompt: string) => {
         question: prompt
       })
 
-      const {
-        data: { choices }
-      } = await openai.createCompletion({
+      const response = await company.text_completion({
         model,
         prompt: prompt,
-        max_tokens: max_response,
+        max_tokens,
         temperature,
         top_p,
         frequency_penalty,
         presence_penalty
       })
+      const completion: CreateCompletionResponse = await response.json()
 
       const preResponseText = pre_response_text.checked
         ? pre_response_text.content
@@ -58,7 +58,7 @@ const useOpenAITextCompletion = (prompt: string) => {
 
       saveMessageToDbAndUpdateConversationState(
         emptyMessage,
-        preResponseText + (choices[0].text || '') + postResponseText
+        preResponseText + (completion.choices[0].text || '') + postResponseText
       )
     } catch (error) {
       showErrorToast(error)
@@ -71,4 +71,4 @@ const useOpenAITextCompletion = (prompt: string) => {
   return { createTextCompletion }
 }
 
-export default useOpenAITextCompletion
+export default useTextCompletion
