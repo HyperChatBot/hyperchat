@@ -5,9 +5,9 @@ import ImageGenerationConfiguration from './ImageGeneration'
 import TextCompletionConfiguration from './TextCompletion'
 
 export {
-  ChatConfiguration,
-  TextCompletionConfiguration,
   AudioTranscriptionConfiguration,
   AudioTranslationConfiguration,
-  ImageGenerationConfiguration
+  ChatConfiguration,
+  ImageGenerationConfiguration,
+  TextCompletionConfiguration
 }

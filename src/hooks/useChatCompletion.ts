@@ -1,16 +1,14 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import toast from 'src/components/Snackbar'
 import { ChatConfiguration } from 'src/configurations/chat'
-import { generateErrorMessage } from 'src/shared/utils'
+import { useCompany, useMessages, useSettings } from 'src/hooks'
 import { currConversationState, loadingState } from 'src/stores/conversation'
-import { ErrorType } from 'src/types/global'
 import { OpenAIChatResponse, OpenAIError } from 'src/types/openai'
-import useMessages from './useMessages'
-import useSettings from './useSettings'
 
-const useAzureChatStream = (question: string) => {
+const useChatCompletion = (prompt: string) => {
   const currConversation = useRecoilValue(currConversationState)
   const { settings } = useSettings()
+  const company = useCompany()
   const setLoading = useSetRecoilState(loadingState)
   const {
     pushEmptyMessage,
@@ -25,7 +23,7 @@ const useAzureChatStream = (question: string) => {
     const {
       model,
       system_message,
-      max_response,
+      max_tokens,
       temperature,
       top_p,
       frequency_penalty,
@@ -36,53 +34,43 @@ const useAzureChatStream = (question: string) => {
     setLoading(true)
 
     const emptyMessage = pushEmptyMessage({
-      question
+      question: prompt
     })
 
     let chat: Response | undefined
 
     try {
-      chat = await fetch(
-        `${settings.azure_endpoint}/openai/deployments/${settings.azure_deployment_name}/chat/completions?api-version=2023-03-15-preview`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'api-key': settings.azure_secret_key
+      chat = await company.chat_completion({
+        messages: [
+          {
+            role: 'system',
+            content: system_message
           },
-          method: 'POST',
-          body: JSON.stringify({
-            messages: [
-              {
-                role: 'system',
-                content: system_message
-              },
-              {
-                role: 'user',
-                content: question
-              }
-            ],
-            model,
-            max_tokens: max_response,
-            temperature,
-            top_p,
-            stop,
-            frequency_penalty,
-            presence_penalty,
-            stream: true
-          })
-        }
-      )
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+        model,
+        max_tokens,
+        temperature,
+        top_p,
+        stop: stop.length > 0 ? stop : undefined,
+        frequency_penalty,
+        presence_penalty,
+        stream: true
+      })
     } catch {
-      // Do nothing, the error will be catched by the following `chat.status !== 200` phrase.
+      toast.error('Network Error.')
+      rollBackEmptyMessage()
+      setLoading(false)
       return
     }
 
     const reader = chat.body?.getReader()
 
     if (!reader) {
-      toast.error(
-        generateErrorMessage(ErrorType.Azure, 'Cannot get ReadableStream.')
-      )
+      toast.error('Cannot get ReadableStream.')
       setLoading(false)
       return
     }
@@ -93,9 +81,7 @@ const useAzureChatStream = (question: string) => {
       const decoder = new TextDecoder('utf-8')
       const chunk = decoder.decode(value, { stream: true })
       const errorData: OpenAIError = JSON.parse(chunk)
-      toast.error(
-        generateErrorMessage(ErrorType.Azure, errorData.error.message)
-      )
+      toast.error(errorData.error.message)
       rollBackEmptyMessage()
       setLoading(false)
       return
@@ -135,7 +121,7 @@ const useAzureChatStream = (question: string) => {
 
         return read()
       } catch {
-        generateErrorMessage(ErrorType.Azure, 'Stream data parsing error.')
+        toast.error('Stream data parsing error.')
       } finally {
         setLoading(false)
       }
@@ -148,4 +134,4 @@ const useAzureChatStream = (question: string) => {
   return { createChatCompletion }
 }
 
-export default useAzureChatStream
+export default useChatCompletion

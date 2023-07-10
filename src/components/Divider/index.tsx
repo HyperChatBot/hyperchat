@@ -12,7 +12,7 @@ const Divider: FC<Props> = ({ direction = 'horizontal', className }) => (
       'bg-black bg-opacity-5 dark:bg-gray-600 dark:bg-opacity-100',
       {
         'h-px w-full': direction === 'horizontal',
-        'h-screen w-px': direction === 'vertical'
+        'w-px': direction === 'vertical'
       },
       className
     )}

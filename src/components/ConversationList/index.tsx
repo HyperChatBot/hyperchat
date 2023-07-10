@@ -1,8 +1,8 @@
+import { capitalCase } from 'change-case'
 import { FC } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { configurations } from 'src/configurations'
 import { useDB } from 'src/hooks'
-import { conversationTitles } from 'src/shared/constants'
 import { currConversationState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { Conversation } from 'src/types/conversation'
@@ -48,7 +48,7 @@ const ConversationList: FC<Props> = ({ conversations }) => {
     <section className="w-87.75">
       <section className="flex items-center justify-between p-6">
         <span className="mr-4 truncate text-xl font-semibold dark:text-dark-text">
-          {conversationTitles[currProduct]}
+          {capitalCase(currProduct)}
         </span>
         <OutlinePlusIcon onClick={addConversation} />
       </section>

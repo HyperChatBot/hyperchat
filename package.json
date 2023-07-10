@@ -19,6 +19,7 @@
     "@mui/material": "^5.13.6",
     "@tauri-apps/api": "^1.4.0",
     "axios": "^1.4.0",
+    "change-case": "^4.1.2",
     "classnames": "^2.3.2",
     "dexie": "^3.2.4",
     "dexie-export-import": "^4.0.7",

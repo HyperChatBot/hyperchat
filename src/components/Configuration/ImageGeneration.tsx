@@ -18,7 +18,6 @@ import {
   configurationDrawerVisibleState,
   currProductState
 } from 'src/stores/global'
-import { Products } from 'src/types/global'
 import Divider from '../Divider'
 import InputSlider from '../InputSlider'
 
@@ -119,28 +118,26 @@ const Configuration: FC = () => {
                 </FormHelperText>
               </FormControl>
 
-              {currProduct !== Products.AzureImageGeneration && (
-                <FormControl size="small" fullWidth>
-                  <InputLabel id="iamge-generation-response-format-select-label">
-                    Response Format
-                  </InputLabel>
-                  <Select
-                    labelId="iamge-generation-response-format-select-label"
-                    id="iamge-generation-response-format-select"
-                    label="Response Format"
-                    {...formik.getFieldProps('response_format')}
-                  >
-                    {responseFormats.map((responseFormat) => (
-                      <MenuItem key={responseFormat} value={responseFormat}>
-                        {responseFormat}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <FormHelperText>
-                    The format in which the generated images are returned.
-                  </FormHelperText>
-                </FormControl>
-              )}
+              <FormControl size="small" fullWidth>
+                <InputLabel id="iamge-generation-response-format-select-label">
+                  Response Format
+                </InputLabel>
+                <Select
+                  labelId="iamge-generation-response-format-select-label"
+                  id="iamge-generation-response-format-select"
+                  label="Response Format"
+                  {...formik.getFieldProps('response_format')}
+                >
+                  {responseFormats.map((responseFormat) => (
+                    <MenuItem key={responseFormat} value={responseFormat}>
+                      {responseFormat}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText>
+                  The format in which the generated images are returned.
+                </FormHelperText>
+              </FormControl>
 
               <AutoSubmitToken />
             </section>

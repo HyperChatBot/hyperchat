@@ -7,7 +7,7 @@ import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 import { HashFile } from 'src/types/global'
 
-const useOpenAIAudio = (question: string, hashFile: HashFile | null) => {
+const useAudio = (prompt: string, hashFile: HashFile | null) => {
   const currConversation = useRecoilValue(currConversationState)
   const settings = useRecoilValue(settingsState)
   const setLoading = useSetRecoilState(loadingState)
@@ -28,22 +28,26 @@ const useOpenAIAudio = (question: string, hashFile: HashFile | null) => {
       setLoading(true)
 
       const emptyMessage = pushEmptyMessage({
-        question,
+        question: prompt,
         file_name: hashFile.hashName
       })
 
       const transcription = await openai.createTranscription(
         hashFile.file,
         model,
-        question,
+        prompt,
         response_format,
         temperature,
-        language
+        language === '' ? undefined : language
       )
+
+      console.log(transcription)
 
       saveMessageToDbAndUpdateConversationState(
         emptyMessage,
-        transcription.data.text
+        // If `response_format` is `json` or `verbose_json`, the result is `transcription.data.text`.
+        // If `response_format` is `text`, `vtt` `or `srt`, the result is `transcription.data`.
+        transcription.data.text || (transcription.data as unknown as string)
       )
     } catch (error) {
       showErrorToast(error)
@@ -63,24 +67,27 @@ const useOpenAIAudio = (question: string, hashFile: HashFile | null) => {
       setLoading(true)
 
       const emptyMessage = pushEmptyMessage({
-        question,
+        question: prompt,
         file_name: hashFile.hashName
       })
 
       const translation = await openai.createTranslation(
         hashFile.file,
         model,
-        question,
+        prompt,
         response_format,
         temperature
       )
 
       saveMessageToDbAndUpdateConversationState(
         emptyMessage,
-        translation.data.text
+        // If `response_format` is `json` or `verbose_json`, the result is `translation.data.text`.
+        // If `response_format` is `text`, `vtt` `or `srt`, the result is `translation.data`.
+        translation.data.text || (translation.data as unknown as string)
       )
     } catch (error) {
       showErrorToast(error)
+      rollBackEmptyMessage()
     } finally {
       setLoading(false)
     }
@@ -89,4 +96,4 @@ const useOpenAIAudio = (question: string, hashFile: HashFile | null) => {
   return { createTranslation, createTranscription }
 }
 
-export default useOpenAIAudio
+export default useAudio

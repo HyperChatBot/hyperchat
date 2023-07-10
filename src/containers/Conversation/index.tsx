@@ -9,11 +9,14 @@ import { configurations } from 'src/configurations'
 import { useDB } from 'src/hooks'
 import { currConversationState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
+import { Conversation as IConversation } from 'src/types/conversation'
 
 const Conversation: FC = () => {
   const currProduct = useRecoilValue(currProductState)
   const { getCurrConversations } = useDB(currProduct)
-  const conversations = useLiveQuery(getCurrConversations, [currProduct])
+  const conversations = useLiveQuery<IConversation[]>(getCurrConversations, [
+    currProduct
+  ])
   const setCurrConversation = useSetRecoilState(currConversationState)
   const Configuration = configurations[currProduct].component()
 

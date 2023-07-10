@@ -1,7 +1,7 @@
 export interface ChatConfiguration {
   model: (typeof models)[number]
   system_message: string
-  max_response: number
+  max_tokens: number
   temperature: number
   top_p: number
   frequency_penalty: number
@@ -19,7 +19,7 @@ export const models = [
 export const configuration: ChatConfiguration = {
   model: 'gpt-3.5-turbo',
   system_message: 'You are an AI assistant that helps people find information.',
-  max_response: 800,
+  max_tokens: 800,
   temperature: 0.7,
   top_p: 0.95,
   frequency_penalty: 0,

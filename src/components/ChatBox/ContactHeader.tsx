@@ -69,11 +69,7 @@ const ContactHeader: FC = () => {
     }
   }
 
-  const saveSummaryWithKeyboard = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Escape') {
-      setSummaryInputVisible(false)
-    }
-
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       saveSummary()
     }
@@ -129,7 +125,7 @@ const ContactHeader: FC = () => {
                 <Input
                   autoFocus
                   value={summaryValue}
-                  onKeyUp={saveSummaryWithKeyboard}
+                  onKeyDown={handleKeyDown}
                   onChange={(e) => setSummaryValue(e.target.value)}
                   className="w-80"
                   sx={{
