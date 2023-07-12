@@ -6,7 +6,8 @@ export const OPENAI_CHAT_COMPLETION_URL = OPENAI_BASE_URL + '/chat/completions'
 
 export const OPENAI_TEXT_COMPLETION_URL = OPENAI_BASE_URL + '/completions'
 
-export const OPENAI_IMAGE_GENERATION_URL = OPENAI_BASE_URL + '/images/generations'
+export const OPENAI_IMAGE_GENERATION_URL =
+  OPENAI_BASE_URL + '/images/generations'
 
 export const EMPTY_CHAT_HINT = 'Create your first conversation!'
 
