@@ -1,13 +1,13 @@
 import AudioTranscriptionConfiguration from './AudioTranscription'
 import AudioTranslationConfiguration from './AudioTranslation'
-import ChatConfiguration from './Chat'
+import ChatCompletionConfiguration from './ChatCompletion'
 import ImageGenerationConfiguration from './ImageGeneration'
 import TextCompletionConfiguration from './TextCompletion'
 
 export {
   AudioTranscriptionConfiguration,
   AudioTranslationConfiguration,
-  ChatConfiguration,
+  ChatCompletionConfiguration,
   ImageGenerationConfiguration,
   TextCompletionConfiguration
 }

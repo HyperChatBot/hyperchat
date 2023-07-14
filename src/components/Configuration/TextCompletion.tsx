@@ -11,27 +11,23 @@ import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
 import { Formik, useFormikContext } from 'formik'
 import { FC, useEffect } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import {
   TextCompletionConfiguration,
   models
 } from 'src/configurations/textCompletion'
 import { useDB } from 'src/hooks'
 import { currConversationState } from 'src/stores/conversation'
-import {
-  configurationDrawerVisibleState,
-  currProductState
-} from 'src/stores/global'
+import { configurationDrawerVisibleState } from 'src/stores/global'
 import Divider from '../Divider'
 import InputSlider from '../InputSlider'
 
 const Configuration: FC = () => {
   const [visible, setVisible] = useRecoilState(configurationDrawerVisibleState)
-  const currProduct = useRecoilValue(currProductState)
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
   )
-  const { updateOneById } = useDB(currProduct)
+  const { updateOneById } = useDB('conversations')
 
   const updateConfiguration = async (values: TextCompletionConfiguration) => {
     if (!currConversation) {

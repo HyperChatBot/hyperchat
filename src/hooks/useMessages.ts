@@ -23,7 +23,7 @@ const useMessages = () => {
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
   )
-  const { getOneById, updateOneById } = useDB(currProduct)
+  const { getOneById, updateOneById } = useDB('conversations')
 
   const pushEmptyMessage = (params: EmptyMessageParams) => {
     const emptyMessage = generateEmptyMessage(params)

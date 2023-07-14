@@ -13,7 +13,7 @@ import { Conversation as IConversation } from 'src/types/conversation'
 
 const Conversation: FC = () => {
   const currProduct = useRecoilValue(currProductState)
-  const { getCurrConversations } = useDB(currProduct)
+  const { getCurrConversations } = useDB('conversations')
   const conversations = useLiveQuery<IConversation[]>(getCurrConversations, [
     currProduct
   ])
