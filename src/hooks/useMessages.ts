@@ -1,5 +1,4 @@
 import { produce } from 'immer'
-import { useRef } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { useDB } from 'src/hooks'
 import { currConversationState } from 'src/stores/conversation'
