@@ -47,6 +47,8 @@ const InputBox: FC = () => {
 
   // Prompt is optional in audio products.
   const validate = () => {
+    if (loading) return false
+
     if (isAudioProduct(currProduct)) {
       return Boolean(hashFile)
     } else {
@@ -55,7 +57,6 @@ const InputBox: FC = () => {
   }
 
   const handleRequest = () => {
-    if (loading) return
     if (!validate()) return
 
     requests[currProduct]()

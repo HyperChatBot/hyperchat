@@ -1,8 +1,9 @@
 import { AudioTranscriptionConfiguration } from '../configurations/audioTranscription'
 import { AudioTranslationConfiguration } from '../configurations/audioTranslation'
-import { ChatConfiguration } from '../configurations/chat'
+import { ChatConfiguration } from '../configurations/chatCompletion'
 import { ImageGenerationConfiguration } from '../configurations/imageGeneration'
 import { TextCompletionConfiguration } from '../configurations/textCompletion'
+import { Products } from './global'
 
 export interface Message {
   message_id: string
@@ -19,6 +20,7 @@ export interface Conversation {
   avatar: string
   created_at: number
   updated_at: number
+  product: Products
   messages: Message[]
   configuration:
     | ChatConfiguration

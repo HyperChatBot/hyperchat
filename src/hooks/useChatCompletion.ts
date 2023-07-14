@@ -1,6 +1,8 @@
+import { CreateChatCompletionRequest } from 'openai'
+import {  encodingForModel } from "js-tiktoken";
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import toast from 'src/components/Snackbar'
-import { ChatConfiguration } from 'src/configurations/chat'
+import { ChatConfiguration } from 'src/configurations/chatCompletion'
 import { useCompany, useMessages, useSettings } from 'src/hooks'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { OpenAIChatResponse, OpenAIError } from 'src/types/openai'
@@ -39,6 +41,32 @@ const useChatCompletion = (prompt: string) => {
 
     let chat: Response | undefined
 
+    // if (tokenLimit) {
+    //   toast.error('This model's maximum context length is 4097 tokens. However, you requested 4123 tokens (3323 in the messages, 800 in the completion). Please reduce the length of the prompt.')
+    //   return
+    // }
+
+    
+    const context: CreateChatCompletionRequest['messages'] = []
+    currConversation.messages
+      .slice()
+      .reverse()
+      .forEach((message) => {
+        const x = encodingForModel(model).encode(message.answer)
+        console.log(x)
+
+        context.push(
+          {
+            role: 'user',
+            content: message.question
+          },
+          {
+            role: 'assistant',
+            content: message.answer
+          }
+        )
+      })
+
     try {
       chat = await company.chat_completion({
         messages: [
@@ -46,6 +74,7 @@ const useChatCompletion = (prompt: string) => {
             role: 'system',
             content: system_message
           },
+          ...context,
           {
             role: 'user',
             content: prompt

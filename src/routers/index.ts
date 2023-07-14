@@ -9,10 +9,6 @@ export const routers = [
     element: Conversation
   },
   {
-    path: '/p/:product/c/:conversationId',
-    element: Conversation
-  },
-  {
     path: '/settings',
     element: Settings
   }
