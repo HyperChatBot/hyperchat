@@ -21,7 +21,7 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
   const createTranscription = async () => {
     if (!hashFile || !settings || !currConversation) return
 
-    const { model, temperature, language, response_format } =
+    const { model, temperature, language, responseFormat } =
       currConversation.configuration as AudioTranscriptionConfiguration
 
     try {
@@ -37,7 +37,7 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
         hashFile.file,
         model,
         prompt,
-        response_format,
+        responseFormat,
         temperature,
         language === '' ? undefined : language
       )
@@ -46,8 +46,8 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
 
       saveMessageToDbAndUpdateConversationState(
         emptyMessage,
-        // If `response_format` is `json` or `verbose_json`, the result is `transcription.data.text`.
-        // If `response_format` is `text`, `vtt` `or `srt`, the result is `transcription.data`.
+        // If `responseFormat` is `json` or `verbose_json`, the result is `transcription.data.text`.
+        // If `responseFormat` is `text`, `vtt` `or `srt`, the result is `transcription.data`.
         transcription.data.text || (transcription.data as unknown as string)
       )
     } catch (error) {
@@ -61,7 +61,7 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
   const createTranslation = async () => {
     if (!hashFile || !settings || !currConversation) return
 
-    const { model, temperature, response_format } =
+    const { model, temperature, responseFormat } =
       currConversation.configuration as AudioTranslationConfiguration
 
     try {
@@ -77,14 +77,14 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
         hashFile.file,
         model,
         prompt,
-        response_format,
+        responseFormat,
         temperature
       )
 
       saveMessageToDbAndUpdateConversationState(
         emptyMessage,
-        // If `response_format` is `json` or `verbose_json`, the result is `translation.data.text`.
-        // If `response_format` is `text`, `vtt` `or `srt`, the result is `translation.data`.
+        // If `responseFormat` is `json` or `verbose_json`, the result is `translation.data.text`.
+        // If `responseFormat` is `text`, `vtt` `or `srt`, the result is `translation.data`.
         translation.data.text || (translation.data as unknown as string)
       )
     } catch (error) {

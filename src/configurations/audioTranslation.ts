@@ -8,5 +8,5 @@ export type AudioTranslationConfiguration = Omit<
 export const configuration: AudioTranslationConfiguration = {
   model: 'whisper-1',
   temperature: 0,
-  response_format: 'json'
+  responseFormat: 'json'
 }

@@ -24,7 +24,7 @@ const useImageGeneration = (prompt: string) => {
   const createOpenAIImageGeneration = async () => {
     if (!settings || !currConversation) return
 
-    const { n, size, response_format } =
+    const { n, size, responseFormat } =
       currConversation.configuration as ImageGenerationConfiguration
 
     try {
@@ -32,14 +32,14 @@ const useImageGeneration = (prompt: string) => {
 
       const emptyMessage = pushEmptyMessage({
         question: prompt,
-        questionTokenCount: 0,
+        questionTokenCount: 0
       })
 
       const response = await company.image_generation({
-        prompt: prompt,
+        prompt,
         n,
         size,
-        response_format
+        response_format: responseFormat
       })
       const image = (await response.json()) as ImagesResponse
 
@@ -67,7 +67,7 @@ const useImageGeneration = (prompt: string) => {
 
       const emptyMessage = pushEmptyMessage({
         question: prompt,
-        questionTokenCount: 0,
+        questionTokenCount: 0
       })
 
       const headers = {

@@ -103,7 +103,7 @@ const Configuration: FC = () => {
                   labelId="audio-transcription-response-format-select-label"
                   id="audio-transcription-response-format-select"
                   label="Response Format"
-                  {...formik.getFieldProps('response_format')}
+                  {...formik.getFieldProps('responseFormat')}
                 >
                   {responseFormats.map((responseFormat) => (
                     <MenuItem key={responseFormat} value={responseFormat}>

@@ -122,7 +122,7 @@ const Configuration: FC = () => {
                   labelId="iamge-generation-response-format-select-label"
                   id="iamge-generation-response-format-select"
                   label="Response Format"
-                  {...formik.getFieldProps('response_format')}
+                  {...formik.getFieldProps('responseFormat')}
                 >
                   {responseFormats.map((responseFormat) => (
                     <MenuItem key={responseFormat} value={responseFormat}>
