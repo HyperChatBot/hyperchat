@@ -4,8 +4,8 @@ export interface ChatConfiguration {
   maxTokens: number
   temperature: number
   topP: number
-  frequency_penalty: number
-  presence_penalty: number
+  frequencyPenalty: number
+  presencePenalty: number
   stop: string[]
   system_message_tokens_count: number
 }
@@ -35,8 +35,8 @@ export const configuration: ChatConfiguration = {
   maxTokens: 800,
   temperature: 0.7,
   topP: 0.95,
-  frequency_penalty: 0,
-  presence_penalty: 0,
+  frequencyPenalty: 0,
+  presencePenalty: 0,
   stop: [],
   system_message_tokens_count: 11
 }

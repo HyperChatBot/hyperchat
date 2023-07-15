@@ -190,10 +190,10 @@ const Configuration: FC = () => {
                 step={0.01}
                 defaultValue={
                   (currConversation.configuration as ChatConfiguration)
-                    .frequency_penalty
+                    .frequencyPenalty
                 }
                 setFieldValue={(value: number) =>
-                  formik.setFieldValue('frequency_penalty', value)
+                  formik.setFieldValue('frequencyPenalty', value)
                 }
               />
               <InputSlider
@@ -204,10 +204,10 @@ const Configuration: FC = () => {
                 step={0.01}
                 defaultValue={
                   (currConversation.configuration as ChatConfiguration)
-                    .presence_penalty
+                    .presencePenalty
                 }
                 setFieldValue={(value: number) =>
-                  formik.setFieldValue('frequency_penalty', value)
+                  formik.setFieldValue('frequencyPenalty', value)
                 }
               />
               <AutoSubmitToken />

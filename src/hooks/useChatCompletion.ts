@@ -28,8 +28,8 @@ const useChatCompletion = (prompt: string) => {
       maxTokens,
       temperature,
       topP,
-      frequency_penalty,
-      presence_penalty,
+      frequencyPenalty,
+      presencePenalty,
       stop,
       system_message_tokens_count
     } = currConversation.configuration as ChatConfiguration
@@ -92,8 +92,8 @@ const useChatCompletion = (prompt: string) => {
         temperature,
         top_p: topP,
         stop: stop.length > 0 ? stop : undefined,
-        frequency_penalty,
-        presence_penalty,
+        frequency_penalty: frequencyPenalty,
+        presence_penalty: presencePenalty,
         stream: true
       })
     } catch {

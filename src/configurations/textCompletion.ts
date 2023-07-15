@@ -8,11 +8,11 @@ export interface TextCompletionConfiguration {
   maxTokens: number
   temperature: number
   topP: number
-  frequency_penalty: number
-  presence_penalty: number
+  frequencyPenalty: number
+  presencePenalty: number
   stop: string[]
-  pre_response_text: ResponseText
-  post_response_text: ResponseText
+  preResponse: ResponseText
+  postResponse: ResponseText
 }
 
 export const models = [
@@ -28,14 +28,14 @@ export const configuration: TextCompletionConfiguration = {
   maxTokens: 800,
   temperature: 0.7,
   topP: 0.95,
-  frequency_penalty: 0,
-  presence_penalty: 0,
+  frequencyPenalty: 0,
+  presencePenalty: 0,
   stop: [],
-  pre_response_text: {
+  preResponse: {
     checked: false,
     content: ''
   },
-  post_response_text: {
+  postResponse: {
     checked: false,
     content: ''
   }

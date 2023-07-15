@@ -178,10 +178,10 @@ const Configuration: FC = () => {
                 defaultValue={
                   (
                     currConversation.configuration as TextCompletionConfiguration
-                  ).frequency_penalty
+                  ).frequencyPenalty
                 }
                 setFieldValue={(value: number) =>
-                  formik.setFieldValue('frequency_penalty', value)
+                  formik.setFieldValue('frequencyPenalty', value)
                 }
               />
 
@@ -194,10 +194,10 @@ const Configuration: FC = () => {
                 defaultValue={
                   (
                     currConversation.configuration as TextCompletionConfiguration
-                  ).presence_penalty
+                  ).presencePenalty
                 }
                 setFieldValue={(value: number) =>
-                  formik.setFieldValue('frequency_penalty', value)
+                  formik.setFieldValue('frequencyPenalty', value)
                 }
               />
 
@@ -209,10 +209,10 @@ const Configuration: FC = () => {
                   <TextField
                     label="Pre-response text"
                     id="pre-response-text"
-                    value={formik.values.pre_response_text.content}
+                    value={formik.values.preResponse.content}
                     onChange={(event) => {
-                      formik.setFieldValue('pre_response_text', {
-                        ...formik.values.pre_response_text,
+                      formik.setFieldValue('preResponse', {
+                        ...formik.values.preResponse,
                         content: event?.target.value
                       })
                     }}
@@ -220,10 +220,10 @@ const Configuration: FC = () => {
                       startAdornment: (
                         <InputAdornment position="start">
                           <Checkbox
-                            checked={formik.values.pre_response_text.checked}
+                            checked={formik.values.preResponse.checked}
                             onChange={(_, checked) =>
-                              formik.setFieldValue('pre_response_text', {
-                                ...formik.values.pre_response_text,
+                              formik.setFieldValue('preResponse', {
+                                ...formik.values.preResponse,
                                 checked
                               })
                             }
@@ -243,10 +243,10 @@ const Configuration: FC = () => {
                   <TextField
                     label="Post-response text"
                     id="post-response-text"
-                    value={formik.values.post_response_text.content}
+                    value={formik.values.postResponse.content}
                     onChange={(event) => {
-                      formik.setFieldValue('post_response_text', {
-                        ...formik.values.post_response_text,
+                      formik.setFieldValue('postResponse', {
+                        ...formik.values.postResponse,
                         content: event?.target.value
                       })
                     }}
@@ -254,10 +254,10 @@ const Configuration: FC = () => {
                       startAdornment: (
                         <InputAdornment position="start">
                           <Checkbox
-                            checked={formik.values.post_response_text.checked}
+                            checked={formik.values.postResponse.checked}
                             onChange={(_, checked) =>
-                              formik.setFieldValue('post_response_text', {
-                                ...formik.values.post_response_text,
+                              formik.setFieldValue('postResponse', {
+                                ...formik.values.postResponse,
                                 checked
                               })
                             }

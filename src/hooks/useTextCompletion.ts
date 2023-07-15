@@ -25,10 +25,10 @@ const useTextCompletion = (prompt: string) => {
       maxTokens,
       temperature,
       topP,
-      frequency_penalty,
-      presence_penalty,
-      pre_response_text,
-      post_response_text
+      frequencyPenalty,
+      presencePenalty,
+      preResponse,
+      postResponse
     } = currConversation.configuration as TextCompletionConfiguration
 
     try {
@@ -45,17 +45,13 @@ const useTextCompletion = (prompt: string) => {
         max_tokens: maxTokens,
         temperature,
         top_p: topP,
-        frequency_penalty,
-        presence_penalty
+        frequency_penalty: frequencyPenalty,
+        presence_penalty: presencePenalty
       })
       const completion: CreateCompletionResponse = await response.json()
 
-      const preResponseText = pre_response_text.checked
-        ? pre_response_text.content
-        : ''
-      const postResponseText = post_response_text.checked
-        ? post_response_text.content
-        : ''
+      const preResponseText = preResponse.checked ? preResponse.content : ''
+      const postResponseText = postResponse.checked ? postResponse.content : ''
 
       saveMessageToDbAndUpdateConversationState(
         emptyMessage,
