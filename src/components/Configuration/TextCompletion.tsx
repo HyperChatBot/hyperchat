@@ -100,10 +100,10 @@ const Configuration: FC = () => {
                 defaultValue={
                   (
                     currConversation.configuration as TextCompletionConfiguration
-                  ).max_tokens
+                  ).maxTokens
                 }
                 setFieldValue={(value: number) =>
-                  formik.setFieldValue('max_tokens', value)
+                  formik.setFieldValue('maxTokens', value)
                 }
               />
 

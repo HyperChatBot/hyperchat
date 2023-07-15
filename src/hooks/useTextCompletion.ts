@@ -22,7 +22,7 @@ const useTextCompletion = (prompt: string) => {
 
     const {
       model,
-      max_tokens,
+      maxTokens,
       temperature,
       top_p,
       frequency_penalty,
@@ -42,7 +42,7 @@ const useTextCompletion = (prompt: string) => {
       const response = await company.text_completion({
         model,
         prompt: prompt,
-        max_tokens,
+        max_tokens: maxTokens,
         temperature,
         top_p,
         frequency_penalty,

@@ -25,7 +25,7 @@ const useChatCompletion = (prompt: string) => {
     const {
       model,
       systemMessage,
-      max_tokens,
+      maxTokens,
       temperature,
       top_p,
       frequency_penalty,
@@ -36,13 +36,13 @@ const useChatCompletion = (prompt: string) => {
 
     const userMessageTokensCount = getTokensCount(prompt, model)
     let tokensCount =
-      userMessageTokensCount + system_message_tokens_count + max_tokens
+      userMessageTokensCount + system_message_tokens_count + maxTokens
     const tokensLimit = models.find((m) => m.name === model)?.tokensLimit || 0
     if (tokensCount > tokensLimit) {
       toast.error(
         `This model's maximum context length is ${tokensLimit} tokens. However, you requested ${tokensCount} tokens (${
-          tokensCount - max_tokens
-        } in the messages, ${max_tokens} in the completion). Please reduce the length of the prompt.`
+          tokensCount - maxTokens
+        } in the messages, ${maxTokens} in the completion). Please reduce the length of the prompt.`
       )
       return
     }
@@ -88,7 +88,7 @@ const useChatCompletion = (prompt: string) => {
           }
         ],
         model,
-        max_tokens,
+        max_tokens: maxTokens,
         temperature,
         top_p,
         stop: stop.length > 0 ? stop : undefined,
