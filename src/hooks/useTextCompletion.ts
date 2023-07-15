@@ -24,7 +24,7 @@ const useTextCompletion = (prompt: string) => {
       model,
       maxTokens,
       temperature,
-      top_p,
+      topP,
       frequency_penalty,
       presence_penalty,
       pre_response_text,
@@ -44,7 +44,7 @@ const useTextCompletion = (prompt: string) => {
         prompt: prompt,
         max_tokens: maxTokens,
         temperature,
-        top_p,
+        top_p: topP,
         frequency_penalty,
         presence_penalty
       })

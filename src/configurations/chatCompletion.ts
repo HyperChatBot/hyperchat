@@ -3,7 +3,7 @@ export interface ChatConfiguration {
   systemMessage: string
   maxTokens: number
   temperature: number
-  top_p: number
+  topP: number
   frequency_penalty: number
   presence_penalty: number
   stop: string[]
@@ -34,7 +34,7 @@ export const configuration: ChatConfiguration = {
   systemMessage: 'You are an AI assistant that helps people find information.',
   maxTokens: 800,
   temperature: 0.7,
-  top_p: 0.95,
+  topP: 0.95,
   frequency_penalty: 0,
   presence_penalty: 0,
   stop: [],

@@ -163,10 +163,10 @@ const Configuration: FC = () => {
                 defaultValue={
                   (
                     currConversation.configuration as TextCompletionConfiguration
-                  ).top_p
+                  ).topP
                 }
                 setFieldValue={(value: number) =>
-                  formik.setFieldValue('top_p', value)
+                  formik.setFieldValue('topP', value)
                 }
               />
               <InputSlider

@@ -7,7 +7,7 @@ export interface TextCompletionConfiguration {
   model: (typeof models)[number]
   maxTokens: number
   temperature: number
-  top_p: number
+  topP: number
   frequency_penalty: number
   presence_penalty: number
   stop: string[]
@@ -27,7 +27,7 @@ export const configuration: TextCompletionConfiguration = {
   model: 'text-davinci-003',
   maxTokens: 800,
   temperature: 0.7,
-  top_p: 0.95,
+  topP: 0.95,
   frequency_penalty: 0,
   presence_penalty: 0,
   stop: [],

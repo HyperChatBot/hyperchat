@@ -176,10 +176,10 @@ const Configuration: FC = () => {
                 max={1}
                 step={0.01}
                 defaultValue={
-                  (currConversation.configuration as ChatConfiguration).top_p
+                  (currConversation.configuration as ChatConfiguration).topP
                 }
                 setFieldValue={(value: number) =>
-                  formik.setFieldValue('top_p', value)
+                  formik.setFieldValue('topP', value)
                 }
               />
               <InputSlider
