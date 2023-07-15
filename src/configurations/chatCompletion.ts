@@ -7,7 +7,7 @@ export interface ChatConfiguration {
   frequencyPenalty: number
   presencePenalty: number
   stop: string[]
-  system_message_tokens_count: number
+  systemMessageTokensCount: number
 }
 
 export const models = [
@@ -38,5 +38,5 @@ export const configuration: ChatConfiguration = {
   frequencyPenalty: 0,
   presencePenalty: 0,
   stop: [],
-  system_message_tokens_count: 11
+  systemMessageTokensCount: 11
 }

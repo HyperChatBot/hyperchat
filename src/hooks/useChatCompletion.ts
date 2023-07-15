@@ -31,12 +31,12 @@ const useChatCompletion = (prompt: string) => {
       frequencyPenalty,
       presencePenalty,
       stop,
-      system_message_tokens_count
+      systemMessageTokensCount
     } = currConversation.configuration as ChatConfiguration
 
     const userMessageTokensCount = getTokensCount(prompt, model)
     let tokensCount =
-      userMessageTokensCount + system_message_tokens_count + maxTokens
+      userMessageTokensCount + systemMessageTokensCount + maxTokens
     const tokensLimit = models.find((m) => m.name === model)?.tokensLimit || 0
     if (tokensCount > tokensLimit) {
       toast.error(

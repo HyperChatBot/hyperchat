@@ -30,15 +30,15 @@ const Configuration: FC = () => {
       return
     }
 
-    // Regenerate `system_message_tokens_count` if `systemMessage` changed.
+    // Regenerate `systemMessageTokensCount` if `systemMessage` changed.
     const prevConfiguration =
       currConversation.configuration as ChatConfiguration
     const configuration: ChatConfiguration = {
       ...values,
-      system_message_tokens_count:
+      systemMessageTokensCount:
         prevConfiguration.systemMessage !== values.systemMessage
           ? getTokensCount(values.systemMessage, values.model)
-          : prevConfiguration.system_message_tokens_count
+          : prevConfiguration.systemMessageTokensCount
     }
 
     await updateOneById(currConversation.conversation_id, {
