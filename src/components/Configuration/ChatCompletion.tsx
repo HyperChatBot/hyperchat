@@ -9,35 +9,43 @@ import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
 import { Formik, useFormikContext } from 'formik'
 import { FC, useEffect } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { ChatConfiguration, models } from 'src/configurations/chat'
+import { useRecoilState } from 'recoil'
+import { ChatConfiguration, models } from 'src/configurations/chatCompletion'
 import { useDB } from 'src/hooks'
+import { getTokensCount } from 'src/shared/utils'
 import { currConversationState } from 'src/stores/conversation'
-import {
-  configurationDrawerVisibleState,
-  currProductState
-} from 'src/stores/global'
+import { configurationDrawerVisibleState } from 'src/stores/global'
 import Divider from '../Divider'
 import InputSlider from '../InputSlider'
 
 const Configuration: FC = () => {
   const [visible, setVisible] = useRecoilState(configurationDrawerVisibleState)
-  const currProduct = useRecoilValue(currProductState)
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
   )
-  const { updateOneById } = useDB(currProduct)
+  const { updateOneById } = useDB('conversations')
 
   const updateConfiguration = async (values: ChatConfiguration) => {
     if (!currConversation) {
       return
     }
 
+    // Regenerate `system_message_tokens_count` if `system_message` changed.
+    const prevConfiguration =
+      currConversation.configuration as ChatConfiguration
+    const configuration: ChatConfiguration = {
+      ...values,
+      system_message_tokens_count:
+        prevConfiguration.system_message !== values.system_message
+          ? getTokensCount(values.system_message, values.model)
+          : prevConfiguration.system_message_tokens_count
+    }
+
     await updateOneById(currConversation.conversation_id, {
-      configuration: values
+      configuration
     })
 
-    setCurrConversation({ ...currConversation, configuration: values })
+    setCurrConversation({ ...currConversation, configuration })
   }
 
   const AutoSubmitToken = () => {
@@ -82,8 +90,8 @@ const Configuration: FC = () => {
                   {...formik.getFieldProps('model')}
                 >
                   {models.map((gpt) => (
-                    <MenuItem key={gpt} value={gpt}>
-                      {gpt}
+                    <MenuItem key={gpt.name} value={gpt.name}>
+                      {gpt.name}
                     </MenuItem>
                   ))}
                 </Select>

@@ -1,4 +1,5 @@
 import { isAxiosError } from 'axios'
+import { encodingForModel, TiktokenModel } from 'js-tiktoken'
 import { DateTime } from 'luxon'
 import toast from 'src/components/Snackbar'
 import { Products, ThemeMode } from 'src/types/global'
@@ -62,3 +63,6 @@ export const showErrorToast = (error: unknown) => {
     toast.error(JSON.stringify(error))
   }
 }
+
+export const getTokensCount = (content: string, model: TiktokenModel) =>
+  encodingForModel(model).encode(content).length

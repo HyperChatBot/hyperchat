@@ -1,21 +1,21 @@
 import {
   AudioTranscriptionConfiguration,
   AudioTranslationConfiguration,
-  ChatConfiguration,
+  ChatCompletionConfiguration,
   ImageGenerationConfiguration,
   TextCompletionConfiguration
 } from 'src/components/Configuration'
 import { Products } from 'src/types/global'
 import { configuration as audioTranscriptionConfiguration } from './audioTranscription'
 import { configuration as audioTranslationConfiguration } from './audioTranslation'
-import { configuration as chatConfiguration } from './chat'
+import { configuration as chatCompletionConfiguration } from './chatCompletion'
 import { configuration as imageGenerationConfiguration } from './imageGeneration'
 import { configuration as textCompletionConfiguration } from './textCompletion'
 
 export const configurations = {
   [Products.ChatCompletion]: {
-    component: () => ChatConfiguration,
-    default: chatConfiguration
+    component: () => ChatCompletionConfiguration,
+    default: chatCompletionConfiguration
   },
   [Products.ImageGeneration]: {
     component: () => ImageGenerationConfiguration,

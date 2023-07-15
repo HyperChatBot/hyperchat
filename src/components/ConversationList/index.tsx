@@ -21,7 +21,7 @@ const ConversationList: FC<Props> = ({ conversations }) => {
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
   )
-  const { insertOne } = useDB(currProduct)
+  const { insertOne } = useDB('conversations')
 
   const addConversation = async () => {
     const chatId = v4()
@@ -31,6 +31,7 @@ const ConversationList: FC<Props> = ({ conversations }) => {
       conversation_id: chatId,
       summary: '',
       messages: [],
+      product: currProduct,
       created_at: +new Date(),
       updated_at: +new Date(),
       configuration: configurations[currProduct].default
