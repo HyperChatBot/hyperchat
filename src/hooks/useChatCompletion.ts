@@ -50,28 +50,26 @@ const useChatCompletion = (prompt: string) => {
     currConversation.messages
       .slice()
       .reverse()
-      .forEach(
-        ({ answer_token_count, question_token_count, question, answer }) => {
-          tokensCount += answer_token_count + question_token_count
-          if (tokensCount > tokensLimit) return
-          context.unshift(
-            {
-              role: 'user',
-              content: question
-            },
-            {
-              role: 'assistant',
-              content: answer
-            }
-          )
-        }
-      )
+      .forEach(({ answerTokenCount, questionTokenCount, question, answer }) => {
+        tokensCount += answerTokenCount + questionTokenCount
+        if (tokensCount > tokensLimit) return
+        context.unshift(
+          {
+            role: 'user',
+            content: question
+          },
+          {
+            role: 'assistant',
+            content: answer
+          }
+        )
+      })
 
     setLoading(true)
 
     const emptyMessage = pushEmptyMessage({
       question: prompt,
-      question_token_count: userMessageTokensCount
+      questionTokenCount: userMessageTokensCount
     })
 
     let chat: Response | undefined
@@ -136,7 +134,7 @@ const useChatCompletion = (prompt: string) => {
           const assistantTokensCount = getTokensCount(_content, model)
           setLoading(false)
           saveMessageToDbAndUpdateConversationState(
-            { ...emptyMessage, answer_token_count: assistantTokensCount },
+            { ...emptyMessage, answerTokenCount: assistantTokensCount },
             _content
           )
           return reader.releaseLock()

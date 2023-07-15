@@ -35,7 +35,8 @@ const useTextCompletion = (prompt: string) => {
       setLoading(true)
 
       const emptyMessage = pushEmptyMessage({
-        question: prompt
+        question: prompt,
+        questionTokenCount: 0
       })
 
       const response = await company.text_completion({

@@ -29,7 +29,8 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
 
       const emptyMessage = pushEmptyMessage({
         question: prompt,
-        file_name: hashFile.hashName
+        questionTokenCount: 0,
+        fileName: hashFile.hashName
       })
 
       const transcription = await openai.createTranscription(
@@ -68,7 +69,8 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
 
       const emptyMessage = pushEmptyMessage({
         question: prompt,
-        file_name: hashFile.hashName
+        questionTokenCount: 0,
+        fileName: hashFile.hashName
       })
 
       const translation = await openai.createTranslation(

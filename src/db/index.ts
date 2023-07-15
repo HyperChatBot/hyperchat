@@ -1,6 +1,5 @@
 import Dexie, { Table } from 'dexie'
 import { Conversation } from 'src/types/conversation'
-import { Products } from 'src/types/global'
 import { Settings } from 'src/types/settings'
 
 export class HyperChatDB extends Dexie {
@@ -11,9 +10,9 @@ export class HyperChatDB extends Dexie {
     super('hyperchat')
     this.version(1).stores({
       conversations:
-        '&conversation_id, summary, file_name, product, created_at, updated_at, *messages, *configuration',
+        '&conversation_id, summary, fileName, product, createdAt, updatedAt, *messages, *configuration',
       settings:
-        '&&settings_id, company, openai_secret_key, openai_organization_id, openai_author_name, azure_endpoint, azure_secret_key, azure_deployment_name, theme_mode, assistant_avatar_filename'
+        '&&settingsId, company, openaiSecretKey, openaiOrganizationId, openaiAuthorName, azureEndPoint, azureSecretKey, azureDeploymentName, themeMode, assistantAvatarFilename'
     })
   }
 }

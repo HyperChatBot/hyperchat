@@ -56,7 +56,7 @@ const ContactHeader: FC = () => {
     if (currConversation) {
       const changes = {
         summary: summaryValue,
-        updated_at: +new Date()
+        updatedAt: +new Date()
       }
       await updateOneById(currConversation.conversation_id, changes)
       setCurrConversation({ ...currConversation, ...changes })
@@ -74,7 +74,7 @@ const ContactHeader: FC = () => {
     if (currConversation) {
       const changes = {
         avatar: data.native,
-        updated_at: +new Date()
+        updatedAt: +new Date()
       }
       await updateOneById(currConversation.conversation_id, changes)
       setCurrConversation({ ...currConversation, ...changes })

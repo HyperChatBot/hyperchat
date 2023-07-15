@@ -31,7 +31,8 @@ const useImageGeneration = (prompt: string) => {
       setLoading(true)
 
       const emptyMessage = pushEmptyMessage({
-        question: prompt
+        question: prompt,
+        questionTokenCount: 0,
       })
 
       const response = await company.image_generation({
@@ -65,12 +66,13 @@ const useImageGeneration = (prompt: string) => {
       setLoading(true)
 
       const emptyMessage = pushEmptyMessage({
-        question: prompt
+        question: prompt,
+        questionTokenCount: 0,
       })
 
       const headers = {
         'Content-Type': 'application/json',
-        'api-key': settings.azure_secret_key
+        'api-key': settings.azureSecretKey
       }
 
       const submission = await company.image_generation({

@@ -6,22 +6,22 @@ import { TextCompletionConfiguration } from '../configurations/textCompletion'
 import { Products } from './global'
 
 export interface Message {
-  message_id: string
+  messageId: string
   question: string
   answer: string
-  question_token_count: number
-  answer_token_count: number
-  question_created_at: number
-  answer_created_at: number
-  file_name?: string
+  questionTokenCount: number
+  answerTokenCount: number
+  questionCreatedAt: number
+  answerCreatedAt: number
+  fileName?: string
 }
 
 export interface Conversation {
   conversation_id: string
   summary: string
   avatar: string
-  created_at: number
-  updated_at: number
+  createdAt: number
+  updatedAt: number
   product: Products
   messages: Message[]
   configuration:
@@ -34,5 +34,5 @@ export interface Conversation {
 
 export type EmptyMessageParams = Pick<
   Message,
-  'question' | 'question_token_count' | 'file_name'
+  'question' | 'questionTokenCount' | 'fileName'
 >

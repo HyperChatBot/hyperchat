@@ -20,11 +20,11 @@ const useCompany = () => {
   const _fetch = <T>(url: string, body: T) => {
     const headers = {
       [Companies.Azure]: {
-        'api-key': settings?.azure_secret_key || ''
+        'api-key': settings?.azureSecretKey || ''
       },
       [Companies.OpenAI]: {
-        Authorization: `Bearer ${settings?.openai_secret_key}`,
-        'OpenAI-Organization': settings?.openai_organization_id || ''
+        Authorization: `Bearer ${settings?.openaiSecretKey}`,
+        'OpenAI-Organization': settings?.openaiOrganizationId || ''
       }
     }
 
@@ -42,21 +42,21 @@ const useCompany = () => {
     [Companies.Azure]: {
       logo: AzureLogoIcon,
       headers: {
-        'api-key': settings?.azure_secret_key
+        'api-key': settings?.azureSecretKey
       },
       [Products.ChatCompletion]: (body: CreateChatCompletionRequest) =>
         _fetch(
-          `${settings?.azure_endpoint}/openai/deployments/${settings?.azure_deployment_name}/chat/completions?api-version=2023-03-15-preview`,
+          `${settings?.azureEndPoint}/openai/deployments/${settings?.azureDeploymentName}/chat/completions?api-version=2023-03-15-preview`,
           body
         ),
       [Products.TextCompletion]: (body: CreateCompletionRequest) =>
         _fetch(
-          `${settings?.azure_endpoint}/openai/deployments/${settings?.azure_deployment_name}/completions?api-version=2022-12-01`,
+          `${settings?.azureEndPoint}/openai/deployments/${settings?.azureDeploymentName}/completions?api-version=2022-12-01`,
           body
         ),
       [Products.ImageGeneration]: (body: CreateImageRequest) =>
         _fetch(
-          `${settings?.azure_endpoint}/openai/images/generations:submit?api-version=2023-06-01-preview`,
+          `${settings?.azureEndPoint}/openai/images/generations:submit?api-version=2023-06-01-preview`,
           body
         )
     },

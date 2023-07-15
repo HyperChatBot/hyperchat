@@ -47,25 +47,25 @@ const ChatMessages: FC = () => {
       {hasMessages ? (
         <>
           {currConversation?.messages.map((message) => (
-            <Fragment key={message.message_id}>
+            <Fragment key={message.messageId}>
               <ChatBubble
                 role="user"
                 avatar=""
-                date={message.question_created_at}
+                date={message.questionCreatedAt}
               >
-                {isAudioProduct(currProduct) && message.file_name && (
-                  <Waveform filename={message.file_name} />
+                {isAudioProduct(currProduct) && message.fileName && (
+                  <Waveform filename={message.fileName} />
                 )}
                 {message.question}
               </ChatBubble>
               <ChatBubble
                 role="assistant"
                 avatar={
-                  settings?.assistant_avatar_filename
-                    ? settings.assistant_avatar_filename
+                  settings?.assistantAvatarFilename
+                    ? settings.assistantAvatarFilename
                     : ChatGPTLogoImg
                 }
-                date={message.answer_created_at}
+                date={message.answerCreatedAt}
               >
                 {loading && !message.answer ? (
                   <MessageSpinner />

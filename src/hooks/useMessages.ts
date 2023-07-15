@@ -11,11 +11,11 @@ import {
 import { v4 } from 'uuid'
 
 const generateEmptyMessage = (params: EmptyMessageParams): Message => ({
-  message_id: v4(),
+  messageId: v4(),
   answer: '',
-  answer_token_count:0,
-  question_created_at: +new Date(),
-  answer_created_at: +new Date(),
+  answerTokenCount: 0,
+  questionCreatedAt: +new Date(),
+  answerCreatedAt: +new Date(),
   ...params
 })
 
@@ -72,10 +72,10 @@ const useMessages = () => {
     if (conversation) {
       conversation.messages.push({
         ...emptyMessage,
-        answer_created_at: +new Date(),
+        answerCreatedAt: +new Date(),
         answer
       })
-      conversation.updated_at = +new Date()
+      conversation.updatedAt = +new Date()
 
       await updateOneById(
         (currConversation as Conversation).conversation_id,

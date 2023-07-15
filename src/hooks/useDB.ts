@@ -42,7 +42,7 @@ const useDB = (tableName: string) => {
     const conversation: Conversation[] = await db
       .table(tableName)
       .where({ product: currProduct })
-      .sortBy('updated_at')
+      .sortBy('updatedAt')
     conversation.reverse()
 
     return conversation

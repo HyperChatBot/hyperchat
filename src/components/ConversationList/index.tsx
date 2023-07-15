@@ -32,8 +32,8 @@ const ConversationList: FC<Props> = ({ conversations }) => {
       summary: '',
       messages: [],
       product: currProduct,
-      created_at: +new Date(),
-      updated_at: +new Date(),
+      createdAt: +new Date(),
+      updatedAt: +new Date(),
       configuration: configurations[currProduct].default
     }
 

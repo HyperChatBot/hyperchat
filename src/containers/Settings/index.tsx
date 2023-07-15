@@ -34,7 +34,7 @@ const Settings: FC = () => {
     if (file && file.type.startsWith('image/') && settings) {
       const filename = await saveFileToAppDataDir(file)
       if (filename) {
-        updateSettings({ ...settings, assistant_avatar_filename: filename })
+        updateSettings({ ...settings, assistantAvatarFilename: filename })
         toast.success('Assistant avatar updated successfully.')
       }
     }
@@ -103,7 +103,7 @@ const Settings: FC = () => {
                         </span>
                       }
                       className="w-160"
-                      {...formik.getFieldProps('openai_secret_key')}
+                      {...formik.getFieldProps('openaiSecretKey')}
                     />
 
                     <TextField
@@ -113,7 +113,7 @@ const Settings: FC = () => {
                       type="text"
                       className="w-160"
                       helperText="For users who belong to multiple organizations, you can pass a header to specify which organization is used for an API request. Usage from these API requests will count against the specified organization's subscription quota."
-                      {...formik.getFieldProps('openai_organization_id')}
+                      {...formik.getFieldProps('openaiOrganizationId')}
                     />
 
                     <TextField
@@ -123,7 +123,7 @@ const Settings: FC = () => {
                       type="text"
                       className="w-160"
                       helperText="The name of the author of this message. May contain a-z, A-Z, 0-9, and underscores, with a maximum length of 64 characters."
-                      {...formik.getFieldProps('openai_author_name')}
+                      {...formik.getFieldProps('openaiAuthorName')}
                     />
 
                     <Button
@@ -155,7 +155,7 @@ const Settings: FC = () => {
                         </span>
                       }
                       className="w-160"
-                      {...formik.getFieldProps('azure_secret_key')}
+                      {...formik.getFieldProps('azureSecretKey')}
                     />
 
                     <TextField
@@ -166,7 +166,7 @@ const Settings: FC = () => {
                       type="text"
                       className="w-160"
                       helperText="Use this endpoint to make calls to the service. The format likes: https://YOUR_DOMAIN.openai.azure.com"
-                      {...formik.getFieldProps('azure_endpoint')}
+                      {...formik.getFieldProps('azureEndPoint')}
                     />
 
                     <TextField
@@ -177,7 +177,7 @@ const Settings: FC = () => {
                       type="text"
                       className="w-160"
                       helperText="Deployments enable you to make completions and search calls against a provided base model or your fine-tuned model. You can also scale up and down your deployments easily by modifying the scale unit."
-                      {...formik.getFieldProps('azure_deployment_name')}
+                      {...formik.getFieldProps('azureDeploymentName')}
                     />
 
                     <Button
@@ -229,9 +229,9 @@ const Settings: FC = () => {
                         borderLeftColor: '#615ef0'
                       }
                     }}
-                    value={formik.values.theme_mode}
+                    value={formik.values.themeMode}
                     onChange={(_, newVal) => {
-                      formik.setFieldValue('theme_mode', newVal)
+                      formik.setFieldValue('themeMode', newVal)
                       toggleTheme(newVal)
                     }}
                   >
@@ -262,8 +262,8 @@ const Settings: FC = () => {
                       <Avatar
                         alt="assistant avatar"
                         src={
-                          settings.assistant_avatar_filename
-                            ? settings.assistant_avatar_filename
+                          settings.assistantAvatarFilename
+                            ? settings.assistantAvatarFilename
                             : ChatGPTImg
                         }
                         sx={{ width: 128, height: 128 }}
