@@ -1,19 +1,19 @@
 [package]
 name = "hyperchat"
 version = "0.0.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
+description = "A Chat Bot App with OpenAI/"
+authors = ["Yancey Leo"]
+license = "MIT"
+repository = "https://github.com/HyperChatBot/hyperchat"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "1.2", features = [] }
+tauri-build = { version = "1.4", features = [] }
 
 [dependencies]
-tauri = { version = "1.2", features = ["fs-all", "path-all", "protocol-all", "shell-all", "updater"] }
+tauri = { version = "1.4", features = ["fs-all", "path-all", "protocol-all", "shell-all", "updater"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 
