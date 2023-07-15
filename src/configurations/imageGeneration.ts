@@ -6,7 +6,7 @@ import {
 export interface ImageGenerationConfiguration {
   n: number
   size: (typeof sizes)[number]
-  response_format: (typeof responseFormats)[number]
+  responseFormat: (typeof responseFormats)[number]
 }
 
 export const sizes: CreateImageRequestSizeEnum[] = [
@@ -23,5 +23,5 @@ export const responseFormats: CreateImageRequestResponseFormatEnum[] = [
 export const configuration: ImageGenerationConfiguration = {
   n: 1,
   size: '1024x1024',
-  response_format: 'url'
+  responseFormat: 'url'
 }

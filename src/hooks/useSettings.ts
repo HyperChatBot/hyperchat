@@ -16,16 +16,16 @@ const useSettings = () => {
 
   const initialSettings = async () => {
     const defaultData = {
-      settings_id: v4(),
+      settingsId: v4(),
       company: Companies.OpenAI,
-      openai_secret_key: '',
-      openai_organization_id: '',
-      openai_author_name: '',
-      azure_secret_key: '',
-      azure_endpoint: '',
-      azure_deployment_name: '',
-      theme_mode: ThemeMode.system,
-      assistant_avatar_filename: ''
+      openaiSecretKey: '',
+      openaiOrganizationId: '',
+      openaiAuthorName: '',
+      azureSecretKey: '',
+      azureEndPoint: '',
+      azureDeploymentName: '',
+      themeMode: ThemeMode.system,
+      assistantAvatarFilename: ''
     }
 
     await insertOne(defaultData)
@@ -35,18 +35,18 @@ const useSettings = () => {
   const updateSettings = async (newSettings: Settings) => {
     if (!settings) return
 
-    await updateOneById(settings.settings_id, newSettings)
+    await updateOneById(settings.settingsId, newSettings)
 
     if (
-      !settings.assistant_avatar_filename.endsWith(
-        newSettings.assistant_avatar_filename
+      !settings.assistantAvatarFilename.endsWith(
+        newSettings.assistantAvatarFilename
       )
     ) {
       const src = await transformFilenameToSrc(
-        newSettings.assistant_avatar_filename
+        newSettings.assistantAvatarFilename
       )
       if (src) {
-        setSettings({ ...newSettings, assistant_avatar_filename: src })
+        setSettings({ ...newSettings, assistantAvatarFilename: src })
       }
     } else {
       setSettings(newSettings)
@@ -66,13 +66,13 @@ const useSettings = () => {
         return
       }
 
-      if (currSettings.assistant_avatar_filename) {
+      if (currSettings.assistantAvatarFilename) {
         const src = await transformFilenameToSrc(
-          currSettings.assistant_avatar_filename
+          currSettings.assistantAvatarFilename
         )
 
         if (src) {
-          setSettings({ ...currSettings, assistant_avatar_filename: src })
+          setSettings({ ...currSettings, assistantAvatarFilename: src })
         } else {
           // if transform is error
           setSettings(currSettings)

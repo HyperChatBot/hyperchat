@@ -16,11 +16,7 @@ import {
   currConversationState,
   summaryInputVisibleState
 } from 'src/stores/conversation'
-import {
-  configurationDrawerVisibleState,
-  currProductState,
-  onlineState
-} from 'src/stores/global'
+import { configurationDrawerVisibleState, onlineState } from 'src/stores/global'
 import { EmojiPickerProps } from 'src/types/global'
 import Avatar from '../Avatar'
 import EmojiPicker from '../EmojiPicker'
@@ -29,7 +25,6 @@ const ContactHeader: FC = () => {
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
   )
-  const currProduct = useRecoilValue(currProductState)
   const [summaryInputVisible, setSummaryInputVisible] = useRecoilState(
     summaryInputVisibleState
   )
@@ -43,7 +38,7 @@ const ContactHeader: FC = () => {
   const [summaryValue, setSummaryValue] = useState(
     currConversation?.summary || ''
   )
-  const { updateOneById, deleteOneById } = useDB(currProduct)
+  const { updateOneById, deleteOneById } = useDB('conversations')
 
   const summary =
     currConversation?.summary ||
@@ -61,7 +56,7 @@ const ContactHeader: FC = () => {
     if (currConversation) {
       const changes = {
         summary: summaryValue,
-        updated_at: +new Date()
+        updatedAt: +new Date()
       }
       await updateOneById(currConversation.conversation_id, changes)
       setCurrConversation({ ...currConversation, ...changes })
@@ -69,11 +64,7 @@ const ContactHeader: FC = () => {
     }
   }
 
-  const saveSummaryWithKeyboard = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Escape') {
-      setSummaryInputVisible(false)
-    }
-
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       saveSummary()
     }
@@ -83,7 +74,7 @@ const ContactHeader: FC = () => {
     if (currConversation) {
       const changes = {
         avatar: data.native,
-        updated_at: +new Date()
+        updatedAt: +new Date()
       }
       await updateOneById(currConversation.conversation_id, changes)
       setCurrConversation({ ...currConversation, ...changes })
@@ -129,7 +120,7 @@ const ContactHeader: FC = () => {
                 <Input
                   autoFocus
                   value={summaryValue}
-                  onKeyUp={saveSummaryWithKeyboard}
+                  onKeyDown={handleKeyDown}
                   onChange={(e) => setSummaryValue(e.target.value)}
                   className="w-80"
                   sx={{

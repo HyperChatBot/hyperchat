@@ -1,24 +1,28 @@
 import { AudioTranscriptionConfiguration } from '../configurations/audioTranscription'
 import { AudioTranslationConfiguration } from '../configurations/audioTranslation'
-import { ChatConfiguration } from '../configurations/chat'
+import { ChatConfiguration } from '../configurations/chatCompletion'
 import { ImageGenerationConfiguration } from '../configurations/imageGeneration'
 import { TextCompletionConfiguration } from '../configurations/textCompletion'
+import { Products } from './global'
 
 export interface Message {
-  message_id: string
+  messageId: string
   question: string
   answer: string
-  question_created_at: number
-  answer_created_at: number
-  file_name?: string
+  questionTokenCount: number
+  answerTokenCount: number
+  questionCreatedAt: number
+  answerCreatedAt: number
+  fileName?: string
 }
 
 export interface Conversation {
   conversation_id: string
   summary: string
   avatar: string
-  created_at: number
-  updated_at: number
+  createdAt: number
+  updatedAt: number
+  product: Products
   messages: Message[]
   configuration:
     | ChatConfiguration
@@ -28,4 +32,7 @@ export interface Conversation {
     | TextCompletionConfiguration
 }
 
-export type EmptyMessageParams = Pick<Message, 'question' | 'file_name'>
+export type EmptyMessageParams = Pick<
+  Message,
+  'question' | 'questionTokenCount' | 'fileName'
+>

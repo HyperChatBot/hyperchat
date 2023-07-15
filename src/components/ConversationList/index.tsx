@@ -1,8 +1,8 @@
+import { capitalCase } from 'change-case'
 import { FC } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { configurations } from 'src/configurations'
 import { useDB } from 'src/hooks'
-import { conversationTitles } from 'src/shared/constants'
 import { currConversationState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { Conversation } from 'src/types/conversation'
@@ -21,7 +21,7 @@ const ConversationList: FC<Props> = ({ conversations }) => {
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
   )
-  const { insertOne } = useDB(currProduct)
+  const { insertOne } = useDB('conversations')
 
   const addConversation = async () => {
     const chatId = v4()
@@ -31,8 +31,9 @@ const ConversationList: FC<Props> = ({ conversations }) => {
       conversation_id: chatId,
       summary: '',
       messages: [],
-      created_at: +new Date(),
-      updated_at: +new Date(),
+      product: currProduct,
+      createdAt: +new Date(),
+      updatedAt: +new Date(),
       configuration: configurations[currProduct].default
     }
 
@@ -48,7 +49,7 @@ const ConversationList: FC<Props> = ({ conversations }) => {
     <section className="w-87.75">
       <section className="flex items-center justify-between p-6">
         <span className="mr-4 truncate text-xl font-semibold dark:text-dark-text">
-          {conversationTitles[currProduct]}
+          {capitalCase(currProduct)}
         </span>
         <OutlinePlusIcon onClick={addConversation} />
       </section>

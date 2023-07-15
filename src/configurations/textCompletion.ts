@@ -5,14 +5,14 @@ export interface ResponseText {
 
 export interface TextCompletionConfiguration {
   model: (typeof models)[number]
-  max_response: number
+  maxTokens: number
   temperature: number
-  top_p: number
-  frequency_penalty: number
-  presence_penalty: number
+  topP: number
+  frequencyPenalty: number
+  presencePenalty: number
   stop: string[]
-  pre_response_text: ResponseText
-  post_response_text: ResponseText
+  preResponse: ResponseText
+  postResponse: ResponseText
 }
 
 export const models = [
@@ -25,17 +25,17 @@ export const models = [
 
 export const configuration: TextCompletionConfiguration = {
   model: 'text-davinci-003',
-  max_response: 800,
+  maxTokens: 800,
   temperature: 0.7,
-  top_p: 0.95,
-  frequency_penalty: 0,
-  presence_penalty: 0,
+  topP: 0.95,
+  frequencyPenalty: 0,
+  presencePenalty: 0,
   stop: [],
-  pre_response_text: {
+  preResponse: {
     checked: false,
     content: ''
   },
-  post_response_text: {
+  postResponse: {
     checked: false,
     content: ''
   }

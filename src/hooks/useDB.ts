@@ -1,6 +1,11 @@
+import { useRecoilValue } from 'recoil'
 import { db } from 'src/db'
+import { currProductState } from 'src/stores/global'
+import { Conversation } from 'src/types/conversation'
 
 const useDB = (tableName: string) => {
+  const currProduct = useRecoilValue(currProductState)
+
   const deleteOneById = async (id: string) => {
     try {
       await db.table(tableName).delete(id)
@@ -33,8 +38,15 @@ const useDB = (tableName: string) => {
     } catch {}
   }
 
-  const getCurrConversations = () =>
-    db.table(tableName).orderBy('updated_at').reverse().toArray()
+  const getCurrConversations = async () => {
+    const conversation: Conversation[] = await db
+      .table(tableName)
+      .where({ product: currProduct })
+      .sortBy('updatedAt')
+    conversation.reverse()
+
+    return conversation
+  }
 
   return {
     getCurrConversations,

@@ -1,15 +1,12 @@
 import Drawer from '@mui/material/Drawer'
 import { Formik, useFormikContext } from 'formik'
 import { FC, ReactElement, cloneElement, useEffect } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import Divider from 'src/components/Divider'
-import { ChatConfiguration } from 'src/configurations/chat'
+import { ChatConfiguration } from 'src/configurations/chatCompletion'
 import { useDB } from 'src/hooks'
 import { currConversationState } from 'src/stores/conversation'
-import {
-  configurationDrawerVisibleState,
-  currProductState
-} from 'src/stores/global'
+import { configurationDrawerVisibleState } from 'src/stores/global'
 
 interface Props {
   children: ReactElement
@@ -17,11 +14,10 @@ interface Props {
 
 const ConfigurationWrapper: FC<Props> = ({ children }) => {
   const [visible, setVisible] = useRecoilState(configurationDrawerVisibleState)
-  const currProduct = useRecoilValue(currProductState)
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
   )
-  const { updateOneById } = useDB(currProduct)
+  const { updateOneById } = useDB('conversations')
 
   const updateConfiguration = async (values: ChatConfiguration) => {
     if (!currConversation) {

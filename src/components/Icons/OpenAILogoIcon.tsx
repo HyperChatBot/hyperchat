@@ -2,7 +2,7 @@ import classNames from 'classnames'
 import { FC } from 'react'
 import { SvgIconProps } from 'src/types/global'
 
-const ChatGPTLogoIcon: FC<SvgIconProps> = ({
+const OpenAILogoIcon: FC<SvgIconProps> = ({
   className,
   pathClassName,
   onClick
@@ -29,4 +29,4 @@ const ChatGPTLogoIcon: FC<SvgIconProps> = ({
   </svg>
 )
 
-export default ChatGPTLogoIcon
+export default OpenAILogoIcon

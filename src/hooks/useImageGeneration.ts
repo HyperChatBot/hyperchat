@@ -1,24 +1,62 @@
 import { DateTime } from 'luxon'
+import { ImagesResponse } from 'openai'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { ImageGenerationConfiguration } from 'src/configurations/imageGeneration'
-import { useMessages } from 'src/hooks'
+import { useCompany, useMessages } from 'src/hooks'
 import { showErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 import { AzureImageGeneration } from 'src/types/azure'
+import { Companies } from 'src/types/global'
 import { sleep } from 'yancey-js-util'
 
-const useAzureImageGeneration = (question: string) => {
+const useImageGeneration = (prompt: string) => {
   const currConversation = useRecoilValue(currConversationState)
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
+  const company = useCompany()
   const {
     pushEmptyMessage,
     saveMessageToDbAndUpdateConversationState,
     rollBackEmptyMessage
   } = useMessages()
 
-  const createImageGeneration = async () => {
+  const createOpenAIImageGeneration = async () => {
+    if (!settings || !currConversation) return
+
+    const { n, size, responseFormat } =
+      currConversation.configuration as ImageGenerationConfiguration
+
+    try {
+      setLoading(true)
+
+      const emptyMessage = pushEmptyMessage({
+        question: prompt,
+        questionTokenCount: 0
+      })
+
+      const response = await company.image_generation({
+        prompt,
+        n,
+        size,
+        response_format: responseFormat
+      })
+      const image = (await response.json()) as ImagesResponse
+
+      const content = image.data
+        .map((val, key) => `![${prompt}-${key}](${val.url})\n`)
+        .join('')
+
+      saveMessageToDbAndUpdateConversationState(emptyMessage, content)
+    } catch (error) {
+      showErrorToast(error)
+      rollBackEmptyMessage()
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const createAzureImageGeneration = async () => {
     if (!settings || !currConversation) return
 
     const { n, size } =
@@ -28,26 +66,20 @@ const useAzureImageGeneration = (question: string) => {
       setLoading(true)
 
       const emptyMessage = pushEmptyMessage({
-        question
+        question: prompt,
+        questionTokenCount: 0
       })
 
       const headers = {
         'Content-Type': 'application/json',
-        'api-key': settings.azure_secret_key
+        'api-key': settings.azureSecretKey
       }
 
-      const submission = await fetch(
-        `${settings.azure_endpoint}/openai/images/generations:submit?api-version=2023-06-01-preview`,
-        {
-          headers,
-          method: 'POST',
-          body: JSON.stringify({
-            prompt: question,
-            n,
-            size
-          })
-        }
-      )
+      const submission = await company.image_generation({
+        prompt: prompt,
+        n,
+        size
+      })
 
       const operation_location = submission.headers.get('Operation-Location')
       if (!operation_location) throw new Error('No Operation Location found.')
@@ -67,7 +99,7 @@ const useAzureImageGeneration = (question: string) => {
 
       let content = ''
       image.result.data.forEach(
-        (image) => (content += `![${question}](${image.url})\n\n`)
+        (image) => (content += `![${prompt}](${image.url})\n\n`)
       )
       content += `(Warning: The expiration date of this image is **${DateTime.fromSeconds(
         image.expires
@@ -84,7 +116,9 @@ const useAzureImageGeneration = (question: string) => {
     }
   }
 
-  return { createImageGeneration }
+  return settings?.company === Companies.OpenAI
+    ? { createImageGeneration: createOpenAIImageGeneration }
+    : { createImageGeneration: createAzureImageGeneration }
 }
 
-export default useAzureImageGeneration
+export default useImageGeneration

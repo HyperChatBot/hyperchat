@@ -1,7 +1,8 @@
 import { isAxiosError } from 'axios'
+import { encodingForModel, TiktokenModel } from 'js-tiktoken'
 import { DateTime } from 'luxon'
 import toast from 'src/components/Snackbar'
-import { ErrorType, Products, ThemeMode } from 'src/types/global'
+import { Products, ThemeMode } from 'src/types/global'
 import { OpenAIError } from 'src/types/openai'
 import { v4 } from 'uuid'
 import { getFileExtension } from 'yancey-js-util'
@@ -20,9 +21,6 @@ export const formatDate = (millis: number) => {
   return { isSameDay: false, display: date.toLocaleString(DateTime.DATE_FULL) }
 }
 
-export const generateErrorMessage = (type: ErrorType, message: string) =>
-  type + message
-
 export const generateHashName = (fileName: string) => {
   const extension = getFileExtension(fileName)
   const hashName = `${v4()}_${+new Date()}.${extension}`
@@ -30,9 +28,9 @@ export const generateHashName = (fileName: string) => {
   return hashName
 }
 
-export const isOpenAIAudioProduct = (product: Products) =>
-  product === Products.OpenAIAudioTranscription ||
-  product === Products.OpenAIAudioTranslation
+export const isAudioProduct = (product: Products) =>
+  product === Products.AudioTranscription ||
+  product === Products.AudioTranslation
 
 export const formatBytes = (bytes: number) => {
   const k = 1024
@@ -61,5 +59,10 @@ export const themeModeToTheme = (themeMode?: ThemeMode) =>
 export const showErrorToast = (error: unknown) => {
   if (isAxiosError<OpenAIError, Record<string, unknown>>(error)) {
     toast.error(error.response?.data.error.message || '')
+  } else {
+    toast.error(JSON.stringify(error))
   }
 }
+
+export const getTokensCount = (content: string, model: TiktokenModel) =>
+  encodingForModel(model).encode(content).length

@@ -22,7 +22,9 @@ const Markdown: FC<Props> = ({ raw }) => {
           return !inline ? (
             <SyntaxHighlighter
               style={mdCodeTheme}
-              language={match ? match[1] : ''}
+              // FIXME: Azure OpenAI Service does not return the language of block code.
+              // Use `ts` as the temporary default.
+              language={match ? match[1] : 'ts'}
               PreTag="div"
               customStyle={{ borderRadius: 0, margin: 0 }}
             >
@@ -89,6 +91,45 @@ const Markdown: FC<Props> = ({ raw }) => {
             <li className={classNames('mb-3 last:mb-0', className)} {..._props}>
               {children}
             </li>
+          )
+        },
+        img({ className, children, ...props }) {
+          return <img {...props} loading="lazy" />
+        },
+        table({ className, children, ...props }) {
+          return (
+            <table
+              className={classNames(
+                'table-fixed border border-gray-500',
+                className
+              )}
+            >
+              {children}
+            </table>
+          )
+        },
+        th({ className, children, ...props }) {
+          return (
+            <th
+              className={classNames(
+                'whitespace-nowrap border border-gray-500 p-2 dark:border-gray-200',
+                className
+              )}
+            >
+              {children}
+            </th>
+          )
+        },
+        td({ className, children, ...props }) {
+          return (
+            <td
+              className={classNames(
+                'whitespace-nowrap border border-gray-500 p-2 dark:border-gray-200',
+                className
+              )}
+            >
+              {children}
+            </td>
           )
         }
       }}

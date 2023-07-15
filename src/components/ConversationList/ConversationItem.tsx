@@ -12,7 +12,7 @@ interface Props {
 }
 
 const ConversationItem: FC<Props> = ({ active, conversation, onClick }) => {
-  const { isSameDay, display } = formatDate(conversation.updated_at)
+  const { isSameDay, display } = formatDate(conversation.updatedAt)
 
   return (
     <ItemWrapper onClick={onClick} active={active}>

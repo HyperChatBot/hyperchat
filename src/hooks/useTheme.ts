@@ -40,7 +40,7 @@ const useTheme = () => {
   }
 
   const setThemeStateAndClass = (newTheme?: ThemeMode) => {
-    const currTheme = themeModeToTheme(newTheme || settings?.theme_mode)
+    const currTheme = themeModeToTheme(newTheme || settings?.themeMode)
     setTheme(currTheme)
     setThemeClass(currTheme)
   }
@@ -49,12 +49,12 @@ const useTheme = () => {
     setThemeStateAndClass(newTheme)
 
     if (settings) {
-      updateSettings({ ...settings, theme_mode: newTheme })
+      updateSettings({ ...settings, themeMode: newTheme })
     }
   }
 
   const onSystemThemeChange = (e: MediaQueryListEvent) => {
-    if (settings?.theme_mode !== ThemeMode.system) return
+    if (settings?.themeMode !== ThemeMode.system) return
     setThemeStateAndClass()
   }
 

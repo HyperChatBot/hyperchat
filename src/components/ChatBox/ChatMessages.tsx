@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatbot.png'
 import NoDataIllustration from 'src/assets/illustrations/no-data.svg'
 import { useSettings } from 'src/hooks'
-import { isOpenAIAudioProduct } from 'src/shared/utils'
+import { isAudioProduct } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import Waveform from '../Waveform'
@@ -47,25 +47,25 @@ const ChatMessages: FC = () => {
       {hasMessages ? (
         <>
           {currConversation?.messages.map((message) => (
-            <Fragment key={message.message_id}>
+            <Fragment key={message.messageId}>
               <ChatBubble
                 role="user"
                 avatar=""
-                date={message.question_created_at}
+                date={message.questionCreatedAt}
               >
-                {isOpenAIAudioProduct(currProduct) && message.file_name && (
-                  <Waveform filename={message.file_name} />
+                {isAudioProduct(currProduct) && message.fileName && (
+                  <Waveform filename={message.fileName} />
                 )}
                 {message.question}
               </ChatBubble>
               <ChatBubble
                 role="assistant"
                 avatar={
-                  settings?.assistant_avatar_filename
-                    ? settings.assistant_avatar_filename
+                  settings?.assistantAvatarFilename
+                    ? settings.assistantAvatarFilename
                     : ChatGPTLogoImg
                 }
-                date={message.answer_created_at}
+                date={message.answerCreatedAt}
               >
                 {loading && !message.answer ? (
                   <MessageSpinner />

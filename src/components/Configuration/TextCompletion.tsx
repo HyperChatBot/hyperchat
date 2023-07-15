@@ -11,27 +11,23 @@ import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
 import { Formik, useFormikContext } from 'formik'
 import { FC, useEffect } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import {
   TextCompletionConfiguration,
   models
 } from 'src/configurations/textCompletion'
 import { useDB } from 'src/hooks'
 import { currConversationState } from 'src/stores/conversation'
-import {
-  configurationDrawerVisibleState,
-  currProductState
-} from 'src/stores/global'
+import { configurationDrawerVisibleState } from 'src/stores/global'
 import Divider from '../Divider'
 import InputSlider from '../InputSlider'
 
 const Configuration: FC = () => {
   const [visible, setVisible] = useRecoilState(configurationDrawerVisibleState)
-  const currProduct = useRecoilValue(currProductState)
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
   )
-  const { updateOneById } = useDB(currProduct)
+  const { updateOneById } = useDB('conversations')
 
   const updateConfiguration = async (values: TextCompletionConfiguration) => {
     if (!currConversation) {
@@ -104,10 +100,10 @@ const Configuration: FC = () => {
                 defaultValue={
                   (
                     currConversation.configuration as TextCompletionConfiguration
-                  ).max_response
+                  ).maxTokens
                 }
                 setFieldValue={(value: number) =>
-                  formik.setFieldValue('max_response', value)
+                  formik.setFieldValue('maxTokens', value)
                 }
               />
 
@@ -167,10 +163,10 @@ const Configuration: FC = () => {
                 defaultValue={
                   (
                     currConversation.configuration as TextCompletionConfiguration
-                  ).top_p
+                  ).topP
                 }
                 setFieldValue={(value: number) =>
-                  formik.setFieldValue('top_p', value)
+                  formik.setFieldValue('topP', value)
                 }
               />
               <InputSlider
@@ -182,10 +178,10 @@ const Configuration: FC = () => {
                 defaultValue={
                   (
                     currConversation.configuration as TextCompletionConfiguration
-                  ).frequency_penalty
+                  ).frequencyPenalty
                 }
                 setFieldValue={(value: number) =>
-                  formik.setFieldValue('frequency_penalty', value)
+                  formik.setFieldValue('frequencyPenalty', value)
                 }
               />
 
@@ -198,10 +194,10 @@ const Configuration: FC = () => {
                 defaultValue={
                   (
                     currConversation.configuration as TextCompletionConfiguration
-                  ).presence_penalty
+                  ).presencePenalty
                 }
                 setFieldValue={(value: number) =>
-                  formik.setFieldValue('frequency_penalty', value)
+                  formik.setFieldValue('frequencyPenalty', value)
                 }
               />
 
@@ -213,10 +209,10 @@ const Configuration: FC = () => {
                   <TextField
                     label="Pre-response text"
                     id="pre-response-text"
-                    value={formik.values.pre_response_text.content}
+                    value={formik.values.preResponse.content}
                     onChange={(event) => {
-                      formik.setFieldValue('pre_response_text', {
-                        ...formik.values.pre_response_text,
+                      formik.setFieldValue('preResponse', {
+                        ...formik.values.preResponse,
                         content: event?.target.value
                       })
                     }}
@@ -224,10 +220,10 @@ const Configuration: FC = () => {
                       startAdornment: (
                         <InputAdornment position="start">
                           <Checkbox
-                            checked={formik.values.pre_response_text.checked}
+                            checked={formik.values.preResponse.checked}
                             onChange={(_, checked) =>
-                              formik.setFieldValue('pre_response_text', {
-                                ...formik.values.pre_response_text,
+                              formik.setFieldValue('preResponse', {
+                                ...formik.values.preResponse,
                                 checked
                               })
                             }
@@ -247,10 +243,10 @@ const Configuration: FC = () => {
                   <TextField
                     label="Post-response text"
                     id="post-response-text"
-                    value={formik.values.post_response_text.content}
+                    value={formik.values.postResponse.content}
                     onChange={(event) => {
-                      formik.setFieldValue('post_response_text', {
-                        ...formik.values.post_response_text,
+                      formik.setFieldValue('postResponse', {
+                        ...formik.values.postResponse,
                         content: event?.target.value
                       })
                     }}
@@ -258,10 +254,10 @@ const Configuration: FC = () => {
                       startAdornment: (
                         <InputAdornment position="start">
                           <Checkbox
-                            checked={formik.values.post_response_text.checked}
+                            checked={formik.values.postResponse.checked}
                             onChange={(_, checked) =>
-                              formik.setFieldValue('post_response_text', {
-                                ...formik.values.post_response_text,
+                              formik.setFieldValue('postResponse', {
+                                ...formik.values.postResponse,
                                 checked
                               })
                             }

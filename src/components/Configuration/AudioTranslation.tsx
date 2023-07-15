@@ -5,25 +5,21 @@ import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
 import { Formik, useFormikContext } from 'formik'
 import { FC, useEffect } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { models, responseFormats } from 'src/configurations/audioTranscription'
 import { AudioTranslationConfiguration } from 'src/configurations/audioTranslation'
 import { useDB } from 'src/hooks'
 import { currConversationState } from 'src/stores/conversation'
-import {
-  configurationDrawerVisibleState,
-  currProductState
-} from 'src/stores/global'
+import { configurationDrawerVisibleState } from 'src/stores/global'
 import Divider from '../Divider'
 import InputSlider from '../InputSlider'
 
 const Configuration: FC = () => {
   const [visible, setVisible] = useRecoilState(configurationDrawerVisibleState)
-  const currProduct = useRecoilValue(currProductState)
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
   )
-  const { updateOneById } = useDB(currProduct)
+  const { updateOneById } = useDB('conversations')
 
   const updateConfiguration = async (values: AudioTranslationConfiguration) => {
     if (!currConversation) {
@@ -98,7 +94,7 @@ const Configuration: FC = () => {
                   labelId="audio-transcription-response-format-select-label"
                   id="audio-transcription-response-format-select"
                   label="Response Format"
-                  {...formik.getFieldProps('response_format')}
+                  {...formik.getFieldProps('responseFormat')}
                 >
                   {responseFormats.map((responseFormat) => (
                     <MenuItem key={responseFormat} value={responseFormat}>
