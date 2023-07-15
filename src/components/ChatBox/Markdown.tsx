@@ -95,6 +95,42 @@ const Markdown: FC<Props> = ({ raw }) => {
         },
         img({ className, children, ...props }) {
           return <img {...props} loading="lazy" />
+        },
+        table({ className, children, ...props }) {
+          return (
+            <table
+              className={classNames(
+                'table-fixed border border-gray-500',
+                className
+              )}
+            >
+              {children}
+            </table>
+          )
+        },
+        th({ className, children, ...props }) {
+          return (
+            <th
+              className={classNames(
+                'whitespace-nowrap border border-gray-500 p-2 dark:border-gray-200',
+                className
+              )}
+            >
+              {children}
+            </th>
+          )
+        },
+        td({ className, children, ...props }) {
+          return (
+            <td
+              className={classNames(
+                'whitespace-nowrap border border-gray-500 p-2 dark:border-gray-200',
+                className
+              )}
+            >
+              {children}
+            </td>
+          )
         }
       }}
     >
