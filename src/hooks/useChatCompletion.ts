@@ -35,13 +35,13 @@ const useChatCompletion = (prompt: string) => {
     } = currConversation.configuration as ChatConfiguration
 
     const userMessageTokensCount = getTokensCount(prompt, model)
-    let count =
+    let tokensCount =
       userMessageTokensCount + system_message_tokens_count + max_tokens
-    const limit = models.find((m) => m.name === model)?.maxTokens || 0
-    if (count > limit) {
+    const tokensLimit = models.find((m) => m.name === model)?.maxTokens || 0
+    if (tokensCount > tokensLimit) {
       toast.error(
-        `This model's maximum context length is ${limit} tokens. However, you requested ${count} tokens (${
-          count - max_tokens
+        `This model's maximum context length is ${tokensLimit} tokens. However, you requested ${tokensCount} tokens (${
+          tokensCount - max_tokens
         } in the messages, ${max_tokens} in the completion). Please reduce the length of the prompt.`
       )
       return
@@ -52,8 +52,8 @@ const useChatCompletion = (prompt: string) => {
       .reverse()
       .forEach(
         ({ answer_token_count, question_token_count, question, answer }) => {
-          count += answer_token_count + question_token_count
-          if (count > limit) return
+          tokensCount += answer_token_count + question_token_count
+          if (tokensCount > tokensLimit) return
           context.unshift(
             {
               role: 'user',
