@@ -30,14 +30,14 @@ const Configuration: FC = () => {
       return
     }
 
-    // Regenerate `system_message_tokens_count` if `system_message` changed.
+    // Regenerate `system_message_tokens_count` if `systemMessage` changed.
     const prevConfiguration =
       currConversation.configuration as ChatConfiguration
     const configuration: ChatConfiguration = {
       ...values,
       system_message_tokens_count:
-        prevConfiguration.system_message !== values.system_message
-          ? getTokensCount(values.system_message, values.model)
+        prevConfiguration.systemMessage !== values.systemMessage
+          ? getTokensCount(values.systemMessage, values.model)
           : prevConfiguration.system_message_tokens_count
     }
 
@@ -104,7 +104,7 @@ const Configuration: FC = () => {
                 multiline
                 rows={5}
                 placeholder="Eg: You are an AI assistant that helps people find information."
-                {...formik.getFieldProps('system_message')}
+                {...formik.getFieldProps('systemMessage')}
               />
 
               <InputSlider

@@ -24,7 +24,7 @@ const useChatCompletion = (prompt: string) => {
 
     const {
       model,
-      system_message,
+      systemMessage,
       max_tokens,
       temperature,
       top_p,
@@ -79,7 +79,7 @@ const useChatCompletion = (prompt: string) => {
         messages: [
           {
             role: 'system',
-            content: system_message
+            content: systemMessage
           },
           ...context,
           {
