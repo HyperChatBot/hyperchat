@@ -37,7 +37,7 @@ const useChatCompletion = (prompt: string) => {
     const userMessageTokensCount = getTokensCount(prompt, model)
     let tokensCount =
       userMessageTokensCount + system_message_tokens_count + max_tokens
-    const tokensLimit = models.find((m) => m.name === model)?.maxTokens || 0
+    const tokensLimit = models.find((m) => m.name === model)?.tokensLimit || 0
     if (tokensCount > tokensLimit) {
       toast.error(
         `This model's maximum context length is ${tokensLimit} tokens. However, you requested ${tokensCount} tokens (${

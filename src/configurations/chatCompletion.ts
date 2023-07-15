@@ -13,19 +13,19 @@ export interface ChatConfiguration {
 export const models = [
   {
     name: 'gpt-3.5-turbo',
-    maxTokens: 4 * 2 ** 10 + 1
+    tokensLimit: 4 * 2 ** 10 + 1
   },
   {
     name: 'gpt-3.5-turbo-16k',
-    maxTokens: 16 * 2 ** 10 + 1
+    tokensLimit: 16 * 2 ** 10 + 1
   },
   {
     name: 'gpt-4',
-    maxTokens: 8 * 2 ** 10 + 1
+    tokensLimit: 8 * 2 ** 10 + 1
   },
   {
     name: 'gpt-4-32k',
-    maxTokens: 32 * 2 ** 10 + 1
+    tokensLimit: 32 * 2 ** 10 + 1
   }
 ] as const
 
