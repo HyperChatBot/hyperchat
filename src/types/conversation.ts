@@ -9,6 +9,8 @@ export interface Message {
   message_id: string
   question: string
   answer: string
+  question_token_count: number
+  answer_token_count: number
   question_created_at: number
   answer_created_at: number
   file_name?: string
@@ -30,4 +32,7 @@ export interface Conversation {
     | TextCompletionConfiguration
 }
 
-export type EmptyMessageParams = Pick<Message, 'question' | 'file_name'>
+export type EmptyMessageParams = Pick<
+  Message,
+  'question' | 'question_token_count' | 'file_name'
+>

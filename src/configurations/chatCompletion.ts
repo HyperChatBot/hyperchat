@@ -1,5 +1,5 @@
 export interface ChatConfiguration {
-  model: (typeof models)[number]
+  model: (typeof models)[number]['name']
   system_message: string
   max_tokens: number
   temperature: number
@@ -7,13 +7,26 @@ export interface ChatConfiguration {
   frequency_penalty: number
   presence_penalty: number
   stop: string[]
+  system_message_tokens_count: number
 }
 
 export const models = [
-  'gpt-3.5-turbo',
-  'gpt-3.5-turbo-16k',
-  'gpt-4',
-  'gpt-4-32k'
+  {
+    name: 'gpt-3.5-turbo',
+    maxTokens: 4 * 2 ** 10 + 1
+  },
+  {
+    name: 'gpt-3.5-turbo-16k',
+    maxTokens: 16 * 2 ** 10 + 1
+  },
+  {
+    name: 'gpt-4',
+    maxTokens: 8 * 2 ** 10 + 1
+  },
+  {
+    name: 'gpt-4-32k',
+    maxTokens: 32 * 2 ** 10 + 1
+  }
 ] as const
 
 export const configuration: ChatConfiguration = {
@@ -24,5 +37,6 @@ export const configuration: ChatConfiguration = {
   top_p: 0.95,
   frequency_penalty: 0,
   presence_penalty: 0,
-  stop: []
+  stop: [],
+  system_message_tokens_count: 11
 }

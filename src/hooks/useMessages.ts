@@ -13,6 +13,7 @@ import { v4 } from 'uuid'
 const generateEmptyMessage = (params: EmptyMessageParams): Message => ({
   message_id: v4(),
   answer: '',
+  answer_token_count:0,
   question_created_at: +new Date(),
   answer_created_at: +new Date(),
   ...params

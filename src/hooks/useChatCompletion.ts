@@ -1,9 +1,9 @@
 import { CreateChatCompletionRequest } from 'openai'
-import {  encodingForModel } from "js-tiktoken";
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import toast from 'src/components/Snackbar'
-import { ChatConfiguration } from 'src/configurations/chatCompletion'
+import { ChatConfiguration, models } from 'src/configurations/chatCompletion'
 import { useCompany, useMessages, useSettings } from 'src/hooks'
+import { getTokensCount } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { OpenAIChatResponse, OpenAIError } from 'src/types/openai'
 
@@ -30,42 +30,51 @@ const useChatCompletion = (prompt: string) => {
       top_p,
       frequency_penalty,
       presence_penalty,
-      stop
+      stop,
+      system_message_tokens_count
     } = currConversation.configuration as ChatConfiguration
 
-    setLoading(true)
-
-    const emptyMessage = pushEmptyMessage({
-      question: prompt
-    })
-
-    let chat: Response | undefined
-
-    // if (tokenLimit) {
-    //   toast.error('This model's maximum context length is 4097 tokens. However, you requested 4123 tokens (3323 in the messages, 800 in the completion). Please reduce the length of the prompt.')
-    //   return
-    // }
-
-    
+    const userMessageTokensCount = getTokensCount(prompt, model)
+    let count =
+      userMessageTokensCount + system_message_tokens_count + max_tokens
+    const limit = models.find((m) => m.name === model)?.maxTokens || 0
+    if (count > limit) {
+      toast.error(
+        `This model's maximum context length is ${limit} tokens. However, you requested ${count} tokens (${
+          count - max_tokens
+        } in the messages, ${max_tokens} in the completion). Please reduce the length of the prompt.`
+      )
+      return
+    }
     const context: CreateChatCompletionRequest['messages'] = []
     currConversation.messages
       .slice()
       .reverse()
-      .forEach((message) => {
-        const x = encodingForModel(model).encode(message.answer)
-        console.log(x)
+      .forEach(
+        ({ answer_token_count, question_token_count, question, answer }) => {
+          count += answer_token_count + question_token_count
+          if (count > limit) return
+          context.unshift(
+            {
+              role: 'user',
+              content: question
+            },
+            {
+              role: 'assistant',
+              content: answer
+            }
+          )
+        }
+      )
 
-        context.push(
-          {
-            role: 'user',
-            content: message.question
-          },
-          {
-            role: 'assistant',
-            content: message.answer
-          }
-        )
-      })
+    setLoading(true)
+
+    const emptyMessage = pushEmptyMessage({
+      question: prompt,
+      question_token_count: userMessageTokensCount
+    })
+
+    let chat: Response | undefined
 
     try {
       chat = await company.chat_completion({
@@ -124,8 +133,12 @@ const useChatCompletion = (prompt: string) => {
         const { done, value } = await reader.read()
 
         if (done) {
+          const assistantTokensCount = getTokensCount(_content, model)
           setLoading(false)
-          saveMessageToDbAndUpdateConversationState(emptyMessage, _content)
+          saveMessageToDbAndUpdateConversationState(
+            { ...emptyMessage, answer_token_count: assistantTokensCount },
+            _content
+          )
           return reader.releaseLock()
         }
 
