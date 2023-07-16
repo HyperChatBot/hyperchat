@@ -12,10 +12,7 @@ import { v4 } from 'uuid'
 
 const generateEmptyMessage = (params: EmptyMessageParams): Message => ({
   messageId: v4(),
-  answer: '',
-  answerTokenCount: 0,
-  questionCreatedAt: +new Date(),
-  answerCreatedAt: +new Date(),
+  createdAt: +new Date(),
   ...params
 })
 
@@ -51,7 +48,7 @@ const useMessages = () => {
         if (!draft) return
 
         const last = draft.messages[draft.messages.length - 1]
-        last.answer += token
+        last.content += token
       })
 
       content += token
@@ -63,22 +60,22 @@ const useMessages = () => {
 
   const saveMessageToDbAndUpdateConversationState = async (
     emptyMessage: Message,
-    answer: string
+    content: string
   ) => {
     const conversation = await getOneById<Conversation>(
-      (currConversation as Conversation).conversation_id
+      (currConversation as Conversation).conversationId
     )
 
     if (conversation) {
       conversation.messages.push({
         ...emptyMessage,
-        answerCreatedAt: +new Date(),
-        answer
+        createdAt: +new Date(),
+        content
       })
       conversation.updatedAt = +new Date()
 
       await updateOneById(
-        (currConversation as Conversation).conversation_id,
+        (currConversation as Conversation).conversationId,
         conversation
       )
       setCurrConversation(conversation)

@@ -28,7 +28,7 @@ const ConversationList: FC<Props> = ({ conversations }) => {
 
     const conversation: Conversation = {
       avatar: '',
-      conversation_id: chatId,
+      conversationId: chatId,
       summary: '',
       messages: [],
       product: currProduct,
@@ -60,10 +60,9 @@ const ConversationList: FC<Props> = ({ conversations }) => {
         {conversations?.length > 0 ? (
           conversations.map((conversation) => (
             <ConversationItem
-              key={conversation.conversation_id}
+              key={conversation.conversationId}
               active={
-                conversation.conversation_id ===
-                currConversation?.conversation_id
+                conversation.conversationId === currConversation?.conversationId
               }
               conversation={conversation}
               onClick={() => switchChat(conversation)}

@@ -26,7 +26,7 @@ const Configuration: FC = () => {
       return
     }
 
-    await updateOneById(currConversation.conversation_id, {
+    await updateOneById(currConversation.conversationId, {
       configuration: values
     })
 

@@ -38,13 +38,13 @@ export default [
     product: Products.AudioTranscription,
     inactive: <MicrophoneIconOutline className={iconClassName} />,
     active: <MicrophoneIconSolid className={iconClassName} />,
-    realm: [, Companies.OpenAI]
+    realm: [Companies.OpenAI]
   },
   {
     product: Products.AudioTranslation,
     inactive: <OutlineTranslationIcon className={iconClassName} />,
     active: <SolidTranslationIcon className={iconClassName} />,
-    realm: [, Companies.OpenAI]
+    realm: [Companies.OpenAI]
   },
   {
     product: Products.ImageGeneration,

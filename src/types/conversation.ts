@@ -5,19 +5,23 @@ import { ImageGenerationConfiguration } from '../configurations/imageGeneration'
 import { TextCompletionConfiguration } from '../configurations/textCompletion'
 import { Products } from './global'
 
+export enum Roles {
+  System = 'system',
+  Assistant = 'assistant',
+  User = 'user'
+}
+
 export interface Message {
   messageId: string
-  question: string
-  answer: string
-  questionTokenCount: number
-  answerTokenCount: number
-  questionCreatedAt: number
-  answerCreatedAt: number
+  content: string
+  role: Roles
+  tokensCount: number
+  createdAt: number
   fileName?: string
 }
 
 export interface Conversation {
-  conversation_id: string
+  conversationId: string
   summary: string
   avatar: string
   createdAt: number
@@ -34,5 +38,5 @@ export interface Conversation {
 
 export type EmptyMessageParams = Pick<
   Message,
-  'question' | 'questionTokenCount' | 'fileName'
+  'content' | 'tokensCount' | 'role' | 'fileName'
 >

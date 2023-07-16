@@ -24,7 +24,7 @@ const ConfigurationWrapper: FC<Props> = ({ children }) => {
       return
     }
 
-    await updateOneById(currConversation.conversation_id, {
+    await updateOneById(currConversation.conversationId, {
       configuration: values
     })
 

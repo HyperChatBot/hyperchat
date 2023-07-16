@@ -5,6 +5,7 @@ import { ChatConfiguration, models } from 'src/configurations/chatCompletion'
 import { useCompany, useMessages, useSettings } from 'src/hooks'
 import { getTokensCount } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
+import { Roles } from 'src/types/conversation'
 import { OpenAIChatResponse, OpenAIError } from 'src/types/openai'
 
 const useChatCompletion = (prompt: string) => {
@@ -50,26 +51,21 @@ const useChatCompletion = (prompt: string) => {
     currConversation.messages
       .slice()
       .reverse()
-      .forEach(({ answerTokenCount, questionTokenCount, question, answer }) => {
-        tokensCount += answerTokenCount + questionTokenCount
+      .forEach(({ tokensCount: historyTokensCount, content, role }) => {
+        tokensCount += historyTokensCount
         if (tokensCount > tokensLimit) return
-        context.unshift(
-          {
-            role: 'user',
-            content: question
-          },
-          {
-            role: 'assistant',
-            content: answer
-          }
-        )
+        context.unshift({
+          role,
+          content
+        })
       })
 
     setLoading(true)
 
     const emptyMessage = pushEmptyMessage({
-      question: prompt,
-      questionTokenCount: userMessageTokensCount
+      content: prompt,
+      role: Roles.Assistant,
+      tokensCount: userMessageTokensCount
     })
 
     let chat: Response | undefined
@@ -134,7 +130,7 @@ const useChatCompletion = (prompt: string) => {
           const assistantTokensCount = getTokensCount(_content, model)
           setLoading(false)
           saveMessageToDbAndUpdateConversationState(
-            { ...emptyMessage, answerTokenCount: assistantTokensCount },
+            { ...emptyMessage, tokensCount: assistantTokensCount },
             _content
           )
           return reader.releaseLock()

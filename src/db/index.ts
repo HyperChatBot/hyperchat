@@ -10,7 +10,7 @@ export class HyperChatDB extends Dexie {
     super('hyperchat')
     this.version(1).stores({
       conversations:
-        '&conversation_id, summary, fileName, product, createdAt, updatedAt, *messages, *configuration',
+        '&conversationId, summary, fileName, product, createdAt, updatedAt, *messages, *configuration',
       settings:
         '&&settingsId, company, openaiSecretKey, openaiOrganizationId, openaiAuthorName, azureEndPoint, azureSecretKey, azureDeploymentName, themeMode, assistantAvatarFilename'
     })

@@ -5,6 +5,7 @@ import { useMessages, useOpenAI } from 'src/hooks'
 import { showErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
+import { Roles } from 'src/types/conversation'
 import { HashFile } from 'src/types/global'
 
 const useAudio = (prompt: string, hashFile: HashFile | null) => {
@@ -28,8 +29,9 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
       setLoading(true)
 
       const emptyMessage = pushEmptyMessage({
-        question: prompt,
-        questionTokenCount: 0,
+        content: prompt,
+        tokensCount: 0,
+        role: Roles.Assistant,
         fileName: hashFile.hashName
       })
 
@@ -41,8 +43,6 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
         temperature,
         language === '' ? undefined : language
       )
-
-      console.log(transcription)
 
       saveMessageToDbAndUpdateConversationState(
         emptyMessage,
@@ -68,8 +68,9 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
       setLoading(true)
 
       const emptyMessage = pushEmptyMessage({
-        question: prompt,
-        questionTokenCount: 0,
+        content: prompt,
+        role: Roles.Assistant,
+        tokensCount: 0,
         fileName: hashFile.hashName
       })
 

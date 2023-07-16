@@ -5,6 +5,7 @@ import { useCompany, useMessages } from 'src/hooks'
 import { showErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
+import { Roles } from 'src/types/conversation'
 
 const useTextCompletion = (prompt: string) => {
   const currConversation = useRecoilValue(currConversationState)
@@ -35,8 +36,9 @@ const useTextCompletion = (prompt: string) => {
       setLoading(true)
 
       const emptyMessage = pushEmptyMessage({
-        question: prompt,
-        questionTokenCount: 0
+        content: prompt,
+        role: Roles.Assistant,
+        tokensCount: 0
       })
 
       const response = await company.text_completion({

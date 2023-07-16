@@ -1,10 +1,11 @@
 import classNames from 'classnames'
 import { DateTime } from 'luxon'
 import { FC, ReactNode } from 'react'
+import { Roles } from 'src/types/conversation'
 import Avatar from '../Avatar'
 
 interface Props {
-  role: 'assistant' | 'user'
+  role: Roles
   avatar: string
   children: ReactNode
   date: number
@@ -14,30 +15,30 @@ const ChatBubble: FC<Props> = ({ role, avatar, date, children }) => {
   return (
     <section
       className={classNames('group mb-8 flex items-start', {
-        'flex-row-reverse': role === 'user'
+        'flex-row-reverse': role === Roles.User
       })}
     >
-      {role === 'assistant' && (
+      {role === Roles.Assistant && (
         <Avatar
           src={avatar}
           className={classNames({
-            'mr-4': role === 'assistant'
+            'mr-4': role === Roles.Assistant
           })}
         />
       )}
 
       <section
         className={classNames('flex flex-col', {
-          'items-start': role === 'assistant',
-          'items-end': role === 'user'
+          'items-start': role === Roles.Assistant,
+          'items-end': role === Roles.User
         })}
       >
         <section
           className={classNames('max-w-160 rounded-2xl p-4 text-sm', {
             'rounded-tl-none bg-main-gray text-black dark:bg-gray-700 dark:text-dark-bubble-assistant-text':
-              role === 'assistant',
+              role === Roles.Assistant,
             'flex min-h-[20px] flex-col items-start gap-4 whitespace-pre-wrap break-words rounded-br-none bg-main-purple text-white':
-              role === 'user'
+              role === Roles.User
           })}
         >
           {children}

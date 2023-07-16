@@ -41,7 +41,7 @@ const Configuration: FC = () => {
           : prevConfiguration.systemMessageTokensCount
     }
 
-    await updateOneById(currConversation.conversation_id, {
+    await updateOneById(currConversation.conversationId, {
       configuration
     })
 

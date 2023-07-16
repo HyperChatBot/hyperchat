@@ -7,6 +7,7 @@ import { showErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 import { AzureImageGeneration } from 'src/types/azure'
+import { Roles } from 'src/types/conversation'
 import { Companies } from 'src/types/global'
 import { sleep } from 'yancey-js-util'
 
@@ -31,8 +32,9 @@ const useImageGeneration = (prompt: string) => {
       setLoading(true)
 
       const emptyMessage = pushEmptyMessage({
-        question: prompt,
-        questionTokenCount: 0
+        content: prompt,
+        role: Roles.Assistant,
+        tokensCount: 0
       })
 
       const response = await company.image_generation({
@@ -66,8 +68,9 @@ const useImageGeneration = (prompt: string) => {
       setLoading(true)
 
       const emptyMessage = pushEmptyMessage({
-        question: prompt,
-        questionTokenCount: 0
+        content: prompt,
+        role: Roles.Assistant,
+        tokensCount: 0
       })
 
       const headers = {
