@@ -41,7 +41,7 @@ const ConversationList: FC<Props> = ({ conversations }) => {
     insertOne(conversation)
   }
 
-  const switchChat = (conversation: Conversation) => {
+  const switchConversation = (conversation: Conversation) => {
     setCurrConversation(conversation)
   }
 
@@ -65,7 +65,7 @@ const ConversationList: FC<Props> = ({ conversations }) => {
                 conversation.conversationId === currConversation?.conversationId
               }
               conversation={conversation}
-              onClick={() => switchChat(conversation)}
+              onClick={() => switchConversation(conversation)}
             />
           ))
         ) : (
