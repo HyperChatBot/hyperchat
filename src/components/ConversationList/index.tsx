@@ -57,7 +57,7 @@ const ConversationList: FC<Props> = ({ conversations }) => {
       <Divider />
 
       <section className="no-scrollbar m-4 h-[calc(100vh_-_7.5625rem)] overflow-y-scroll">
-        {conversations?.length > 0 ? (
+        {Array.isArray(conversations) && conversations.length > 0 ? (
           conversations.map((conversation) => (
             <ConversationItem
               key={conversation.conversationId}
