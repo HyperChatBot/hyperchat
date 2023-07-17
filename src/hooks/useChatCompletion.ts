@@ -97,6 +97,7 @@ const useChatCompletion = (prompt: string) => {
 
     if (!reader) {
       toast.error('Cannot get ReadableStream.')
+      rollbackMessage()
       setLoading(false)
       return
     }
@@ -145,6 +146,7 @@ const useChatCompletion = (prompt: string) => {
         return read()
       } catch {
         toast.error('Stream data parsing error.')
+        rollbackMessage()
       } finally {
         setLoading(false)
       }
