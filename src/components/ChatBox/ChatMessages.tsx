@@ -64,14 +64,14 @@ const ChatMessages: FC = () => {
                 <Waveform filename={message.fileName} />
               )}
 
-              {loading && !message.content ? (
+              {loading &&
+              !message.content ? (
                 <MessageSpinner />
               ) : message.role === Roles.Assistant ? (
                 <Markdown raw={message.content} />
               ) : (
                 message.content
               )}
-              {message.content}
             </ChatBubble>
           ))}
         </>

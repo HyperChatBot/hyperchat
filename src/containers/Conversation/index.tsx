@@ -1,5 +1,5 @@
 import { useLiveQuery } from 'dexie-react-hooks'
-import { FC, useEffect } from 'react'
+import { FC } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import ChatBox from 'src/components/ChatBox'
 import ConversationList from 'src/components/ConversationList'
@@ -20,11 +20,11 @@ const Conversation: FC = () => {
   const setCurrConversation = useSetRecoilState(currConversationState)
   const Configuration = configurations[currProduct].component()
 
-  useEffect(() => {
-    if (conversations && currProduct) {
-      setCurrConversation(conversations[0])
-    }
-  }, [conversations, currProduct])
+  // useEffect(() => {
+  //   if (conversations && currProduct) {
+  //     setCurrConversation(conversations[0])
+  //   }
+  // }, [conversations, currProduct])
 
   if (!conversations) return <Loading />
 

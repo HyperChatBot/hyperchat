@@ -5,7 +5,6 @@ import { ChatConfiguration, models } from 'src/configurations/chatCompletion'
 import { useCompany, useMessages, useSettings } from 'src/hooks'
 import { getTokensCount } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
-import { Roles } from 'src/types/conversation'
 import { OpenAIChatResponse, OpenAIError } from 'src/types/openai'
 
 const useChatCompletion = (prompt: string) => {
@@ -14,10 +13,11 @@ const useChatCompletion = (prompt: string) => {
   const company = useCompany()
   const setLoading = useSetRecoilState(loadingState)
   const {
-    pushEmptyMessage,
-    saveMessageToDbAndUpdateConversationState,
-    updateStreamState,
-    rollBackEmptyMessage
+    rollBackEmptyMessage,
+
+    saveUserMessage,
+    saveAssistantMessage,
+    updateChatCompletionStream
   } = useMessages()
 
   const createChatCompletion = async () => {
@@ -59,14 +59,10 @@ const useChatCompletion = (prompt: string) => {
           content
         })
       })
+    await saveUserMessage(prompt, userMessageTokensCount)
 
     setLoading(true)
-
-    const emptyMessage = pushEmptyMessage({
-      content: prompt,
-      role: Roles.Assistant,
-      tokensCount: userMessageTokensCount
-    })
+    updateChatCompletionStream()
 
     let chat: Response | undefined
 
@@ -119,20 +115,14 @@ const useChatCompletion = (prompt: string) => {
       return
     }
 
-    let _content = ''
-
     const decoder = new TextDecoder('utf-8')
     const read = async (): Promise<void> => {
       try {
         const { done, value } = await reader.read()
 
         if (done) {
-          const assistantTokensCount = getTokensCount(_content, model)
+          saveAssistantMessage()
           setLoading(false)
-          saveMessageToDbAndUpdateConversationState(
-            { ...emptyMessage, tokensCount: assistantTokensCount },
-            _content
-          )
           return reader.releaseLock()
         }
 
@@ -150,8 +140,7 @@ const useChatCompletion = (prompt: string) => {
           const token = data.choices[0].delta.content
 
           if (token !== undefined) {
-            const content = updateStreamState(token)
-            _content += content
+            updateChatCompletionStream(token)
           }
         })
 
