@@ -1,6 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks'
-import { FC } from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { FC, useEffect } from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import ChatBox from 'src/components/ChatBox'
 import ConversationList from 'src/components/ConversationList'
 import Divider from 'src/components/Divider'
@@ -13,18 +13,25 @@ import { Conversation as IConversation } from 'src/types/conversation'
 
 const Conversation: FC = () => {
   const currProduct = useRecoilValue(currProductState)
-  const { getCurrConversations } = useDB('conversations')
-  const conversations = useLiveQuery<IConversation[]>(getCurrConversations, [
-    currProduct
-  ])
-  const setCurrConversation = useSetRecoilState(currConversationState)
+  const { getConversationByProduct } = useDB('conversations')
+  const conversations = useLiveQuery<IConversation[]>(
+    getConversationByProduct,
+    [currProduct]
+  )
+  const [currConversation, setCurrConversation] = useRecoilState(
+    currConversationState
+  )
   const Configuration = configurations[currProduct].component()
 
-  // useEffect(() => {
-  //   if (conversations && currProduct) {
-  //     setCurrConversation(conversations[0])
-  //   }
-  // }, [conversations, currProduct])
+  useEffect(() => {
+    if (
+      conversations &&
+      currProduct &&
+      conversations[0]?.conversationId !== currConversation?.conversationId
+    ) {
+      setCurrConversation(conversations[0])
+    }
+  }, [conversations, currProduct])
 
   if (!conversations) return <Loading />
 

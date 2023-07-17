@@ -38,7 +38,7 @@ const useDB = (tableName: string) => {
     } catch {}
   }
 
-  const getCurrConversations = async () => {
+  const getConversationByProduct = async () => {
     const conversation: Conversation[] = await db
       .table(tableName)
       .where({ product: currProduct })
@@ -49,7 +49,7 @@ const useDB = (tableName: string) => {
   }
 
   return {
-    getCurrConversations,
+    getConversationByProduct,
     deleteOneById,
     toArray,
     updateOneById,
