@@ -35,8 +35,3 @@ export interface Conversation {
     | AudioTranslationConfiguration
     | TextCompletionConfiguration
 }
-
-export type EmptyMessageParams = Pick<
-  Message,
-  'content' | 'tokensCount' | 'role' | 'fileName'
->

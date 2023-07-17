@@ -13,8 +13,7 @@ const useChatCompletion = (prompt: string) => {
   const company = useCompany()
   const setLoading = useSetRecoilState(loadingState)
   const {
-    rollBackEmptyMessage,
-
+    rollbackMessage,
     saveUserMessage,
     saveAssistantMessage,
     updateChatCompletionStream
@@ -59,8 +58,7 @@ const useChatCompletion = (prompt: string) => {
           content
         })
       })
-    await saveUserMessage(prompt, userMessageTokensCount)
-
+    saveUserMessage(prompt, userMessageTokensCount)
     setLoading(true)
     updateChatCompletionStream()
 
@@ -90,7 +88,7 @@ const useChatCompletion = (prompt: string) => {
       })
     } catch {
       toast.error('Network Error.')
-      rollBackEmptyMessage()
+      rollbackMessage()
       setLoading(false)
       return
     }
@@ -110,7 +108,7 @@ const useChatCompletion = (prompt: string) => {
       const chunk = decoder.decode(value, { stream: true })
       const errorData: OpenAIError = JSON.parse(chunk)
       toast.error(errorData.error.message)
-      rollBackEmptyMessage()
+      rollbackMessage()
       setLoading(false)
       return
     }

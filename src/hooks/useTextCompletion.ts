@@ -5,18 +5,14 @@ import { useCompany, useMessages } from 'src/hooks'
 import { showErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
-import { Roles } from 'src/types/conversation'
 
 const useTextCompletion = (prompt: string) => {
   const currConversation = useRecoilValue(currConversationState)
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
   const company = useCompany()
-  const {
-    pushEmptyMessage,
-    saveMessageToDbAndUpdateConversationState,
-    rollBackEmptyMessage
-  } = useMessages()
+  const { rollbackMessage, saveUserMessage, saveCommonAssistantMessage } =
+    useMessages()
 
   const createTextCompletion = async () => {
     if (!settings || !currConversation) return
@@ -33,13 +29,8 @@ const useTextCompletion = (prompt: string) => {
     } = currConversation.configuration as TextCompletionConfiguration
 
     try {
+      saveUserMessage(prompt)
       setLoading(true)
-
-      const emptyMessage = pushEmptyMessage({
-        content: prompt,
-        role: Roles.Assistant,
-        tokensCount: 0
-      })
 
       const response = await company.text_completion({
         model,
@@ -55,13 +46,12 @@ const useTextCompletion = (prompt: string) => {
       const preResponseText = preResponse.checked ? preResponse.content : ''
       const postResponseText = postResponse.checked ? postResponse.content : ''
 
-      saveMessageToDbAndUpdateConversationState(
-        emptyMessage,
+      saveCommonAssistantMessage(
         preResponseText + (completion.choices[0].text || '') + postResponseText
       )
     } catch (error) {
       showErrorToast(error)
-      rollBackEmptyMessage()
+      rollbackMessage()
     } finally {
       setLoading(false)
     }

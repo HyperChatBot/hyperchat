@@ -1,71 +1,24 @@
 import { produce } from 'immer'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { ChatConfiguration } from 'src/configurations/chatCompletion'
 import { useDB } from 'src/hooks'
 import { getTokensCount } from 'src/shared/utils'
 import { currConversationState } from 'src/stores/conversation'
-import { currProductState } from 'src/stores/global'
-import {
-  Conversation,
-  EmptyMessageParams,
-  Message,
-  Roles
-} from 'src/types/conversation'
+import { Message, Roles } from 'src/types/conversation'
 import { v4 } from 'uuid'
 
-const generateEmptyMessage = (params: EmptyMessageParams): Message => ({
-  messageId: v4(),
-  createdAt: +new Date(),
-  ...params
-})
-
 const useMessages = () => {
-  const currProduct = useRecoilValue(currProductState)
+  const { updateOneById } = useDB('conversations')
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
   )
-  const { getOneById, updateOneById } = useDB('conversations')
 
-  const pushEmptyMessage = (params: EmptyMessageParams) => {
-    const emptyMessage = generateEmptyMessage(params)
-    setCurrConversation({
-      ...(currConversation as Conversation),
-      messages: [...(currConversation as Conversation).messages, emptyMessage]
-    })
-
-    return emptyMessage
-  }
-
-  const rollBackEmptyMessage = () => {
+  const rollbackMessage = () => {
     setCurrConversation((prevState) =>
       produce(prevState, (draft) => {
         draft?.messages.pop()
       })
     )
-  }
-
-  const saveMessageToDbAndUpdateConversationState = async (
-    emptyMessage: Message,
-    content: string
-  ) => {
-    const conversation = await getOneById<Conversation>(
-      (currConversation as Conversation).conversationId
-    )
-
-    if (conversation) {
-      conversation.messages.push({
-        ...emptyMessage,
-        createdAt: +new Date(),
-        content
-      })
-      conversation.updatedAt = +new Date()
-
-      await updateOneById(
-        (currConversation as Conversation).conversationId,
-        conversation
-      )
-      setCurrConversation(conversation)
-    }
   }
 
   const updateChatCompletionStream = (token?: string) => {
@@ -90,6 +43,35 @@ const useMessages = () => {
         }
       })
     )
+  }
+
+  const saveCommonAssistantMessage = (content: string) => {
+    if (!currConversation) return
+
+    setCurrConversation((prevState) => {
+      const newConversation = produce(prevState, (draft) => {
+        if (!draft) return
+
+        const message: Message = {
+          messageId: v4(),
+          content,
+          role: Roles.Assistant,
+          tokensCount: 0,
+          createdAt: +new Date()
+        }
+        draft.messages.push(message)
+        draft.updatedAt = +new Date()
+      })
+
+      if (newConversation) {
+        updateOneById(currConversation.conversationId, {
+          messages: newConversation.messages,
+          updatedAt: newConversation.updatedAt
+        })
+      }
+
+      return newConversation
+    })
   }
 
   const saveAssistantMessage = () => {
@@ -119,14 +101,14 @@ const useMessages = () => {
     })
   }
 
-  const saveUserMessage = async (content: string, tokensCount: number) => {
+  const saveUserMessage = async (content: string, tokensCount?: number) => {
     if (!currConversation) return
 
     const message: Message = {
       messageId: v4(),
       content,
       role: Roles.User,
-      tokensCount,
+      tokensCount: tokensCount || 0,
       createdAt: +new Date()
     }
 
@@ -142,12 +124,10 @@ const useMessages = () => {
   }
 
   return {
-    pushEmptyMessage,
-    saveMessageToDbAndUpdateConversationState,
-    rollBackEmptyMessage,
-
+    rollbackMessage,
     saveUserMessage,
     saveAssistantMessage,
+    saveCommonAssistantMessage,
     updateChatCompletionStream
   }
 }

@@ -5,7 +5,6 @@ import { useMessages, useOpenAI } from 'src/hooks'
 import { showErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
-import { Roles } from 'src/types/conversation'
 import { HashFile } from 'src/types/global'
 
 const useAudio = (prompt: string, hashFile: HashFile | null) => {
@@ -13,11 +12,8 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
   const settings = useRecoilValue(settingsState)
   const setLoading = useSetRecoilState(loadingState)
   const openai = useOpenAI()
-  const {
-    pushEmptyMessage,
-    saveMessageToDbAndUpdateConversationState,
-    rollBackEmptyMessage
-  } = useMessages()
+  const { rollbackMessage, saveUserMessage, saveCommonAssistantMessage } =
+    useMessages()
 
   const createTranscription = async () => {
     if (!hashFile || !settings || !currConversation) return
@@ -26,14 +22,8 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
       currConversation.configuration as AudioTranscriptionConfiguration
 
     try {
+      saveUserMessage(prompt)
       setLoading(true)
-
-      const emptyMessage = pushEmptyMessage({
-        content: prompt,
-        tokensCount: 0,
-        role: Roles.Assistant,
-        fileName: hashFile.hashName
-      })
 
       const transcription = await openai.createTranscription(
         hashFile.file,
@@ -44,15 +34,14 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
         language === '' ? undefined : language
       )
 
-      saveMessageToDbAndUpdateConversationState(
-        emptyMessage,
+      saveCommonAssistantMessage(
         // If `responseFormat` is `json` or `verbose_json`, the result is `transcription.data.text`.
         // If `responseFormat` is `text`, `vtt` `or `srt`, the result is `transcription.data`.
         transcription.data.text || (transcription.data as unknown as string)
       )
     } catch (error) {
       showErrorToast(error)
-      rollBackEmptyMessage()
+      rollbackMessage()
     } finally {
       setLoading(false)
     }
@@ -65,14 +54,8 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
       currConversation.configuration as AudioTranslationConfiguration
 
     try {
+      await saveUserMessage(prompt)
       setLoading(true)
-
-      const emptyMessage = pushEmptyMessage({
-        content: prompt,
-        role: Roles.Assistant,
-        tokensCount: 0,
-        fileName: hashFile.hashName
-      })
 
       const translation = await openai.createTranslation(
         hashFile.file,
@@ -82,15 +65,14 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
         temperature
       )
 
-      saveMessageToDbAndUpdateConversationState(
-        emptyMessage,
+      saveCommonAssistantMessage(
         // If `responseFormat` is `json` or `verbose_json`, the result is `translation.data.text`.
         // If `responseFormat` is `text`, `vtt` `or `srt`, the result is `translation.data`.
         translation.data.text || (translation.data as unknown as string)
       )
     } catch (error) {
       showErrorToast(error)
-      rollBackEmptyMessage()
+      rollbackMessage()
     } finally {
       setLoading(false)
     }
