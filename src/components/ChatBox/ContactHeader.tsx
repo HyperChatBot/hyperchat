@@ -35,6 +35,7 @@ const ContactHeader: FC = () => {
   const setConfigurationDrawerVisible = useSetRecoilState(
     configurationDrawerVisibleState
   )
+  const [isTyping, setIsTyping] = useState(false)
   const [summaryValue, setSummaryValue] = useState(
     currConversation?.summary || ''
   )
@@ -65,7 +66,8 @@ const ContactHeader: FC = () => {
   }
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !isTyping) {
+      e.preventDefault()
       saveSummary()
     }
   }
@@ -122,6 +124,8 @@ const ContactHeader: FC = () => {
                   value={summaryValue}
                   onKeyDown={handleKeyDown}
                   onChange={(e) => setSummaryValue(e.target.value)}
+                  onCompositionStart={() => setIsTyping(true)}
+                  onCompositionEnd={() => setIsTyping(false)}
                   className="w-80"
                   sx={{
                     '.MuiInput-input': {
