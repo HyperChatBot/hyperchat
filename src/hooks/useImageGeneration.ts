@@ -15,11 +15,8 @@ const useImageGeneration = (prompt: string) => {
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
   const company = useCompany()
-  const {
-    pushEmptyMessage,
-    saveMessageToDbAndUpdateConversationState,
-    rollBackEmptyMessage
-  } = useMessages()
+  const { rollbackMessage, saveUserMessage, saveCommonAssistantMessage } =
+    useMessages()
 
   const createOpenAIImageGeneration = async () => {
     if (!settings || !currConversation) return
@@ -28,13 +25,8 @@ const useImageGeneration = (prompt: string) => {
       currConversation.configuration as ImageGenerationConfiguration
 
     try {
+      saveUserMessage(prompt)
       setLoading(true)
-
-      const emptyMessage = pushEmptyMessage({
-        question: prompt,
-        questionTokenCount: 0
-      })
-
       const response = await company.image_generation({
         prompt,
         n,
@@ -47,10 +39,10 @@ const useImageGeneration = (prompt: string) => {
         .map((val, key) => `![${prompt}-${key}](${val.url})\n`)
         .join('')
 
-      saveMessageToDbAndUpdateConversationState(emptyMessage, content)
+      saveCommonAssistantMessage(content)
     } catch (error) {
       showErrorToast(error)
-      rollBackEmptyMessage()
+      rollbackMessage()
     } finally {
       setLoading(false)
     }
@@ -63,17 +55,8 @@ const useImageGeneration = (prompt: string) => {
       currConversation.configuration as ImageGenerationConfiguration
 
     try {
+      saveUserMessage(prompt)
       setLoading(true)
-
-      const emptyMessage = pushEmptyMessage({
-        question: prompt,
-        questionTokenCount: 0
-      })
-
-      const headers = {
-        'Content-Type': 'application/json',
-        'api-key': settings.azureSecretKey
-      }
 
       const submission = await company.image_generation({
         prompt: prompt,
@@ -90,7 +73,10 @@ const useImageGeneration = (prompt: string) => {
         sleep(retry_after)
 
         const response = await fetch(operation_location, {
-          headers,
+          headers: {
+            'Content-Type': 'application/json',
+            'api-key': settings.azureSecretKey
+          },
           method: 'GET'
         })
         retry_after = Number(response.headers.get('Retry-after')) * 1000
@@ -107,10 +93,10 @@ const useImageGeneration = (prompt: string) => {
         DateTime.DATETIME_SHORT_WITH_SECONDS
       )}**, please download as soon as possible.)`
 
-      saveMessageToDbAndUpdateConversationState(emptyMessage, content)
+      saveCommonAssistantMessage(content)
     } catch (error) {
       showErrorToast(error)
-      rollBackEmptyMessage()
+      rollbackMessage()
     } finally {
       setLoading(false)
     }

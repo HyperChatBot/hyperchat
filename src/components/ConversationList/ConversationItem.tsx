@@ -36,7 +36,7 @@ const ConversationItem: FC<Props> = ({ active, conversation, onClick }) => {
               { 'w-44': isSameDay }
             )}
           >
-            {conversation.summary || conversation.conversation_id}
+            {conversation.summary || conversation.conversationId}
           </span>
           <span className="text-xs font-semibold text-black text-opacity-30 dark:text-dark-text-sub">
             {display}
@@ -45,8 +45,7 @@ const ConversationItem: FC<Props> = ({ active, conversation, onClick }) => {
 
         {conversation.messages.length > 0 && (
           <p className="mt-2 w-48 truncate text-xs font-semibold text-black text-opacity-40 dark:text-dark-text-sub">
-            {conversation.messages[conversation.messages.length - 1].answer ||
-              conversation.messages[conversation.messages.length - 1].question}
+            {conversation.messages[conversation.messages.length - 1].content}
           </p>
         )}
       </div>

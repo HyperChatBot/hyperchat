@@ -67,12 +67,11 @@ const useTheme = () => {
       .matchMedia('(prefers-color-scheme:dark)')
       .addEventListener('change', onSystemThemeChange)
 
-    return () => {
+    return () =>
       window
         .matchMedia('(prefers-color-scheme:dark)')
         .removeEventListener('change', onSystemThemeChange)
-    }
-  }, [])
+  }, [settings])
 
   return { theme, muiTheme, toggleTheme }
 }

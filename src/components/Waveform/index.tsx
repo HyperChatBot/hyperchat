@@ -50,7 +50,6 @@ const Waveform: FC<Props> = ({ filename }) => {
 
     const waveSurfer = WaveSurfer.create({
       container: containerRef.current as HTMLDivElement,
-      responsive: true,
       cursorWidth: 0,
       barWidth: 2,
       height: 40,

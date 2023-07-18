@@ -8,18 +8,18 @@ export const onlineState = atom({
 })
 
 export const currProductState = atom({
-  key: 'currProductState',
+  key: 'CurrProduct',
   default:
     (window.localStorage.getItem('currProductState') as Products) ||
     Products.ChatCompletion
 })
 
 export const themeState = atom<ThemeMode.dark | ThemeMode.light>({
-  key: 'themeState',
+  key: 'Theme',
   default: themeModeToTheme()
 })
 
 export const configurationDrawerVisibleState = atom({
-  key: 'configurationDrawerVisibleState',
+  key: 'ConfigurationDrawerVisible',
   default: false
 })
