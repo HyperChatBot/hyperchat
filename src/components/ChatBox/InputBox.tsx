@@ -9,7 +9,7 @@ import { currConversationState, loadingState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { HashFile } from 'src/types/global'
 import Divider from '../Divider'
-import { SolidSendIcon } from '../Icons'
+import { LoadingIcon, SolidSendIcon } from '../Icons'
 
 const InputBox: FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -162,19 +162,23 @@ const InputBox: FC = () => {
             </>
           )}
 
-          <SolidSendIcon
-            onClick={handleRequest}
-            pathClassName={classNames(
-              'fill-current',
-              {
-                'text-black dark:text-white text-opacity-30': !validate()
-              },
-              {
-                'text-main-purple dark:text-main-purple text-opacity-100':
-                  validate()
-              }
-            )}
-          />
+          {loading ? (
+            <LoadingIcon className="h-5 w-5 animate-spin text-main-purple" />
+          ) : (
+            <SolidSendIcon
+              onClick={handleRequest}
+              pathClassName={classNames(
+                'fill-current',
+                {
+                  'text-black dark:text-white text-opacity-30': !validate()
+                },
+                {
+                  'text-main-purple dark:text-main-purple text-opacity-100':
+                    validate()
+                }
+              )}
+            />
+          )}
         </section>
       </section>
     </section>
