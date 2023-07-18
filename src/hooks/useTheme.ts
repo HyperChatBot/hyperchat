@@ -67,9 +67,17 @@ const useTheme = () => {
       .matchMedia('(prefers-color-scheme:dark)')
       .addEventListener('change', onSystemThemeChange)
 
+    window
+      .matchMedia('(prefers-color-scheme:light)')
+      .addEventListener('change', onSystemThemeChange)
+
     return () => {
       window
         .matchMedia('(prefers-color-scheme:dark)')
+        .removeEventListener('change', onSystemThemeChange)
+
+      window
+        .matchMedia('(prefers-color-scheme:light)')
         .removeEventListener('change', onSystemThemeChange)
     }
   }, [])
