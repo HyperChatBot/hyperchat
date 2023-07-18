@@ -34,7 +34,8 @@ const Configuration: FC = () => {
       return
     }
     await updateOneById(currConversation.conversationId, {
-      configuration: values
+      configuration: values,
+      updatedAt: +new Date()
     })
 
     setCurrConversation({ ...currConversation, configuration: values })
