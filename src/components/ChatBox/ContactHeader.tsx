@@ -35,6 +35,7 @@ const ContactHeader: FC = () => {
   const setConfigurationDrawerVisible = useSetRecoilState(
     configurationDrawerVisibleState
   )
+  const [isTyping, setIsTyping] = useState(false)
   const [summaryValue, setSummaryValue] = useState(
     currConversation?.summary || ''
   )
@@ -42,7 +43,7 @@ const ContactHeader: FC = () => {
 
   const summary =
     currConversation?.summary ||
-    currConversation?.conversation_id ||
+    currConversation?.conversationId ||
     EMPTY_CHAT_HINT
 
   const openSummaryInput = () => {
@@ -58,14 +59,15 @@ const ContactHeader: FC = () => {
         summary: summaryValue,
         updatedAt: +new Date()
       }
-      await updateOneById(currConversation.conversation_id, changes)
+      await updateOneById(currConversation.conversationId, changes)
       setCurrConversation({ ...currConversation, ...changes })
       setSummaryInputVisible(false)
     }
   }
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !isTyping) {
+      e.preventDefault()
       saveSummary()
     }
   }
@@ -76,7 +78,7 @@ const ContactHeader: FC = () => {
         avatar: data.native,
         updatedAt: +new Date()
       }
-      await updateOneById(currConversation.conversation_id, changes)
+      await updateOneById(currConversation.conversationId, changes)
       setCurrConversation({ ...currConversation, ...changes })
       setAvatarPickerVisible(false)
     }
@@ -84,7 +86,7 @@ const ContactHeader: FC = () => {
 
   const deleteCurrConversation = async () => {
     if (currConversation) {
-      await deleteOneById(currConversation.conversation_id)
+      await deleteOneById(currConversation.conversationId)
     }
   }
 
@@ -122,6 +124,8 @@ const ContactHeader: FC = () => {
                   value={summaryValue}
                   onKeyDown={handleKeyDown}
                   onChange={(e) => setSummaryValue(e.target.value)}
+                  onCompositionStart={() => setIsTyping(true)}
+                  onCompositionEnd={() => setIsTyping(false)}
                   className="w-80"
                   sx={{
                     '.MuiInput-input': {

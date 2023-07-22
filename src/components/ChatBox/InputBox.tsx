@@ -1,8 +1,7 @@
 import { MicrophoneIcon } from '@heroicons/react/24/solid'
-import Input from '@mui/material/Input'
 import Tooltip from '@mui/material/Tooltip'
 import classNames from 'classnames'
-import { ChangeEvent, FC, useRef, useState } from 'react'
+import { ChangeEvent, FC, useEffect, useRef, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { useAppData, useRequest } from 'src/hooks'
 import { isAudioProduct } from 'src/shared/utils'
@@ -10,7 +9,7 @@ import { currConversationState, loadingState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { HashFile } from 'src/types/global'
 import Divider from '../Divider'
-import { SolidSendIcon } from '../Icons'
+import { LoadingIcon, SolidSendIcon } from '../Icons'
 
 const InputBox: FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -20,6 +19,7 @@ const InputBox: FC = () => {
   const loading = useRecoilValue(loadingState)
   const { saveFileToAppDataDir } = useAppData()
   const [prompt, setPrompt] = useState('')
+  const [isTyping, setIsTyping] = useState(false)
   const [hashFile, setHashFile] = useState<HashFile | null>(null)
   const requests = useRequest(prompt, hashFile as HashFile)
 
@@ -66,46 +66,64 @@ const InputBox: FC = () => {
   // FIXME: I cannot declare the type of `event` correctly.
   // @ts-ignore
   const handleKeyDown = (event) => {
-    if ((event.keyCode === 13 || event.key === 'Enter') && event.shiftKey) {
+    if (event.key === 'Enter' && event.shiftKey) {
+      event.preventDefault()
+
       const start = event.target.selectionStart
       const end = event.target.selectionEnd
       const value = event.target.value
 
       setPrompt(value.substring(0, start) + '\n' + value.substring(end))
       event.target.selectionStart = event.target.selectionEnd = start + 1
-      event.preventDefault()
     }
 
-    if ((event.keyCode === 13 || event.key === 'Enter') && !event.shiftKey) {
-      handleRequest()
+    if (event.key === 'Enter' && !event.shiftKey && !isTyping) {
       event.preventDefault()
+      handleRequest()
     }
   }
+
+  useEffect(() => {
+    if (textareaRef && textareaRef.current) {
+      textareaRef.current.style.height = 'inherit'
+      textareaRef.current.style.height = `${textareaRef.current?.scrollHeight}px`
+      textareaRef.current.style.overflow = `${
+        textareaRef?.current?.scrollHeight > 400 ? 'auto' : 'hidden'
+      }`
+    }
+  }, [prompt])
 
   if (!currConversation) return null
 
   return (
     <section className="absolute bottom-6 left-6 w-[calc(100%_-_3rem)] bg-white pt-6 dark:bg-gray-800">
       <section className="relative flex w-full">
-        <Input
-          inputRef={textareaRef}
-          className="max-h-52 overflow-scroll rounded-md border border-black/10 bg-white text-sm shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:border-gray-900/50 dark:bg-gray-700 dark:text-white dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]"
-          placeholder="Send a message."
-          multiline
+        <textarea
+          ref={textareaRef}
+          className={classNames(
+            'w-full resize-none rounded-md border border-black/10 bg-white px-4 py-3 pr-10 text-sm text-black  outline-none dark:border-gray-900/50 dark:bg-gray-700 dark:text-white',
+            { 'pr-24': isAudioProduct(currProduct) }
+          )}
+          style={{
+            resize: 'none',
+            bottom: `${textareaRef?.current?.scrollHeight}px`,
+            maxHeight: '400px',
+            overflow: `${
+              textareaRef.current && textareaRef.current.scrollHeight > 400
+                ? 'auto'
+                : 'hidden'
+            }`
+          }}
+          placeholder="Type a message..."
           value={prompt}
+          rows={1}
+          onCompositionStart={() => setIsTyping(true)}
+          onCompositionEnd={() => setIsTyping(false)}
           onChange={(e) => setPrompt(e.target.value)}
           onKeyDown={handleKeyDown}
-          disableUnderline
-          fullWidth
-          sx={{
-            paddingTop: 1.5,
-            paddingRight: 2,
-            paddingBottom: 1.5,
-            paddingLeft: 2
-          }}
         />
 
-        <section className="absolute bottom-3.5 right-4 z-10 flex gap-3">
+        <section className="absolute bottom-2.5 right-4 z-10 flex gap-3">
           {isAudioProduct(currProduct) && (
             <>
               <label
@@ -144,19 +162,23 @@ const InputBox: FC = () => {
             </>
           )}
 
-          <SolidSendIcon
-            onClick={handleRequest}
-            pathClassName={classNames(
-              'fill-current',
-              {
-                'text-black dark:text-white text-opacity-30': !validate()
-              },
-              {
-                'text-main-purple dark:text-main-purple text-opacity-100':
-                  validate()
-              }
-            )}
-          />
+          {loading ? (
+            <LoadingIcon className="h-5 w-5 animate-spin text-main-purple" />
+          ) : (
+            <SolidSendIcon
+              onClick={handleRequest}
+              pathClassName={classNames(
+                'fill-current',
+                {
+                  'text-black dark:text-white text-opacity-30': !validate()
+                },
+                {
+                  'text-main-purple dark:text-main-purple text-opacity-100':
+                    validate()
+                }
+              )}
+            />
+          )}
         </section>
       </section>
     </section>

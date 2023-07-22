@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { FC, Fragment, useEffect, useRef } from 'react'
+import { FC, useEffect, useRef } from 'react'
 import { useRecoilValue } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatbot.png'
 import NoDataIllustration from 'src/assets/illustrations/no-data.svg'
@@ -7,6 +7,8 @@ import { useSettings } from 'src/hooks'
 import { isAudioProduct } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
+import { Roles } from 'src/types/conversation'
+import { Products } from 'src/types/global'
 import Waveform from '../Waveform'
 import ChatBubble from './ChatBubble'
 import Markdown from './Markdown'
@@ -19,6 +21,13 @@ const ChatMessages: FC = () => {
   const currProduct = useRecoilValue(currProductState)
   const currConversation = useRecoilValue(currConversationState)
   const hasMessages = currConversation && currConversation.messages.length > 0
+
+  const getBotLogo = (role: Roles) =>
+    role === Roles.Assistant
+      ? settings?.assistantAvatarFilename
+        ? settings.assistantAvatarFilename
+        : ChatGPTLogoImg
+      : ''
 
   const scrollToBottom = () => {
     if (!chatBoxRef.current) return
@@ -47,34 +56,35 @@ const ChatMessages: FC = () => {
       {hasMessages ? (
         <>
           {currConversation?.messages.map((message) => (
-            <Fragment key={message.messageId}>
-              <ChatBubble
-                role="user"
-                avatar=""
-                date={message.questionCreatedAt}
-              >
-                {isAudioProduct(currProduct) && message.fileName && (
-                  <Waveform filename={message.fileName} />
-                )}
-                {message.question}
-              </ChatBubble>
-              <ChatBubble
-                role="assistant"
-                avatar={
-                  settings?.assistantAvatarFilename
-                    ? settings.assistantAvatarFilename
-                    : ChatGPTLogoImg
-                }
-                date={message.answerCreatedAt}
-              >
-                {loading && !message.answer ? (
-                  <MessageSpinner />
-                ) : (
-                  <Markdown raw={message.answer} />
-                )}
-              </ChatBubble>
-            </Fragment>
+            <ChatBubble
+              key={message.messageId}
+              role={message.role}
+              avatar={getBotLogo(message.role)}
+              date={message.createdAt}
+            >
+              {isAudioProduct(currProduct) && message.fileName && (
+                <Waveform filename={message.fileName} />
+              )}
+
+              {loading && !message.content ? (
+                <MessageSpinner />
+              ) : message.role === Roles.Assistant ? (
+                <Markdown raw={message.content} />
+              ) : (
+                message.content
+              )}
+            </ChatBubble>
           ))}
+
+          {loading && currProduct !== Products.ChatCompletion && (
+            <ChatBubble
+              role={Roles.Assistant}
+              avatar={getBotLogo(Roles.Assistant)}
+              date={+new Date()}
+            >
+              <MessageSpinner />
+            </ChatBubble>
+          )}
         </>
       ) : (
         <img

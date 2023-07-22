@@ -28,7 +28,7 @@ const ConversationList: FC<Props> = ({ conversations }) => {
 
     const conversation: Conversation = {
       avatar: '',
-      conversation_id: chatId,
+      conversationId: chatId,
       summary: '',
       messages: [],
       product: currProduct,
@@ -41,7 +41,7 @@ const ConversationList: FC<Props> = ({ conversations }) => {
     insertOne(conversation)
   }
 
-  const switchChat = (conversation: Conversation) => {
+  const switchConversation = (conversation: Conversation) => {
     setCurrConversation(conversation)
   }
 
@@ -57,16 +57,15 @@ const ConversationList: FC<Props> = ({ conversations }) => {
       <Divider />
 
       <section className="no-scrollbar m-4 h-[calc(100vh_-_7.5625rem)] overflow-y-scroll">
-        {conversations?.length > 0 ? (
+        {Array.isArray(conversations) && conversations.length > 0 ? (
           conversations.map((conversation) => (
             <ConversationItem
-              key={conversation.conversation_id}
+              key={conversation.conversationId}
               active={
-                conversation.conversation_id ===
-                currConversation?.conversation_id
+                conversation.conversationId === currConversation?.conversationId
               }
               conversation={conversation}
-              onClick={() => switchChat(conversation)}
+              onClick={() => switchConversation(conversation)}
             />
           ))
         ) : (

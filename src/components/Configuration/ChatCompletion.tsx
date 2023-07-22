@@ -41,8 +41,9 @@ const Configuration: FC = () => {
           : prevConfiguration.systemMessageTokensCount
     }
 
-    await updateOneById(currConversation.conversation_id, {
-      configuration
+    await updateOneById(currConversation.conversationId, {
+      configuration,
+      updatedAt: +new Date()
     })
 
     setCurrConversation({ ...currConversation, configuration })

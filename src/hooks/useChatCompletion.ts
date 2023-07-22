@@ -13,10 +13,10 @@ const useChatCompletion = (prompt: string) => {
   const company = useCompany()
   const setLoading = useSetRecoilState(loadingState)
   const {
-    pushEmptyMessage,
-    saveMessageToDbAndUpdateConversationState,
-    updateStreamState,
-    rollBackEmptyMessage
+    rollbackMessage,
+    saveUserMessage,
+    saveAssistantMessage,
+    updateChatCompletionStream
   } = useMessages()
 
   const createChatCompletion = async () => {
@@ -50,27 +50,17 @@ const useChatCompletion = (prompt: string) => {
     currConversation.messages
       .slice()
       .reverse()
-      .forEach(({ answerTokenCount, questionTokenCount, question, answer }) => {
-        tokensCount += answerTokenCount + questionTokenCount
+      .forEach(({ tokensCount: historyTokensCount, content, role }) => {
+        tokensCount += historyTokensCount
         if (tokensCount > tokensLimit) return
-        context.unshift(
-          {
-            role: 'user',
-            content: question
-          },
-          {
-            role: 'assistant',
-            content: answer
-          }
-        )
+        context.unshift({
+          role,
+          content
+        })
       })
-
+    saveUserMessage(prompt, userMessageTokensCount)
     setLoading(true)
-
-    const emptyMessage = pushEmptyMessage({
-      question: prompt,
-      questionTokenCount: userMessageTokensCount
-    })
+    updateChatCompletionStream()
 
     let chat: Response | undefined
 
@@ -98,7 +88,7 @@ const useChatCompletion = (prompt: string) => {
       })
     } catch {
       toast.error('Network Error.')
-      rollBackEmptyMessage()
+      rollbackMessage()
       setLoading(false)
       return
     }
@@ -107,6 +97,7 @@ const useChatCompletion = (prompt: string) => {
 
     if (!reader) {
       toast.error('Cannot get ReadableStream.')
+      rollbackMessage()
       setLoading(false)
       return
     }
@@ -118,12 +109,10 @@ const useChatCompletion = (prompt: string) => {
       const chunk = decoder.decode(value, { stream: true })
       const errorData: OpenAIError = JSON.parse(chunk)
       toast.error(errorData.error.message)
-      rollBackEmptyMessage()
+      rollbackMessage()
       setLoading(false)
       return
     }
-
-    let _content = ''
 
     const decoder = new TextDecoder('utf-8')
     const read = async (): Promise<void> => {
@@ -131,12 +120,8 @@ const useChatCompletion = (prompt: string) => {
         const { done, value } = await reader.read()
 
         if (done) {
-          const assistantTokensCount = getTokensCount(_content, model)
+          saveAssistantMessage()
           setLoading(false)
-          saveMessageToDbAndUpdateConversationState(
-            { ...emptyMessage, answerTokenCount: assistantTokensCount },
-            _content
-          )
           return reader.releaseLock()
         }
 
@@ -154,14 +139,14 @@ const useChatCompletion = (prompt: string) => {
           const token = data.choices[0].delta.content
 
           if (token !== undefined) {
-            const content = updateStreamState(token)
-            _content += content
+            updateChatCompletionStream(token)
           }
         })
 
         return read()
       } catch {
         toast.error('Stream data parsing error.')
+        rollbackMessage()
       } finally {
         setLoading(false)
       }
