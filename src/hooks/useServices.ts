@@ -3,19 +3,26 @@ import {
   CreateCompletionRequest,
   CreateImageRequest
 } from 'openai'
+import { useEffect } from 'react'
+import { useRecoilValue } from 'recoil'
 import { AzureLogoIcon, OpenAILogoIcon } from 'src/components/Icons'
 import {
   OPENAI_CHAT_COMPLETION_URL,
   OPENAI_IMAGE_GENERATION_URL,
   OPENAI_TEXT_COMPLETION_URL
 } from 'src/shared/constants'
+import { currConversationState } from 'src/stores/conversation'
+import { currProductState } from 'src/stores/global'
 import { Companies, Products } from 'src/types/global'
 import useOpenAI from './useOpenAI'
 import useSettings from './useSettings'
 
 const useServices = () => {
+  const controller = new AbortController()
   const openai = useOpenAI()
   const { settings } = useSettings()
+  const currConversation = useRecoilValue(currConversationState)
+  const currProduct = useRecoilValue(currProductState)
 
   const _fetch = <T>(url: string, body: T) => {
     const headers = {
@@ -34,6 +41,7 @@ const useServices = () => {
         ...headers[settings?.company || Companies.OpenAI]
       },
       method: 'POST',
+      signal: controller.signal,
       body: JSON.stringify(body)
     })
   }
@@ -73,6 +81,13 @@ const useServices = () => {
       [Products.AudioTranslation]: openai.createTranslation
     }
   }
+
+  useEffect(() => {
+    return () =>
+      controller.abort(
+        'This request has been cancelled. If you would like to access the complete data, please stay on the conversation.'
+      )
+  }, [currConversation, currProduct])
 
   return services[settings?.company || Companies.OpenAI]
 }

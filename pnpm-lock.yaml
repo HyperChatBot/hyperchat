@@ -39,6 +39,7 @@ specifiers:
   electron-squirrel-startup: ^1.0.0
   emoji-mart: ^5.5.2
   eslint: ^8.0.1
+  eslint-import-resolver-alias: ^1.1.2
   eslint-plugin-import: ^2.25.0
   formik: ^2.4.2
   immer: ^10.0.2
@@ -127,6 +128,7 @@ devDependencies:
   autoprefixer: 10.4.14_postcss@8.4.27
   electron: 25.3.1
   eslint: 8.45.0
+  eslint-import-resolver-alias: 1.1.2_5rfvta7qn57kxm7ir36ta6fixq
   eslint-plugin-import: 2.27.5_vdlnholh74uk2lamdhhi4g2qza
   postcss: 8.4.27
   postcss-import: 15.1.0_postcss@8.4.27
@@ -3238,6 +3240,15 @@ packages:
     optionalDependencies:
       source-map: 0.6.1
     dev: false
+
+  /eslint-import-resolver-alias/1.1.2_5rfvta7qn57kxm7ir36ta6fixq:
+    resolution: {integrity: sha512-WdviM1Eu834zsfjHtcGHtGfcu+F30Od3V7I9Fi57uhBEwPkjDcii7/yW8jAT+gOhn4P/vOxxNAXbFAKsrrc15w==}
+    engines: {node: '>= 4'}
+    peerDependencies:
+      eslint-plugin-import: '>=1.4.0'
+    dependencies:
+      eslint-plugin-import: 2.27.5_vdlnholh74uk2lamdhhi4g2qza
+    dev: true
 
   /eslint-import-resolver-node/0.3.7:
     resolution: {integrity: sha512-gozW2blMLJCeFpBwugLTGyvVjNoeo1knonXAcatC6bjPBZitotxdWf7Gimr25N4c0AAOo4eOUfaG82IJPDpqCA==}

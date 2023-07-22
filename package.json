@@ -39,6 +39,7 @@
     "autoprefixer": "^10.4.14",
     "electron": "25.3.1",
     "eslint": "^8.0.1",
+    "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.25.0",
     "postcss": "^8.4.26",
     "postcss-import": "^15.1.0",
