@@ -9,7 +9,8 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "lint": "echo \"No linting configured\"",
+    "prettier": "prettier ./.prettierrc -w ./src"
   },
   "keywords": [],
   "author": "Yancey Leo",
@@ -22,6 +23,7 @@
     "@electron-forge/maker-zip": "^6.2.1",
     "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
     "@electron-forge/plugin-vite": "^6.2.1",
+    "@electron-forge/shared-types": "^6.2.1",
     "@tauri-apps/cli": "^1.4.0",
     "@types/lodash.throttle": "^4.1.7",
     "@types/luxon": "^3.3.0",
