@@ -13,7 +13,7 @@ import { Companies, Products } from 'src/types/global'
 import useOpenAI from './useOpenAI'
 import useSettings from './useSettings'
 
-const useCompany = () => {
+const useServices = () => {
   const openai = useOpenAI()
   const { settings } = useSettings()
 
@@ -38,7 +38,7 @@ const useCompany = () => {
     })
   }
 
-  const company = {
+  const services = {
     [Companies.Azure]: {
       logo: AzureLogoIcon,
       headers: {
@@ -74,7 +74,7 @@ const useCompany = () => {
     }
   }
 
-  return company[settings?.company || Companies.OpenAI]
+  return services[settings?.company || Companies.OpenAI]
 }
 
-export default useCompany
+export default useServices

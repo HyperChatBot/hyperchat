@@ -64,6 +64,7 @@ const InputBox: FC = () => {
   }
 
   // FIXME: I cannot declare the type of `event` correctly.
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const handleKeyDown = (event) => {
     if (event.key === 'Enter' && event.shiftKey) {
