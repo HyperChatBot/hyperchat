@@ -3,7 +3,7 @@ import path from 'path'
 import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
-export default defineConfig(async () => ({
+export default defineConfig({
   plugins: [react()],
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
@@ -28,11 +28,14 @@ export default defineConfig(async () => ({
   resolve: {
     alias: {
       src: path.resolve(__dirname, './src')
-    }
+    },
+    // Some libs that can run in both Web and Node.js, such as `axios`, we need to tell Vite to build them in Node.js.
+    browserField: false,
+    mainFields: ['module', 'jsnext:main', 'jsnext']
   },
   esbuild: {
     supported: {
       'top-level-await': true
     }
   }
-}))
+})

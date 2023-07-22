@@ -1,29 +1,26 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "useDefineForClassFields": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "allowJs": false,
+    "module": "commonjs",
+    "allowJs": true,
     "skipLibCheck": true,
-    "esModuleInterop": false,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "sourceMap": true,
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "src/*": ["src/*"]
-    }
+      "src/*": [
+        "src/*"
+      ]
+    },
+    "outDir": "dist",
+    "moduleResolution": "node",
+    "resolveJsonModule": true
   },
-  "include": ["src", "tailwind.config.js", "postcss.config.js"],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ]
+  "include": [
+    "src",
+    "tailwind.config.js",
+    "postcss.config.js"
+  ],
 }
