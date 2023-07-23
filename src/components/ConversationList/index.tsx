@@ -3,12 +3,14 @@ import { FC } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { configurations } from 'src/configurations'
 import { useDB } from 'src/hooks'
-import { currConversationState } from 'src/stores/conversation'
+import { BAN_ACTIVE_HINT } from 'src/shared/constants'
+import { currConversationState, loadingState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { Conversation } from 'src/types/conversation'
 import { v4 } from 'uuid'
 import Divider from '../Divider'
 import { OutlinePlusIcon } from '../Icons'
+import toast from '../Snackbar'
 import ConversationItem from './ConversationItem'
 import ChatEmpty from './EmptyItem'
 
@@ -17,6 +19,7 @@ interface Props {
 }
 
 const ConversationList: FC<Props> = ({ conversations }) => {
+  const loading = useRecoilValue(loadingState)
   const currProduct = useRecoilValue(currProductState)
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
@@ -24,11 +27,14 @@ const ConversationList: FC<Props> = ({ conversations }) => {
   const { insertOne } = useDB('conversations')
 
   const addConversation = async () => {
-    const chatId = v4()
+    if (loading) {
+      toast.warning(BAN_ACTIVE_HINT)
+      return
+    }
 
     const conversation: Conversation = {
       avatar: '',
-      conversationId: chatId,
+      conversationId: v4(),
       summary: '',
       messages: [],
       product: currProduct,
@@ -42,6 +48,10 @@ const ConversationList: FC<Props> = ({ conversations }) => {
   }
 
   const switchConversation = (conversation: Conversation) => {
+    if (loading) {
+      toast.warning(BAN_ACTIVE_HINT)
+      return
+    }
     setCurrConversation(conversation)
   }
 
