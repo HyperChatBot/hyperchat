@@ -1,7 +1,7 @@
 import useAppData from './useAppData'
 import useAudio from './useAudio'
 import useChatCompletion from './useChatCompletion'
-import useCompany from './useCompany'
+import useServices from './useSevices'
 import useDB from './useDB'
 import useImageGeneration from './useImageGeneration'
 import useMessages from './useMessages'
@@ -16,7 +16,7 @@ export {
   useAppData,
   useAudio,
   useChatCompletion,
-  useCompany,
+  useServices,
   useDB,
   useImageGeneration,
   useMessages,
