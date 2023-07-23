@@ -6,7 +6,7 @@ import {
 } from '@heroicons/react/24/solid'
 import Input from '@mui/material/Input'
 import classNames from 'classnames'
-import { FC, KeyboardEvent, useEffect, useState } from 'react'
+import { FC, KeyboardEvent, memo, useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatbot.png'
 import { useDB } from 'src/hooks'
@@ -179,4 +179,4 @@ const ContactHeader: FC = () => {
   )
 }
 
-export default ContactHeader
+export default memo(ContactHeader)

@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { FC, useEffect, useRef } from 'react'
+import { FC, memo, useEffect, useMemo, useRef } from 'react'
 import { useRecoilValue } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatbot.png'
 import NoDataIllustration from 'src/assets/illustrations/no-data.svg'
@@ -20,7 +20,10 @@ const ChatMessages: FC = () => {
   const { settings } = useSettings()
   const currProduct = useRecoilValue(currProductState)
   const currConversation = useRecoilValue(currConversationState)
-  const hasMessages = currConversation && currConversation.messages.length > 0
+  const hasMessages = useMemo(
+    () => currConversation && currConversation.messages.length > 0,
+    [currConversation]
+  )
 
   const getBotLogo = (role: Roles) =>
     role === Roles.Assistant
@@ -97,4 +100,4 @@ const ChatMessages: FC = () => {
   )
 }
 
-export default ChatMessages
+export default memo(ChatMessages)

@@ -1,7 +1,7 @@
 import { MicrophoneIcon } from '@heroicons/react/24/solid'
 import Tooltip from '@mui/material/Tooltip'
 import classNames from 'classnames'
-import { ChangeEvent, FC, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, FC, memo, useEffect, useRef, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { useAppData, useRequest } from 'src/hooks'
 import { isAudioProduct } from 'src/shared/utils'
@@ -186,4 +186,4 @@ const InputBox: FC = () => {
   )
 }
 
-export default InputBox
+export default memo(InputBox)
