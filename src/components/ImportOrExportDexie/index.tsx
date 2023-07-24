@@ -36,6 +36,7 @@ const ImportOrExportDexie: FC = () => {
       await importDB(file)
       window.location.reload()
     } catch (e: unknown) {
+      // @ts-ignore
       toast.error(e.message)
     } finally {
       if (inputRef.current) {
