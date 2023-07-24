@@ -62,6 +62,7 @@ const ContactHeader: FC = () => {
       toast.warning(BAN_ACTIVE_HINT)
       return
     }
+    if (!currConversation) return
     setSummaryValue(currConversation?.summary || '')
     setSummaryInputVisible(true)
   }
@@ -164,7 +165,7 @@ const ContactHeader: FC = () => {
                 className="flex cursor-pointer items-center"
               >
                 <p className="mr-4 text-base">{summary}</p>
-                <PencilSquareIcon className="h-4 w-4" />
+                {!!currConversation && <PencilSquareIcon className="h-4 w-4" />}
               </div>
             )}
           </div>

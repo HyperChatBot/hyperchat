@@ -9,7 +9,7 @@ import { exportDB, importDB } from 'dexie-export-import'
 import { ChangeEvent, FC, useRef } from 'react'
 import toast from '../Snackbar'
 
-const ImportOrExportDexie: FC = () => {
+const ImportAndExportDexie: FC = () => {
   const inputRef = useRef<HTMLInputElement>(null)
 
   const exportDatabase = async () => {
@@ -46,16 +46,16 @@ const ImportOrExportDexie: FC = () => {
   }
 
   return (
-    <section className="flex gap-2">
+    <section className="flex gap-4">
       <Button
-        variant="outlined"
+       variant="contained"
         onClick={exportDatabase}
         startIcon={<DocumentArrowDownIcon className="h-4 w-4" />}
       >
         Export Data
       </Button>
       <Button
-        variant="outlined"
+        variant="contained"
         startIcon={<DocumentArrowUpIcon className="h-4 w-4" />}
         className="relative"
       >
@@ -72,4 +72,4 @@ const ImportOrExportDexie: FC = () => {
   )
 }
 
-export default ImportOrExportDexie
+export default ImportAndExportDexie

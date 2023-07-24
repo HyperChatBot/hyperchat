@@ -17,7 +17,7 @@ import { Formik } from 'formik'
 import { ChangeEvent, FC } from 'react'
 import ChatGPTImg from 'src/assets/chatbot.png'
 import { SolidSettingsBrightnessIcon } from 'src/components/Icons'
-import ImportOrExportDexie from 'src/components/ImportOrExportDexie'
+import ImportAndExportDexie from 'src/components/ImportAndExportDexie'
 import toast from 'src/components/Snackbar'
 import { useAppData, useSettings, useTheme } from 'src/hooks'
 import { Companies, ThemeMode } from 'src/types/global'
@@ -119,7 +119,7 @@ const Settings: FC = () => {
 
                     <TextField
                       id="openai-author-name-input"
-                      label="Author Name"
+                      label="Name"
                       size="small"
                       type="text"
                       className="w-160"
@@ -129,7 +129,7 @@ const Settings: FC = () => {
 
                     <Button
                       variant="contained"
-                      sx={{ width: 'max-content' }}
+                      sx={{ width: 120 }}
                       onClick={() => updateSettings(formik.values)}
                     >
                       Save
@@ -288,7 +288,7 @@ const Settings: FC = () => {
             <header className="text-xl font-medium dark:text-white">
               Data Import and Export
             </header>
-            <ImportOrExportDexie />
+            <ImportAndExportDexie />
           </section>
         </Box>
       </div>
