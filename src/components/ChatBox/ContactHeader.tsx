@@ -6,22 +6,25 @@ import {
 } from '@heroicons/react/24/solid'
 import Input from '@mui/material/Input'
 import classNames from 'classnames'
-import { FC, KeyboardEvent, useEffect, useState } from 'react'
+import { FC, KeyboardEvent, memo, useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatbot.png'
 import { useDB } from 'src/hooks'
-import { EMPTY_CHAT_HINT } from 'src/shared/constants'
+import { BAN_ACTIVE_HINT, EMPTY_CHAT_HINT } from 'src/shared/constants'
 import {
   avatarPickerVisibleState,
   currConversationState,
+  loadingState,
   summaryInputVisibleState
 } from 'src/stores/conversation'
 import { configurationDrawerVisibleState, onlineState } from 'src/stores/global'
 import { EmojiPickerProps } from 'src/types/global'
 import Avatar from '../Avatar'
 import EmojiPicker from '../EmojiPicker'
+import toast from '../Snackbar'
 
 const ContactHeader: FC = () => {
+  const loading = useRecoilValue(loadingState)
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
   )
@@ -46,9 +49,29 @@ const ContactHeader: FC = () => {
     currConversation?.conversationId ||
     EMPTY_CHAT_HINT
 
+  const openAvatarPicker = () => {
+    if (loading) {
+      toast.warning(BAN_ACTIVE_HINT)
+      return
+    }
+    setAvatarPickerVisible(true)
+  }
+
   const openSummaryInput = () => {
+    if (loading) {
+      toast.warning(BAN_ACTIVE_HINT)
+      return
+    }
     setSummaryValue(currConversation?.summary || '')
     setSummaryInputVisible(true)
+  }
+
+  const openConfigurationDrawer = () => {
+    if (loading) {
+      toast.warning(BAN_ACTIVE_HINT)
+      return
+    }
+    setConfigurationDrawerVisible(true)
   }
 
   const saveSummary = async () => {
@@ -85,6 +108,10 @@ const ContactHeader: FC = () => {
   }
 
   const deleteCurrConversation = async () => {
+    if (loading) {
+      toast.warning(BAN_ACTIVE_HINT)
+      return
+    }
     if (currConversation) {
       await deleteOneById(currConversation.conversationId)
     }
@@ -101,16 +128,12 @@ const ContactHeader: FC = () => {
         {currConversation?.avatar ? (
           <div
             className="flex items-center justify-center text-5xl"
-            onClick={() => setAvatarPickerVisible(true)}
+            onClick={openAvatarPicker}
           >
             {currConversation?.avatar}
           </div>
         ) : (
-          <Avatar
-            size="xs"
-            src={ChatGPTLogoImg}
-            onClick={() => setAvatarPickerVisible(true)}
-          />
+          <Avatar size="xs" src={ChatGPTLogoImg} onClick={openAvatarPicker} />
         )}
 
         {avatarPickerVisible && <EmojiPicker onEmojiSelect={saveAvatar} />}
@@ -169,7 +192,7 @@ const ContactHeader: FC = () => {
           </section>
           <section
             className="flex cursor-pointer rounded-lg bg-main-purple bg-opacity-10 pb-2.5 pl-4 pr-4 pt-2.5 text-main-purple"
-            onClick={() => setConfigurationDrawerVisible(true)}
+            onClick={openConfigurationDrawer}
           >
             <AdjustmentsVerticalIcon className="h-4 w-4" />
           </section>
@@ -179,4 +202,4 @@ const ContactHeader: FC = () => {
   )
 }
 
-export default ContactHeader
+export default memo(ContactHeader)

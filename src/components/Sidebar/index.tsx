@@ -4,14 +4,17 @@ import Tooltip from '@mui/material/Tooltip'
 import { capitalCase } from 'change-case'
 import { FC, MouseEvent } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import LogoImg from 'src/assets/chatbot.png'
 import { AzureLogoIcon, OpenAILogoIcon } from 'src/components/Icons'
 import { useSettings } from 'src/hooks'
+import { BAN_ACTIVE_HINT } from 'src/shared/constants'
+import { loadingState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { Companies, Products } from 'src/types/global'
 import Avatar from '../Avatar'
 import Divider from '../Divider'
+import toast from '../Snackbar'
 import items, { iconClassName } from './Items'
 
 const companyLogo = {
@@ -24,11 +27,16 @@ const companyLogo = {
 }
 
 const Sidebar: FC = () => {
+  const loading = useRecoilValue(loadingState)
   const location = useLocation()
   const { settings } = useSettings()
   const [currProduct, setCurrProduct] = useRecoilState(currProductState)
 
   const onProductChange = async (e: MouseEvent, product: Products) => {
+    if (loading) {
+      toast.warning(BAN_ACTIVE_HINT)
+      return
+    }
     window.localStorage.setItem('currProductState', product)
     setCurrProduct(product)
   }

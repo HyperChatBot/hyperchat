@@ -11,6 +11,8 @@ export const OPENAI_IMAGE_GENERATION_URL =
 
 export const EMPTY_CHAT_HINT = 'Create your first conversation!'
 
+export const BAN_ACTIVE_HINT = 'Please wait for this request to finish!'
+
 export const TEXTAREA_MAX_ROWS = 8
 
 export const SNACKBAR_ANCHOR_ORIGIN: SnackbarOrigin = {

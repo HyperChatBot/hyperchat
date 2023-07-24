@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import { ImagesResponse } from 'openai'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { ImageGenerationConfiguration } from 'src/configurations/imageGeneration'
-import { useCompany, useMessages } from 'src/hooks'
+import { useServices, useMessages } from 'src/hooks'
 import { showErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
@@ -14,7 +14,7 @@ const useImageGeneration = (prompt: string) => {
   const currConversation = useRecoilValue(currConversationState)
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
-  const company = useCompany()
+  const services = useServices()
   const { rollbackMessage, saveUserMessage, saveCommonAssistantMessage } =
     useMessages()
 
@@ -27,7 +27,7 @@ const useImageGeneration = (prompt: string) => {
     try {
       saveUserMessage(prompt)
       setLoading(true)
-      const response = await company.image_generation({
+      const response = await services.image_generation({
         prompt,
         n,
         size,
@@ -58,7 +58,7 @@ const useImageGeneration = (prompt: string) => {
       saveUserMessage(prompt)
       setLoading(true)
 
-      const submission = await company.image_generation({
+      const submission = await services.image_generation({
         prompt: prompt,
         n,
         size

@@ -2,7 +2,7 @@ import { CreateChatCompletionRequest } from 'openai'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import toast from 'src/components/Snackbar'
 import { ChatConfiguration, models } from 'src/configurations/chatCompletion'
-import { useCompany, useMessages, useSettings } from 'src/hooks'
+import { useMessages, useServices, useSettings } from 'src/hooks'
 import { getTokensCount } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { OpenAIChatResponse, OpenAIError } from 'src/types/openai'
@@ -10,7 +10,7 @@ import { OpenAIChatResponse, OpenAIError } from 'src/types/openai'
 const useChatCompletion = (prompt: string) => {
   const currConversation = useRecoilValue(currConversationState)
   const { settings } = useSettings()
-  const company = useCompany()
+  const services = useServices()
   const setLoading = useSetRecoilState(loadingState)
   const {
     rollbackMessage,
@@ -65,7 +65,7 @@ const useChatCompletion = (prompt: string) => {
     let chat: Response | undefined
 
     try {
-      chat = await company.chat_completion({
+      chat = await services.chat_completion({
         messages: [
           {
             role: 'system',
@@ -147,7 +147,6 @@ const useChatCompletion = (prompt: string) => {
       } catch {
         toast.error('Stream data parsing error.')
         rollbackMessage()
-      } finally {
         setLoading(false)
       }
     }

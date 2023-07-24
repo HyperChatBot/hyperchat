@@ -1,7 +1,7 @@
 import { CreateCompletionResponse } from 'openai'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { TextCompletionConfiguration } from 'src/configurations/textCompletion'
-import { useCompany, useMessages } from 'src/hooks'
+import { useMessages, useServices } from 'src/hooks'
 import { showErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
@@ -10,7 +10,7 @@ const useTextCompletion = (prompt: string) => {
   const currConversation = useRecoilValue(currConversationState)
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
-  const company = useCompany()
+  const services = useServices()
   const { rollbackMessage, saveUserMessage, saveCommonAssistantMessage } =
     useMessages()
 
@@ -32,7 +32,7 @@ const useTextCompletion = (prompt: string) => {
       saveUserMessage(prompt)
       setLoading(true)
 
-      const response = await company.text_completion({
+      const response = await services.text_completion({
         model,
         prompt: prompt,
         max_tokens: maxTokens,

@@ -41,7 +41,7 @@
     "remark-gfm": "^3.0.1",
     "remark-math": "^5.1.1",
     "uuid": "^9.0.0",
-    "wavesurfer.js": "^7.0.3",
+    "wavesurfer.js": "^6.6.4",
     "yancey-js-util": "^3.1.0"
   },
   "devDependencies": {
@@ -54,8 +54,14 @@
     "@types/react-syntax-highlighter": "^15.5.7",
     "@types/uuid": "^9.0.2",
     "@types/wavesurfer.js": "^6.0.6",
+    "@typescript-eslint/eslint-plugin": "^6.1.0",
+    "@typescript-eslint/parser": "^6.1.0",
     "@vitejs/plugin-react": "^4.0.3",
     "autoprefixer": "^10.4.14",
+    "eslint": "^8.45.0",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "postcss": "^8.4.26",
     "postcss-import": "^15.1.0",
     "prettier": "^3.0.0",

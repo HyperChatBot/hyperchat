@@ -22,9 +22,10 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
       currConversation.configuration as AudioTranscriptionConfiguration
 
     try {
-      saveUserMessage(prompt)
+      saveUserMessage(prompt, 0, hashFile.hashName)
       setLoading(true)
 
+      // TODO: Uses pure fetch.
       const transcription = await openai.createTranscription(
         hashFile.file,
         model,
@@ -54,9 +55,10 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
       currConversation.configuration as AudioTranslationConfiguration
 
     try {
-      await saveUserMessage(prompt)
+      saveUserMessage(prompt, 0, hashFile.hashName)
       setLoading(true)
 
+      // TODO: Uses pure fetch.
       const translation = await openai.createTranslation(
         hashFile.file,
         model,

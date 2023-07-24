@@ -17,6 +17,7 @@ import { Formik } from 'formik'
 import { ChangeEvent, FC } from 'react'
 import ChatGPTImg from 'src/assets/chatbot.png'
 import { SolidSettingsBrightnessIcon } from 'src/components/Icons'
+import ImportOrExportDexie from 'src/components/ImportOrExportDexie'
 import toast from 'src/components/Snackbar'
 import { useAppData, useSettings, useTheme } from 'src/hooks'
 import { Companies, ThemeMode } from 'src/types/global'
@@ -281,6 +282,15 @@ const Settings: FC = () => {
             </Box>
           )}
         </Formik>
+        <Divider />
+        <Box component="div" className="my-8">
+          <section className="flex flex-col gap-6">
+            <header className="text-xl font-medium dark:text-white">
+              Data Import and Export
+            </header>
+            <ImportOrExportDexie />
+          </section>
+        </Box>
       </div>
     </section>
   )
