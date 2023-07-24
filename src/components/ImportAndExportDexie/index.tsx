@@ -25,7 +25,11 @@ const ImportAndExportDexie: FC = () => {
       toast.success(
         `The ${filename} has been saved in your local Download Directory.`
       )
-    } catch {}
+    } catch (e) {
+       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      toast.error(e.toString())
+    }
   }
 
   const importDatabase = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -36,6 +40,7 @@ const ImportAndExportDexie: FC = () => {
       await importDB(file)
       window.location.reload()
     } catch (e: unknown) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       toast.error(e.message)
     } finally {
@@ -48,7 +53,7 @@ const ImportAndExportDexie: FC = () => {
   return (
     <section className="flex gap-4">
       <Button
-       variant="contained"
+        variant="contained"
         onClick={exportDatabase}
         startIcon={<DocumentArrowDownIcon className="h-4 w-4" />}
       >

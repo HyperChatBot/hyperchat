@@ -10,12 +10,15 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:import/recommended",
     "plugin:import/typescript",
-    "plugin:react/jsx-runtime",
+    "plugin:react/recommended",
     "plugin:react-hooks/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": "latest"
+    "ecmaVersion": "latest",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
   "settings": {
     "import/resolver": {
@@ -33,5 +36,8 @@
       }
     }
   },
-  "rules": {}
+  "rules": {
+    "react/jsx-uses-react": "off",
+    "react/react-in-jsx-scope": "off"
+  }
 }
