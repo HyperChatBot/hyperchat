@@ -26,7 +26,7 @@ const ImportAndExportDexie: FC = () => {
         `The ${filename} has been saved in your local Download Directory.`
       )
     } catch (e) {
-       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       toast.error(e.toString())
     }
