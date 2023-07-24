@@ -10,6 +10,7 @@
     "tauri": "tauri",
     "prettier": "prettier ./.prettierrc -w ./src --fix",
     "lint": "eslint --cache --fix",
+    "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -62,6 +63,7 @@
     "@typescript-eslint/parser": "^6.1.0",
     "@vitejs/plugin-react": "^4.0.3",
     "autoprefixer": "^10.4.14",
+    "conventional-changelog-cli": "^3.0.0",
     "eslint": "^8.45.0",
     "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.27.5",
