@@ -1,9 +1,9 @@
 import { DateTime } from 'luxon'
 import { ImagesResponse } from 'openai'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
+import toast from 'src/components/Snackbar'
 import { ImageGenerationConfiguration } from 'src/configurations/imageGeneration'
-import { useServices, useMessages } from 'src/hooks'
-import { showErrorToast } from 'src/shared/utils'
+import { useMessages, useServices } from 'src/hooks'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 import { AzureImageGeneration } from 'src/types/azure'
@@ -34,6 +34,9 @@ const useImageGeneration = (prompt: string) => {
         response_format: responseFormat
       })
       const image = (await response.json()) as ImagesResponse
+      if (image.error) {
+        throw new Error(image.error.message)
+      }
 
       const content = image.data
         .map((val, key) => `![${prompt}-${key}](${val.url})\n`)
@@ -41,7 +44,7 @@ const useImageGeneration = (prompt: string) => {
 
       saveCommonAssistantMessage(content)
     } catch (error) {
-      showErrorToast(error)
+      toast.error(error)
       rollbackMessage()
     } finally {
       setLoading(false)
@@ -63,6 +66,10 @@ const useImageGeneration = (prompt: string) => {
         n,
         size
       })
+
+      if (submission.status !== 200) {
+        throw new Error('Request image generation error.')
+      }
 
       const operation_location = submission.headers.get('Operation-Location')
       if (!operation_location) throw new Error('No Operation Location found.')
@@ -95,7 +102,7 @@ const useImageGeneration = (prompt: string) => {
 
       saveCommonAssistantMessage(content)
     } catch (error) {
-      showErrorToast(error)
+      toast.error(error.message)
       rollbackMessage()
     } finally {
       setLoading(false)

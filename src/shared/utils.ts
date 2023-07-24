@@ -1,9 +1,6 @@
-import { isAxiosError } from 'axios'
 import { encodingForModel, TiktokenModel } from 'js-tiktoken'
 import { DateTime } from 'luxon'
-import toast from 'src/components/Snackbar'
 import { Products, ThemeMode } from 'src/types/global'
-import { OpenAIError } from 'src/types/openai'
 import { v4 } from 'uuid'
 import { getFileExtension } from 'yancey-js-util'
 
@@ -55,14 +52,6 @@ export const themeModeToTheme = (themeMode?: ThemeMode) =>
       ? ThemeMode.dark
       : ThemeMode.light
     : themeMode
-
-export const showErrorToast = (error: unknown) => {
-  if (isAxiosError<OpenAIError, Record<string, unknown>>(error)) {
-    toast.error(error.response?.data.error.message || '')
-  } else {
-    toast.error(JSON.stringify(error))
-  }
-}
 
 export const getTokensCount = (content: string, model: TiktokenModel) =>
   encodingForModel(model).encode(content).length
