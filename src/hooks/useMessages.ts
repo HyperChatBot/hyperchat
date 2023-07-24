@@ -1,4 +1,5 @@
 import { produce } from 'immer'
+import { useCallback } from 'react'
 import { useRecoilState } from 'recoil'
 import { ChatConfiguration } from 'src/configurations/chatCompletion'
 import { useDB } from 'src/hooks'
@@ -14,67 +15,74 @@ const useMessages = () => {
   )
 
   const rollbackMessage = () => {
-    setCurrConversation((prevState) =>
-      produce(prevState, (draft) => {
-        draft?.messages.pop()
-      })
-    )
-  }
-
-  const updateChatCompletionStream = (token?: string) => {
     if (!currConversation) return
 
     setCurrConversation((prevState) =>
       produce(prevState, (draft) => {
         if (!draft) return
+        draft.messages.pop()
+      })
+    )
+  }
 
-        const lastMessage = draft.messages[draft.messages.length - 1]
-        if (token === undefined) {
+  const updateChatCompletionStream = useCallback(
+    (token?: string) => {
+      if (!currConversation) return
+
+      setCurrConversation((prevState) =>
+        produce(prevState, (draft) => {
+          if (!draft) return
+          const lastMessage = draft.messages[draft.messages.length - 1]
+          if (token === undefined) {
+            const message: Message = {
+              messageId: v4(),
+              content: '',
+              role: Roles.Assistant,
+              tokensCount: 0,
+              createdAt: +new Date()
+            }
+            draft.messages.push({ ...message, content: '' })
+          } else {
+            lastMessage.content += token
+          }
+        })
+      )
+    },
+    [currConversation]
+  )
+
+  const saveCommonAssistantMessage = useCallback(
+    (content: string) => {
+      if (!currConversation) return
+
+      setCurrConversation((prevState) => {
+        const newConversation = produce(prevState, (draft) => {
+          if (!draft) return
           const message: Message = {
             messageId: v4(),
-            content: '',
+            content,
             role: Roles.Assistant,
             tokensCount: 0,
             createdAt: +new Date()
           }
-          draft.messages.push({ ...message, content: '' })
-        } else {
-          lastMessage.content += token
-        }
-      })
-    )
-  }
-
-  const saveCommonAssistantMessage = (content: string) => {
-    if (!currConversation) return
-
-    setCurrConversation((prevState) => {
-      const newConversation = produce(prevState, (draft) => {
-        if (!draft) return
-
-        const message: Message = {
-          messageId: v4(),
-          content,
-          role: Roles.Assistant,
-          tokensCount: 0,
-          createdAt: +new Date()
-        }
-        draft.messages.push(message)
-        draft.updatedAt = +new Date()
-      })
-
-      if (newConversation) {
-        updateOneById(currConversation.conversationId, {
-          messages: newConversation.messages,
-          updatedAt: newConversation.updatedAt
+          draft.messages.push(message)
+          draft.updatedAt = +new Date()
         })
-      }
 
-      return newConversation
-    })
-  }
+        if (newConversation) {
+          updateOneById(currConversation.conversationId, {
+            messages: newConversation.messages,
+            updatedAt: newConversation.updatedAt
+          })
+        }
 
-  const saveAssistantMessage = () => {
+        return newConversation
+      })
+    },
+    [currConversation]
+  )
+
+  const saveAssistantMessage = useCallback(() => {
     if (!currConversation) return
 
     setCurrConversation((prevState) => {
@@ -99,29 +107,33 @@ const useMessages = () => {
 
       return newConversation
     })
-  }
+  }, [currConversation])
 
-  const saveUserMessage = async (content: string, tokensCount?: number) => {
-    if (!currConversation) return
+  const saveUserMessage = useCallback(
+    (content: string, tokensCount?: number, fileName?: string) => {
+      if (!currConversation) return
 
-    const message: Message = {
-      messageId: v4(),
-      content,
-      role: Roles.User,
-      tokensCount: tokensCount || 0,
-      createdAt: +new Date()
-    }
+      const message: Message = {
+        messageId: v4(),
+        content,
+        role: Roles.User,
+        tokensCount: tokensCount || 0,
+        fileName,
+        createdAt: +new Date()
+      }
 
-    const newConversations = produce(currConversation, (draft) => {
-      draft.messages.push(message)
-      draft.updatedAt = +new Date()
-    })
-    setCurrConversation(newConversations)
-    await updateOneById(currConversation.conversationId, {
-      messages: newConversations.messages,
-      updatedAt: newConversations.updatedAt
-    })
-  }
+      const newConversations = produce(currConversation, (draft) => {
+        draft.messages.push(message)
+        draft.updatedAt = +new Date()
+      })
+      setCurrConversation(newConversations)
+      updateOneById(currConversation.conversationId, {
+        messages: newConversations.messages,
+        updatedAt: newConversations.updatedAt
+      })
+    },
+    [currConversation]
+  )
 
   return {
     rollbackMessage,

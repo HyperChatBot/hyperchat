@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { FC } from 'react'
+import { FC, memo } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark as mdCodeTheme } from 'react-syntax-highlighter/dist/esm/styles/prism'
@@ -139,4 +139,7 @@ const Markdown: FC<Props> = ({ raw }) => {
   )
 }
 
-export default Markdown
+export default memo(
+  Markdown,
+  (prevProps, nextProps) => prevProps.raw === nextProps.raw
+)
