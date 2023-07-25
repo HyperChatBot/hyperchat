@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/HyperChatBot/hyperchat/compare/v1.0.0...v1.0.1) (2023-07-25)
+
+
+### Bug Fixes
+
+* remove showErrorToast ([0b46792](https://github.com/HyperChatBot/hyperchat/commit/0b4679246ebda726da60095ce0d83af735a66d6b))
+
 ## 1.0.0 (2023-07-24)
 
 
