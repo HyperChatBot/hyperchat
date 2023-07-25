@@ -21,5 +21,4 @@ jobs:
           package-name: release-please-action
           extra-files: |
             src-tauri/Cargo.toml
-            src-tauri/Cargo.lock
             src-tauri/tauri.conf.json

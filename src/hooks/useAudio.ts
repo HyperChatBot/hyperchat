@@ -1,8 +1,8 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import toast from 'src/components/Snackbar'
 import { AudioTranscriptionConfiguration } from 'src/configurations/audioTranscription'
 import { AudioTranslationConfiguration } from 'src/configurations/audioTranslation'
 import { useMessages, useOpenAI } from 'src/hooks'
+import { showApiRequestErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 import { HashFile } from 'src/types/global'
@@ -34,9 +34,6 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
         temperature,
         language === '' ? undefined : language
       )
-      if (transcription.error) {
-        throw new Error(transcription.error.message)
-      }
 
       saveCommonAssistantMessage(
         // If `responseFormat` is `json` or `verbose_json`, the result is `transcription.data.text`.
@@ -44,9 +41,7 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
         transcription.data.text || (transcription.data as unknown as string)
       )
     } catch (error) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      toast.error(error)
+      showApiRequestErrorToast()
       rollbackMessage()
     } finally {
       setLoading(false)
@@ -71,9 +66,6 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
         responseFormat,
         temperature
       )
-      if (translation.error) {
-        throw new Error(translation.error.message)
-      }
 
       saveCommonAssistantMessage(
         // If `responseFormat` is `json` or `verbose_json`, the result is `translation.data.text`.
@@ -81,9 +73,7 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
         translation.data.text || (translation.data as unknown as string)
       )
     } catch (error) {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      toast.error(error)
+      showApiRequestErrorToast()
       rollbackMessage()
     } finally {
       setLoading(false)
