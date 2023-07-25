@@ -1,8 +1,8 @@
 import { CreateCompletionResponse } from 'openai'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import toast from 'src/components/Snackbar'
 import { TextCompletionConfiguration } from 'src/configurations/textCompletion'
 import { useMessages, useServices } from 'src/hooks'
+import { showApiRequestErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 
@@ -42,9 +42,6 @@ const useTextCompletion = (prompt: string) => {
         presence_penalty: presencePenalty
       })
       const completion: CreateCompletionResponse = await response.json()
-      if (completion.error) {
-        throw new Error(completion.error.message)
-      }
 
       const preResponseText = preResponse.checked ? preResponse.content : ''
       const postResponseText = postResponse.checked ? postResponse.content : ''
@@ -53,7 +50,7 @@ const useTextCompletion = (prompt: string) => {
         preResponseText + (completion.choices[0].text || '') + postResponseText
       )
     } catch (error) {
-      toast.error(error)
+      showApiRequestErrorToast()
       rollbackMessage()
     } finally {
       setLoading(false)

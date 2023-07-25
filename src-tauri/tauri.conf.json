@@ -8,7 +8,7 @@
   },
   "package": {
     "productName": "Hyper Chat",
-    "version": "1.0.1"
+    "version": "1.0.3"
   },
   "tauri": {
     "allowlist": {

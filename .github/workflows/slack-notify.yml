@@ -1,5 +1,5 @@
 on: [push, pull_request]
-name: Slack Notification on Pushing or Pull Requesting
+name: slack-notification
 jobs:
   slackNotification:
     name: Slack Notification when Pushing
@@ -14,4 +14,4 @@ jobs:
           SLACK_TITLE: '${{ github.actor }} is ${{ github.event_name }}ing the ${{ github.ref }} to ${{ github.repository }}.'
           SLACK_FOOTER: 'Powered by Yancey Inc. and its affiliates.'
           SLACK_COLOR: ${{ job.status }}
-          SLACK_MESSAGE: 'Commit: ${{ github.event.head_commit.message }}.' 
+          SLACK_MESSAGE: 'Commit: ${{ github.event.head_commit.message }}.'

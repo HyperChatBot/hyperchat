@@ -1,9 +1,9 @@
 import { DateTime } from 'luxon'
 import { ImagesResponse } from 'openai'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import toast from 'src/components/Snackbar'
 import { ImageGenerationConfiguration } from 'src/configurations/imageGeneration'
 import { useMessages, useServices } from 'src/hooks'
+import { showApiRequestErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 import { AzureImageGeneration } from 'src/types/azure'
@@ -34,17 +34,14 @@ const useImageGeneration = (prompt: string) => {
         response_format: responseFormat
       })
       const image = (await response.json()) as ImagesResponse
-      if (image.error) {
-        throw new Error(image.error.message)
-      }
 
       const content = image.data
         .map((val, key) => `![${prompt}-${key}](${val.url})\n`)
         .join('')
 
       saveCommonAssistantMessage(content)
-    } catch (error) {
-      toast.error(error)
+    } catch {
+      showApiRequestErrorToast()
       rollbackMessage()
     } finally {
       setLoading(false)
@@ -101,8 +98,8 @@ const useImageGeneration = (prompt: string) => {
       )}**, please download as soon as possible.)`
 
       saveCommonAssistantMessage(content)
-    } catch (error) {
-      toast.error(error.message)
+    } catch {
+      showApiRequestErrorToast()
       rollbackMessage()
     } finally {
       setLoading(false)
