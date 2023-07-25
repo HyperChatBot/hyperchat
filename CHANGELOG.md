@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/HyperChatBot/hyperchat/compare/v1.0.1...v1.0.2) (2023-07-25)
+
+
+### Bug Fixes
+
+* show common toast if request error ([a6275ba](https://github.com/HyperChatBot/hyperchat/commit/a6275bab837697f44f9ad6743a46d70d1999e256))
+
 ## [1.0.1](https://github.com/HyperChatBot/hyperchat/compare/v1.0.0...v1.0.1) (2023-07-25)
 
 
