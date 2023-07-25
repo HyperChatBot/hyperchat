@@ -1,6 +1,6 @@
 name: cross-platform-release
 on:
-  push:
+  create:
     tags:
       - 'v*'
   workflow_dispatch:
