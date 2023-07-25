@@ -1,6 +1,6 @@
 [package]
 name = "hyperchat"
-version = "1.0.2"
+version = "1.0.3"
 description = "ChatGPT AI Bot."
 authors = ["Yancey Leo"]
 license = "MIT"
