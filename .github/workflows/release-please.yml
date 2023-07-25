@@ -17,7 +17,9 @@ jobs:
     steps:
       - uses: google-github-actions/release-please-action@v3
         with:
-          release-type: rust
+          release-type: node
           package-name: release-please-action
           extra-files: |
-            package.json
+            src-tauri/Cargo.toml
+            src-tauri/Cargo.lock
+            src-tauri/tauri.conf.json
