@@ -64,10 +64,6 @@ const useImageGeneration = (prompt: string) => {
         size
       })
 
-      if (submission.status !== 200) {
-        throw new Error('Request image generation error.')
-      }
-
       const operation_location = submission.headers.get('Operation-Location')
       if (!operation_location) throw new Error('No Operation Location found.')
       let retry_after = Number(submission.headers.get('Retry-after')) * 1000
