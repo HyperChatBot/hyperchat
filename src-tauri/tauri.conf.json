@@ -43,7 +43,7 @@
       "targets": "all"
     },
     "security": {
-      "csp": "default-src 'self'; img-src 'self' asset: https://asset.localhost; style-src 'self' 'unsafe-inline'; connect-src *"
+      "csp": "default-src 'self'; img-src * 'self' data: https: asset: https://asset.localhost; style-src 'self' 'unsafe-inline'; connect-src *  asset: https://asset.localhost"
     },
     "updater": {
       "active": true,
