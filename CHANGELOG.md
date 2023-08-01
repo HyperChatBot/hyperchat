@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.4](https://github.com/HyperChatBot/hyperchat/compare/v1.0.3...v1.0.4) (2023-08-01)
+
+
+### Bug Fixes
+
+* allow local and azure assets in csp ([f7de69c](https://github.com/HyperChatBot/hyperchat/commit/f7de69c4e8e4b79289d540b90e1e90925c2250c9))
+* azure image generation should return 202 status code for continuous request ([fa6ac62](https://github.com/HyperChatBot/hyperchat/commit/fa6ac6271d7e8b6894b98e7fd561a5576e6eb11a))
+* reset the value of input:type=file when the request finished ([6534f98](https://github.com/HyperChatBot/hyperchat/commit/6534f9880cef375a598ebd3bfad6acf884db0115))
+
 ## [1.0.3](https://github.com/HyperChatBot/hyperchat/compare/v1.0.2...v1.0.3) (2023-07-25)
 
 
