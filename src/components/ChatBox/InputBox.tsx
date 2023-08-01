@@ -43,6 +43,10 @@ const InputBox: FC = () => {
       textareaRef.current.blur()
       textareaRef.current.value = ''
     }
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
   }
 
   // Prompt is optional in audio products.
