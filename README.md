@@ -3,21 +3,58 @@
 ![chat-completion](./screenshots/chat-completion.png)
 
 [![CodeQL](https://github.com/HyperChatBot/hyperchat/actions/workflows/github-code-scanning/codeql/badge.svg?branch=master)](https://github.com/HyperChatBot/hyperchat/actions/workflows/github-code-scanning/codeql)
-[![Release](https://github.com/HyperChatBot/hyperchat/actions/workflows/cross-platform-build.yml/badge.svg)](https://github.com/HyperChatBot/hyperchat/actions/workflows/cross-platform-build.yml)
+[![Release](https://github.com/HyperChatBot/hyperchat/actions/workflows/cross-platform-release.yml/badge.svg)](https://github.com/HyperChatBot/hyperchat/actions/workflows/cross-platform-release.yml)
+[![Test](https://github.com/HyperChatBot/hyperchat/actions/workflows/cross-platform-test.yml/badge.svg)](https://github.com/HyperChatBot/hyperchat/actions/workflows/cross-platform-test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 ![Code Style](https://camo.githubusercontent.com/c83b8df34339bd302b7fd3fbb631f99ba25f87f8/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f636f64655f7374796c652d70726574746965722d6666363962342e737667)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-green.svg)](https://github.com/HyperChatBot/hyperchat/pulls)
 [![Node](https://img.shields.io/badge/Node.js-%3E%3D16.18.0-green.svg)](https://nodejs.org/en/)
-[![Node](https://img.shields.io/badge/Rust-%3E%3D1.68.0-orange.svg)](https://nodejs.org/en/)
-[![discord](https://img.shields.io/badge/contact-me-blue?logo=discord&logoColor=white)](https://discord.gg/sgEtbsKf)
+[![Rust](https://img.shields.io/badge/Rust-%3E%3D1.68.0-orange.svg)](https://nodejs.org/en/)
+[![Version](https://img.shields.io/badge/Version-v1.0.4-blue.svg)](https://nodejs.org/en/)
+[![Twitter](https://img.shields.io/badge/Twitter-Connect-brightgreen?logo=twitter)](https://twitter/YanceyOfficial)
 
 ## Introduction
 
 Hyper Chat is a high-performance cross-platform AI chat application for desktop that is compatible with both OpenAI and Azure OpenAI services' APIs. In addition, Hyper Chat also provides features such as Text Completion, Image Generation, Audio Transcription, and Audio Translation.
 
-## Recommended IDE Setup
+## To start using Hyper Chat
 
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+You can download Hyper Chat on our [Landing Page](https://hyperchat.yancey.app), or munual download on [GitHub Release](https://github.com/HyperChatBot/hyperchat/releases/).
+
+We always keep the dev tools(eg: Command + Option + I) open in the production environment. In Hyper Chat, everything is transparent and controllable.
+
+### macOS
+
+As Hyper Chat is not planning to be released on the App Store, you may encounter the following issue when you open it for the first time. Please follow the steps below to resolve it:
+
+![can't-be-oepn-in-macos](./screenshots/can't-be-oepn-in-macos.png)
+
+1. Move the Hyper Chat.app to the /Applications directory.
+2. Open your terminal App, execute the command `chmod +x /Applications/Hyper\ Chat.app/Contents/MacOS/Hyper\ Chat`.
+
+## To start developing Hyper Chat
+
+### Prerequisites
+
+We have chosen [Tauri](https://tauri.app/) as our cross-platform base. Please make sure that [Rust](https://www.rust-lang.org/) is installed on your system.
+
+Then, to install Tauri globally, please follow the tutorial on [create-tauri-app](https://github.com/tauri-apps/create-tauri-app). We recommend using `cargo install create-tauri-app`.
+
+Additionally, we use [React](https://react.dev/) + [Vite](https://vitejs.dev/) for rendering and packaging pages, so please install [Node.js](https://nodejs.org/en) and [pnpm](https://pnpm.io/) globally in advance.
+
+### Recommended IDE Setup
+
+- [VS Code](https://code.visualstudio.com/)
+- [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode)
+- [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- [Tailwind CSS IntelliSense](https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss)
+- [Eslint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+
+### Available Scripts
+
+- To start tauri development window, you can execute `cargo tauri dev`.
+- To build the bundle, you can execute `cargo tauri build`
 
 ## Contributing
 
@@ -34,6 +71,19 @@ Read our [contributing guide](./CONTRIBUTING.md) to learn about our development 
 ### Good Issues
 
 Please make sure to read the [Issue Reporting Checklist](./.github/ISSUE_TEMPLATE/bug_report.md) before opening an issue. Issues not conforming to the guidelines may be closed immediately.
+
+## Upgrade Plans
+
+We are continuously working to enhance Hyper Chat's capabilities and performance. Here are some of the features and upgrades that we plan to add in the future releases:
+
+- Support for Claude 2
+- Support for Bard
+- Improved Performance
+- Regular Model Updates
+
+## Discussions
+
+If you have any questions or feedback about Hyper Chat, please visit our [official discussion forum](https://github.com/orgs/HyperChatBot/discussions/71) to start a conversation with our team or other users. We are committed to making Hyper Chat the best possible chat application, and your feedback plays a crucial role in achieving this goal.
 
 ## Thanks
 
