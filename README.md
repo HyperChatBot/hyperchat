@@ -54,7 +54,7 @@ Additionally, we use [React](https://react.dev/) + [Vite](https://vitejs.dev/) f
 ### Available Scripts
 
 - To start tauri development window, you can execute `cargo tauri dev`.
-- To build the bundle, you can execute `cargo tauri build`
+- To build the bundle, you can execute `cargo tauri build`.
 
 ## Contributing
 
