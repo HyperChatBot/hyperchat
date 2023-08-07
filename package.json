@@ -53,7 +53,7 @@
     "@commitlint/config-conventional": "^17.6.7",
     "@tauri-apps/cli": "^1.4.0",
     "@types/luxon": "^3.3.1",
-    "@types/node": "^20.4.5",
+    "@types/node": "^20.4.8",
     "@types/react": "^18.2.18",
     "@types/react-dom": "^18.2.7",
     "@types/react-syntax-highlighter": "^15.5.7",
