@@ -32,7 +32,7 @@
     "formik": "^2.4.2",
     "immer": "^10.0.2",
     "js-tiktoken": "^1.0.7",
-    "luxon": "^3.3.0",
+    "luxon": "^3.4.0",
     "notistack": "^3.0.1",
     "openai": "^3.3.0",
     "react": "^18.2.0",
