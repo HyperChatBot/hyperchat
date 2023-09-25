@@ -71,7 +71,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.3",
-    "postcss": "^8.4.27",
+    "postcss": "^8.4.30",
     "postcss-import": "^15.1.0",
     "prettier": "^3.0.0",
     "prettier-plugin-organize-imports": "^3.2.3",
