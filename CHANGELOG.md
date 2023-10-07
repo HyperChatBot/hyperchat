@@ -1,3 +1,12 @@
+## [1.0.5](https://github.com/Hyper-Chat-Bot/hyperchat/compare/v1.0.4...v1.0.5) (2023-10-07)
+
+
+### Bug Fixes
+
+* uses DATE_MED instead DATE_FULL for the better visual experience ([686895d](https://github.com/Hyper-Chat-Bot/hyperchat/commit/686895d0a5629d19b5ac66c89d1d42c2fa60d97f))
+
+
+
 # Changelog
 
 ## [1.0.4](https://github.com/HyperChatBot/hyperchat/compare/v1.0.3...v1.0.4) (2023-08-01)
