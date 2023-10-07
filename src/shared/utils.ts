@@ -16,7 +16,7 @@ export const formatDate = (millis: number) => {
     }
   }
 
-  return { isSameDay: false, display: date.toLocaleString(DateTime.DATE_FULL) }
+  return { isSameDay: false, display: date.toLocaleString(DateTime.DATE_MED) }
 }
 
 export const generateHashName = (fileName: string) => {
