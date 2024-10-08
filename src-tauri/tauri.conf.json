@@ -2,60 +2,38 @@
   "build": {
     "beforeDevCommand": "pnpm dev",
     "beforeBuildCommand": "pnpm build",
-    "devPath": "http://localhost:1420",
-    "distDir": "../dist",
-    "withGlobalTauri": true
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:1420"
   },
-  "package": {
-    "productName": "Hyper Chat",
-    "version": "1.0.5"
+  "bundle": {
+    "active": true,
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "targets": "all",
+    "createUpdaterArtifacts": "v1Compatible"
   },
-  "tauri": {
-    "allowlist": {
-      "all": false,
-      "shell": {
-        "all": true,
-        "open": true
-      },
-      "fs": {
-        "scope": ["**"],
-        "all": true
-      },
-      "path": {
-        "all": true
-      },
-      "protocol": {
-        "all": true,
-        "asset": true,
-        "assetScope": ["**"]
-      }
-    },
-    "bundle": {
-      "active": true,
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ],
-      "identifier": "app.yancey.hyperchat",
-      "targets": "all"
-    },
-    "security": {
-      "csp": "default-src 'self'; img-src * 'self' data: https: asset: https://asset.localhost; style-src 'self' 'unsafe-inline'; connect-src *  asset: https://asset.localhost"
-    },
+  "productName": "Hyper Chat",
+  "mainBinaryName": "Hyper Chat",
+  "version": "1.0.5",
+  "identifier": "app.yancey.hyperchat",
+  "plugins": {
     "updater": {
-      "active": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQxREEzQTNDNjY5MjJENDcKUldSSExaSm1QRHJhMFFwQ3I5dWI4ZmJKNG9CSG1kVE90M3pHajZ5TWhCMUhaejJBbDNWNFVZbkgK",
       "endpoints": [
         "https://faas.yancey.app/api/updater/{{target}}/{{arch}}/{{current_version}}?code=PjS1zF7Vc1QMrJ80C3xJS1tqkGqH-pT4oNlPfkFBYt0YAzFupnB5tA=="
       ],
-      "dialog": true,
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQxREEzQTNDNjY5MjJENDcKUldSSExaSm1QRHJhMFFwQ3I5dWI4ZmJKNG9CSG1kVE90M3pHajZ5TWhCMUhaejJBbDNWNFVZbkgK",
       "windows": {
         "installMode": "passive"
       }
-    },
+    }
+  },
+  "app": {
+    "withGlobalTauri": true,
     "windows": [
       {
         "fullscreen": false,
@@ -66,6 +44,15 @@
         "minWidth": 1280,
         "minHeight": 900
       }
-    ]
+    ],
+    "security": {
+      "assetProtocol": {
+        "scope": [
+          "**"
+        ],
+        "enable": true
+      },
+      "csp": "default-src 'self'; img-src * 'self' data: https: asset: https://asset.localhost; style-src 'self' 'unsafe-inline'; connect-src ipc: http://ipc.localhost *  asset: https://asset.localhost"
+    }
   }
 }

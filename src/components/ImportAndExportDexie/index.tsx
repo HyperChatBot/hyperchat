@@ -3,7 +3,7 @@ import {
   DocumentArrowUpIcon
 } from '@heroicons/react/24/outline'
 import Button from '@mui/material/Button'
-import { BaseDirectory, writeTextFile } from '@tauri-apps/api/fs'
+import { BaseDirectory, writeTextFile } from '@tauri-apps/plugin-fs'
 import Dexie from 'dexie'
 import { exportDB, importDB } from 'dexie-export-import'
 import { ChangeEvent, FC, useRef } from 'react'

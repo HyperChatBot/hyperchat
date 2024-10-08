@@ -1,18 +1,13 @@
-import {
-  BaseDirectory,
-  createDir,
-  exists,
-  writeBinaryFile
-} from '@tauri-apps/api/fs'
+import { convertFileSrc } from '@tauri-apps/api/core'
 import { appDataDir, join } from '@tauri-apps/api/path'
-import { convertFileSrc } from '@tauri-apps/api/tauri'
+import { BaseDirectory, exists, mkdir, writeFile } from '@tauri-apps/plugin-fs'
 import { generateHashName } from 'src/shared/utils'
 
 const useAppData = () => {
   const transformFilenameToSrc = async (fileName: string) => {
     try {
       const isExist = await exists(`data/${fileName}`, {
-        dir: BaseDirectory.AppData
+        baseDir: BaseDirectory.AppData
       })
 
       if (isExist) {
@@ -24,14 +19,16 @@ const useAppData = () => {
       } else {
         throw new Error('')
       }
-    } catch {}
+    } catch {
+      throw new Error('')
+    }
   }
 
   const saveFileToAppDataDir = async (file: File) => {
     const hashName = generateHashName(file.name)
-    await createDir('data', { dir: BaseDirectory.AppData, recursive: true })
-    await writeBinaryFile(`data/${hashName}`, await file.arrayBuffer(), {
-      dir: BaseDirectory.AppData
+    await mkdir('data', { baseDir: BaseDirectory.AppData, recursive: true })
+    await writeFile(`data/${hashName}`, await file.arrayBuffer() as Uint8Array, {
+      baseDir: BaseDirectory.AppData
     })
     return hashName
   }
