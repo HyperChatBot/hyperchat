@@ -6,10 +6,10 @@
 [![Release](https://github.com/HyperChatBot/hyperchat/actions/workflows/cross-platform-release.yml/badge.svg)](https://github.com/HyperChatBot/hyperchat/actions/workflows/cross-platform-release.yml)
 [![Test](https://github.com/HyperChatBot/hyperchat/actions/workflows/cross-platform-test.yml/badge.svg)](https://github.com/HyperChatBot/hyperchat/actions/workflows/cross-platform-test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-![Code Style](https://camo.githubusercontent.com/c83b8df34339bd302b7fd3fbb631f99ba25f87f8/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f636f64655f7374796c652d70726574746965722d6666363962342e737667)
+[![Code Style](https://img.shields.io/badge/code%20style-prettier-green)](https://prettier.io/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-green.svg)](https://github.com/HyperChatBot/hyperchat/pulls)
-[![Node](https://img.shields.io/badge/Node.js-%3E%3D16.18.0-green.svg)](https://nodejs.org/en/)
-[![Rust](https://img.shields.io/badge/Rust-%3E%3D1.68.0-orange.svg)](https://nodejs.org/en/)
+[![Node](https://img.shields.io/badge/Node.js-%3E%3D18.19.0-green.svg)](https://nodejs.org/en/)
+[![Rust](https://img.shields.io/badge/Rust-%3E%3D1.81.0-orange.svg)](https://nodejs.org/en/)
 [![Version](https://img.shields.io/badge/Version-v1.0.5-blue.svg)](https://nodejs.org/en/)
 [![Twitter](https://img.shields.io/badge/Twitter-Connect-brightgreen?logo=twitter)](https://twitter/YanceyOfficial)
 
