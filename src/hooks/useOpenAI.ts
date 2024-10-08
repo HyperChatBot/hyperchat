@@ -1,4 +1,4 @@
-import { Configuration, OpenAIApi } from 'openai'
+import {  OpenAI } from 'openai'
 import { useSettings } from 'src/hooks'
 
 class CustomFormData extends FormData {
@@ -10,13 +10,12 @@ class CustomFormData extends FormData {
 const useOpenAI = () => {
   const { settings } = useSettings()
 
-  const configuration = new Configuration({
+  const openai = new OpenAI({
     apiKey: settings?.openaiSecretKey,
     organization: settings?.openaiOrganizationId,
-    formDataCtor: CustomFormData
+    dangerouslyAllowBrowser: true
   })
 
-  const openai = new OpenAIApi(configuration)
   return openai
 }
 
