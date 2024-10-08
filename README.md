@@ -77,10 +77,9 @@ Please make sure to read the [Issue Reporting Checklist](./.github/ISSUE_TEMPLAT
 We are continuously working to enhance Hyper Chat's capabilities and performance. Here are some of the features and upgrades that we plan to add in the future releases:
 
 - Support function call and plugin
-- Support for Claude 2
-- Support for Bard
-- Improved Performance
-- Regular Model Updates
+- Support for Claude, ‎Gemini, Llama and so on
+- Improve Performance
+- Regular model version updates
 
 ## Discussions
 
