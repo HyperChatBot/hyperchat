@@ -1,4 +1,4 @@
-import { CreateCompletionResponse } from 'openai'
+import { Completion } from 'openai/resources'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { TextCompletionConfiguration } from 'src/configurations/textCompletion'
 import { useMessages, useServices } from 'src/hooks'
@@ -41,7 +41,7 @@ const useTextCompletion = (prompt: string) => {
         frequency_penalty: frequencyPenalty,
         presence_penalty: presencePenalty
       })
-      const completion: CreateCompletionResponse = await response.json()
+      const completion: Completion = await response.json()
 
       const preResponseText = preResponse.checked ? preResponse.content : ''
       const postResponseText = postResponse.checked ? postResponse.content : ''

@@ -1,4 +1,4 @@
-import { CreateChatCompletionRequest } from 'openai'
+import { ChatCompletionCreateParams } from 'openai/resources'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import toast from 'src/components/Snackbar'
 import { ChatConfiguration, models } from 'src/configurations/chatCompletion'
@@ -46,7 +46,7 @@ const useChatCompletion = (prompt: string) => {
       )
       return
     }
-    const context: CreateChatCompletionRequest['messages'] = []
+    const context: ChatCompletionCreateParams['messages'] = []
     currConversation.messages
       .slice()
       .reverse()

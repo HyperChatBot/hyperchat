@@ -19,7 +19,7 @@ const ImportAndExportDexie: FC = () => {
       const text = await blob.text()
       const filename = `dexie-export-${Date.now()}.json`
       await writeTextFile(filename, text, {
-        dir: BaseDirectory.Download
+        baseDir: BaseDirectory.Download
       })
 
       toast.success(

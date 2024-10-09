@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { ImagesResponse } from 'openai'
+import { ImagesResponse } from 'openai/resources'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { ImageGenerationConfiguration } from 'src/configurations/imageGeneration'
 import { useMessages, useServices } from 'src/hooks'

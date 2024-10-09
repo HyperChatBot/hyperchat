@@ -67,13 +67,15 @@ const useSettings = () => {
       }
 
       if (currSettings.assistantAvatarFilename) {
-        const src = await transformFilenameToSrc(
-          currSettings.assistantAvatarFilename
-        )
+        try {
+          const src = await transformFilenameToSrc(
+            currSettings.assistantAvatarFilename
+          )
 
-        if (src) {
-          setSettings({ ...currSettings, assistantAvatarFilename: src })
-        } else {
+          if (src) {
+            setSettings({ ...currSettings, assistantAvatarFilename: src })
+          }
+        } catch {
           // if transform is error
           setSettings(currSettings)
         }
