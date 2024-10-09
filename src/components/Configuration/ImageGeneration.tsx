@@ -105,9 +105,7 @@ const Configuration: FC = () => {
                   {...formik.getFieldProps('size')}
                 >
                   {sizes.map((size) => (
-                    <MenuItem key={size} value={size}>
-                      {size}
-                    </MenuItem>
+                    <MenuItem key={size}>{size}</MenuItem>
                   ))}
                 </Select>
                 <FormHelperText>
@@ -126,9 +124,7 @@ const Configuration: FC = () => {
                   {...formik.getFieldProps('responseFormat')}
                 >
                   {responseFormats.map((responseFormat) => (
-                    <MenuItem key={responseFormat} value={responseFormat}>
-                      {responseFormat}
-                    </MenuItem>
+                    <MenuItem key={responseFormat}>{responseFormat}</MenuItem>
                   ))}
                 </Select>
                 <FormHelperText>

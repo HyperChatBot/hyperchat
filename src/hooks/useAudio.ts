@@ -1,3 +1,5 @@
+import { AudioResponseFormat } from 'openai/resources'
+import { Uploadable } from 'openai/src/uploads'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { AudioTranscriptionConfiguration } from 'src/configurations/audioTranscription'
 import { AudioTranslationConfiguration } from 'src/configurations/audioTranslation'
@@ -26,20 +28,16 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
       setLoading(true)
 
       // TODO: Uses pure fetch.
-      const transcription = await openai.createTranscription(
-        hashFile.file,
+      const transcription = await openai.audio.transcriptions.create({
+        file: hashFile.file as Uploadable,
         model,
         prompt,
-        responseFormat,
+        response_format: responseFormat as AudioResponseFormat,
         temperature,
-        language === '' ? undefined : language
-      )
+        language: language === '' ? undefined : language
+      })
 
-      saveCommonAssistantMessage(
-        // If `responseFormat` is `json` or `verbose_json`, the result is `transcription.data.text`.
-        // If `responseFormat` is `text`, `vtt` `or `srt`, the result is `transcription.data`.
-        transcription.data.text || (transcription.data as unknown as string)
-      )
+      saveCommonAssistantMessage(transcription.text)
     } catch (error) {
       showApiRequestErrorToast()
       rollbackMessage()
@@ -59,18 +57,16 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
       setLoading(true)
 
       // TODO: Uses pure fetch.
-      const translation = await openai.createTranslation(
-        hashFile.file,
+      const translation = await openai.audio.translations.create({
+        file: hashFile.file,
         model,
         prompt,
-        responseFormat,
+        response_format: responseFormat as AudioResponseFormat,
         temperature
-      )
+      })
 
       saveCommonAssistantMessage(
-        // If `responseFormat` is `json` or `verbose_json`, the result is `translation.data.text`.
-        // If `responseFormat` is `text`, `vtt` `or `srt`, the result is `translation.data`.
-        translation.data.text || (translation.data as unknown as string)
+        translation.text
       )
     } catch (error) {
       showApiRequestErrorToast()

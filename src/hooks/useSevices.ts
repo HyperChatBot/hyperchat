@@ -1,8 +1,8 @@
 import {
-  CreateChatCompletionRequest,
-  CreateCompletionRequest,
-  CreateImageRequest
-} from 'openai'
+  ChatCompletionCreateParams,
+  CompletionCreateParams,
+  ImageGenerateParams,
+} from 'openai/resources'
 import {
   OPENAI_CHAT_COMPLETION_URL,
   OPENAI_IMAGE_GENERATION_URL,
@@ -37,28 +37,28 @@ const useServices = () => {
 
   const company = {
     [Companies.Azure]: {
-      [Products.ChatCompletion]: (body: CreateChatCompletionRequest) =>
+      [Products.ChatCompletion]: (body: ChatCompletionCreateParams) =>
         _fetch(
           `${settings?.azureEndPoint}/openai/deployments/${settings?.azureDeploymentName}/chat/completions?api-version=2023-03-15-preview`,
           body
         ),
-      [Products.TextCompletion]: (body: CreateCompletionRequest) =>
+      [Products.TextCompletion]: (body: CompletionCreateParams) =>
         _fetch(
           `${settings?.azureEndPoint}/openai/deployments/${settings?.azureDeploymentName}/completions?api-version=2022-12-01`,
           body
         ),
-      [Products.ImageGeneration]: (body: CreateImageRequest) =>
+      [Products.ImageGeneration]: (body: ImageGenerateParams) =>
         _fetch(
           `${settings?.azureEndPoint}/openai/images/generations:submit?api-version=2023-06-01-preview`,
           body
         )
     },
     [Companies.OpenAI]: {
-      [Products.ChatCompletion]: (body: CreateChatCompletionRequest) =>
+      [Products.ChatCompletion]: (body: ChatCompletionCreateParams) =>
         _fetch(OPENAI_CHAT_COMPLETION_URL, body),
-      [Products.TextCompletion]: (body: CreateCompletionRequest) =>
+      [Products.TextCompletion]: (body: CompletionCreateParams) =>
         _fetch(OPENAI_TEXT_COMPLETION_URL, body),
-      [Products.ImageGeneration]: (body: CreateImageRequest) =>
+      [Products.ImageGeneration]: (body: ImageGenerateParams) =>
         _fetch(OPENAI_IMAGE_GENERATION_URL, body)
     }
   }

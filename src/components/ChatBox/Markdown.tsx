@@ -3,7 +3,7 @@ import { FC, memo } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark as mdCodeTheme } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import rehypeMathjax from 'rehype-mathjax'
+// import rehypeMathjax from 'rehype-mathjax'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 
@@ -15,11 +15,11 @@ const Markdown: FC<Props> = ({ raw }) => {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm, remarkMath]}
-      rehypePlugins={[rehypeMathjax]}
+      // rehypePlugins={[rehypeMathjax]}
       components={{
-        code({ inline, className, children, ...props }) {
+        code({ className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || '')
-          return !inline ? (
+          return (
             <SyntaxHighlighter
               style={mdCodeTheme}
               // FIXME: Azure OpenAI Service does not return the language of block code.
@@ -30,11 +30,11 @@ const Markdown: FC<Props> = ({ raw }) => {
             >
               {String(children).replace(/\n$/, '')}
             </SyntaxHighlighter>
-          ) : (
-            <code className={classNames('font-semibold', className)}>
-              `{children}`
-            </code>
           )
+
+          // <code className={classNames('font-semibold', className)}>
+          //   `{children}`
+          // </code>
         },
         p({ className, children, ...props }) {
           return (
@@ -61,34 +61,31 @@ const Markdown: FC<Props> = ({ raw }) => {
           )
         },
         ol({ className, children, ...props }) {
-          const _props = { ...props, ordered: props.ordered.toString() }
           return (
             <ol
               className={classNames('mb-3 list-disc pl-3 last:mb-0', className)}
-              {..._props}
+              {...props}
             >
               {children}
             </ol>
           )
         },
         ul({ className, children, ...props }) {
-          const _props = { ...props, ordered: props.ordered.toString() }
           return (
             <ul
               className={classNames(
                 'mb-3 list-decimal pl-3 last:mb-0',
                 className
               )}
-              {..._props}
+              {...props}
             >
               {children}
             </ul>
           )
         },
         li({ className, children, ...props }) {
-          const _props = { ...props, ordered: props.ordered.toString() }
           return (
-            <li className={classNames('mb-3 last:mb-0', className)} {..._props}>
+            <li className={classNames('mb-3 last:mb-0', className)} {...props}>
               {children}
             </li>
           )

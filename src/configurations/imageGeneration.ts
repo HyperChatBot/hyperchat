@@ -1,7 +1,4 @@
-import {
-  CreateImageRequestResponseFormatEnum,
-  CreateImageRequestSizeEnum
-} from 'openai'
+import { ImageGenerateParams } from 'openai/resources'
 
 export interface ImageGenerationConfiguration {
   n: number
@@ -9,13 +6,13 @@ export interface ImageGenerationConfiguration {
   responseFormat: (typeof responseFormats)[number]
 }
 
-export const sizes: CreateImageRequestSizeEnum[] = [
+export const sizes: ImageGenerateParams['size'][] = [
   '256x256',
   '512x512',
   '1024x1024'
 ]
 
-export const responseFormats: CreateImageRequestResponseFormatEnum[] = [
+export const responseFormats: ImageGenerateParams['response_format'][] = [
   'url',
   'b64_json'
 ]
