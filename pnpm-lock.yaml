@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@azure/openai':
+    specifier: 1.0.0-beta.12
+    version: 1.0.0-beta.12
   '@emoji-mart/data':
     specifier: ^1.2.1
     version: 1.2.1
@@ -224,6 +227,96 @@ packages:
       bidi-js: 1.0.3
       css-tree: 2.3.1
       is-potential-custom-element-name: 1.0.1
+    dev: false
+
+  /@azure-rest/core-client@1.4.0:
+    resolution: {integrity: sha512-ozTDPBVUDR5eOnMIwhggbnVmOrka4fXCs8n8mvUo4WLLc38kki6bAOByDoVZZPz/pZy2jMt2kwfpvy/UjALj6w==}
+    engines: {node: '>=18.0.0'}
+    dependencies:
+      '@azure/abort-controller': 2.1.2
+      '@azure/core-auth': 1.8.0
+      '@azure/core-rest-pipeline': 1.17.0
+      '@azure/core-tracing': 1.2.0
+      '@azure/core-util': 1.10.0
+      tslib: 2.7.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
+  /@azure/abort-controller@2.1.2:
+    resolution: {integrity: sha512-nBrLsEWm4J2u5LpAPjxADTlq3trDgVZZXHNKabeXZtpq3d3AbN/KGO82R87rdDz5/lYB024rtEf10/q0urNgsA==}
+    engines: {node: '>=18.0.0'}
+    dependencies:
+      tslib: 2.7.0
+    dev: false
+
+  /@azure/core-auth@1.8.0:
+    resolution: {integrity: sha512-YvFMowkXzLbXNM11yZtVLhUCmuG0ex7JKOH366ipjmHBhL3vpDcPAeWF+jf0X+jVXwFqo3UhsWUq4kH0ZPdu/g==}
+    engines: {node: '>=18.0.0'}
+    dependencies:
+      '@azure/abort-controller': 2.1.2
+      '@azure/core-util': 1.10.0
+      tslib: 2.7.0
+    dev: false
+
+  /@azure/core-rest-pipeline@1.17.0:
+    resolution: {integrity: sha512-62Vv8nC+uPId3j86XJ0WI+sBf0jlqTqPUFCBNrGtlaUeQUIXWV/D8GE5A1d+Qx8H7OQojn2WguC8kChD6v0shA==}
+    engines: {node: '>=18.0.0'}
+    dependencies:
+      '@azure/abort-controller': 2.1.2
+      '@azure/core-auth': 1.8.0
+      '@azure/core-tracing': 1.2.0
+      '@azure/core-util': 1.10.0
+      '@azure/logger': 1.1.4
+      http-proxy-agent: 7.0.2
+      https-proxy-agent: 7.0.5
+      tslib: 2.7.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
+  /@azure/core-sse@2.1.3:
+    resolution: {integrity: sha512-KSSdIKy8kvWCpYr8Hzpu22j3wcXsVTYE0IlgmI1T/aHvBDsLgV91y90UTfVWnuiuApRLCCVC4gS09ApBGOmYQA==}
+    engines: {node: '>=18.0.0'}
+    dependencies:
+      tslib: 2.7.0
+    dev: false
+
+  /@azure/core-tracing@1.2.0:
+    resolution: {integrity: sha512-UKTiEJPkWcESPYJz3X5uKRYyOcJD+4nYph+KpfdPRnQJVrZfk0KJgdnaAWKfhsBBtAf/D58Az4AvCJEmWgIBAg==}
+    engines: {node: '>=18.0.0'}
+    dependencies:
+      tslib: 2.7.0
+    dev: false
+
+  /@azure/core-util@1.10.0:
+    resolution: {integrity: sha512-dqLWQsh9Nro1YQU+405POVtXnwrIVqPyfUzc4zXCbThTg7+vNNaiMkwbX9AMXKyoFYFClxmB3s25ZFr3+jZkww==}
+    engines: {node: '>=18.0.0'}
+    dependencies:
+      '@azure/abort-controller': 2.1.2
+      tslib: 2.7.0
+    dev: false
+
+  /@azure/logger@1.1.4:
+    resolution: {integrity: sha512-4IXXzcCdLdlXuCG+8UKEwLA1T1NHqUfanhXYHiQTn+6sfWCZXduqbtXDGceg3Ce5QxTGo7EqmbV6Bi+aqKuClQ==}
+    engines: {node: '>=18.0.0'}
+    dependencies:
+      tslib: 2.7.0
+    dev: false
+
+  /@azure/openai@1.0.0-beta.12:
+    resolution: {integrity: sha512-qKblxr6oVa8GsyNzY+/Ub9VmEsPYKhBrUrPaNEQiM+qrxnBPVm9kaeqGFFb/U78Q2zOabmhF9ctYt3xBW0nWnQ==}
+    engines: {node: '>=18.0.0'}
+    dependencies:
+      '@azure-rest/core-client': 1.4.0
+      '@azure/core-auth': 1.8.0
+      '@azure/core-rest-pipeline': 1.17.0
+      '@azure/core-sse': 2.1.3
+      '@azure/core-util': 1.10.0
+      '@azure/logger': 1.1.4
+      tslib: 2.7.0
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   /@babel/code-frame@7.25.7:

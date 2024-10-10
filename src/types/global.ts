@@ -14,11 +14,11 @@ export enum Companies {
 }
 
 export enum Products {
-  ChatCompletion = 'chat_completion',
-  TextCompletion = 'text_completion',
-  AudioTranscription = 'audio_transcription',
-  AudioTranslation = 'audio_translation',
-  ImageGeneration = 'image_generation'
+  ChatCompletion = 'chatCompletion',
+  Completion = 'completion',
+  AudioTranscription = 'audioTranscription',
+  AudioTranslation = 'audioTranslation',
+  ImageGeneration = 'imageGeneration'
 }
 
 export interface AlertError {

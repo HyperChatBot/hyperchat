@@ -27,9 +27,13 @@ const useAppData = () => {
   const saveFileToAppDataDir = async (file: File) => {
     const hashName = generateHashName(file.name)
     await mkdir('data', { baseDir: BaseDirectory.AppData, recursive: true })
-    await writeFile(`data/${hashName}`, await file.arrayBuffer() as Uint8Array, {
-      baseDir: BaseDirectory.AppData
-    })
+    await writeFile(
+      `data/${hashName}`,
+      (await file.arrayBuffer()) as Uint8Array,
+      {
+        baseDir: BaseDirectory.AppData
+      }
+    )
     return hashName
   }
 

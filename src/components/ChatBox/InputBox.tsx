@@ -106,7 +106,7 @@ const InputBox: FC = () => {
         <textarea
           ref={textareaRef}
           className={classNames(
-            'w-full resize-none rounded-md border border-black/10 bg-white px-4 py-3 pr-10 text-sm text-black  outline-none dark:border-gray-900/50 dark:bg-gray-700 dark:text-white',
+            'w-full resize-none rounded-md border border-black/10 bg-white px-4 py-3 pr-10 text-sm text-black outline-none dark:border-gray-900/50 dark:bg-gray-700 dark:text-white',
             { 'pr-24': isAudioProduct(currProduct) }
           )}
           style={{

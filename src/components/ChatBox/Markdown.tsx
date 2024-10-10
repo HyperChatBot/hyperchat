@@ -3,7 +3,7 @@ import { FC, memo } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark as mdCodeTheme } from 'react-syntax-highlighter/dist/esm/styles/prism'
-// import rehypeMathjax from 'rehype-mathjax'
+import rehypeMathjax from 'rehype-mathjax'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 
@@ -15,26 +15,24 @@ const Markdown: FC<Props> = ({ raw }) => {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm, remarkMath]}
-      // rehypePlugins={[rehypeMathjax]}
+      rehypePlugins={[rehypeMathjax]}
       components={{
         code({ className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || '')
-          return (
+          return match ? (
             <SyntaxHighlighter
               style={mdCodeTheme}
-              // FIXME: Azure OpenAI Service does not return the language of block code.
-              // Use `ts` as the temporary default.
-              language={match ? match[1] : 'ts'}
+              language={match[1]}
               PreTag="div"
               customStyle={{ borderRadius: 0, margin: 0 }}
             >
               {String(children).replace(/\n$/, '')}
             </SyntaxHighlighter>
+          ) : (
+            <code className={classNames('font-semibold', className)}>
+              `{children}`
+            </code>
           )
-
-          // <code className={classNames('font-semibold', className)}>
-          //   `{children}`
-          // </code>
         },
         p({ className, children, ...props }) {
           return (

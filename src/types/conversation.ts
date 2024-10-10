@@ -1,8 +1,8 @@
 import { AudioTranscriptionConfiguration } from '../configurations/audioTranscription'
 import { AudioTranslationConfiguration } from '../configurations/audioTranslation'
 import { ChatConfiguration } from '../configurations/chatCompletion'
+import { CompletionConfiguration } from '../configurations/completion'
 import { ImageGenerationConfiguration } from '../configurations/imageGeneration'
-import { TextCompletionConfiguration } from '../configurations/textCompletion'
 import { Products } from './global'
 
 export enum Roles {
@@ -33,5 +33,5 @@ export interface Conversation {
     | ImageGenerationConfiguration
     | AudioTranscriptionConfiguration
     | AudioTranslationConfiguration
-    | TextCompletionConfiguration
+    | CompletionConfiguration
 }
