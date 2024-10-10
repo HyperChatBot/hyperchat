@@ -10,7 +10,7 @@ import { Conversation } from 'src/types/conversation'
 import { v4 } from 'uuid'
 import Divider from '../Divider'
 import { OutlinePlusIcon } from '../Icons'
-import toast from '../Snackbar'
+import Toast from '../Snackbar'
 import ConversationItem from './ConversationItem'
 import ChatEmpty from './EmptyItem'
 
@@ -28,7 +28,7 @@ const ConversationList: FC<Props> = ({ conversations }) => {
 
   const addConversation = async () => {
     if (loading) {
-      toast.warning(BAN_ACTIVE_HINT)
+      Toast.warning(BAN_ACTIVE_HINT)
       return
     }
 
@@ -49,7 +49,7 @@ const ConversationList: FC<Props> = ({ conversations }) => {
 
   const switchConversation = (conversation: Conversation) => {
     if (loading) {
-      toast.warning(BAN_ACTIVE_HINT)
+      Toast.warning(BAN_ACTIVE_HINT)
       return
     }
     setCurrConversation(conversation)

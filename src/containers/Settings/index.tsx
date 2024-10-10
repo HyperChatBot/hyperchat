@@ -18,7 +18,7 @@ import { ChangeEvent, FC } from 'react'
 import ChatGPTImg from 'src/assets/chatbot.png'
 import { SolidSettingsBrightnessIcon } from 'src/components/Icons'
 import ImportAndExportDexie from 'src/components/ImportAndExportDexie'
-import toast from 'src/components/Snackbar'
+import Toast from 'src/components/Snackbar'
 import { useAppData, useSettings, useTheme } from 'src/hooks'
 import { Companies, ThemeMode } from 'src/types/global'
 import { Settings as SettingsParams } from 'src/types/settings'
@@ -36,7 +36,7 @@ const Settings: FC = () => {
       const filename = await saveFileToAppDataDir(file)
       if (filename) {
         updateSettings({ ...settings, assistantAvatarFilename: filename })
-        toast.success('Assistant avatar updated successfully.')
+        Toast.success('Assistant avatar updated successfully.')
       }
     }
   }

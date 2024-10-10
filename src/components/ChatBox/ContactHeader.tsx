@@ -21,7 +21,7 @@ import { configurationDrawerVisibleState, onlineState } from 'src/stores/global'
 import { EmojiPickerProps } from 'src/types/global'
 import Avatar from '../Avatar'
 import EmojiPicker from '../EmojiPicker'
-import toast from '../Snackbar'
+import Toast from '../Snackbar'
 
 const ContactHeader: FC = () => {
   const loading = useRecoilValue(loadingState)
@@ -51,7 +51,7 @@ const ContactHeader: FC = () => {
 
   const openAvatarPicker = () => {
     if (loading) {
-      toast.warning(BAN_ACTIVE_HINT)
+      Toast.warning(BAN_ACTIVE_HINT)
       return
     }
     setAvatarPickerVisible(true)
@@ -59,7 +59,7 @@ const ContactHeader: FC = () => {
 
   const openSummaryInput = () => {
     if (loading) {
-      toast.warning(BAN_ACTIVE_HINT)
+      Toast.warning(BAN_ACTIVE_HINT)
       return
     }
     if (!currConversation) return
@@ -69,7 +69,7 @@ const ContactHeader: FC = () => {
 
   const openConfigurationDrawer = () => {
     if (loading) {
-      toast.warning(BAN_ACTIVE_HINT)
+      Toast.warning(BAN_ACTIVE_HINT)
       return
     }
     setConfigurationDrawerVisible(true)
@@ -110,7 +110,7 @@ const ContactHeader: FC = () => {
 
   const deleteCurrConversation = async () => {
     if (loading) {
-      toast.warning(BAN_ACTIVE_HINT)
+      Toast.warning(BAN_ACTIVE_HINT)
       return
     }
     if (currConversation) {

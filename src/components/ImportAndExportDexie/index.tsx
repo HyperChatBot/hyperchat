@@ -7,7 +7,7 @@ import { BaseDirectory, writeTextFile } from '@tauri-apps/plugin-fs'
 import Dexie from 'dexie'
 import { exportDB, importDB } from 'dexie-export-import'
 import { ChangeEvent, FC, useRef } from 'react'
-import toast from '../Snackbar'
+import Toast from '../Snackbar'
 
 const ImportAndExportDexie: FC = () => {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -22,13 +22,13 @@ const ImportAndExportDexie: FC = () => {
         baseDir: BaseDirectory.Download
       })
 
-      toast.success(
+      Toast.success(
         `The ${filename} has been saved in your local Download Directory.`
       )
     } catch (e) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      toast.error(e.toString())
+      Toast.error(e.toString())
     }
   }
 
@@ -42,7 +42,7 @@ const ImportAndExportDexie: FC = () => {
     } catch (e: unknown) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      toast.error(e.message)
+      Toast.error(e.message)
     } finally {
       if (inputRef.current) {
         inputRef.current.value = ''

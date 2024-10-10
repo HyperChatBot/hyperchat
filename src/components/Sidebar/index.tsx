@@ -14,7 +14,7 @@ import { currProductState } from 'src/stores/global'
 import { Companies, Products } from 'src/types/global'
 import Avatar from '../Avatar'
 import Divider from '../Divider'
-import toast from '../Snackbar'
+import Toast from '../Snackbar'
 import items, { iconClassName } from './Items'
 
 const companyLogo = {
@@ -34,7 +34,7 @@ const Sidebar: FC = () => {
 
   const onProductChange = async (e: MouseEvent, product: Products) => {
     if (loading) {
-      toast.warning(BAN_ACTIVE_HINT)
+      Toast.warning(BAN_ACTIVE_HINT)
       return
     }
     window.localStorage.setItem('currProductState', product)
