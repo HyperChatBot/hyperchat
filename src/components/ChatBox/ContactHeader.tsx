@@ -172,7 +172,7 @@ const ContactHeader: FC = () => {
 
           <p className="flex items-center">
             <span
-              className={classNames('mr-2 h-2.5 w-2.5 rounded-full ', {
+              className={classNames('mr-2 h-2.5 w-2.5 rounded-full', {
                 'bg-red-500': !isOnline,
                 'bg-status-green': isOnline
               })}

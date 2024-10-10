@@ -1,23 +1,23 @@
 import {
   useAudio,
   useChatCompletion,
-  useImageGeneration,
-  useTextCompletion
+  useCompletion,
+  useImageGeneration
 } from 'src/hooks'
 import { HashFile, Products } from 'src/types/global'
 
 const useRequest = (prompt: string, hashFile: HashFile) => {
-  const { createChatCompletion } = useChatCompletion(prompt)
-  const { createTextCompletion } = useTextCompletion(prompt)
-  const { createImageGeneration } = useImageGeneration(prompt)
-  const { createTranscription, createTranslation } = useAudio(prompt, hashFile)
+  const chatCompletion = useChatCompletion(prompt)
+  const completion = useCompletion(prompt)
+  const imageGeneration = useImageGeneration(prompt)
+  const audio = useAudio(prompt, hashFile)
 
   const requests = {
-    [Products.ChatCompletion]: createChatCompletion,
-    [Products.TextCompletion]: createTextCompletion,
-    [Products.AudioTranscription]: createTranscription,
-    [Products.AudioTranslation]: createTranslation,
-    [Products.ImageGeneration]: createImageGeneration
+    [Products.ChatCompletion]: chatCompletion,
+    [Products.Completion]: completion,
+    [Products.ImageGeneration]: imageGeneration,
+    [Products.AudioTranscription]: audio?.audioTranscription,
+    [Products.AudioTranslation]: audio?.audioTranslation
   }
 
   return requests

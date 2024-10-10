@@ -12,10 +12,7 @@ import Tooltip from '@mui/material/Tooltip'
 import { Formik, useFormikContext } from 'formik'
 import { FC, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
-import {
-  TextCompletionConfiguration,
-  models
-} from 'src/configurations/textCompletion'
+import { CompletionConfiguration, models } from 'src/configurations/completion'
 import { useDB } from 'src/hooks'
 import { currConversationState } from 'src/stores/conversation'
 import { configurationDrawerVisibleState } from 'src/stores/global'
@@ -29,7 +26,7 @@ const Configuration: FC = () => {
   )
   const { updateOneById } = useDB('conversations')
 
-  const updateConfiguration = async (values: TextCompletionConfiguration) => {
+  const updateConfiguration = async (values: CompletionConfiguration) => {
     if (!currConversation) {
       return
     }
@@ -67,9 +64,9 @@ const Configuration: FC = () => {
 
         <Divider />
 
-        <Formik<TextCompletionConfiguration>
+        <Formik<CompletionConfiguration>
           initialValues={
-            currConversation.configuration as TextCompletionConfiguration
+            currConversation.configuration as CompletionConfiguration
           }
           onSubmit={updateConfiguration}
         >
@@ -99,9 +96,8 @@ const Configuration: FC = () => {
                 max={4000}
                 step={1}
                 defaultValue={
-                  (
-                    currConversation.configuration as TextCompletionConfiguration
-                  ).maxTokens
+                  (currConversation.configuration as CompletionConfiguration)
+                    .maxTokens
                 }
                 setFieldValue={(value: number) =>
                   formik.setFieldValue('maxTokens', value)
@@ -147,9 +143,8 @@ const Configuration: FC = () => {
                 max={1}
                 step={0.01}
                 defaultValue={
-                  (
-                    currConversation.configuration as TextCompletionConfiguration
-                  ).temperature
+                  (currConversation.configuration as CompletionConfiguration)
+                    .temperature
                 }
                 setFieldValue={(value: number) =>
                   formik.setFieldValue('temperature', value)
@@ -162,9 +157,8 @@ const Configuration: FC = () => {
                 max={1}
                 step={0.01}
                 defaultValue={
-                  (
-                    currConversation.configuration as TextCompletionConfiguration
-                  ).topP
+                  (currConversation.configuration as CompletionConfiguration)
+                    .topP
                 }
                 setFieldValue={(value: number) =>
                   formik.setFieldValue('topP', value)
@@ -177,9 +171,8 @@ const Configuration: FC = () => {
                 max={2}
                 step={0.01}
                 defaultValue={
-                  (
-                    currConversation.configuration as TextCompletionConfiguration
-                  ).frequencyPenalty
+                  (currConversation.configuration as CompletionConfiguration)
+                    .frequencyPenalty
                 }
                 setFieldValue={(value: number) =>
                   formik.setFieldValue('frequencyPenalty', value)
@@ -193,9 +186,8 @@ const Configuration: FC = () => {
                 max={2}
                 step={0.01}
                 defaultValue={
-                  (
-                    currConversation.configuration as TextCompletionConfiguration
-                  ).presencePenalty
+                  (currConversation.configuration as CompletionConfiguration)
+                    .presencePenalty
                 }
                 setFieldValue={(value: number) =>
                   formik.setFieldValue('frequencyPenalty', value)

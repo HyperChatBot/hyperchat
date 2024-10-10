@@ -2,8 +2,8 @@ import { ImageGenerateParams } from 'openai/resources'
 
 export interface ImageGenerationConfiguration {
   n: number
-  size: (typeof sizes)[number]
-  responseFormat: (typeof responseFormats)[number]
+  size: '256x256' | '512x512' | '1024x1024' | '1792x1024' | '1024x1792'
+  responseFormat: 'url' | 'b64_json'
 }
 
 export const sizes: ImageGenerateParams['size'][] = [

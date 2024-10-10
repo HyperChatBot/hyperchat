@@ -3,7 +3,7 @@ export interface ResponseText {
   content: string
 }
 
-export interface TextCompletionConfiguration {
+export interface CompletionConfiguration {
   model: (typeof models)[number]
   maxTokens: number
   temperature: number
@@ -23,7 +23,7 @@ export const models = [
   'text-ada-001'
 ] as const
 
-export const configuration: TextCompletionConfiguration = {
+export const configuration: CompletionConfiguration = {
   model: 'text-davinci-003',
   maxTokens: 800,
   temperature: 0.7,

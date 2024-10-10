@@ -27,7 +27,7 @@ export default [
     realm: [Companies.Azure, Companies.OpenAI]
   },
   {
-    product: Products.TextCompletion,
+    product: Products.Completion,
     inactive: (
       <ChatBubbleBottomCenterTextIconOutline className={iconClassName} />
     ),
