@@ -63,7 +63,9 @@ const InputBox: FC = () => {
   const handleRequest = () => {
     if (!validate()) return
 
-    requests[currProduct]()
+    if (requests[currProduct]) {
+      requests[currProduct]()
+    }
     resetInput()
   }
 
@@ -122,6 +124,7 @@ const InputBox: FC = () => {
           placeholder="Type a message..."
           value={prompt}
           rows={1}
+          // FIXME: The webkit(safari) doesn't support `onCompositionStart` or `onCompositionEnd`.
           onCompositionStart={() => setIsTyping(true)}
           onCompositionEnd={() => setIsTyping(false)}
           onChange={(e) => setPrompt(e.target.value)}

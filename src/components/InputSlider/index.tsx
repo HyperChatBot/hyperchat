@@ -74,19 +74,21 @@ const InputSlider: FC<Props> = ({
         </div>
 
         <TextField
-          InputLabelProps={{ shrink: true }}
+          slotProps={{
+            inputLabel: { shrink: true },
+            htmlInput: {
+              inputMode: 'numeric',
+              pattern: '[0-9]*',
+              step,
+              min,
+              max
+            }
+          }}
           type="number"
           value={value}
           onChange={handleInputChange}
           onBlur={handleBlur}
           size="small"
-          inputProps={{
-            inputMode: 'numeric',
-            pattern: '[0-9]*',
-            step,
-            min,
-            max
-          }}
           sx={{
             width: 100
           }}

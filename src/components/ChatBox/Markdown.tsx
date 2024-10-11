@@ -3,6 +3,7 @@ import { FC, memo } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { oneDark as mdCodeTheme } from 'react-syntax-highlighter/dist/esm/styles/prism'
+// @ts-ignore
 import rehypeMathjax from 'rehype-mathjax'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'

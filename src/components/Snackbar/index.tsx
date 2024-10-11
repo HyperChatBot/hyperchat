@@ -19,22 +19,22 @@ export const SnackbarUtilsConfig = () => {
   return <InnerSnackbarUtilsConfig setUseSnackbarRef={setUseSnackbarRef} />
 }
 
-const toast = {
+const Toast = {
   success(msg: string) {
-    this.toast(msg, 'success')
+    this.Toast(msg, 'success')
   },
   warning(msg: string) {
-    this.toast(msg, 'warning')
+    this.Toast(msg, 'warning')
   },
   info(msg: string) {
-    this.toast(msg, 'info')
+    this.Toast(msg, 'info')
   },
   error(msg: string) {
-    this.toast(msg, 'error')
+    this.Toast(msg, 'error')
   },
-  toast(msg: string, variant: VariantType = 'default') {
+  Toast(msg: string, variant: VariantType = 'default') {
     useSnackbarRef.enqueueSnackbar(msg, { variant })
   }
 }
 
-export default toast
+export default Toast

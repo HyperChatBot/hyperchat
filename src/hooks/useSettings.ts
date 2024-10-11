@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import toast from 'src/components/Snackbar'
+import Toast from 'src/components/Snackbar'
 import { useDB } from 'src/hooks'
 import { settingsState } from 'src/stores/settings'
 import { Companies, ThemeMode } from 'src/types/global'
@@ -52,7 +52,7 @@ const useSettings = () => {
       setSettings(newSettings)
     }
 
-    toast.success('Settings updated successfully.')
+    Toast.success('Settings updated successfully.')
   }
 
   const getSettings = async () => {
