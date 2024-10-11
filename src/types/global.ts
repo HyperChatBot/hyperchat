@@ -47,3 +47,10 @@ export enum ThemeMode {
   system = 'system',
   dark = 'dark'
 }
+
+export interface RequestError {
+  status: number
+  name: string
+  code: string
+  message: string
+}

@@ -14,6 +14,7 @@ const useMessages = () => {
     currConversationState
   )
 
+  // If a stream chat completion request fails, delete it in the user interface.
   const rollbackMessage = () => {
     if (!currConversation) return
 

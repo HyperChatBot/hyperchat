@@ -1,6 +1,6 @@
 # Hyper Chat
 
-![chat-completion](./screenshots/chat-completion.png)
+![Hyper Chat](./screenshots/chat-completion.png)
 
 [![CodeQL](https://github.com/HyperChatBot/hyperchat/actions/workflows/github-code-scanning/codeql/badge.svg?branch=master)](https://github.com/HyperChatBot/hyperchat/actions/workflows/github-code-scanning/codeql)
 [![Release](https://github.com/HyperChatBot/hyperchat/actions/workflows/cross-platform-release.yml/badge.svg)](https://github.com/HyperChatBot/hyperchat/actions/workflows/cross-platform-release.yml)
@@ -77,9 +77,9 @@ Please make sure to read the [Issue Reporting Checklist](./.github/ISSUE_TEMPLAT
 We are continuously working to enhance Hyper Chat's capabilities and performance. Here are some of the features and upgrades that we plan to add in the future releases:
 
 - Support function call and plugin
-- Support for Claude, ‎Gemini, Llama and so on
+- Support audio input
+- Support for Claude, Gemini, Llama and so on
 - Improve Performance
-- Regular model version updates
 
 ## Discussions
 

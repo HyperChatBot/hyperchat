@@ -2,6 +2,7 @@ import { Cog6ToothIcon as Cog6ToothIconOutline } from '@heroicons/react/24/outli
 import { Cog6ToothIcon as Cog6ToothIconSolid } from '@heroicons/react/24/solid'
 import Tooltip from '@mui/material/Tooltip'
 import { capitalCase } from 'change-case'
+import { enqueueSnackbar } from 'notistack'
 import { FC, MouseEvent } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -14,7 +15,6 @@ import { currProductState } from 'src/stores/global'
 import { Companies, Products } from 'src/types/global'
 import Avatar from '../Avatar'
 import Divider from '../Divider'
-import Toast from '../Snackbar'
 import items, { iconClassName } from './Items'
 
 const companyLogo = {
@@ -34,7 +34,7 @@ const Sidebar: FC = () => {
 
   const onProductChange = async (e: MouseEvent, product: Products) => {
     if (loading) {
-      Toast.warning(BAN_ACTIVE_HINT)
+      enqueueSnackbar(BAN_ACTIVE_HINT, { variant: 'warning' })
       return
     }
     window.localStorage.setItem('currProductState', product)

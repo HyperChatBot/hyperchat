@@ -4,7 +4,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { AudioTranscriptionConfiguration } from 'src/configurations/audioTranscription'
 import { AudioTranslationConfiguration } from 'src/configurations/audioTranslation'
 import { useClients, useMessages } from 'src/hooks'
-import { showApiRequestErrorToast } from 'src/shared/utils'
+import { showRequestErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 import { Companies, HashFile, Products } from 'src/types/global'
@@ -14,8 +14,7 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
   const currConversation = useRecoilValue(currConversationState)
   const settings = useRecoilValue(settingsState)
   const setLoading = useSetRecoilState(loadingState)
-  const { rollbackMessage, saveUserMessage, saveCommonAssistantMessage } =
-    useMessages()
+  const { saveUserMessage, saveCommonAssistantMessage } = useMessages()
 
   if (!hashFile || !settings || !currConversation) return
 
@@ -37,9 +36,8 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
       })
 
       saveCommonAssistantMessage(transcription.text)
-    } catch (error) {
-      showApiRequestErrorToast()
-      rollbackMessage()
+    } catch (e) {
+      showRequestErrorToast(e)
     } finally {
       setLoading(false)
     }
@@ -62,9 +60,8 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
       })
 
       saveCommonAssistantMessage(translation.text)
-    } catch (error) {
-      showApiRequestErrorToast()
-      rollbackMessage()
+    } catch (e) {
+      showRequestErrorToast(e)
     } finally {
       setLoading(false)
     }
@@ -81,7 +78,7 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
       const buffer = await hashFile.file.arrayBuffer()
       const uint8Array = new Uint8Array(buffer)
       const transcription = await azureClient.getAudioTranscription(
-        settings.azureDeploymentName,
+        settings.azureDeploymentNameSpeechRecognition,
         uint8Array,
         {
           prompt,
@@ -91,9 +88,8 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
       )
 
       saveCommonAssistantMessage(transcription.text)
-    } catch (error) {
-      showApiRequestErrorToast()
-      rollbackMessage()
+    } catch (e) {
+      showRequestErrorToast(e)
     } finally {
       setLoading(false)
     }
@@ -110,7 +106,7 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
       const buffer = await hashFile.file.arrayBuffer()
       const uint8Array = new Uint8Array(buffer)
       const translation = await azureClient.getAudioTranslation(
-        settings.azureDeploymentName,
+        settings.azureDeploymentNameSpeechRecognition,
         uint8Array,
         {
           prompt,
@@ -119,9 +115,8 @@ const useAudio = (prompt: string, hashFile: HashFile | null) => {
       )
 
       saveCommonAssistantMessage(translation.text)
-    } catch (error) {
-      showApiRequestErrorToast()
-      rollbackMessage()
+    } catch (e) {
+      showRequestErrorToast(e)
     } finally {
       setLoading(false)
     }

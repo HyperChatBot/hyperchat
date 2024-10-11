@@ -16,6 +16,7 @@ const Markdown: FC<Props> = ({ raw }) => {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm, remarkMath]}
+      // @ts-ignore
       rehypePlugins={[rehypeMathjax]}
       components={{
         code({ className, children, ...props }) {
@@ -91,6 +92,18 @@ const Markdown: FC<Props> = ({ raw }) => {
         },
         img({ className, children, ...props }) {
           return <img {...props} loading="lazy" />
+        },
+        a({ className, children, ...props }) {
+          return (
+            <a
+              {...props}
+              rel="noopener noreferrer"
+              target="_blank"
+              className={classNames('font-bold underline', className)}
+            >
+              {children}
+            </a>
+          )
         },
         table({ className, children, ...props }) {
           return (

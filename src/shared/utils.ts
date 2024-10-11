@@ -1,7 +1,7 @@
 import { encodingForModel, TiktokenModel } from 'js-tiktoken'
 import { DateTime } from 'luxon'
-import Toast from 'src/components/Snackbar'
-import { Products, ThemeMode } from 'src/types/global'
+import { enqueueSnackbar } from 'notistack'
+import { Products, RequestError, ThemeMode } from 'src/types/global'
 import { v4 } from 'uuid'
 import { getFileExtension } from 'yancey-js-util'
 
@@ -57,6 +57,12 @@ export const themeModeToTheme = (themeMode?: ThemeMode) =>
 export const getTokensCount = (content: string, model: TiktokenModel) =>
   encodingForModel(model).encode(content).length
 
-// Output a simple error if request failed.
-// TODO: Output the error message thrown by the OpenAI or Azure API.
-export const showApiRequestErrorToast = () => Toast.error(`Request failed.`)
+export const showRequestErrorToast = (e?: RequestError | unknown) =>
+  enqueueSnackbar(
+    (e as RequestError)?.message ??
+      (e as RequestError)?.name ??
+      'Request failed.',
+    {
+      variant: 'error'
+    }
+  )

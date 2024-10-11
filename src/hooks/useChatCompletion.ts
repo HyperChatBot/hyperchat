@@ -1,3 +1,4 @@
+import { enqueueSnackbar } from 'notistack'
 import {
   ChatCompletionChunk,
   ChatCompletionCreateParams,
@@ -5,10 +6,9 @@ import {
 } from 'openai/resources'
 import { Stream } from 'openai/streaming'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import Toast from 'src/components/Snackbar'
 import { ChatConfiguration, models } from 'src/configurations/chatCompletion'
 import { useClients, useMessages, useSettings } from 'src/hooks'
-import { getTokensCount } from 'src/shared/utils'
+import { getTokensCount, showRequestErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { Companies } from 'src/types/global'
 
@@ -44,10 +44,11 @@ const useChatCompletion = (prompt: string) => {
       userMessageTokensCount + systemMessageTokensCount + maxTokens
     const tokensLimit = models.find((m) => m.name === model)?.tokensLimit || 0
     if (tokensCount > tokensLimit) {
-      Toast.error(
+      enqueueSnackbar(
         `This model's maximum context length is ${tokensLimit} tokens. However, you requested ${tokensCount} tokens (${
           tokensCount - maxTokens
-        } in the messages, ${maxTokens} in the completion). Please reduce the length of the prompt.`
+        } in the messages, ${maxTokens} in the completion). Please reduce the length of the prompt.`,
+        { variant: 'error' }
       )
       return
     }
@@ -91,7 +92,7 @@ const useChatCompletion = (prompt: string) => {
 
     try {
       const events = await azureClient.streamChatCompletions(
-        settings.azureDeploymentName,
+        settings.azureDeploymentNameChatCompletion,
         messages,
         options
       )
@@ -105,30 +106,35 @@ const useChatCompletion = (prompt: string) => {
             continue
           }
           if (filterResults.error) {
-            Toast.error(
-              `\tContent filter ran into an error ${filterResults.error.code}: ${filterResults.error.message}`
+            enqueueSnackbar(
+              `\tContent filter ran into an error ${filterResults.error.code}: ${filterResults.error.message}`,
+              { variant: 'error' }
             )
           } else {
             const { hate, sexual, selfHarm, violence } = filterResults
 
             if (hate?.filtered) {
-              Toast.error(
-                `\tHate category is filtered: ${hate?.filtered}, with ${hate?.severity} severity`
+              enqueueSnackbar(
+                `\tHate category is filtered: ${hate?.filtered}, with ${hate?.severity} severity`,
+                { variant: 'error' }
               )
             }
             if (sexual?.filtered) {
-              Toast.error(
-                `\tSexual category is filtered: ${sexual?.filtered}, with ${sexual?.severity} severity`
+              enqueueSnackbar(
+                `\tSexual category is filtered: ${sexual?.filtered}, with ${sexual?.severity} severity`,
+                { variant: 'error' }
               )
             }
             if (selfHarm?.filtered) {
-              Toast.error(
-                `\tSelf-harm category is filtered: ${selfHarm?.filtered}, with ${selfHarm?.severity} severity`
+              enqueueSnackbar(
+                `\tSelf-harm category is filtered: ${selfHarm?.filtered}, with ${selfHarm?.severity} severity`,
+                { variant: 'error' }
               )
             }
             if (violence?.filtered) {
-              Toast.error(
-                `\tViolence category is filtered: ${violence?.filtered}, with ${violence?.severity} severity`
+              enqueueSnackbar(
+                `\tViolence category is filtered: ${violence?.filtered}, with ${violence?.severity} severity`,
+                { variant: 'error' }
               )
             }
           }
@@ -137,7 +143,7 @@ const useChatCompletion = (prompt: string) => {
 
       saveAssistantMessage()
     } catch (e) {
-      Toast.error(e as string)
+      showRequestErrorToast(e)
       rollbackMessage()
     } finally {
       setLoading(false)
@@ -162,10 +168,11 @@ const useChatCompletion = (prompt: string) => {
       userMessageTokensCount + systemMessageTokensCount + maxTokens
     const tokensLimit = models.find((m) => m.name === model)?.tokensLimit || 0
     if (tokensCount > tokensLimit) {
-      Toast.error(
+      enqueueSnackbar(
         `This model's maximum context length is ${tokensLimit} tokens. However, you requested ${tokensCount} tokens (${
           tokensCount - maxTokens
-        } in the messages, ${maxTokens} in the completion). Please reduce the length of the prompt.`
+        } in the messages, ${maxTokens} in the completion). Please reduce the length of the prompt.`,
+        { variant: 'error' }
       )
       return
     }
@@ -223,15 +230,14 @@ const useChatCompletion = (prompt: string) => {
               continue
             }
             if (choice.delta.refusal) {
-              Toast.error(choice.delta.refusal)
+              enqueueSnackbar(choice.delta.refusal, { variant: 'error' })
             }
           }
         }
 
       saveAssistantMessage()
     } catch (e) {
-      Toast.error(e as string)
-      rollbackMessage()
+      showRequestErrorToast(e)
     } finally {
       setLoading(false)
     }

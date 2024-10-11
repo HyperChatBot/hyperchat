@@ -1,6 +1,6 @@
+import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import Toast from 'src/components/Snackbar'
 import { useDB } from 'src/hooks'
 import { settingsState } from 'src/stores/settings'
 import { Companies, ThemeMode } from 'src/types/global'
@@ -23,7 +23,12 @@ const useSettings = () => {
       openaiAuthorName: '',
       azureSecretKey: '',
       azureEndPoint: '',
-      azureDeploymentName: '',
+      azureDeploymentNameChatCompletion: '',
+      azureDeploymentNameCompletion: '',
+      azureDeploymentNameSpeechRecognition: '',
+      azureDeploymentNameTextToImage: '',
+      azureDeploymentNameEmbedding: '',
+      azureDeploymentNameAudioGeneration: '',
       themeMode: ThemeMode.system,
       assistantAvatarFilename: ''
     }
@@ -52,7 +57,7 @@ const useSettings = () => {
       setSettings(newSettings)
     }
 
-    Toast.success('Settings updated successfully.')
+    enqueueSnackbar('Settings updated successfully.', { variant: 'success' })
   }
 
   const getSettings = async () => {

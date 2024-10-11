@@ -6,8 +6,8 @@ import Button from '@mui/material/Button'
 import { BaseDirectory, writeTextFile } from '@tauri-apps/plugin-fs'
 import Dexie from 'dexie'
 import { exportDB, importDB } from 'dexie-export-import'
+import { enqueueSnackbar } from 'notistack'
 import { ChangeEvent, FC, useRef } from 'react'
-import Toast from '../Snackbar'
 
 const ImportAndExportDexie: FC = () => {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -22,13 +22,14 @@ const ImportAndExportDexie: FC = () => {
         baseDir: BaseDirectory.Download
       })
 
-      Toast.success(
-        `The ${filename} has been saved in your local Download Directory.`
+      enqueueSnackbar(
+        `The ${filename} has been saved in your local Download Directory.`,
+        { variant: 'success' }
       )
     } catch (e) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      Toast.error(e.toString())
+      enqueueSnackbar(e?.toString(), { variant: 'error' })
     }
   }
 
@@ -39,10 +40,10 @@ const ImportAndExportDexie: FC = () => {
     try {
       await importDB(file)
       window.location.reload()
-    } catch (e: unknown) {
+    } catch (e) {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      Toast.error(e.message)
+      enqueueSnackbar(e?.message, { variant: 'error' })
     } finally {
       if (inputRef.current) {
         inputRef.current.value = ''

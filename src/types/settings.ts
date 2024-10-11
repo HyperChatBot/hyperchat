@@ -8,7 +8,12 @@ export interface Settings {
   openaiAuthorName: string
   azureSecretKey: string
   azureEndPoint: string
-  azureDeploymentName: string
+  azureDeploymentNameChatCompletion: string
+  azureDeploymentNameCompletion: string
+  azureDeploymentNameSpeechRecognition: string
+  azureDeploymentNameTextToImage: string
+  azureDeploymentNameEmbedding: string
+  azureDeploymentNameAudioGeneration: string
   themeMode: ThemeMode
   assistantAvatarFilename: string
 }

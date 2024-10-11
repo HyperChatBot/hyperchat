@@ -1,7 +1,7 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { CompletionConfiguration } from 'src/configurations/completion'
 import { useClients, useMessages } from 'src/hooks'
-import { showApiRequestErrorToast } from 'src/shared/utils'
+import { showRequestErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 import { Companies } from 'src/types/global'
@@ -11,8 +11,7 @@ const useCompletion = (prompt: string) => {
   const currConversation = useRecoilValue(currConversationState)
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
-  const { rollbackMessage, saveUserMessage, saveCommonAssistantMessage } =
-    useMessages()
+  const { saveUserMessage, saveCommonAssistantMessage } = useMessages()
 
   if (!settings || !currConversation) return
 
@@ -48,9 +47,8 @@ const useCompletion = (prompt: string) => {
       saveCommonAssistantMessage(
         preResponseText + (completion.choices[0].text || '') + postResponseText
       )
-    } catch (error) {
-      showApiRequestErrorToast()
-      rollbackMessage()
+    } catch (e) {
+      showRequestErrorToast(e)
     } finally {
       setLoading(false)
     }
@@ -62,7 +60,7 @@ const useCompletion = (prompt: string) => {
       setLoading(true)
 
       const completion = await azureClient.getCompletions(
-        settings.azureDeploymentName,
+        settings.azureDeploymentNameCompletion,
         [prompt],
         {
           maxTokens,
@@ -79,9 +77,8 @@ const useCompletion = (prompt: string) => {
       saveCommonAssistantMessage(
         preResponseText + (completion.choices[0].text || '') + postResponseText
       )
-    } catch (error) {
-      showApiRequestErrorToast()
-      rollbackMessage()
+    } catch (e) {
+      showRequestErrorToast(e)
     } finally {
       setLoading(false)
     }

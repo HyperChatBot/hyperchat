@@ -3,7 +3,7 @@ import { themeModeToTheme } from 'src/shared/utils'
 import { Products, ThemeMode } from 'src/types/global'
 
 export const onlineState = atom({
-  key: 'onlineState',
+  key: 'OnlineState',
   default: window.navigator.onLine
 })
 

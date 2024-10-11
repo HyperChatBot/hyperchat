@@ -2,7 +2,6 @@ import { ThemeProvider } from '@mui/material/styles'
 import { SnackbarProvider } from 'notistack'
 import { FC, lazy } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { SnackbarUtilsConfig } from 'src/components/Snackbar'
 import { useOnline, useTheme } from 'src/hooks'
 import { routers } from 'src/routers'
 import {
@@ -24,8 +23,11 @@ const Layouts: FC = () => {
         anchorOrigin={SNACKBAR_ANCHOR_ORIGIN}
         autoHideDuration={SNACKBAR_AUTO_HIDE_DURATION}
         preventDuplicate
+        hideIconVariant
+        style={{
+          maxWidth: 500
+        }}
       >
-        <SnackbarUtilsConfig />
         <section className="container flex w-screen flex-row overflow-x-hidden dark:bg-gray-800">
           <BrowserRouter>
             <Sidebar />

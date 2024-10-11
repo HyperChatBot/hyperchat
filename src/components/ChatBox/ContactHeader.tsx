@@ -6,6 +6,7 @@ import {
 } from '@heroicons/react/24/solid'
 import Input from '@mui/material/Input'
 import classNames from 'classnames'
+import { enqueueSnackbar } from 'notistack'
 import { FC, KeyboardEvent, memo, useEffect, useState } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatbot.png'
@@ -21,7 +22,6 @@ import { configurationDrawerVisibleState, onlineState } from 'src/stores/global'
 import { EmojiPickerProps } from 'src/types/global'
 import Avatar from '../Avatar'
 import EmojiPicker from '../EmojiPicker'
-import Toast from '../Snackbar'
 
 const ContactHeader: FC = () => {
   const loading = useRecoilValue(loadingState)
@@ -51,7 +51,7 @@ const ContactHeader: FC = () => {
 
   const openAvatarPicker = () => {
     if (loading) {
-      Toast.warning(BAN_ACTIVE_HINT)
+      enqueueSnackbar(BAN_ACTIVE_HINT, { variant: 'warning' })
       return
     }
     setAvatarPickerVisible(true)
@@ -59,7 +59,7 @@ const ContactHeader: FC = () => {
 
   const openSummaryInput = () => {
     if (loading) {
-      Toast.warning(BAN_ACTIVE_HINT)
+      enqueueSnackbar(BAN_ACTIVE_HINT, { variant: 'warning' })
       return
     }
     if (!currConversation) return
@@ -69,7 +69,7 @@ const ContactHeader: FC = () => {
 
   const openConfigurationDrawer = () => {
     if (loading) {
-      Toast.warning(BAN_ACTIVE_HINT)
+      enqueueSnackbar(BAN_ACTIVE_HINT, { variant: 'warning' })
       return
     }
     setConfigurationDrawerVisible(true)
@@ -110,7 +110,7 @@ const ContactHeader: FC = () => {
 
   const deleteCurrConversation = async () => {
     if (loading) {
-      Toast.warning(BAN_ACTIVE_HINT)
+      enqueueSnackbar(BAN_ACTIVE_HINT, { variant: 'warning' })
       return
     }
     if (currConversation) {

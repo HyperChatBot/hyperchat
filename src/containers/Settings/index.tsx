@@ -14,11 +14,11 @@ import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import Typography from '@mui/material/Typography'
 import { Formik } from 'formik'
+import { enqueueSnackbar } from 'notistack'
 import { ChangeEvent, FC } from 'react'
 import ChatGPTImg from 'src/assets/chatbot.png'
 import { SolidSettingsBrightnessIcon } from 'src/components/Icons'
 import ImportAndExportDexie from 'src/components/ImportAndExportDexie'
-import Toast from 'src/components/Snackbar'
 import { useAppData, useSettings, useTheme } from 'src/hooks'
 import { Companies, ThemeMode } from 'src/types/global'
 import { Settings as SettingsParams } from 'src/types/settings'
@@ -36,7 +36,9 @@ const Settings: FC = () => {
       const filename = await saveFileToAppDataDir(file)
       if (filename) {
         updateSettings({ ...settings, assistantAvatarFilename: filename })
-        Toast.success('Assistant avatar updated successfully.')
+        enqueueSnackbar('Assistant avatar updated successfully.', {
+          variant: 'success'
+        })
       }
     }
   }
@@ -171,14 +173,71 @@ const Settings: FC = () => {
                     />
 
                     <TextField
-                      required
-                      id="azure-deployment-name-input"
-                      label="Deployment Name"
+                      id="azure-deployment-name-chat-completion-input"
+                      label="Chat Completion Deployment Name"
                       size="small"
                       type="text"
-                      className="w-160"
-                      helperText="Deployments enable you to make completions and search calls against a provided base model or your fine-tuned model. You can also scale up and down your deployments easily by modifying the scale unit."
-                      {...formik.getFieldProps('azureDeploymentName')}
+                      className="w-80"
+                      {...formik.getFieldProps(
+                        'azureDeploymentNameChatCompletion'
+                      )}
+                      placeholder="gpt-4o"
+                    />
+
+                    <TextField
+                      id="azure-deployment-name-completion-input"
+                      label="Completion Deployment Name"
+                      size="small"
+                      type="text"
+                      className="w-80"
+                      {...formik.getFieldProps('azureDeploymentNameCompletion')}
+                      placeholder="Eg: davinci-002"
+                    />
+
+                    <TextField
+                      id="azure-deployment-name-speech-recognition-input"
+                      label="Speech Recognition Deployment Name"
+                      size="small"
+                      type="text"
+                      className="w-80"
+                      {...formik.getFieldProps(
+                        'azureDeploymentNameSpeechRecognition'
+                      )}
+                      placeholder="Eg: whisper"
+                    />
+
+                    <TextField
+                      id="azure-deployment-name-text-to-image-input"
+                      label="Text to Image Deployment Name"
+                      size="small"
+                      type="text"
+                      className="w-80"
+                      {...formik.getFieldProps(
+                        'azureDeploymentNameTextToImage'
+                      )}
+                      placeholder="Eg: dall-e-3"
+                    />
+
+                    <TextField
+                      id="azure-deployment-name-embedding-input"
+                      label="Embedding Deployment Name"
+                      size="small"
+                      type="text"
+                      className="w-80"
+                      {...formik.getFieldProps('azureDeploymentNameEmbedding')}
+                      placeholder="Eg: text-embedding-ada-002"
+                    />
+
+                    <TextField
+                      id="azure-deployment-name-audio-generation-input"
+                      label="Audio Generation Deployment Name"
+                      size="small"
+                      type="text"
+                      className="w-80"
+                      {...formik.getFieldProps(
+                        'azureDeploymentNameAudioGeneration'
+                      )}
+                      placeholder="Eg: gpt-4o-realtime-preview"
                     />
 
                     <Button

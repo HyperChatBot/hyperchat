@@ -1,7 +1,7 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { ImageGenerationConfiguration } from 'src/configurations/imageGeneration'
 import { useClients, useMessages } from 'src/hooks'
-import { showApiRequestErrorToast } from 'src/shared/utils'
+import { showRequestErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 import { Companies } from 'src/types/global'
@@ -11,8 +11,7 @@ const useImageGeneration = (prompt: string) => {
   const currConversation = useRecoilValue(currConversationState)
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
-  const { rollbackMessage, saveUserMessage, saveCommonAssistantMessage } =
-    useMessages()
+  const { saveUserMessage, saveCommonAssistantMessage } = useMessages()
 
   if (!settings || !currConversation) return
 
@@ -35,9 +34,8 @@ const useImageGeneration = (prompt: string) => {
         .join('')
 
       saveCommonAssistantMessage(content)
-    } catch {
-      showApiRequestErrorToast()
-      rollbackMessage()
+    } catch (e) {
+      showRequestErrorToast(e)
     } finally {
       setLoading(false)
     }
@@ -51,7 +49,7 @@ const useImageGeneration = (prompt: string) => {
       saveUserMessage(prompt)
       setLoading(true)
       const image = await azureClient.getImages(
-        settings.azureDeploymentName,
+        settings.azureDeploymentNameTextToImage,
         prompt,
         {
           n,
@@ -65,9 +63,8 @@ const useImageGeneration = (prompt: string) => {
         .join('')
 
       saveCommonAssistantMessage(content)
-    } catch {
-      showApiRequestErrorToast()
-      rollbackMessage()
+    } catch (e) {
+      showRequestErrorToast(e)
     } finally {
       setLoading(false)
     }
