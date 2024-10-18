@@ -19,7 +19,7 @@ Hyper Chat is a high-performance cross-platform AI chat application for desktop 
 
 ## To start using Hyper Chat
 
-You can download Hyper Chat on our [Landing Page](https://hyperchat.yancey.app), or munual download on [GitHub Release](https://github.com/HyperChatBot/hyperchat/releases/).
+You can download Hyper Chat on our [Landing Page](https://hyperchat.yancey.app), or manual download on [GitHub Release](https://github.com/HyperChatBot/hyperchat/releases/).
 
 We always keep the dev tools(eg: Command + Option + I) open in the production environment. In Hyper Chat, everything is transparent and controllable.
 
