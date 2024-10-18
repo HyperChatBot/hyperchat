@@ -33,7 +33,7 @@ const useAudio = () => {
       setLoading(true)
 
       const transcription = await openAiClient.audio.transcriptions.create({
-        file: binary,
+        file: binary as File,
         model,
         prompt: rest.text,
         response_format: responseFormat as AudioResponseFormat,
@@ -67,7 +67,7 @@ const useAudio = () => {
       setLoading(true)
 
       const translation = await openAiClient.audio.translations.create({
-        file: binary,
+        file: binary as File,
         model,
         prompt: rest.text,
         response_format: responseFormat as AudioResponseFormat,
@@ -99,13 +99,13 @@ const useAudio = () => {
       saveUserMessage([rest])
       setLoading(true)
 
-      const buffer = await binary.arrayBuffer()
+      const buffer = await (binary as File).arrayBuffer()
       const uint8Array = new Uint8Array(buffer)
       const transcription = await azureClient.getAudioTranscription(
-        settings.azureDeploymentNameSpeechRecognition,
+        settings.azureDeploymentNameAudioGeneration,
         uint8Array,
         {
-          prompt,
+          prompt: rest.text,
           temperature,
           language: language === '' ? undefined : language
         }
@@ -136,13 +136,13 @@ const useAudio = () => {
       saveUserMessage([rest])
       setLoading(true)
 
-      const buffer = await binary.arrayBuffer()
+      const buffer = await (binary as File).arrayBuffer()
       const uint8Array = new Uint8Array(buffer)
       const translation = await azureClient.getAudioTranslation(
-        settings.azureDeploymentNameSpeechRecognition,
+        settings.azureDeploymentNameAudioGeneration,
         uint8Array,
         {
-          prompt,
+          prompt: rest.text,
           temperature
         }
       )

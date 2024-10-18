@@ -12,7 +12,7 @@ export class HyperChatDB extends Dexie {
       conversations:
         '&conversationId, summary, fileName, product, createdAt, updatedAt, *messages, *configuration',
       settings:
-        '&&settingsId, company, openaiSecretKey, openaiOrganizationId, openaiAuthorName, azureEndPoint, azureSecretKey, azureDeploymentNameChatCompletion, azureDeploymentNameCompletion, azureDeploymentNameSpeechRecognition, azureDeploymentNameTextToImage, azureDeploymentNameEmbedding, azureDeploymentNameAudioGeneration, azureSpeechSecretKey, azureSpeechRegion, themeMode, assistantAvatarFilename'
+        '&&settingsId, company, openaiSecretKey, openaiOrganizationId, openaiAuthorName, azureEndPoint, azureSecretKey, azureDeploymentNameChatCompletion, azureDeploymentNameCompletion, azureDeploymentNameTextToImage, azureDeploymentNameEmbedding, azureDeploymentNameAudioGeneration, azureSpeechSecretKey, azureSpeechRegion, themeMode, assistantAvatarFilename'
     })
   }
 }

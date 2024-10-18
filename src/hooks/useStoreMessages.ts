@@ -130,7 +130,6 @@ const useStoreMessages = () => {
     async (
       content: (ChatCompletionContentPart | AudioContentPart)[],
       tokensCount?: number,
-      fileName?: string
     ) => {
       if (!currConversation) return
 
@@ -139,7 +138,6 @@ const useStoreMessages = () => {
         role: Roles.User,
         content,
         tokensCount: tokensCount || 0,
-        fileName,
         createdAt: +new Date()
       }
 

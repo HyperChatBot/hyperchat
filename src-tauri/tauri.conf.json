@@ -19,7 +19,7 @@
   },
   "productName": "Hyper Chat",
   "mainBinaryName": "Hyper Chat",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "identifier": "app.yancey.hyperchat",
   "plugins": {
     "updater": {

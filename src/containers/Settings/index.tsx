@@ -197,18 +197,6 @@ const Settings: FC = () => {
                     />
 
                     <TextField
-                      id="azure-deployment-name-speech-recognition-input"
-                      label="Speech Recognition Deployment Name"
-                      size="small"
-                      type="text"
-                      className="w-80"
-                      {...formik.getFieldProps(
-                        'azureDeploymentNameSpeechRecognition'
-                      )}
-                      placeholder="Eg: whisper"
-                    />
-
-                    <TextField
                       id="azure-deployment-name-text-to-image-input"
                       label="Text to Image Deployment Name"
                       size="small"
@@ -239,7 +227,7 @@ const Settings: FC = () => {
                       {...formik.getFieldProps(
                         'azureDeploymentNameAudioGeneration'
                       )}
-                      placeholder="Eg: gpt-4o-realtime-preview"
+                      placeholder="Eg: whisper-1"
                     />
 
                     <Divider />

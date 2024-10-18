@@ -15,7 +15,7 @@ const useSettings = () => {
   const { updateOneById, insertOne, toArray } = useDB('settings')
 
   const initialSettings = async () => {
-    const defaultData = {
+    const defaultData: Settings = {
       settingsId: v4(),
       company: Companies.OpenAI,
       openaiSecretKey: '',
@@ -25,12 +25,13 @@ const useSettings = () => {
       azureEndPoint: '',
       azureDeploymentNameChatCompletion: '',
       azureDeploymentNameCompletion: '',
-      azureDeploymentNameSpeechRecognition: '',
       azureDeploymentNameTextToImage: '',
       azureDeploymentNameEmbedding: '',
       azureDeploymentNameAudioGeneration: '',
       themeMode: ThemeMode.system,
-      assistantAvatarFilename: ''
+      assistantAvatarFilename: '',
+      azureSpeechSecretKey: '',
+      azureSpeechRegion: ''
     }
 
     await insertOne(defaultData)
