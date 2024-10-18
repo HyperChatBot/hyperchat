@@ -195,7 +195,7 @@ const InputBox: FC = () => {
             <section className="group relative" key={idx}>
               <span className="absolute -right-2 -top-2 hidden rounded-full bg-white group-hover:block">
                 <SolidCloseIcon
-                  className="h-6 w-6 text-black dark:text-white"
+                  className="h-6 w-6 text-black"
                   onClick={() => deleteBase64Image(idx)}
                 />
               </span>
