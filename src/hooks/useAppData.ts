@@ -1,7 +1,7 @@
 import { convertFileSrc } from '@tauri-apps/api/core'
 import { appDataDir, join } from '@tauri-apps/api/path'
 import { BaseDirectory, exists, mkdir, writeFile } from '@tauri-apps/plugin-fs'
-import { generateHashName } from 'src/shared/utils'
+import { generateFilename } from 'src/shared/utils'
 
 const useAppData = () => {
   const transformFilenameToSrc = async (fileName: string) => {
@@ -25,16 +25,16 @@ const useAppData = () => {
   }
 
   const saveFileToAppDataDir = async (file: File) => {
-    const hashName = generateHashName(file.name)
+    const filename = generateFilename(file.name)
     await mkdir('data', { baseDir: BaseDirectory.AppData, recursive: true })
     await writeFile(
-      `data/${hashName}`,
+      `data/${filename}`,
       (await file.arrayBuffer()) as Uint8Array,
       {
         baseDir: BaseDirectory.AppData
       }
     )
-    return hashName
+    return filename
   }
 
   return { transformFilenameToSrc, saveFileToAppDataDir }

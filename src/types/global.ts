@@ -21,17 +21,6 @@ export enum Products {
   ImageGeneration = 'imageGeneration'
 }
 
-export interface AlertError {
-  code: number
-  message: string
-}
-
-export interface HashFile {
-  file: File
-  hashName: string
-  src?: string
-}
-
 export interface EmojiPickerProps {
   emoticons: string[]
   id: string
@@ -53,4 +42,9 @@ export interface RequestError {
   name: string
   code: string
   message: string
+}
+
+export enum MediaType {
+  Image = 'image',
+  Audio = 'audio'
 }

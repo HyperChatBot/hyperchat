@@ -172,6 +172,8 @@ const Settings: FC = () => {
                       {...formik.getFieldProps('azureEndPoint')}
                     />
 
+                    <Divider />
+
                     <TextField
                       id="azure-deployment-name-chat-completion-input"
                       label="Chat Completion Deployment Name"
@@ -238,6 +240,29 @@ const Settings: FC = () => {
                         'azureDeploymentNameAudioGeneration'
                       )}
                       placeholder="Eg: gpt-4o-realtime-preview"
+                    />
+
+                    <Divider />
+
+                    <TextField
+                      autoComplete="current-password"
+                      required
+                      id="azure-speech-secret-key-input"
+                      label="Speech Secret Key"
+                      size="small"
+                      type="password"
+                      className="w-160"
+                      {...formik.getFieldProps('azureSpeechSecretKey')}
+                    />
+
+                    <TextField
+                      required
+                      id="azure-speech-region-input"
+                      label="Speech Region"
+                      size="small"
+                      type="input"
+                      className="w-160"
+                      {...formik.getFieldProps('azureSpeechRegion')}
                     />
 
                     <Button

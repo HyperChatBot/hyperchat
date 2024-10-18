@@ -1,18 +1,21 @@
+import { ChatRequestMessageUnion } from '@azure/openai'
 import { enqueueSnackbar } from 'notistack'
 import {
   ChatCompletionChunk,
-  ChatCompletionCreateParams,
+  ChatCompletionContentPart,
+  ChatCompletionContentPartImage,
+  ChatCompletionContentPartText,
   ChatCompletionMessageParam
 } from 'openai/resources'
 import { Stream } from 'openai/streaming'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { ChatConfiguration, models } from 'src/configurations/chatCompletion'
-import { useClients, useMessages, useSettings } from 'src/hooks'
+import { useClients, useSettings, useStoreMessages } from 'src/hooks'
 import { getTokensCount, showRequestErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { Companies } from 'src/types/global'
 
-const useChatCompletion = (prompt: string) => {
+const useChatCompletion = () => {
   const { openAiClient, azureClient } = useClients()
   const currConversation = useRecoilValue(currConversationState)
   const { settings } = useSettings()
@@ -22,11 +25,13 @@ const useChatCompletion = (prompt: string) => {
     saveUserMessage,
     saveAssistantMessage,
     updateChatCompletionStream
-  } = useMessages()
+  } = useStoreMessages()
 
   if (!settings || !currConversation) return
 
-  const createChatCompletionByAzure = async () => {
+  const createChatCompletionByAzure = async (
+    userMessage: ChatCompletionContentPart[]
+  ) => {
     const {
       model,
       systemMessage,
@@ -39,9 +44,22 @@ const useChatCompletion = (prompt: string) => {
       systemMessageTokensCount
     } = currConversation.configuration as ChatConfiguration
 
-    const userMessageTokensCount = getTokensCount(prompt, model)
+    let userMessageText = ''
+    userMessage.forEach((message) => {
+      // TODO: It seems that the image needn't be calculated in the token.
+      // if (message.type === 'image_url') {
+      //   userMessageText += message.imageUrl.url + ' '
+      // }
+
+      if (message.type === 'text') {
+        userMessageText += message.text + ' '
+      }
+    })
+    const userMessageTokensCount = getTokensCount(userMessageText, model)
+
     let tokensCount =
       userMessageTokensCount + systemMessageTokensCount + maxTokens
+
     const tokensLimit = models.find((m) => m.name === model)?.tokensLimit || 0
     if (tokensCount > tokensLimit) {
       enqueueSnackbar(
@@ -52,7 +70,7 @@ const useChatCompletion = (prompt: string) => {
       )
       return
     }
-    const context: ChatCompletionCreateParams['messages'] = []
+    const context: ChatCompletionMessageParam[] = []
     currConversation.messages
       .slice()
       .reverse()
@@ -61,22 +79,36 @@ const useChatCompletion = (prompt: string) => {
         if (tokensCount > tokensLimit) return
         context.unshift({
           role,
-          content
+          // TODO: The size of the image base64 string may be very large;
+          // do not send it to the OpenAI service as context.
+          content: content.filter((item) => item.type === 'text')
         })
       })
-    saveUserMessage(prompt, userMessageTokensCount)
-    setLoading(true)
-    updateChatCompletionStream()
 
-    const messages: ChatCompletionMessageParam[] = [
+    await saveUserMessage(userMessage, userMessageTokensCount)
+    setLoading(true)
+
+    const messages: ChatRequestMessageUnion[] = [
       {
         role: 'system',
-        content: systemMessage
+        content: [{ type: 'text', text: systemMessage }]
       },
-      ...context,
+      ...JSON.parse(JSON.stringify(context)),
       {
         role: 'user',
-        content: prompt
+        content: userMessage.map((item) => {
+          // Fuck Microsoft
+          if (item.type === 'image_url') {
+            return {
+              type: 'image_url',
+              imageUrl: { url: item.image_url.url }
+            }
+          }
+
+          if (item.type === 'text') {
+            return item
+          }
+        })
       }
     ]
 
@@ -150,7 +182,12 @@ const useChatCompletion = (prompt: string) => {
     }
   }
 
-  const createChatCompletionByOpenAI = async () => {
+  const createChatCompletionByOpenAI = async (
+    userMessage: (
+      | ChatCompletionContentPartText
+      | ChatCompletionContentPartImage
+    )[]
+  ) => {
     const {
       model,
       systemMessage,
@@ -162,10 +199,22 @@ const useChatCompletion = (prompt: string) => {
       stop,
       systemMessageTokensCount
     } = currConversation.configuration as ChatConfiguration
+    let userMessageText = ''
+    userMessage.forEach((message) => {
+      // TODO: It seems that the image needn't be calculated in the token.
+      // if (message.type === 'image_url') {
+      //   userMessageText += message.imageUrl.url + ' '
+      // }
 
-    const userMessageTokensCount = getTokensCount(prompt, model)
+      if (message.type === 'text') {
+        userMessageText += message.text + ' '
+      }
+    })
+    const userMessageTokensCount = getTokensCount(userMessageText, model)
+
     let tokensCount =
       userMessageTokensCount + systemMessageTokensCount + maxTokens
+
     const tokensLimit = models.find((m) => m.name === model)?.tokensLimit || 0
     if (tokensCount > tokensLimit) {
       enqueueSnackbar(
@@ -176,7 +225,7 @@ const useChatCompletion = (prompt: string) => {
       )
       return
     }
-    const context: ChatCompletionCreateParams['messages'] = []
+    const context: ChatCompletionMessageParam[] = []
     currConversation.messages
       .slice()
       .reverse()
@@ -185,22 +234,31 @@ const useChatCompletion = (prompt: string) => {
         if (tokensCount > tokensLimit) return
         context.unshift({
           role,
-          content
-        })
+          // TODO: The size of the image base64 string may be very large; do not add it to the context.
+          content: content.filter((item) => item.type === 'text')
+        } as ChatCompletionMessageParam)
       })
-    saveUserMessage(prompt, userMessageTokensCount)
+
+    await saveUserMessage(userMessage, userMessageTokensCount)
     setLoading(true)
-    updateChatCompletionStream()
 
     const messages: ChatCompletionMessageParam[] = [
       {
         role: 'system',
-        content: systemMessage
+        content: [{ type: 'text', text: systemMessage }]
       },
-      ...context,
+      ...JSON.parse(JSON.stringify(context)),
       {
         role: 'user',
-        content: prompt
+        content: userMessage.map((item) => {
+          if (item.type === 'image_url') {
+            return { type: item.type, image_url: item.image_url }
+          }
+
+          if (item.type === 'text') {
+            return item
+          }
+        })
       }
     ]
 

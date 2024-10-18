@@ -14,6 +14,19 @@ interface Props {
 const ConversationItem: FC<Props> = ({ active, conversation, onClick }) => {
   const { isSameDay, display } = formatDate(conversation.updatedAt)
 
+  const showLastMessage = () => {
+    const { content } = conversation.messages[conversation.messages.length - 1]
+    const lastMessage = content[content.length - 1]
+
+    if (lastMessage.type === 'image_url') {
+      return '[Image]'
+    } else if (lastMessage.type === 'text') {
+      return lastMessage.text
+    }
+
+    return ''
+  }
+
   return (
     <ItemWrapper onClick={onClick} active={active}>
       {conversation.avatar ? (
@@ -45,7 +58,7 @@ const ConversationItem: FC<Props> = ({ active, conversation, onClick }) => {
 
         {conversation.messages.length > 0 && (
           <p className="mt-2 w-48 truncate text-xs font-semibold text-black text-opacity-40 dark:text-dark-text-sub">
-            {conversation.messages[conversation.messages.length - 1].content}
+            {showLastMessage()}
           </p>
         )}
       </div>

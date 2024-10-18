@@ -1,17 +1,18 @@
+import { ChatCompletionContentPartText } from 'openai/resources'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { CompletionConfiguration } from 'src/configurations/completion'
-import { useClients, useMessages } from 'src/hooks'
+import { useClients, useStoreMessages } from 'src/hooks'
 import { showRequestErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 import { Companies } from 'src/types/global'
 
-const useCompletion = (prompt: string) => {
+const useCompletion = () => {
   const { openAiClient, azureClient } = useClients()
   const currConversation = useRecoilValue(currConversationState)
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
-  const { saveUserMessage, saveCommonAssistantMessage } = useMessages()
+  const { saveUserMessage, saveCommonAssistantMessage } = useStoreMessages()
 
   if (!settings || !currConversation) return
 
@@ -26,14 +27,16 @@ const useCompletion = (prompt: string) => {
     postResponse
   } = currConversation.configuration as CompletionConfiguration
 
-  const createCompletionByOpenAI = async () => {
+  const createCompletionByOpenAI = async (
+    completionTextContent: ChatCompletionContentPartText[]
+  ) => {
     try {
-      saveUserMessage(prompt)
+      saveUserMessage(completionTextContent)
       setLoading(true)
 
       const completion = await openAiClient.completions.create({
         model,
-        prompt,
+        prompt: completionTextContent[0].text,
         max_tokens: maxTokens,
         temperature,
         top_p: topP,
@@ -44,9 +47,16 @@ const useCompletion = (prompt: string) => {
       const preResponseText = preResponse.checked ? preResponse.content : ''
       const postResponseText = postResponse.checked ? postResponse.content : ''
 
-      saveCommonAssistantMessage(
-        preResponseText + (completion.choices[0].text || '') + postResponseText
-      )
+      const assistantContent: ChatCompletionContentPartText[] = [
+        {
+          text:
+            preResponseText +
+            (completion.choices[0].text || '') +
+            postResponseText,
+          type: 'text'
+        }
+      ]
+      saveCommonAssistantMessage(assistantContent)
     } catch (e) {
       showRequestErrorToast(e)
     } finally {
@@ -54,14 +64,16 @@ const useCompletion = (prompt: string) => {
     }
   }
 
-  const createCompletionByAzure = async () => {
+  const createCompletionByAzure = async (
+    completionTextContent: ChatCompletionContentPartText[]
+  ) => {
     try {
-      saveUserMessage(prompt)
+      saveUserMessage(completionTextContent)
       setLoading(true)
 
       const completion = await azureClient.getCompletions(
         settings.azureDeploymentNameCompletion,
-        [prompt],
+        [completionTextContent[0].text],
         {
           maxTokens,
           temperature,
@@ -74,9 +86,16 @@ const useCompletion = (prompt: string) => {
       const preResponseText = preResponse.checked ? preResponse.content : ''
       const postResponseText = postResponse.checked ? postResponse.content : ''
 
-      saveCommonAssistantMessage(
-        preResponseText + (completion.choices[0].text || '') + postResponseText
-      )
+      const assistantContent: ChatCompletionContentPartText[] = [
+        {
+          text:
+            preResponseText +
+            (completion.choices[0].text || '') +
+            postResponseText,
+          type: 'text'
+        }
+      ]
+      saveCommonAssistantMessage(assistantContent)
     } catch (e) {
       showRequestErrorToast(e)
     } finally {

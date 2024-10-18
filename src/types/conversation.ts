@@ -1,9 +1,19 @@
+import { ChatCompletionContentPart } from 'openai/resources'
 import { AudioTranscriptionConfiguration } from '../configurations/audioTranscription'
 import { AudioTranslationConfiguration } from '../configurations/audioTranslation'
 import { ChatConfiguration } from '../configurations/chatCompletion'
 import { CompletionConfiguration } from '../configurations/completion'
 import { ImageGenerationConfiguration } from '../configurations/imageGeneration'
 import { Products } from './global'
+
+export interface AudioContentPart {
+  type: 'audio'
+  audioUrl: {
+    url: string
+  }
+  text: string
+  binary?: File
+}
 
 export enum Roles {
   System = 'system',
@@ -13,11 +23,10 @@ export enum Roles {
 
 export interface Message {
   messageId: string
-  content: string
   role: Roles
+  content: (ChatCompletionContentPart | AudioContentPart)[]
   tokensCount: number
   createdAt: number
-  fileName?: string
 }
 
 export interface Conversation {
@@ -34,4 +43,9 @@ export interface Conversation {
     | AudioTranscriptionConfiguration
     | AudioTranslationConfiguration
     | CompletionConfiguration
+}
+
+export interface AudioFile {
+  filename: string
+  binary?: File
 }

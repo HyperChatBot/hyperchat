@@ -1,71 +1,156 @@
-import { MicrophoneIcon } from '@heroicons/react/24/solid'
-import Tooltip from '@mui/material/Tooltip'
 import classNames from 'classnames'
-import { ChangeEvent, FC, memo, useEffect, useRef, useState } from 'react'
-import { useRecoilValue } from 'recoil'
-import { useAppData, useRequest } from 'src/hooks'
-import { isAudioProduct } from 'src/shared/utils'
-import { currConversationState, loadingState } from 'src/stores/conversation'
+import { produce } from 'immer'
+import {
+  ChatCompletionContentPart,
+  ChatCompletionContentPartImage,
+  ChatCompletionContentPartText
+} from 'openai/resources'
+import { FC, memo, useEffect, useRef, useState } from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import items from 'src/components/Sidebar/Items'
+import {
+  useAudio,
+  useChatCompletion,
+  useCompletion,
+  useImageGeneration
+} from 'src/hooks'
+import {
+  audioFileState,
+  base64ImagesState,
+  currConversationState,
+  loadingState,
+  userInputState
+} from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
-import { HashFile } from 'src/types/global'
-import Divider from '../Divider'
-import { LoadingIcon, SolidSendIcon } from '../Icons'
+import { settingsState } from 'src/stores/settings'
+import { AudioContentPart } from 'src/types/conversation'
+import { Products } from 'src/types/global'
+import { LoadingIcon, SolidCloseIcon, SolidSendIcon } from '../Icons'
+import WaveForm from '../Waveform'
+import MediaUploader from './MediaUploader'
+import AudioRecorder from './Recorder'
 
 const InputBox: FC = () => {
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
   const currConversation = useRecoilValue(currConversationState)
   const currProduct = useRecoilValue(currProductState)
+  const settings = useRecoilValue(settingsState)
   const loading = useRecoilValue(loadingState)
-  const { saveFileToAppDataDir } = useAppData()
-  const [prompt, setPrompt] = useState('')
+  const [userInput, setUserInput] = useRecoilState(userInputState)
+  const [audioFile, setAudioFile] = useRecoilState(audioFileState)
+  const [base64Images, setBase64Images] = useRecoilState(base64ImagesState)
+  const createChatCompletion = useChatCompletion()
+  const createAudio = useAudio()
+  const createImage = useImageGeneration()
+  const createCompletion = useCompletion()
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
   const [isTyping, setIsTyping] = useState(false)
-  const [hashFile, setHashFile] = useState<HashFile | null>(null)
-  const requests = useRequest(prompt, hashFile as HashFile)
+  const mediaType = items.find(
+    (item) => item.product === currProduct
+  )?.multiMedia
 
-  const onFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0]
-
-    if (file) {
-      const hashName = await saveFileToAppDataDir(file)
-      setHashFile({
-        file,
-        hashName
+  const deleteBase64Image = (idx: number) => {
+    setBase64Images(
+      produce(base64Images, (draft) => {
+        draft?.splice(idx, 1)
       })
-    }
+    )
   }
 
   const resetInput = () => {
-    setPrompt('')
-    setHashFile(null)
-
-    if (textareaRef.current) {
-      textareaRef.current.blur()
-      textareaRef.current.value = ''
-    }
-
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ''
-    }
+    setUserInput('')
+    setAudioFile({
+      filename: '',
+      binary: undefined
+    })
+    setBase64Images(null)
   }
 
-  // Prompt is optional in audio products.
   const validate = () => {
     if (loading) return false
-
-    if (isAudioProduct(currProduct)) {
-      return Boolean(hashFile)
-    } else {
-      return prompt.trim().length !== 0
-    }
+    return userInput.trim().length !== 0
   }
 
   const handleRequest = () => {
-    if (!validate()) return
+    if (!settings || !validate()) return
 
-    if (requests[currProduct]) {
-      requests[currProduct]()
+    if (currProduct === Products.ChatCompletion) {
+      const chatMessageImageContent:
+        | ChatCompletionContentPartImage[]
+        | undefined = base64Images?.map((imageUrl) => ({
+        type: 'image_url',
+        image_url: {
+          url: imageUrl
+        }
+      }))
+
+      const chatMessageTextContent: ChatCompletionContentPartText = {
+        type: 'text',
+        text: userInput
+      }
+
+      const chatCompletionUserMessage: ChatCompletionContentPart[] = [
+        ...(chatMessageImageContent || []),
+        chatMessageTextContent
+      ]
+
+      if (createChatCompletion) {
+        createChatCompletion(chatCompletionUserMessage)
+      }
     }
+
+    if (
+      currProduct === Products.AudioTranscription ||
+      currProduct === Products.AudioTranslation
+    ) {
+      const audioContentPart: AudioContentPart[] = [
+        {
+          type: 'audio',
+          audioUrl: { url: audioFile.filename },
+          text: userInput,
+          binary: audioFile.binary
+        }
+      ]
+
+      if (createAudio) {
+        if (currProduct === Products.AudioTranscription) {
+          const createAudioTranscription =
+            createAudio[Products.AudioTranscription]
+          createAudioTranscription(audioContentPart)
+        }
+
+        if (currProduct === Products.AudioTranslation) {
+          const createAudioTranslation = createAudio[Products.AudioTranslation]
+          createAudioTranslation(audioContentPart)
+        }
+      }
+    }
+
+    if (currProduct === Products.ImageGeneration) {
+      const imageGenerationTextContent: ChatCompletionContentPartText[] = [
+        {
+          type: 'text',
+          text: userInput
+        }
+      ]
+
+      if (createImage) {
+        createImage(imageGenerationTextContent)
+      }
+    }
+
+    if (currProduct === Products.Completion) {
+      const completionTextContent: ChatCompletionContentPartText[] = [
+        {
+          type: 'text',
+          text: userInput
+        }
+      ]
+
+      if (createCompletion) {
+        createCompletion(completionTextContent)
+      }
+    }
+
     resetInput()
   }
 
@@ -80,7 +165,7 @@ const InputBox: FC = () => {
       const end = event.target.selectionEnd
       const value = event.target.value
 
-      setPrompt(value.substring(0, start) + '\n' + value.substring(end))
+      setUserInput(value.substring(0, start) + '\n' + value.substring(end))
       event.target.selectionStart = event.target.selectionEnd = start + 1
     }
 
@@ -98,96 +183,84 @@ const InputBox: FC = () => {
         textareaRef?.current?.scrollHeight > 400 ? 'auto' : 'hidden'
       }`
     }
-  }, [prompt])
+  }, [userInput])
 
   if (!currConversation) return null
 
   return (
-    <section className="absolute bottom-6 left-6 w-[calc(100%_-_3rem)] bg-white pt-6 dark:bg-gray-800">
-      <section className="relative flex w-full">
-        <textarea
-          ref={textareaRef}
-          className={classNames(
-            'w-full resize-none rounded-md border border-black/10 bg-white px-4 py-3 pr-10 text-sm text-black outline-none dark:border-gray-900/50 dark:bg-gray-700 dark:text-white',
-            { 'pr-24': isAudioProduct(currProduct) }
-          )}
-          style={{
-            resize: 'none',
-            bottom: `${textareaRef?.current?.scrollHeight}px`,
-            maxHeight: '400px',
-            overflow: `${
-              textareaRef.current && textareaRef.current.scrollHeight > 400
-                ? 'auto'
-                : 'hidden'
-            }`
-          }}
-          placeholder="Type a message..."
-          value={prompt}
-          rows={1}
-          // FIXME: The webkit(safari) doesn't support `onCompositionStart` or `onCompositionEnd`.
-          onCompositionStart={() => setIsTyping(true)}
-          onCompositionEnd={() => setIsTyping(false)}
-          onChange={(e) => setPrompt(e.target.value)}
-          onKeyDown={handleKeyDown}
-        />
-
-        <section className="absolute bottom-2.5 right-4 z-10 flex gap-3">
-          {isAudioProduct(currProduct) && (
-            <>
-              <label
-                htmlFor="$$video-input"
-                className="relative flex cursor-pointer items-center"
-              >
-                <input
-                  type="file"
-                  id="$$video-input"
-                  accept="audio/mp3,video/mp4,video/mpeg,video/mpea,video/m4a,video/wav,video/webm"
-                  className="absolute h-6 w-6 opacity-0 file:h-6 file:w-6"
-                  ref={fileInputRef}
-                  onChange={onFileChange}
+    <section className="absolute bottom-6 left-6 w-[calc(100%_-_3rem)] rounded-md border border-black/10 bg-white dark:bg-gray-700">
+      {Array.isArray(base64Images) && base64Images.length > 0 && (
+        <section className="mb-2 ml-4 mt-4 flex w-full flex-row gap-2">
+          {base64Images.map((image, idx) => (
+            <section className="group relative" key={idx}>
+              <span className="absolute -right-2 -top-2 hidden rounded-full bg-white group-hover:block">
+                <SolidCloseIcon
+                  className="h-6 w-6 text-black dark:text-white"
+                  onClick={() => deleteBase64Image(idx)}
                 />
-                <Tooltip
-                  title={hashFile?.file.name || ''}
-                  placement="top"
-                  open={Boolean(hashFile?.file.name)}
-                >
-                  <MicrophoneIcon
-                    className={classNames(
-                      'relative h-5 w-5',
-                      {
-                        'text-black text-opacity-30 dark:text-white':
-                          !validate()
-                      },
-                      {
-                        'text-main-purple text-opacity-100 dark:text-main-purple':
-                          validate()
-                      }
-                    )}
-                  />
-                </Tooltip>
-              </label>
-              <Divider direction="vertical" className="h-6" />
-            </>
-          )}
-
-          {loading ? (
-            <LoadingIcon className="h-5 w-5 animate-spin text-main-purple" />
-          ) : (
-            <SolidSendIcon
-              onClick={handleRequest}
-              pathClassName={classNames(
-                'fill-current',
-                {
-                  'text-black dark:text-white text-opacity-30': !validate()
-                },
-                {
-                  'text-main-purple dark:text-main-purple text-opacity-100':
-                    validate()
-                }
-              )}
-            />
-          )}
+              </span>
+              <img src={image} className="h-16 w-16 rounded-xl object-cover" />
+            </section>
+          ))}
         </section>
+      )}
+      {audioFile.filename && (
+        <section className="ml-4 mt-4 flex w-1/2 rounded-3xl bg-main-purple">
+          <WaveForm filename={audioFile.filename} />
+        </section>
+      )}
+
+      {mediaType && (
+        <MediaUploader
+          mediaType={mediaType}
+          className="absolute bottom-3 left-4"
+        />
+      )}
+
+      <textarea
+        ref={textareaRef}
+        className={classNames(
+          'block w-full resize-none rounded-md bg-white px-4 py-3 pl-12 pr-20 text-sm text-black outline-none dark:border-gray-900/50 dark:bg-gray-700 dark:text-white',
+          { ['pl-4']: mediaType === undefined }
+        )}
+        style={{
+          resize: 'none',
+          bottom: `${textareaRef?.current?.scrollHeight}px`,
+          maxHeight: '400px',
+          overflow: `${
+            textareaRef.current && textareaRef.current.scrollHeight > 400
+              ? 'auto'
+              : 'hidden'
+          }`
+        }}
+        placeholder="Type a message..."
+        value={userInput}
+        rows={1}
+        // FIXME: The webkit(safari) doesn't support `onCompositionStart` or `onCompositionEnd`.
+        onCompositionStart={() => setIsTyping(true)}
+        onCompositionEnd={() => setIsTyping(false)}
+        onChange={(e) => setUserInput(e.target.value)}
+        onKeyDown={handleKeyDown}
+      />
+      <section className="absolute bottom-[2px] right-4 flex items-center">
+        <AudioRecorder />
+        {loading ? (
+          <LoadingIcon className="h-5 w-5 animate-spin text-main-purple" />
+        ) : (
+          <SolidSendIcon
+            onClick={handleRequest}
+            pathClassName={classNames(
+              'fill-current',
+              {
+                'text-black dark:text-white text-opacity-30': !validate()
+              },
+              {
+                'text-main-purple dark:text-main-purple text-opacity-100':
+                  validate()
+              }
+            )}
+          />
+        )}
       </section>
     </section>
   )

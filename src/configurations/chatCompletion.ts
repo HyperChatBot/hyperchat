@@ -26,6 +26,10 @@ export const models = [
   {
     name: 'gpt-4-32k',
     tokensLimit: 32 * 2 ** 10 + 1
+  },
+  {
+    name: 'gpt-4o',
+    tokensLimit: 128 * 2 ** 10 + 1
   }
 ] as const
 

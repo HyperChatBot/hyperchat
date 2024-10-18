@@ -10,7 +10,7 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-green.svg)](https://github.com/HyperChatBot/hyperchat/pulls)
 [![Node](https://img.shields.io/badge/Node.js-%3E%3D18.19.0-green.svg)](https://nodejs.org/en/)
 [![Rust](https://img.shields.io/badge/Rust-%3E%3D1.81.0-orange.svg)](https://nodejs.org/en/)
-[![Version](https://img.shields.io/badge/Version-v1.0.5-blue.svg)](https://nodejs.org/en/)
+[![Version](https://img.shields.io/badge/Version-v2.0.0-blue.svg)](https://nodejs.org/en/)
 [![Twitter](https://img.shields.io/badge/Twitter-Connect-brightgreen?logo=twitter)](https://twitter/YanceyOfficial)
 
 ## Introduction

@@ -155,9 +155,11 @@ const Configuration: FC = () => {
                     <TextField
                       {...params}
                       label="Language"
-                      inputProps={{
-                        ...params.inputProps,
-                        autoComplete: 'new-password' // disable autocomplete and autofill
+                      slotProps={{
+                        htmlInput: {
+                          ...params.inputProps,
+                          autoComplete: 'new-password'
+                        }
                       }}
                       helperText="The language of the input audio. Supplying the input language
                       in ISO-639-1 format will improve accuracy and latency."

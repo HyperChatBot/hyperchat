@@ -1,39 +1,46 @@
+import { ChatCompletionContentPartText } from 'openai/resources'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { ImageGenerationConfiguration } from 'src/configurations/imageGeneration'
-import { useClients, useMessages } from 'src/hooks'
+import { useClients, useStoreMessages } from 'src/hooks'
 import { showRequestErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 import { Companies } from 'src/types/global'
 
-const useImageGeneration = (prompt: string) => {
+const useImageGeneration = () => {
   const { openAiClient, azureClient } = useClients()
   const currConversation = useRecoilValue(currConversationState)
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
-  const { saveUserMessage, saveCommonAssistantMessage } = useMessages()
+  const { saveUserMessage, saveCommonAssistantMessage } = useStoreMessages()
 
   if (!settings || !currConversation) return
 
-  const createImageGenerationByOpenAI = async () => {
+  const createImageGenerationByOpenAI = async (
+    imageGenerationTextContent: ChatCompletionContentPartText[]
+  ) => {
     const { n, size, responseFormat } =
       currConversation.configuration as ImageGenerationConfiguration
 
     try {
-      saveUserMessage(prompt)
+      saveUserMessage(imageGenerationTextContent)
       setLoading(true)
       const image = await openAiClient.images.generate({
-        prompt,
+        prompt: imageGenerationTextContent[0].text,
         n,
         size,
         response_format: responseFormat
       })
 
-      const content = image.data
-        .map((val, key) => `![${prompt}-${key}](${val.url})\n`)
-        .join('')
-
-      saveCommonAssistantMessage(content)
+      const assistantContent: ChatCompletionContentPartText[] = [
+        {
+          text: image.data
+            .map((val, key) => `![${prompt}-${key}](${val.url})\n`)
+            .join(''),
+          type: 'text'
+        }
+      ]
+      saveCommonAssistantMessage(assistantContent)
     } catch (e) {
       showRequestErrorToast(e)
     } finally {
@@ -41,16 +48,18 @@ const useImageGeneration = (prompt: string) => {
     }
   }
 
-  const createImageGenerationByAzure = async () => {
+  const createImageGenerationByAzure = async (
+    imageGenerationTextContent: ChatCompletionContentPartText[]
+  ) => {
     const { n, size, responseFormat } =
       currConversation.configuration as ImageGenerationConfiguration
 
     try {
-      saveUserMessage(prompt)
+      saveUserMessage(imageGenerationTextContent)
       setLoading(true)
       const image = await azureClient.getImages(
         settings.azureDeploymentNameTextToImage,
-        prompt,
+        imageGenerationTextContent[0].text,
         {
           n,
           size,
@@ -58,11 +67,15 @@ const useImageGeneration = (prompt: string) => {
         }
       )
 
-      const content = image.data
-        .map((val, key) => `![${prompt}-${key}](${val.url})\n`)
-        .join('')
-
-      saveCommonAssistantMessage(content)
+      const assistantContent: ChatCompletionContentPartText[] = [
+        {
+          text: image.data
+            .map((val, key) => `![${prompt}-${key}](${val.url})\n`)
+            .join(''),
+          type: 'text'
+        }
+      ]
+      saveCommonAssistantMessage(assistantContent)
     } catch (e) {
       showRequestErrorToast(e)
     } finally {

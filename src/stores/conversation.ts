@@ -1,5 +1,5 @@
 import { atom } from 'recoil'
-import { Conversation } from 'src/types/conversation'
+import { AudioFile, Conversation } from 'src/types/conversation'
 
 export const currConversationState = atom<Conversation | undefined>({
   key: 'CurrConversation',
@@ -24,4 +24,21 @@ export const currPlayingAudioIdState = atom<string | undefined>({
 export const loadingState = atom({
   key: 'Loading',
   default: false
+})
+
+export const userInputState = atom({
+  key: 'UserInput',
+  default: ''
+})
+
+export const audioFileState = atom<AudioFile>({
+  key: 'AudioFile',
+  default: {
+    filename: ''
+  }
+})
+
+export const base64ImagesState = atom<string[] | null>({
+  key: 'Base64Images',
+  default: null
 })

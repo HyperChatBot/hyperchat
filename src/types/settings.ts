@@ -14,6 +14,8 @@ export interface Settings {
   azureDeploymentNameTextToImage: string
   azureDeploymentNameEmbedding: string
   azureDeploymentNameAudioGeneration: string
+  azureSpeechSecretKey: string
+  azureSpeechRegion: string
   themeMode: ThemeMode
   assistantAvatarFilename: string
 }

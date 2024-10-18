@@ -8,7 +8,7 @@ const useDB = (tableName: string) => {
 
   const deleteOneById = async (id: string) => {
     try {
-      await db.table(tableName).delete(id)
+      const x = await db.table(tableName).delete(id)
     } catch {}
   }
 
@@ -39,13 +39,15 @@ const useDB = (tableName: string) => {
   }
 
   const getConversationByProduct = async () => {
-    const conversation: Conversation[] = await db
-      .table(tableName)
-      .where({ product: currProduct })
-      .sortBy('updatedAt')
-    conversation.reverse()
+    try {
+      const conversation: Conversation[] = await db
+        .table(tableName)
+        .where({ product: currProduct })
+        .sortBy('updatedAt')
+      conversation.reverse()
 
-    return conversation
+      return conversation
+    } catch {}
   }
 
   return {

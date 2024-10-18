@@ -1,14 +1,18 @@
-import { produce } from 'immer'
+import { produce, WritableDraft } from 'immer'
+import {
+  ChatCompletionContentPart,
+  ChatCompletionContentPartText
+} from 'openai/resources'
 import { useCallback } from 'react'
 import { useRecoilState } from 'recoil'
 import { ChatConfiguration } from 'src/configurations/chatCompletion'
 import { useDB } from 'src/hooks'
 import { getTokensCount } from 'src/shared/utils'
 import { currConversationState } from 'src/stores/conversation'
-import { Message, Roles } from 'src/types/conversation'
+import { AudioContentPart, Message, Roles } from 'src/types/conversation'
 import { v4 } from 'uuid'
 
-const useMessages = () => {
+const useStoreMessages = () => {
   const { updateOneById } = useDB('conversations')
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
@@ -33,18 +37,25 @@ const useMessages = () => {
       setCurrConversation((prevState) =>
         produce(prevState, (draft) => {
           if (!draft) return
-          const lastMessage = draft.messages[draft.messages.length - 1]
-          if (token === undefined) {
-            const message: Message = {
-              messageId: v4(),
-              content: '',
-              role: Roles.Assistant,
-              tokensCount: 0,
-              createdAt: +new Date()
+
+          const { role, content } = draft.messages[draft.messages.length - 1]
+
+          if (role !== Roles.Assistant) {
+            if (token) {
+              const message: Message = {
+                messageId: v4(),
+                role: Roles.Assistant,
+                content: [{ type: 'text', text: token }],
+                tokensCount: 0,
+                createdAt: +new Date()
+              }
+              draft.messages.push(message)
             }
-            draft.messages.push({ ...message, content: '' })
           } else {
-            lastMessage.content += token
+            // Assume assistant always returns text
+            const textContent =
+              content[0] as WritableDraft<ChatCompletionContentPartText>
+            textContent.text += token
           }
         })
       )
@@ -53,7 +64,7 @@ const useMessages = () => {
   )
 
   const saveCommonAssistantMessage = useCallback(
-    (content: string) => {
+    (content: ChatCompletionContentPartText[]) => {
       if (!currConversation) return
 
       setCurrConversation((prevState) => {
@@ -61,8 +72,8 @@ const useMessages = () => {
           if (!draft) return
           const message: Message = {
             messageId: v4(),
-            content,
             role: Roles.Assistant,
+            content,
             tokensCount: 0,
             createdAt: +new Date()
           }
@@ -90,9 +101,14 @@ const useMessages = () => {
       const newConversation = produce(prevState, (draft) => {
         if (!draft) return
         const lastMessage = draft.messages[draft.messages.length - 1]
+
         if (lastMessage.role === Roles.Assistant) {
           lastMessage.tokensCount = getTokensCount(
-            lastMessage.content,
+            (
+              lastMessage.content as WritableDraft<
+                ChatCompletionContentPartText[]
+              >
+            )[0].text,
             (currConversation.configuration as ChatConfiguration).model
           )
         }
@@ -111,13 +127,17 @@ const useMessages = () => {
   }, [currConversation])
 
   const saveUserMessage = useCallback(
-    (content: string, tokensCount?: number, fileName?: string) => {
+    async (
+      content: (ChatCompletionContentPart | AudioContentPart)[],
+      tokensCount?: number,
+      fileName?: string
+    ) => {
       if (!currConversation) return
 
       const message: Message = {
         messageId: v4(),
-        content,
         role: Roles.User,
+        content,
         tokensCount: tokensCount || 0,
         fileName,
         createdAt: +new Date()
@@ -127,8 +147,9 @@ const useMessages = () => {
         draft.messages.push(message)
         draft.updatedAt = +new Date()
       })
+
       setCurrConversation(newConversations)
-      updateOneById(currConversation.conversationId, {
+      await updateOneById(currConversation.conversationId, {
         messages: newConversations.messages,
         updatedAt: newConversations.updatedAt
       })
@@ -145,4 +166,4 @@ const useMessages = () => {
   }
 }
 
-export default useMessages
+export default useStoreMessages

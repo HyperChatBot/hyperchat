@@ -15,7 +15,7 @@ const Conversation: FC = () => {
   const currProduct = useRecoilValue(currProductState)
   const { getConversationByProduct } = useDB('conversations')
   const conversations = useLiveQuery<IConversation[]>(
-    getConversationByProduct,
+    getConversationByProduct as () => Promise<IConversation[]>,
     [currProduct]
   )
   const [currConversation, setCurrConversation] = useRecoilState(

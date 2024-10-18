@@ -14,7 +14,7 @@ import {
   OutlineTranslationIcon,
   SolidTranslationIcon
 } from 'src/components/Icons'
-import { Companies, Products } from 'src/types/global'
+import { Companies, MediaType, Products } from 'src/types/global'
 
 export const iconClassName = 'h-6 w-6 text-black dark:text-white'
 export const companyClassName = 'h-8 w-8'
@@ -24,7 +24,8 @@ export default [
     product: Products.ChatCompletion,
     inactive: <ChatBubbleLeftRightIconOutline className={iconClassName} />,
     active: <ChatBubbleLeftRightIconSolid className={iconClassName} />,
-    realm: [Companies.Azure, Companies.OpenAI]
+    realm: [Companies.Azure, Companies.OpenAI],
+    multiMedia: MediaType.Image
   },
   {
     product: Products.Completion,
@@ -32,24 +33,28 @@ export default [
       <ChatBubbleBottomCenterTextIconOutline className={iconClassName} />
     ),
     active: <ChatBubbleBottomCenterTextIconSolid className={iconClassName} />,
-    realm: [Companies.Azure, Companies.OpenAI]
+    realm: [Companies.Azure, Companies.OpenAI],
+    multiMedia: undefined
   },
   {
     product: Products.AudioTranscription,
     inactive: <MicrophoneIconOutline className={iconClassName} />,
     active: <MicrophoneIconSolid className={iconClassName} />,
-    realm: [Companies.OpenAI]
+    realm: [Companies.Azure, Companies.OpenAI],
+    multiMedia: MediaType.Audio
   },
   {
     product: Products.AudioTranslation,
     inactive: <OutlineTranslationIcon className={iconClassName} />,
     active: <SolidTranslationIcon className={iconClassName} />,
-    realm: [Companies.OpenAI]
+    realm: [Companies.Azure, Companies.OpenAI],
+    multiMedia: MediaType.Audio
   },
   {
     product: Products.ImageGeneration,
     inactive: <PhotoIconOutline className={iconClassName} />,
     active: <PhotoIconSolid className={iconClassName} />,
-    realm: [Companies.Azure, Companies.OpenAI]
+    realm: [Companies.Azure, Companies.OpenAI],
+    multiMedia: undefined
   }
 ]

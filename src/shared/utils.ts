@@ -19,33 +19,17 @@ export const formatDate = (millis: number) => {
   return { isSameDay: false, display: date.toLocaleString(DateTime.DATE_MED) }
 }
 
-export const generateHashName = (fileName: string) => {
+export const generateFilename = (fileName: string) => {
   const extension = getFileExtension(fileName)
-  const hashName = `${v4()}_${+new Date()}.${extension}`
+  const filename = `${v4()}_${+new Date()}.${extension}`
 
-  return hashName
+  return filename
 }
 
-export const isAudioProduct = (product: Products) =>
+export const isSupportAudio = (product: Products) =>
   product === Products.AudioTranscription ||
-  product === Products.AudioTranslation
-
-export const formatBytes = (bytes: number) => {
-  const k = 1024
-  const sizes = [
-    'Bytes',
-    'KiB',
-    'MiB',
-    'GiB',
-    'TiB',
-    'PiB',
-    'EiB',
-    'ZiB',
-    'YiB'
-  ]
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`
-}
+  product === Products.AudioTranslation ||
+  product === Products.ChatCompletion
 
 export const themeModeToTheme = (themeMode?: ThemeMode) =>
   themeMode === ThemeMode.system || !themeMode
@@ -66,3 +50,18 @@ export const showRequestErrorToast = (e?: RequestError | unknown) =>
       variant: 'error'
     }
   )
+
+export const convertBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader()
+    fileReader.readAsDataURL(file)
+
+    fileReader.onload = () => {
+      resolve(fileReader.result as string)
+    }
+
+    fileReader.onerror = (error) => {
+      reject(error)
+    }
+  })
+}

@@ -54,7 +54,7 @@ const Waveform: FC<Props> = ({ filename }) => {
       barWidth: 2,
       height: 40,
       waveColor: 'rgba(255, 255, 255, 0.6)',
-      progressColor: '#fff'
+      progressColor: '#383351'
     })
     waveSurfer.load(src)
     waveSurfer.on('ready', () => {
@@ -73,14 +73,14 @@ const Waveform: FC<Props> = ({ filename }) => {
     <section className="flex w-full items-center">
       {isPlaying ? (
         <PauseCircleIcon
-          className="flex-shrink-0 cursor-pointer"
+          className="flex-shrink-0 cursor-pointer pl-1 text-white"
           width={36}
           height={36}
           onClick={handlePlaying}
         />
       ) : (
         <PlayCircleIcon
-          className="flex-shrink-0 cursor-pointer"
+          className="flex-shrink-0 cursor-pointer pl-1 text-white"
           width={36}
           height={36}
           onClick={handlePlaying}

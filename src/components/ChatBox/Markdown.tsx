@@ -16,7 +16,6 @@ const Markdown: FC<Props> = ({ raw }) => {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm, remarkMath]}
-      // @ts-ignore
       rehypePlugins={[rehypeMathjax]}
       components={{
         code({ className, children, ...props }) {
