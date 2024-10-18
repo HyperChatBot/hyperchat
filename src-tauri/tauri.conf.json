@@ -23,7 +23,7 @@
   "identifier": "app.yancey.hyperchat",
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEVDNTVCNDc3NUE3MjVERTAKUldUZ1hYSmFkN1JWN1Bya1FuMDM1R2xOZU9KMXR3ZURCb2pkVXFveTJDcEJMTkUxZWtBT0phY3YK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQ5OTc4NjI4NEIzMTdDMUIKUldRYmZERkxLSWFYMlY5NkYwRE55Z1NCRHA1T3lxTHBkaUhCN2dUQ1hkUU9ZTm8zNzJTcFpSNzMK",
       "endpoints": [
         "https://faas.yancey.app/api/updater/{{target}}/{{arch}}/{{current_version}}?code=PjS1zF7Vc1QMrJ80C3xJS1tqkGqH-pT4oNlPfkFBYt0YAzFupnB5tA=="
       ],
