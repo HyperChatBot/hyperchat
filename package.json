@@ -38,7 +38,7 @@
     "immer": "^10.1.1",
     "js-tiktoken": "^1.0.15",
     "luxon": "^3.5.0",
-    "microsoft-cognitiveservices-speech-sdk": "^1.40.0",
+    "microsoft-cognitiveservices-speech-sdk": "^1.41.0",
     "notistack": "^3.0.1",
     "openai": "^4.67.2",
     "react": "^18.3.1",
