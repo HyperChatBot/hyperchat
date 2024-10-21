@@ -57,7 +57,7 @@
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
-    "@tauri-apps/cli": "^2.0.2",
+    "@tauri-apps/cli": "^2.0.4",
     "@types/luxon": "^3.4.2",
     "@types/node": "^22.7.5",
     "@types/react": "^18.3.11",
