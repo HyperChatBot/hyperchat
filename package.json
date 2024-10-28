@@ -40,7 +40,7 @@
     "luxon": "^3.5.0",
     "microsoft-cognitiveservices-speech-sdk": "^1.40.0",
     "notistack": "^3.0.1",
-    "openai": "^4.67.2",
+    "openai": "^4.68.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-markdown": "^9.0.1",
