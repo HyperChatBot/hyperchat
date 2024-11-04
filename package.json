@@ -50,7 +50,7 @@
     "rehype-mathjax": "^6.0.0",
     "remark-gfm": "^4.0.0",
     "remark-math": "^6.0.0",
-    "uuid": "^10.0.0",
+    "uuid": "^11.0.2",
     "wavesurfer.js": "^7.8.6",
     "yancey-js-util": "^3.2.0"
   },
