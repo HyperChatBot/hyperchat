@@ -22,7 +22,7 @@
     "@emotion/styled": "^11.13.0",
     "@heroicons/react": "^2.1.5",
     "@lottiefiles/react-lottie-player": "^3.5.4",
-    "@mui/material": "^6.1.2",
+    "@mui/material": "^6.1.7",
     "@tauri-apps/api": "^2.0.2",
     "@tauri-apps/plugin-fs": "~2.0.0",
     "@tauri-apps/plugin-shell": "~2.0.0",
