@@ -8,7 +8,7 @@ const useDB = (tableName: string) => {
 
   const deleteOneById = async (id: string) => {
     try {
-      const x = await db.table(tableName).delete(id)
+      await db.table(tableName).delete(id)
     } catch {}
   }
 

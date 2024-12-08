@@ -1,10 +1,8 @@
 import { PaperClipIcon } from '@heroicons/react/24/outline'
 import classNames from 'classnames'
 import { enqueueSnackbar } from 'notistack'
-import { config } from 'process'
 import { ChangeEvent, FC, useRef } from 'react'
 import { useRecoilState, useSetRecoilState } from 'recoil'
-import { useAppData } from 'src/hooks'
 import { multiMedialConfig } from 'src/shared/constants'
 import { convertBase64 } from 'src/shared/utils'
 import { audioFileState, base64ImagesState } from 'src/stores/conversation'
@@ -16,7 +14,6 @@ interface Props {
 }
 
 const MediaUploader: FC<Props> = ({ mediaType, className }) => {
-  const { saveFileToAppDataDir } = useAppData()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [audioFile, setAudioFile] = useRecoilState(audioFileState)
   const setBase64Images = useSetRecoilState(base64ImagesState)
@@ -34,10 +31,10 @@ const MediaUploader: FC<Props> = ({ mediaType, className }) => {
         binary: file
       })
 
-      const filename = await saveFileToAppDataDir(file)
+      const response = await window.electronAPI.saveFileToAppDataDir({ file })
       setAudioFile({
         ...audioFile,
-        filename
+        filename: response.filename
       })
     }
 

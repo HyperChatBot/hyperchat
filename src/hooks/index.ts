@@ -1,4 +1,3 @@
-import useAppData from './useAppData'
 import useAudio from './useAudio'
 import useChatCompletion from './useChatCompletion'
 import useClients from './useClients'
@@ -12,7 +11,6 @@ import useStoreMessages from './useStoreMessages'
 import useTheme from './useTheme'
 
 export {
-  useAppData,
   useAudio,
   useChatCompletion,
   useClients,

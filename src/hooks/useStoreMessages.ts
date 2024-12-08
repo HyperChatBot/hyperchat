@@ -129,7 +129,7 @@ const useStoreMessages = () => {
   const saveUserMessage = useCallback(
     async (
       content: (ChatCompletionContentPart | AudioContentPart)[],
-      tokensCount?: number,
+      tokensCount?: number
     ) => {
       if (!currConversation) return
 

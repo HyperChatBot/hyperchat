@@ -6,10 +6,8 @@ import { settingsState } from 'src/stores/settings'
 import { Companies, ThemeMode } from 'src/types/global'
 import { Settings } from 'src/types/settings'
 import { v4 } from 'uuid'
-import useAppData from './useAppData'
 
 const useSettings = () => {
-  const { transformFilenameToSrc } = useAppData()
   const [loading, setLoading] = useState(false)
   const [settings, setSettings] = useRecoilState(settingsState)
   const { updateOneById, insertOne, toArray } = useDB('settings')
@@ -48,11 +46,11 @@ const useSettings = () => {
         newSettings.assistantAvatarFilename
       )
     ) {
-      const src = await transformFilenameToSrc(
-        newSettings.assistantAvatarFilename
-      )
+      const src = await window.electronAPI.transformFilenameToSrc({
+        filename: newSettings.assistantAvatarFilename
+      })
       if (src) {
-        setSettings({ ...newSettings, assistantAvatarFilename: src })
+        setSettings({ ...newSettings, assistantAvatarFilename: src.assetUrl })
       }
     } else {
       setSettings(newSettings)
@@ -74,12 +72,15 @@ const useSettings = () => {
 
       if (currSettings.assistantAvatarFilename) {
         try {
-          const src = await transformFilenameToSrc(
-            currSettings.assistantAvatarFilename
-          )
+          const src = await window.electronAPI.transformFilenameToSrc({
+            filename: currSettings.assistantAvatarFilename
+          })
 
           if (src) {
-            setSettings({ ...currSettings, assistantAvatarFilename: src })
+            setSettings({
+              ...currSettings,
+              assistantAvatarFilename: src.assetUrl
+            })
           }
         } catch {
           // if transform is error
@@ -88,7 +89,6 @@ const useSettings = () => {
       } else {
         setSettings(currSettings)
       }
-    } catch {
     } finally {
       setLoading(false)
     }

@@ -1,4 +1,7 @@
-import { ChatRequestMessageUnion } from '@azure/openai'
+import {
+  ChatRequestMessageUnion,
+  ContentFilterSuccessResultsForChoice
+} from '@azure/openai'
 import { enqueueSnackbar } from 'notistack'
 import {
   ChatCompletionChunk,
@@ -143,7 +146,8 @@ const useChatCompletion = () => {
               { variant: 'error' }
             )
           } else {
-            const { hate, sexual, selfHarm, violence } = filterResults
+            const { hate, sexual, selfHarm, violence } =
+              filterResults as ContentFilterSuccessResultsForChoice
 
             if (hate?.filtered) {
               enqueueSnackbar(

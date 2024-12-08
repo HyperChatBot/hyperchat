@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { DateTime } from 'luxon'
-import { FC, ReactNode, memo } from 'react'
+import { FC, memo, ReactNode } from 'react'
 import { Roles } from 'src/types/conversation'
 import Avatar from '../Avatar'
 

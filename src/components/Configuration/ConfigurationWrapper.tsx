@@ -1,6 +1,6 @@
 import Drawer from '@mui/material/Drawer'
 import { Formik, useFormikContext } from 'formik'
-import { FC, ReactElement, cloneElement, useEffect } from 'react'
+import { cloneElement, FC, ReactElement, useEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import Divider from 'src/components/Divider'
 import { ChatConfiguration } from 'src/configurations/chatCompletion'
