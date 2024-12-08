@@ -1,5 +1,4 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { CompletionConfiguration } from 'src/configurations/completion'
 import { useClients } from 'src/hooks'
 import { showRequestErrorToast } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
@@ -7,23 +6,12 @@ import { settingsState } from 'src/stores/settings'
 import { Companies } from 'src/types/global'
 
 const useSpeech = () => {
-  const { openAiClient, azureClient, azureSpeechClient } = useClients()
+  const { openAiClient, azureSpeechClient } = useClients()
   const currConversation = useRecoilValue(currConversationState)
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
 
   if (!settings || !currConversation) return
-
-  const {
-    model,
-    maxTokens,
-    temperature,
-    topP,
-    frequencyPenalty,
-    presencePenalty,
-    preResponse,
-    postResponse
-  } = currConversation.configuration as CompletionConfiguration
 
   const createSpeechByOpenAI = async (text: string) => {
     try {
@@ -32,7 +20,7 @@ const useSpeech = () => {
       const speech = await openAiClient.audio.speech.create({
         model: 'tts-1',
         input: text,
-        voice: 'alloy'
+        voice: 'nova'
       })
       const audioBlob = await speech.blob()
       const audioUrl = URL.createObjectURL(audioBlob)

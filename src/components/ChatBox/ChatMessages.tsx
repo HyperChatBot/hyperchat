@@ -115,11 +115,13 @@ const ChatMessages: FC = () => {
                       >
                         <SpeakerWaveIcon
                           className={classNames(
-                            'relative h-5 w-5 text-black dark:text-white'
+                            'relative mt-3 h-5 w-5 text-black dark:text-white'
                           )}
                         />
                       </button>
-                      {audioUrl && <audio src={audioUrl} className="hidden" />}
+                      {audioUrl && (
+                        <audio src={audioUrl} className="hidden" autoPlay />
+                      )}
                     </div>
                   ) : (
                     <div>
