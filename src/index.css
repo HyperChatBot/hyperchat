@@ -3,15 +3,13 @@
 @tailwind utilities;
 
 @layer utilities {
-  /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
 
-  /* Hide scrollbar for IE, Edge and Firefox */
   .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 
   .brand {
@@ -23,6 +21,41 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
     background-size: 400%;
+  }
+
+  .markdown {
+    p {
+      @apply mb-3 whitespace-pre-wrap break-words last:mb-0;
+    }
+
+    ol,
+    ul {
+      @apply mb-3 pl-3 last:mb-0;
+    }
+
+    ol {
+      @apply list-disc;
+    }
+
+    ul {
+      @apply list-decimal;
+    }
+
+    li {
+      @apply mb-3 last:mb-0;
+    }
+
+    table {
+      @apply mb-3 table-fixed border border-gray-500;
+    }
+
+    th {
+      @apply whitespace-nowrap border border-gray-500 p-2 dark:border-gray-200;
+    }
+
+    td {
+      @apply whitespace-nowrap border border-gray-500 p-2 dark:border-gray-200;
+    }
   }
 }
 
