@@ -31,7 +31,11 @@ const Settings: FC = () => {
     const file = e.target.files && e.target.files[0]
 
     if (file && file.type.startsWith('image/') && settings) {
-      const response = await window.electronAPI.saveFileToAppDataDir({ file })
+      const arrayBuffer = await file.arrayBuffer()
+      const response = await window.electronAPI.saveFileToAppDataDir({
+        arrayBuffer,
+        filename: file.name
+      })
       if (response.filename) {
         updateSettings({
           ...settings,

@@ -50,7 +50,11 @@ const useSettings = () => {
         filename: newSettings.assistantAvatarFilename
       })
       if (src) {
-        setSettings({ ...newSettings, assistantAvatarFilename: src.assetUrl })
+        const blob = new Blob([src.arrayBuffer], {
+          type: 'application/octet-stream'
+        })
+        const assetUrl = URL.createObjectURL(blob)
+        setSettings({ ...newSettings, assistantAvatarFilename: assetUrl })
       }
     } else {
       setSettings(newSettings)
@@ -77,9 +81,13 @@ const useSettings = () => {
           })
 
           if (src) {
+            const blob = new Blob([src.arrayBuffer], {
+              type: 'application/octet-stream'
+            })
+            const assetUrl = URL.createObjectURL(blob)
             setSettings({
               ...currSettings,
-              assistantAvatarFilename: src.assetUrl
+              assistantAvatarFilename: assetUrl
             })
           }
         } catch {

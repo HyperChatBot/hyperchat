@@ -1,8 +1,11 @@
+import { app } from 'electron'
 import { existsSync, mkdirSync, writeFileSync } from 'fs'
-import { generateFilename } from 'src/shared/utils'
+import path from 'path'
+import { generateHashedFilename } from 'src/shared/utils'
 
 export interface Request {
-  file: File
+  arrayBuffer: ArrayBuffer
+  filename: string
 }
 
 export interface Response {
@@ -13,19 +16,17 @@ export interface Response {
 
 const saveFileToAppDataDir = async (
   event: Electron.IpcMainInvokeEvent,
-  { file }: Request
+  { arrayBuffer, filename: originFilename }: Request
 ): Promise<Response> => {
-  const filename = generateFilename(file.name)
+  const filename = generateHashedFilename(originFilename)
+  const appDataPath = path.join(app.getPath('home'), '.hyperchat', 'data')
+  const filePath = path.join(appDataPath, filename)
 
-  if (!existsSync(filename)) {
-    mkdirSync(filename, { recursive: true })
+  if (!existsSync(appDataPath)) {
+    mkdirSync(appDataPath, { recursive: true })
   }
 
-  writeFileSync(
-    `data/${filename}`,
-    (await file.arrayBuffer()) as Uint8Array,
-    'utf8'
-  )
+  writeFileSync(filePath, Buffer.from(arrayBuffer), 'utf8')
 
   return { success: true, filename }
 }

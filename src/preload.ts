@@ -14,15 +14,15 @@ import { BRIDGE_NAME, IPC_NAMES } from './constants'
 
 contextBridge.exposeInMainWorld(BRIDGE_NAME, {
   saveFileWithDialog: (
-    params: SaveFileWithDialogRequest
+    request: SaveFileWithDialogRequest
   ): Promise<SaveFileWithDialogResponse> =>
-    ipcRenderer.invoke(IPC_NAMES.saveFileWithDialog, params),
+    ipcRenderer.invoke(IPC_NAMES.saveFileWithDialog, request),
   saveFileToAppDataDir: (
-    params: SaveFileToAppDataDirRequest
+    request: SaveFileToAppDataDirRequest
   ): Promise<SaveFileToAppDataDirResponse> =>
-    ipcRenderer.invoke(IPC_NAMES.saveFileToAppDataDir, params),
+    ipcRenderer.invoke(IPC_NAMES.saveFileToAppDataDir, request),
   transformFilenameToSrc: (
-    params: TransformFilenameToSrcRequest
+    request: TransformFilenameToSrcRequest
   ): Promise<TransformFilenameToSrcResponse> =>
-    ipcRenderer.invoke(IPC_NAMES.transformFilenameToSrc, params)
+    ipcRenderer.invoke(IPC_NAMES.transformFilenameToSrc, request)
 })

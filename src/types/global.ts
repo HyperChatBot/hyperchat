@@ -44,7 +44,9 @@ export interface RequestError {
   message: string
 }
 
-export enum MediaType {
-  Image = 'image',
-  Audio = 'audio'
+export enum Functions {
+  TextToSpeech = 'TextToSpeech',
+  SpeechToText = 'SpeechToText',
+  AudioAttachment = 'AudioAttachment',
+  ImageAttachment = 'ImageAttachment'
 }

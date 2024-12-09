@@ -19,7 +19,7 @@ export const formatDate = (millis: number) => {
   return { isSameDay: false, display: date.toLocaleString(DateTime.DATE_MED) }
 }
 
-export const generateFilename = (fileName: string) => {
+export const generateHashedFilename = (fileName: string) => {
   const extension = getFileExtension(fileName)
   const filename = `${v4()}_${+new Date()}.${extension}`
 

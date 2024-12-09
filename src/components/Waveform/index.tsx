@@ -28,10 +28,14 @@ const Waveform: FC<Props> = ({ filename }) => {
   }
 
   const createFileSrc = async () => {
-    const currSrc = await window.electronAPI.transformFilenameToSrc({
+    const src = await window.electronAPI.transformFilenameToSrc({
       filename
     })
-    setSrc(currSrc.assetUrl || '')
+    const blob = new Blob([src.arrayBuffer], {
+      type: 'application/octet-stream'
+    })
+    const assetUrl = URL.createObjectURL(blob)
+    setSrc(assetUrl || '')
   }
 
   useEffect(() => {

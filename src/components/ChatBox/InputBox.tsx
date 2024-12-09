@@ -24,7 +24,7 @@ import {
 import { currProductState } from 'src/stores/global'
 import { settingsState } from 'src/stores/settings'
 import { AudioContentPart } from 'src/types/conversation'
-import { Products } from 'src/types/global'
+import { Functions, Products } from 'src/types/global'
 import { LoadingIcon, SolidCloseIcon, SolidSendIcon } from '../Icons'
 import WaveForm from '../Waveform'
 import MediaUploader from './MediaUploader'
@@ -44,9 +44,13 @@ const InputBox: FC = () => {
   const createCompletion = useCompletion()
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const [isTyping, setIsTyping] = useState(false)
-  const mediaType = items.find(
+  const supportFunctions = items.find(
     (item) => item.product === currProduct
-  )?.multiMedia
+  ).functions
+  const canAddAttachment =
+    supportFunctions.includes(Functions.ImageAttachment) ||
+    supportFunctions.includes(Functions.AudioAttachment)
+  const canUseSTT = supportFunctions.includes(Functions.SpeechToText)
 
   const deleteBase64Image = (idx: number) => {
     setBase64Images(
@@ -210,18 +214,15 @@ const InputBox: FC = () => {
         </section>
       )}
 
-      {mediaType && (
-        <MediaUploader
-          mediaType={mediaType}
-          className="absolute bottom-3 left-4"
-        />
+      {canAddAttachment && (
+        <MediaUploader className="absolute bottom-3 left-4" />
       )}
 
       <textarea
         ref={textareaRef}
         className={classNames(
           'block w-full resize-none rounded-md bg-white px-4 py-3 pl-12 pr-20 text-sm text-black outline-none dark:border-gray-900/50 dark:bg-gray-700 dark:text-white',
-          { ['pl-4']: mediaType === undefined }
+          { ['pl-4']: !canAddAttachment }
         )}
         style={{
           resize: 'none',
@@ -236,14 +237,14 @@ const InputBox: FC = () => {
         placeholder="Type a message..."
         value={userInput}
         rows={1}
-        // FIXME: The webkit(safari) doesn't support `onCompositionStart` or `onCompositionEnd`.
         onCompositionStart={() => setIsTyping(true)}
         onCompositionEnd={() => setIsTyping(false)}
         onChange={(e) => setUserInput(e.target.value)}
         onKeyDown={handleKeyDown}
       />
       <section className="absolute bottom-[2px] right-4 flex items-center">
-        <AudioRecorder />
+        {canUseSTT && <AudioRecorder />}
+
         {loading ? (
           <LoadingIcon className="h-5 w-5 animate-spin text-main-purple" />
         ) : (

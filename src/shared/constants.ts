@@ -1,5 +1,5 @@
 import { SnackbarOrigin } from '@mui/material'
-import { MediaType } from 'src/types/global'
+import { Functions } from 'src/types/global'
 
 export const EMPTY_CHAT_HINT = 'Create your first conversation!'
 
@@ -15,8 +15,8 @@ export const SNACKBAR_MAX_NUM = 1
 export const SNACKBAR_AUTO_HIDE_DURATION = 3000
 
 export const multiMedialConfig = {
-  [MediaType.Image]: { multiple: true, accept: 'image/*' },
-  [MediaType.Audio]: {
+  [Functions.ImageAttachment]: { multiple: true, accept: 'image/*' },
+  [Functions.AudioAttachment]: {
     multiple: false,
     accept:
       'audio/mp3,video/mp4,video/mpeg,video/mpea,video/m4a,video/wav,video/webm'

@@ -5,12 +5,13 @@ import { FC, memo, useEffect, useMemo, useRef, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import ChatGPTLogoImg from 'src/assets/chatbot.png'
 import NoDataIllustration from 'src/assets/illustrations/no-data.svg'
+import items from 'src/components/Sidebar/Items'
 import { useSettings, useSpeech } from 'src/hooks'
 import { isSupportAudio } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { Message, Roles } from 'src/types/conversation'
-import { Products } from 'src/types/global'
+import { Functions, Products } from 'src/types/global'
 import Waveform from '../Waveform'
 import ChatBubble from './ChatBubble'
 import Markdown from './Markdown'
@@ -28,6 +29,9 @@ const ChatMessages: FC = () => {
     () => currConversation && currConversation.messages.length > 0,
     [currConversation]
   )
+  const canUseTTS = items
+    .find((item) => item.product === currProduct)
+    ?.functions?.includes(Functions.TextToSpeech)
 
   const getBotLogo = (role: Roles) =>
     role === Roles.Assistant
@@ -104,23 +108,27 @@ const ChatMessages: FC = () => {
                           )[0].text
                         }
                       />
-                      <button
-                        onClick={() =>
-                          createTTSUrl(
-                            (
-                              message.content as ChatCompletionContentPartText[]
-                            )[0].text
-                          )
-                        }
-                      >
-                        <SpeakerWaveIcon
-                          className={classNames(
-                            'relative mt-3 h-5 w-5 text-black dark:text-white'
+                      {canUseTTS && (
+                        <>
+                          <button
+                            onClick={() =>
+                              createTTSUrl(
+                                (
+                                  message.content as ChatCompletionContentPartText[]
+                                )[0].text
+                              )
+                            }
+                          >
+                            <SpeakerWaveIcon
+                              className={classNames(
+                                'relative mt-3 h-5 w-5 text-black dark:text-white'
+                              )}
+                            />
+                          </button>
+                          {audioUrl && (
+                            <audio src={audioUrl} className="hidden" autoPlay />
                           )}
-                        />
-                      </button>
-                      {audioUrl && (
-                        <audio src={audioUrl} className="hidden" autoPlay />
+                        </>
                       )}
                     </div>
                   ) : (
