@@ -5,7 +5,7 @@ import { currConversationState, loadingState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 import { Companies } from 'src/types/global'
 
-const useSpeech = () => {
+const useTTS = () => {
   const { openAiClient, azureSpeechClient } = useClients()
   const currConversation = useRecoilValue(currConversationState)
   const setLoading = useSetRecoilState(loadingState)
@@ -58,4 +58,4 @@ const useSpeech = () => {
   return services[settings.company]
 }
 
-export default useSpeech
+export default useTTS

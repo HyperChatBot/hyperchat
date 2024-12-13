@@ -6,9 +6,10 @@ import useDB from './useDB'
 import useImageGeneration from './useImageGeneration'
 import useOnline from './useOnline'
 import useSettings from './useSettings'
-import useSpeech from './useSpeech'
 import useStoreMessages from './useStoreMessages'
+import useSTT from './useSTT'
 import useTheme from './useTheme'
+import useTTS from './useTTS'
 
 export {
   useAudio,
@@ -19,7 +20,8 @@ export {
   useImageGeneration,
   useOnline,
   useSettings,
-  useSpeech,
+  useTTS,
   useStoreMessages,
-  useTheme
+  useTheme,
+  useSTT
 }

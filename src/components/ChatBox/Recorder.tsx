@@ -4,7 +4,7 @@ import { enqueueSnackbar } from 'notistack'
 import { FC, useRef, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import RecorderJSON from 'src/assets/lotties/recorder.json'
-import { useClients } from 'src/hooks'
+import { useSTT } from 'src/hooks'
 import { userInputState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 
@@ -14,7 +14,7 @@ interface Props {
 
 const AudioRecorder: FC<Props> = ({ className }) => {
   const settings = useRecoilValue(settingsState)
-  const { azureClient } = useClients()
+  const createSTT = useSTT()
   const [userInput, setUserInput] = useRecoilState(userInputState)
   const [isRecording, setIsRecording] = useState(false)
   // const [audioUrl, setAudioUrl] = useState('')
@@ -27,6 +27,7 @@ const AudioRecorder: FC<Props> = ({ className }) => {
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      console.log(stream)
       mediaRecorderRef.current = new MediaRecorder(stream)
       mediaRecorderRef.current.start()
       setIsRecording(true)
@@ -35,19 +36,17 @@ const AudioRecorder: FC<Props> = ({ className }) => {
         audioChunksRef.current.push(event.data)
       }
       mediaRecorderRef.current.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, {
-          type: 'audio/mp3'
-        })
-        const uint8Array = new Uint8Array(await audioBlob.arrayBuffer())
-        const transcription = await azureClient.getAudioTranscription(
-          settings.azureDeploymentNameAudioGeneration,
-          uint8Array
-        )
-        setUserInput(`${userInput}${transcription.text}`)
-
-        // const audioUrl = URL.createObjectURL(audioBlob)
-        // setAudioUrl(audioUrl)
+        const transcriptionText = await createSTT(audioChunksRef.current)
+        setUserInput(`${userInput}${transcriptionText}`)
         audioChunksRef.current = []
+
+        // setAudioUrl(
+        //   URL.createObjectURL(
+        //     new Blob(audioChunksRef.current, {
+        //       type: 'audio/mp3'
+        //     })
+        //   )
+        // )
       }
     } catch (error) {
       enqueueSnackbar('Error accessing media devices.', { variant: 'error' })
@@ -75,13 +74,14 @@ const AudioRecorder: FC<Props> = ({ className }) => {
       />
 
       {/* {
-      // the audio preview is just for test.
-      audioUrl && (
-        <audio controls>
-          <source src={audioUrl} type="audio/mp3" />
-          Your browser does not support the audio element.
-        </audio>
-      )} */}
+        // the audio preview is just for test.
+        audioUrl && (
+          <audio controls>
+            <source src={audioUrl} type="audio/mp3" />
+            Your browser does not support the audio element.
+          </audio>
+        )
+      } */}
     </section>
   )
 }

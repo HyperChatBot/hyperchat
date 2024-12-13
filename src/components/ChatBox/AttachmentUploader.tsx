@@ -3,32 +3,28 @@ import classNames from 'classnames'
 import { enqueueSnackbar } from 'notistack'
 import { ChangeEvent, FC, useRef } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import items from 'src/components/Sidebar/Items'
 import { multiMedialConfig } from 'src/shared/constants'
 import { convertBase64 } from 'src/shared/utils'
 import { audioFileState, base64ImagesState } from 'src/stores/conversation'
-import { currProductState } from 'src/stores/global'
+import { metaOfCurrProductSelector } from 'src/stores/global'
 import { Functions } from 'src/types/global'
 
 interface Props {
   className?: string
 }
 
-const MediaUploader: FC<Props> = ({ className }) => {
-  const currProduct = useRecoilValue(currProductState)
+const AttachmentUploader: FC<Props> = ({ className }) => {
+  const metaOfCurrProduct = useRecoilValue(metaOfCurrProductSelector)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [audioFile, setAudioFile] = useRecoilState(audioFileState)
   const setBase64Images = useSetRecoilState(base64ImagesState)
 
   const validate = () => true
 
-  const supportFunctions = items.find(
-    (item) => item.product === currProduct
-  ).functions
-  const canAddAudioAttachment = supportFunctions.includes(
+  const canAddAudioAttachment = metaOfCurrProduct.functions.includes(
     Functions.AudioAttachment
   )
-  const canAddImageAttachment = supportFunctions.includes(
+  const canAddImageAttachment = metaOfCurrProduct.functions.includes(
     Functions.ImageAttachment
   )
 
@@ -106,4 +102,4 @@ const MediaUploader: FC<Props> = ({ className }) => {
   )
 }
 
-export default MediaUploader
+export default AttachmentUploader

@@ -45,8 +45,13 @@ export interface RequestError {
 }
 
 export enum Functions {
-  TextToSpeech = 'TextToSpeech',
-  SpeechToText = 'SpeechToText',
-  AudioAttachment = 'AudioAttachment',
-  ImageAttachment = 'ImageAttachment'
+  TextToSpeech = 'textToSpeech',
+  SpeechToText = 'speechToText',
+  AudioAttachment = 'audioAttachment',
+  ImageAttachment = 'imageAttachment'
+}
+
+export enum AttachmentTypes {
+  Audio = 'audio',
+  Image = 'image'
 }

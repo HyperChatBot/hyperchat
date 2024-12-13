@@ -7,7 +7,6 @@ import {
 } from 'openai/resources'
 import { FC, memo, useEffect, useRef, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import items from 'src/components/Sidebar/Items'
 import {
   useAudio,
   useChatCompletion,
@@ -21,13 +20,13 @@ import {
   loadingState,
   userInputState
 } from 'src/stores/conversation'
-import { currProductState } from 'src/stores/global'
+import { currProductState, metaOfCurrProductSelector } from 'src/stores/global'
 import { settingsState } from 'src/stores/settings'
 import { AudioContentPart } from 'src/types/conversation'
 import { Functions, Products } from 'src/types/global'
 import { LoadingIcon, SolidCloseIcon, SolidSendIcon } from '../Icons'
 import WaveForm from '../Waveform'
-import MediaUploader from './MediaUploader'
+import AttachmentUploader from './AttachmentUploader'
 import AudioRecorder from './Recorder'
 
 const InputBox: FC = () => {
@@ -35,6 +34,7 @@ const InputBox: FC = () => {
   const currProduct = useRecoilValue(currProductState)
   const settings = useRecoilValue(settingsState)
   const loading = useRecoilValue(loadingState)
+  const metaOfCurrProduct = useRecoilValue(metaOfCurrProductSelector)
   const [userInput, setUserInput] = useRecoilState(userInputState)
   const [audioFile, setAudioFile] = useRecoilState(audioFileState)
   const [base64Images, setBase64Images] = useRecoilState(base64ImagesState)
@@ -44,13 +44,10 @@ const InputBox: FC = () => {
   const createCompletion = useCompletion()
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const [isTyping, setIsTyping] = useState(false)
-  const supportFunctions = items.find(
-    (item) => item.product === currProduct
-  ).functions
   const canAddAttachment =
-    supportFunctions.includes(Functions.ImageAttachment) ||
-    supportFunctions.includes(Functions.AudioAttachment)
-  const canUseSTT = supportFunctions.includes(Functions.SpeechToText)
+    metaOfCurrProduct.functions.includes(Functions.ImageAttachment) ||
+    metaOfCurrProduct.functions.includes(Functions.AudioAttachment)
+  const canUseSTT = metaOfCurrProduct.functions.includes(Functions.SpeechToText)
 
   const deleteBase64Image = (idx: number) => {
     setBase64Images(
@@ -215,7 +212,7 @@ const InputBox: FC = () => {
       )}
 
       {canAddAttachment && (
-        <MediaUploader className="absolute bottom-3 left-4" />
+        <AttachmentUploader className="absolute bottom-3 left-4" />
       )}
 
       <textarea

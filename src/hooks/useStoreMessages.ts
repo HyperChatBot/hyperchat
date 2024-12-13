@@ -47,7 +47,7 @@ const useStoreMessages = () => {
                 role: Roles.Assistant,
                 content: [{ type: 'text', text: token }],
                 tokensCount: 0,
-                createdAt: +new Date()
+                createdAt: +new Date(),
               }
               draft.messages.push(message)
             }

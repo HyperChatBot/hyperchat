@@ -12,19 +12,18 @@ const Markdown: FC<Props> = ({ raw }) => {
     const renderer = new marked.Renderer()
 
     renderer.code = ({ text, lang }: Tokens.Code) => {
-      const language = lang && lang.split(/\s/)[0]
+      const language = (lang && lang.split(/\s/)[0]) ?? 'javascript'
 
-      if (language) {
-        const highlighted =
-          language && hljs.getLanguage(language)
-            ? hljs.highlight(text, { language: language }).value
-            : hljs.highlightAuto(text).value
+      const highlighted =
+        language && hljs.getLanguage(language)
+          ? hljs.highlight(text, { language: language }).value
+          : hljs.highlightAuto(text).value
 
-        return `<pre class="-mx-4 my-3 overflow-x-scroll text-xs last:my-0"><code class="hljs ${language}">${highlighted}</code></pre>`
-      } else {
-        return `<code class="font-semibold">${text}</code>`
-      }
+      return `<pre class="-mx-4 my-3 overflow-x-scroll text-xs last:my-0"><code class="hljs ${language}">${highlighted}</code></pre>`
     }
+
+    renderer.codespan = ({ text }: Tokens.Codespan) =>
+      `<code class="p-0.5 bg-slate-300 rounded-md dark:bg-slate-600">${text}</code>`
 
     renderer.image = ({ text, href }: Tokens.Image) => {
       return `<img src="${href}" alt="${text}" class="mb-3" loading="lazy" />`

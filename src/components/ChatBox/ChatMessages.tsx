@@ -1,17 +1,13 @@
-import { SpeakerWaveIcon } from '@heroicons/react/24/outline'
 import classNames from 'classnames'
 import { ChatCompletionContentPartText } from 'openai/resources'
-import { FC, memo, useEffect, useMemo, useRef, useState } from 'react'
+import { FC, memo, useMemo, useRef } from 'react'
 import { useRecoilValue } from 'recoil'
-import ChatGPTLogoImg from 'src/assets/chatbot.png'
 import NoDataIllustration from 'src/assets/illustrations/no-data.svg'
-import items from 'src/components/Sidebar/Items'
-import { useSettings, useSpeech } from 'src/hooks'
 import { isSupportAudio } from 'src/shared/utils'
 import { currConversationState, loadingState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
 import { Message, Roles } from 'src/types/conversation'
-import { Functions, Products } from 'src/types/global'
+import { Products } from 'src/types/global'
 import Waveform from '../Waveform'
 import ChatBubble from './ChatBubble'
 import Markdown from './Markdown'
@@ -20,25 +16,12 @@ import MessageSpinner from './MessageSpinner'
 const ChatMessages: FC = () => {
   const chatBoxRef = useRef<HTMLDivElement>(null)
   const loading = useRecoilValue(loadingState)
-  const { settings } = useSettings()
   const currProduct = useRecoilValue(currProductState)
   const currConversation = useRecoilValue(currConversationState)
-  const [audioUrl, setAudioUrl] = useState('')
-  const createSpeech = useSpeech()
   const hasMessages = useMemo(
     () => currConversation && currConversation.messages.length > 0,
-    [currConversation]
+    [currConversation?.messages?.length]
   )
-  const canUseTTS = items
-    .find((item) => item.product === currProduct)
-    ?.functions?.includes(Functions.TextToSpeech)
-
-  const getBotLogo = (role: Roles) =>
-    role === Roles.Assistant
-      ? settings?.assistantAvatarFilename
-        ? settings.assistantAvatarFilename
-        : ChatGPTLogoImg
-      : ''
 
   const scrollToBottom = () => {
     if (!chatBoxRef.current) return
@@ -52,15 +35,6 @@ const ChatMessages: FC = () => {
     }
   }
 
-  const createTTSUrl = async (text: string) => {
-    if (typeof createSpeech === 'function') {
-      const url = await createSpeech(text)
-      if (url) {
-        setAudioUrl(url)
-      }
-    }
-  }
-
   const getAudioFilename = (message: Message) => {
     if (isSupportAudio(currProduct) && message.content[0].type === 'audio') {
       return message.content[0].audioUrl.url
@@ -69,9 +43,9 @@ const ChatMessages: FC = () => {
     return ''
   }
 
-  useEffect(() => {
-    scrollToBottom()
-  }, [currConversation])
+  // useEffect(() => {
+  //   scrollToBottom()
+  // }, [currConversation])
 
   return (
     <section
@@ -84,12 +58,7 @@ const ChatMessages: FC = () => {
       {hasMessages ? (
         <>
           {currConversation?.messages.map((message) => (
-            <ChatBubble
-              key={message.messageId}
-              role={message.role}
-              avatar={getBotLogo(message.role)}
-              date={message.createdAt}
-            >
+            <ChatBubble key={message.messageId} message={message}>
               {getAudioFilename(message) ? (
                 <>
                   <Waveform filename={getAudioFilename(message)} />
@@ -100,37 +69,12 @@ const ChatMessages: FC = () => {
                   {loading && !message.content ? (
                     <MessageSpinner />
                   ) : message.role === Roles.Assistant ? (
-                    <div>
-                      <Markdown
-                        raw={
-                          (
-                            message.content as ChatCompletionContentPartText[]
-                          )[0].text
-                        }
-                      />
-                      {canUseTTS && (
-                        <>
-                          <button
-                            onClick={() =>
-                              createTTSUrl(
-                                (
-                                  message.content as ChatCompletionContentPartText[]
-                                )[0].text
-                              )
-                            }
-                          >
-                            <SpeakerWaveIcon
-                              className={classNames(
-                                'relative mt-3 h-5 w-5 text-black dark:text-white'
-                              )}
-                            />
-                          </button>
-                          {audioUrl && (
-                            <audio src={audioUrl} className="hidden" autoPlay />
-                          )}
-                        </>
-                      )}
-                    </div>
+                    <Markdown
+                      raw={
+                        (message.content as ChatCompletionContentPartText[])[0]
+                          .text
+                      }
+                    />
                   ) : (
                     <div>
                       {message.content.map((item, key) => {
@@ -157,9 +101,13 @@ const ChatMessages: FC = () => {
 
           {loading && currProduct !== Products.ChatCompletion && (
             <ChatBubble
-              role={Roles.Assistant}
-              avatar={getBotLogo(Roles.Assistant)}
-              date={+new Date()}
+              message={{
+                messageId: '$$placeholder',
+                role: Roles.Assistant,
+                content: [],
+                tokensCount: 0,
+                createdAt: +new Date()
+              }}
             >
               <MessageSpinner />
             </ChatBubble>

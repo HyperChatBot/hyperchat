@@ -49,7 +49,8 @@ export default [
       Functions.SpeechToText,
       Functions.TextToSpeech,
       Functions.AudioAttachment
-    ]
+    ],
+    attachmentTypes: [] 
   },
   {
     product: Products.AudioTranslation,
