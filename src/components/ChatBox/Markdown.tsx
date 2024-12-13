@@ -4,10 +4,10 @@ import { marked, Tokens } from 'marked'
 import { FC, memo, useCallback } from 'react'
 
 interface Props {
-  raw: string
+  src: string
 }
 
-const Markdown: FC<Props> = ({ raw }) => {
+const Markdown: FC<Props> = memo(({ src }) => {
   const parseMarkdown = useCallback(() => {
     const renderer = new marked.Renderer()
 
@@ -29,14 +29,14 @@ const Markdown: FC<Props> = ({ raw }) => {
       return `<img src="${href}" alt="${text}" class="mb-3" loading="lazy" />`
     }
 
-    renderer.link = ({ href, title, text }: Tokens.Link) => {
+    renderer.link = ({ href, text }: Tokens.Link) => {
       return `<a href="${href}" target="_blank" rel="noopener noreferrer" class="font-bold underline">${text}</a>`
     }
 
-    return marked(raw, {
+    return marked(src, {
       renderer
     })
-  }, [raw])
+  }, [src])
 
   return (
     <section
@@ -44,9 +44,6 @@ const Markdown: FC<Props> = ({ raw }) => {
       dangerouslySetInnerHTML={{ __html: parseMarkdown() }}
     />
   )
-}
+})
 
-export default memo(
-  Markdown,
-  (prevProps, nextProps) => prevProps.raw === nextProps.raw
-)
+export default Markdown

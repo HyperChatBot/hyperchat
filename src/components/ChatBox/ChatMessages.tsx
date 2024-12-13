@@ -1,21 +1,15 @@
 import classNames from 'classnames'
-import { ChatCompletionContentPartText } from 'openai/resources'
-import { FC, memo, useMemo, useRef } from 'react'
+import { FC, memo, useEffect, useMemo, useRef } from 'react'
 import { useRecoilValue } from 'recoil'
 import NoDataIllustration from 'src/assets/illustrations/no-data.svg'
 import { isSupportAudio } from 'src/shared/utils'
-import { currConversationState, loadingState } from 'src/stores/conversation'
+import { currConversationState } from 'src/stores/conversation'
 import { currProductState } from 'src/stores/global'
-import { Message, Roles } from 'src/types/conversation'
-import { Products } from 'src/types/global'
-import Waveform from '../Waveform'
+import { Message } from 'src/types/conversation'
 import ChatBubble from './ChatBubble'
-import Markdown from './Markdown'
-import MessageSpinner from './MessageSpinner'
 
 const ChatMessages: FC = () => {
   const chatBoxRef = useRef<HTMLDivElement>(null)
-  const loading = useRecoilValue(loadingState)
   const currProduct = useRecoilValue(currProductState)
   const currConversation = useRecoilValue(currConversationState)
   const hasMessages = useMemo(
@@ -43,9 +37,9 @@ const ChatMessages: FC = () => {
     return ''
   }
 
-  // useEffect(() => {
-  //   scrollToBottom()
-  // }, [currConversation])
+  useEffect(() => {
+    scrollToBottom()
+  }, [currConversation])
 
   return (
     <section
@@ -58,60 +52,8 @@ const ChatMessages: FC = () => {
       {hasMessages ? (
         <>
           {currConversation?.messages.map((message) => (
-            <ChatBubble key={message.messageId} message={message}>
-              {getAudioFilename(message) ? (
-                <>
-                  <Waveform filename={getAudioFilename(message)} />
-                  {message.content}
-                </>
-              ) : (
-                <>
-                  {loading && !message.content ? (
-                    <MessageSpinner />
-                  ) : message.role === Roles.Assistant ? (
-                    <Markdown
-                      raw={
-                        (message.content as ChatCompletionContentPartText[])[0]
-                          .text
-                      }
-                    />
-                  ) : (
-                    <div>
-                      {message.content.map((item, key) => {
-                        if (item.type === 'image_url') {
-                          return (
-                            <img
-                              src={item.image_url.url}
-                              key={key}
-                              className="mb-2 max-w-80"
-                            />
-                          )
-                        }
-
-                        if (item.type === 'text') {
-                          return <p key={key}>{item.text}</p>
-                        }
-                      })}
-                    </div>
-                  )}
-                </>
-              )}
-            </ChatBubble>
+            <ChatBubble key={message.messageId} message={message}></ChatBubble>
           ))}
-
-          {loading && currProduct !== Products.ChatCompletion && (
-            <ChatBubble
-              message={{
-                messageId: '$$placeholder',
-                role: Roles.Assistant,
-                content: [],
-                tokensCount: 0,
-                createdAt: +new Date()
-              }}
-            >
-              <MessageSpinner />
-            </ChatBubble>
-          )}
         </>
       ) : (
         <img

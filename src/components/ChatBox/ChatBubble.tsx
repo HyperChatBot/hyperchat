@@ -1,18 +1,20 @@
 import classNames from 'classnames'
-import { FC, memo, ReactNode } from 'react'
+import { ChatCompletionContentPartText } from 'openai/resources'
+import { FC, memo } from 'react'
 import ChatGPTLogoImg from 'src/assets/chatbot.png'
 import { useSettings } from 'src/hooks'
 import { Message, Roles } from 'src/types/conversation'
 import Avatar from '../Avatar'
+import Markdown from './Markdown'
 import ToolsBox from './ToolsBox'
 
 interface Props {
   message: Message
-  children: ReactNode
 }
 
-const ChatBubble: FC<Props> = ({ message, children }) => {
+const ChatBubble: FC<Props> = ({ message }) => {
   const { settings } = useSettings()
+
   const getBotLogo = (role: Roles) =>
     role === Roles.Assistant
       ? settings?.assistantAvatarFilename
@@ -49,7 +51,31 @@ const ChatBubble: FC<Props> = ({ message, children }) => {
               message.role === Roles.User
           })}
         >
-          {children}
+          {message.role === Roles.Assistant && (
+            <Markdown
+              src={(message.content as ChatCompletionContentPartText[])[0].text}
+            />
+          )}
+
+          {message.role === Roles.User && (
+            <div>
+              {message.content.map((item, key) => {
+                if (item.type === 'image_url') {
+                  return (
+                    <img
+                      src={item.image_url.url}
+                      key={key}
+                      className="mb-2 max-w-80"
+                    />
+                  )
+                }
+
+                if (item.type === 'text') {
+                  return <p key={key}>{item.text}</p>
+                }
+              })}
+            </div>
+          )}
         </section>
         <ToolsBox message={message} />
       </section>
@@ -57,7 +83,4 @@ const ChatBubble: FC<Props> = ({ message, children }) => {
   )
 }
 
-export default memo(
-  ChatBubble,
-  (prevProps, nextProps) => prevProps.children === nextProps.children
-)
+export default memo(ChatBubble)
