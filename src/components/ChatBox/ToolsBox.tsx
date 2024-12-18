@@ -3,13 +3,9 @@ import {
   SpeakerWaveIcon
 } from '@heroicons/react/24/outline'
 import { DateTime } from 'luxon'
-import { ChatCompletionContentPartText } from 'openai/resources'
 import { FC, useState } from 'react'
-import { useRecoilValue } from 'recoil'
 import { useTTS } from 'src/hooks'
-import { metaOfCurrProductSelector } from 'src/stores/global'
-import { Message, Roles } from 'src/types/conversation'
-import { Functions } from 'src/types/global'
+import { ContentPartType, Message, Roles } from 'src/types/conversation'
 
 interface Props {
   message: Message
@@ -17,18 +13,19 @@ interface Props {
 
 const ToolsBox: FC<Props> = ({ message: { createdAt, content, role } }) => {
   const [audioUrl, setAudioUrl] = useState('')
-  const metaOfCurrProduct = useRecoilValue(metaOfCurrProductSelector)
   const createSpeech = useTTS()
-  const canUseTTS = metaOfCurrProduct.functions?.includes(
-    Functions.TextToSpeech
-  )
-  const text = (content as ChatCompletionContentPartText[])?.[0]?.text
 
   const createTTSUrl = async () => {
     if (typeof createSpeech === 'function') {
-      const url = await createSpeech(text)
-      if (url) {
-        setAudioUrl(url)
+      const textPrompt = content.find(
+        (item) => item.type === ContentPartType.TextPrompt
+      )
+
+      if (textPrompt) {
+        const url = await createSpeech(textPrompt.text)
+        if (url) {
+          setAudioUrl(url)
+        }
       }
     }
   }
@@ -41,12 +38,10 @@ const ToolsBox: FC<Props> = ({ message: { createdAt, content, role } }) => {
     >
       {role === Roles.Assistant && (
         <>
-          {canUseTTS && (
-            <SpeakerWaveIcon
-              className="h-4 w-4 cursor-pointer text-black opacity-30 dark:text-white"
-              onClick={createTTSUrl}
-            />
-          )}
+          <SpeakerWaveIcon
+            className="h-4 w-4 cursor-pointer text-black opacity-30 dark:text-white"
+            onClick={createTTSUrl}
+          />
           <DocumentDuplicateIcon className="h-4 w-4 cursor-pointer text-black opacity-30 dark:text-white" />
         </>
       )}

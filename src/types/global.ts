@@ -10,15 +10,8 @@ export interface SvgIconProps {
 
 export enum Companies {
   OpenAI = 'OpenAI',
-  Azure = 'Azure'
-}
-
-export enum Products {
-  ChatCompletion = 'chatCompletion',
-  Completion = 'completion',
-  AudioTranscription = 'audioTranscription',
-  AudioTranslation = 'audioTranslation',
-  ImageGeneration = 'imageGeneration'
+  Google = 'Google',
+  Anthropic = 'Anthropic'
 }
 
 export interface EmojiPickerProps {
@@ -42,16 +35,4 @@ export interface RequestError {
   name: string
   code: string
   message: string
-}
-
-export enum Functions {
-  TextToSpeech = 'textToSpeech',
-  SpeechToText = 'speechToText',
-  AudioAttachment = 'audioAttachment',
-  ImageAttachment = 'imageAttachment'
-}
-
-export enum AttachmentTypes {
-  Audio = 'audio',
-  Image = 'image'
 }

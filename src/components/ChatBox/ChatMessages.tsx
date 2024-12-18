@@ -2,15 +2,11 @@ import classNames from 'classnames'
 import { FC, memo, useEffect, useMemo, useRef } from 'react'
 import { useRecoilValue } from 'recoil'
 import NoDataIllustration from 'src/assets/illustrations/no-data.svg'
-import { isSupportAudio } from 'src/shared/utils'
 import { currConversationState } from 'src/stores/conversation'
-import { currProductState } from 'src/stores/global'
-import { Message } from 'src/types/conversation'
 import ChatBubble from './ChatBubble'
 
 const ChatMessages: FC = () => {
   const chatBoxRef = useRef<HTMLDivElement>(null)
-  const currProduct = useRecoilValue(currProductState)
   const currConversation = useRecoilValue(currConversationState)
   const hasMessages = useMemo(
     () => currConversation && currConversation.messages.length > 0,
@@ -29,14 +25,6 @@ const ChatMessages: FC = () => {
     }
   }
 
-  const getAudioFilename = (message: Message) => {
-    if (isSupportAudio(currProduct) && message.content[0].type === 'audio') {
-      return message.content[0].audioUrl.url
-    }
-
-    return ''
-  }
-
   useEffect(() => {
     scrollToBottom()
   }, [currConversation])
@@ -52,7 +40,7 @@ const ChatMessages: FC = () => {
       {hasMessages ? (
         <>
           {currConversation?.messages.map((message) => (
-            <ChatBubble key={message.messageId} message={message}></ChatBubble>
+            <ChatBubble key={message.id} message={message} />
           ))}
         </>
       ) : (

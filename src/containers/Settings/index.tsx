@@ -144,12 +144,12 @@ const Settings: FC = () => {
                   </>
                 )}
 
-                {formik.values.company === Companies.Azure && (
+                {formik.values.company === Companies.Anthropic && (
                   <>
                     <TextField
                       autoComplete="current-password"
                       required
-                      id="azure-secret-key-input"
+                      id="anthropic-secret-key-input"
                       label="Secret Key"
                       size="small"
                       type="password"
@@ -163,104 +163,44 @@ const Settings: FC = () => {
                         </span>
                       }
                       className="w-160"
-                      {...formik.getFieldProps('azureSecretKey')}
-                    />
-
-                    <TextField
-                      required
-                      id="azure-endpoint-input"
-                      label="Endpoint"
-                      size="small"
-                      type="text"
-                      className="w-160"
-                      helperText="Use this endpoint to make calls to the service. The format likes: https://YOUR_DOMAIN.openai.azure.com"
-                      {...formik.getFieldProps('azureEndPoint')}
-                    />
-
-                    <Divider />
-
-                    <TextField
-                      id="azure-deployment-name-chat-completion-input"
-                      label="Chat Completion Deployment Name"
-                      size="small"
-                      type="text"
-                      className="w-80"
-                      {...formik.getFieldProps(
-                        'azureDeploymentNameChatCompletion'
-                      )}
-                      placeholder="gpt-4o"
-                    />
-
-                    <TextField
-                      id="azure-deployment-name-completion-input"
-                      label="Completion Deployment Name"
-                      size="small"
-                      type="text"
-                      className="w-80"
-                      {...formik.getFieldProps('azureDeploymentNameCompletion')}
-                      placeholder="Eg: davinci-002"
-                    />
-
-                    <TextField
-                      id="azure-deployment-name-text-to-image-input"
-                      label="Text to Image Deployment Name"
-                      size="small"
-                      type="text"
-                      className="w-80"
-                      {...formik.getFieldProps(
-                        'azureDeploymentNameTextToImage'
-                      )}
-                      placeholder="Eg: dall-e-3"
-                    />
-
-                    <TextField
-                      id="azure-deployment-name-embedding-input"
-                      label="Embedding Deployment Name"
-                      size="small"
-                      type="text"
-                      className="w-80"
-                      {...formik.getFieldProps('azureDeploymentNameEmbedding')}
-                      placeholder="Eg: text-embedding-ada-002"
-                    />
-
-                    <TextField
-                      id="azure-deployment-name-audio-generation-input"
-                      label="Audio Generation Deployment Name"
-                      size="small"
-                      type="text"
-                      className="w-80"
-                      {...formik.getFieldProps(
-                        'azureDeploymentNameAudioGeneration'
-                      )}
-                      placeholder="Eg: whisper-1"
-                    />
-
-                    <Divider />
-
-                    <TextField
-                      autoComplete="current-password"
-                      required
-                      id="azure-speech-secret-key-input"
-                      label="Speech Secret Key"
-                      size="small"
-                      type="password"
-                      className="w-160"
-                      {...formik.getFieldProps('azureSpeechSecretKey')}
-                    />
-
-                    <TextField
-                      required
-                      id="azure-speech-region-input"
-                      label="Speech Region"
-                      size="small"
-                      type="input"
-                      className="w-160"
-                      {...formik.getFieldProps('azureSpeechRegion')}
+                      {...formik.getFieldProps('anthropicSecretKey')}
                     />
 
                     <Button
                       variant="contained"
-                      sx={{ width: 'max-content' }}
+                      sx={{ width: 120 }}
+                      onClick={() => updateSettings(formik.values)}
+                    >
+                      Save
+                    </Button>
+                  </>
+                )}
+
+                {formik.values.company === Companies.Google && (
+                  <>
+                    <TextField
+                      autoComplete="current-password"
+                      required
+                      id="google-secret-key-input"
+                      label="Secret Key"
+                      size="small"
+                      type="password"
+                      helperText={
+                        <span>
+                          <strong>
+                            Your secret key will only be stored in IndexedDB!
+                          </strong>{' '}
+                          Do not share it with others or expose it in any
+                          client-side code.
+                        </span>
+                      }
+                      className="w-160"
+                      {...formik.getFieldProps('googleSecretKey')}
+                    />
+
+                    <Button
+                      variant="contained"
+                      sx={{ width: 120 }}
                       onClick={() => updateSettings(formik.values)}
                     >
                       Save

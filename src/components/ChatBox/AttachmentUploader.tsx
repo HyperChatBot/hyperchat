@@ -2,70 +2,38 @@ import { PaperClipIcon } from '@heroicons/react/24/outline'
 import classNames from 'classnames'
 import { enqueueSnackbar } from 'notistack'
 import { ChangeEvent, FC, useRef } from 'react'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { multiMedialConfig } from 'src/shared/constants'
-import { convertBase64 } from 'src/shared/utils'
-import { audioFileState, base64ImagesState } from 'src/stores/conversation'
-import { metaOfCurrProductSelector } from 'src/stores/global'
-import { Functions } from 'src/types/global'
+import { useRecoilState } from 'recoil'
+import { convertToBase64 } from 'src/shared/utils'
+import { base64FilePromptState } from 'src/stores/conversation'
 
 interface Props {
   className?: string
 }
 
 const AttachmentUploader: FC<Props> = ({ className }) => {
-  const metaOfCurrProduct = useRecoilValue(metaOfCurrProductSelector)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [audioFile, setAudioFile] = useRecoilState(audioFileState)
-  const setBase64Images = useSetRecoilState(base64ImagesState)
+  const [base64FilePrompt, setBase64FilePrompt] = useRecoilState(
+    base64FilePromptState
+  )
 
   const validate = () => true
-
-  const canAddAudioAttachment = metaOfCurrProduct.functions.includes(
-    Functions.AudioAttachment
-  )
-  const canAddImageAttachment = metaOfCurrProduct.functions.includes(
-    Functions.ImageAttachment
-  )
-
-  const mediaType = canAddAudioAttachment
-    ? Functions.AudioAttachment
-    : Functions.ImageAttachment
 
   const onFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
     if (!files) return
 
-    if (canAddAudioAttachment) {
-      const file = files[0]
-      setAudioFile({
-        ...audioFile,
-        binary: file
-      })
-
-      const arrayBuffer = await file.arrayBuffer()
-      const response = await window.electronAPI.saveFileToAppDataDir({
-        arrayBuffer,
-        filename: file.name
-      })
-      setAudioFile({
-        ...audioFile,
-        filename: response.filename
-      })
-    }
-
-    if (canAddImageAttachment) {
+    try {
       const promises = []
       for (const file of files) {
-        promises.push(convertBase64(file))
+        promises.push(convertToBase64(file))
       }
 
-      try {
-        const base64Files = await Promise.all(promises)
-        setBase64Images(base64Files)
-      } catch {
-        enqueueSnackbar('Can not upload images.', { variant: 'error' })
-      }
+      const base64Files = await Promise.all(promises)
+      setBase64FilePrompt([...base64FilePrompt, ...base64Files])
+    } catch {
+      enqueueSnackbar('Can not upload images.', { variant: 'error' })
+    } finally {
+      fileInputRef.current.files = null
     }
   }
 
@@ -78,9 +46,8 @@ const AttachmentUploader: FC<Props> = ({ className }) => {
         <input
           type="file"
           id="$$file-input"
-          accept={multiMedialConfig[mediaType].accept}
           className="absolute h-6 w-6 opacity-0 file:h-6 file:w-6"
-          multiple={multiMedialConfig[mediaType].multiple}
+          multiple
           ref={fileInputRef}
           onChange={onFileChange}
         />

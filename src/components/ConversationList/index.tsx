@@ -1,12 +1,11 @@
-import { capitalCase } from 'change-case'
 import { enqueueSnackbar } from 'notistack'
 import { FC } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { configurations } from 'src/configurations'
+import configurations from 'src/configurations'
 import { useDB } from 'src/hooks'
 import { BAN_ACTIVE_HINT } from 'src/shared/constants'
 import { currConversationState, loadingState } from 'src/stores/conversation'
-import { currProductState } from 'src/stores/global'
+import { settingsState } from 'src/stores/settings'
 import { Conversation } from 'src/types/conversation'
 import { v4 } from 'uuid'
 import Divider from '../Divider'
@@ -20,7 +19,7 @@ interface Props {
 
 const ConversationList: FC<Props> = ({ conversations }) => {
   const loading = useRecoilValue(loadingState)
-  const currProduct = useRecoilValue(currProductState)
+  const settings = useRecoilValue(settingsState)
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
   )
@@ -34,13 +33,12 @@ const ConversationList: FC<Props> = ({ conversations }) => {
 
     const conversation: Conversation = {
       avatar: '',
-      conversationId: v4(),
+      id: v4(),
       summary: '',
       messages: [],
-      product: currProduct,
       createdAt: +new Date(),
       updatedAt: +new Date(),
-      configuration: configurations[currProduct].default
+      configuration: configurations[settings.company].configuration
     }
 
     setCurrConversation(conversation)
@@ -59,7 +57,7 @@ const ConversationList: FC<Props> = ({ conversations }) => {
     <section className="w-87.75">
       <section className="flex items-center justify-between p-6">
         <span className="mr-4 truncate text-xl font-semibold dark:text-dark-text">
-          {capitalCase(currProduct)}
+          Hyper Chat
         </span>
         <OutlinePlusIcon onClick={addConversation} />
       </section>
@@ -70,9 +68,9 @@ const ConversationList: FC<Props> = ({ conversations }) => {
         {Array.isArray(conversations) && conversations.length > 0 ? (
           conversations.map((conversation) => (
             <ConversationItem
-              key={conversation.conversationId}
+              key={conversation.id}
               active={
-                conversation.conversationId === currConversation?.conversationId
+                conversation.id === currConversation?.id
               }
               conversation={conversation}
               onClick={() => switchConversation(conversation)}

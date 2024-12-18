@@ -10,9 +10,9 @@ export class HyperChatDB extends Dexie {
     super('hyperchat')
     this.version(1).stores({
       conversations:
-        '&conversationId, summary, fileName, product, createdAt, updatedAt, *messages, *configuration',
+        '&id, summary, fileName, createdAt, updatedAt, *messages, *configuration',
       settings:
-        '&&settingsId, company, openaiSecretKey, openaiOrganizationId, openaiAuthorName, azureEndPoint, azureSecretKey, azureDeploymentNameChatCompletion, azureDeploymentNameCompletion, azureDeploymentNameTextToImage, azureDeploymentNameEmbedding, azureDeploymentNameAudioGeneration, azureSpeechSecretKey, azureSpeechRegion, themeMode, assistantAvatarFilename'
+        '&&id, company, openaiSecretKey, openaiOrganizationId, openaiAuthorName, geminiSecretKey, anthropicSecretKey, themeMode, assistantAvatarFilename'
     })
   }
 }

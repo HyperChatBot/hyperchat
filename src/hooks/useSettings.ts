@@ -14,22 +14,15 @@ const useSettings = () => {
 
   const initialSettings = async () => {
     const defaultData: Settings = {
-      settingsId: v4(),
+      id: v4(),
       company: Companies.OpenAI,
       openaiSecretKey: '',
       openaiOrganizationId: '',
       openaiAuthorName: '',
-      azureSecretKey: '',
-      azureEndPoint: '',
-      azureDeploymentNameChatCompletion: '',
-      azureDeploymentNameCompletion: '',
-      azureDeploymentNameTextToImage: '',
-      azureDeploymentNameEmbedding: '',
-      azureDeploymentNameAudioGeneration: '',
+      googleSecretKey: '',
+      anthropicSecretKey: '',
       themeMode: ThemeMode.system,
-      assistantAvatarFilename: '',
-      azureSpeechSecretKey: '',
-      azureSpeechRegion: ''
+      assistantAvatarFilename: ''
     }
 
     await insertOne(defaultData)
@@ -39,7 +32,8 @@ const useSettings = () => {
   const updateSettings = async (newSettings: Settings) => {
     if (!settings) return
 
-    await updateOneById(settings.settingsId, newSettings)
+    console.log(newSettings)
+    await updateOneById(settings.id, newSettings)
 
     if (
       !settings.assistantAvatarFilename.endsWith(
@@ -67,7 +61,7 @@ const useSettings = () => {
     setLoading(true)
     try {
       const settings = (await toArray()) as Settings[]
-      const currSettings = settings[0]
+      const currSettings = settings?.[0]
 
       if (!currSettings) {
         initialSettings()

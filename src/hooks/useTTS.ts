@@ -6,7 +6,7 @@ import { settingsState } from 'src/stores/settings'
 import { Companies } from 'src/types/global'
 
 const useTTS = () => {
-  const { openAiClient, azureSpeechClient } = useClients()
+  const { openAiClient } = useClients()
   const currConversation = useRecoilValue(currConversationState)
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
@@ -32,26 +32,7 @@ const useTTS = () => {
     }
   }
 
-  const createSpeechByAzure = (text: string): Promise<string> =>
-    new Promise((resolve, reject) => {
-      azureSpeechClient.speakTextAsync(
-        text,
-        (result) => {
-          const { audioData } = result
-          azureSpeechClient.close()
-          const audioBlob = new Blob([audioData])
-          const audioUrl = URL.createObjectURL(audioBlob)
-          resolve(audioUrl)
-        },
-        (error) => {
-          azureSpeechClient.close()
-          reject(error)
-        }
-      )
-    })
-
   const services = {
-    [Companies.Azure]: createSpeechByAzure,
     [Companies.OpenAI]: createSpeechByOpenAI
   }
 

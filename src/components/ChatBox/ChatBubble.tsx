@@ -1,9 +1,13 @@
 import classNames from 'classnames'
-import { ChatCompletionContentPartText } from 'openai/resources'
 import { FC, memo } from 'react'
 import ChatGPTLogoImg from 'src/assets/chatbot.png'
 import { useSettings } from 'src/hooks'
-import { Message, Roles } from 'src/types/conversation'
+import {
+  ContentPartType,
+  Message,
+  Roles,
+  TextPrompt
+} from 'src/types/conversation'
 import Avatar from '../Avatar'
 import Markdown from './Markdown'
 import ToolsBox from './ToolsBox'
@@ -52,27 +56,63 @@ const ChatBubble: FC<Props> = ({ message }) => {
           })}
         >
           {message.role === Roles.Assistant && (
-            <Markdown
-              src={(message.content as ChatCompletionContentPartText[])[0].text}
-            />
+            <Markdown src={(message.content as TextPrompt[])[0].text} />
           )}
 
           {message.role === Roles.User && (
             <div>
               {message.content.map((item, key) => {
-                if (item.type === 'image_url') {
+                if (item.type === ContentPartType.TextPrompt) {
+                  return <p key={key}>{item.text}</p>
+                }
+
+                if (
+                  item.type === ContentPartType.Base64FilePromptType &&
+                  item.mimeType.includes('image')
+                ) {
                   return (
-                    <img
-                      src={item.image_url.url}
-                      key={key}
-                      className="mb-2 max-w-80"
-                    />
+                    <img src={item.data} key={key} className="mb-2 max-w-80" />
                   )
                 }
 
-                if (item.type === 'text') {
-                  return <p key={key}>{item.text}</p>
+                if (
+                  item.type === ContentPartType.UrlFileUrlPromptType &&
+                  item.mimeType.includes('image')
+                ) {
+                  return (
+                    <img src={item.url} key={key} className="mb-2 max-w-80" />
+                  )
                 }
+
+                if (
+                  item.type === ContentPartType.Base64FilePromptType &&
+                  item.mimeType.includes('audio')
+                ) {
+                  return <audio src={item.data} key={key} controls />
+                }
+
+                if (
+                  item.type === ContentPartType.UrlFileUrlPromptType &&
+                  item.mimeType.includes('audio')
+                ) {
+                  return <audio src={item.url} key={key} controls />
+                }
+
+                if (
+                  item.type === ContentPartType.Base64FilePromptType &&
+                  item.mimeType.includes('video')
+                ) {
+                  return <video src={item.data} key={key} controls />
+                }
+
+                if (
+                  item.type === ContentPartType.UrlFileUrlPromptType &&
+                  item.mimeType.includes('video')
+                ) {
+                  return <video src={item.url} key={key} controls />
+                }
+
+                return <div>File: {item.name}</div>
               })}
             </div>
           )}

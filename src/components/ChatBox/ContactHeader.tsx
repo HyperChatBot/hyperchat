@@ -46,7 +46,7 @@ const ContactHeader: FC = () => {
 
   const summary =
     currConversation?.summary ||
-    currConversation?.conversationId ||
+    currConversation?.id ||
     EMPTY_CHAT_HINT
 
   const openAvatarPicker = () => {
@@ -83,7 +83,7 @@ const ContactHeader: FC = () => {
         summary: summaryValue,
         updatedAt: +new Date()
       }
-      await updateOneById(currConversation.conversationId, changes)
+      await updateOneById(currConversation.id, changes)
       setCurrConversation({ ...currConversation, ...changes })
       setSummaryInputVisible(false)
     }
@@ -102,7 +102,7 @@ const ContactHeader: FC = () => {
         avatar: data.native,
         updatedAt: +new Date()
       }
-      await updateOneById(currConversation.conversationId, changes)
+      await updateOneById(currConversation.id, changes)
       setCurrConversation({ ...currConversation, ...changes })
       setAvatarPickerVisible(false)
     }
@@ -114,7 +114,7 @@ const ContactHeader: FC = () => {
       return
     }
     if (currConversation) {
-      await deleteOneById(currConversation.conversationId)
+      await deleteOneById(currConversation.id)
     }
   }
 

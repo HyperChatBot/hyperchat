@@ -1,63 +1,43 @@
+import Button from '@mui/material/Button'
 import Autocomplete from '@mui/material/Autocomplete'
 import Chip from '@mui/material/Chip'
-import Drawer from '@mui/material/Drawer'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
-import { Formik, useFormikContext } from 'formik'
-import { FC, useEffect } from 'react'
-import { useRecoilState } from 'recoil'
-import { ChatConfiguration, models } from 'src/configurations/chatCompletion'
+import { Formik } from 'formik'
+import { FC } from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import configurations from 'src/configurations'
 import { useDB } from 'src/hooks'
-import { getTokensCount } from 'src/shared/utils'
 import { currConversationState } from 'src/stores/conversation'
-import { configurationDrawerVisibleState } from 'src/stores/global'
+import { settingsState } from 'src/stores/settings'
+import { Configuration as IConfiguration } from 'src/types/conversation'
 import Divider from '../Divider'
 import InputSlider from '../InputSlider'
 
 const Configuration: FC = () => {
-  const [visible, setVisible] = useRecoilState(configurationDrawerVisibleState)
   const [currConversation, setCurrConversation] = useRecoilState(
     currConversationState
   )
+  const settings = useRecoilValue(settingsState)
+  const availableModels = configurations[settings.company].models
+
   const { updateOneById } = useDB('conversations')
 
-  const updateConfiguration = async (values: ChatConfiguration) => {
+  const updateConfiguration = async (values: IConfiguration) => {
     if (!currConversation) {
       return
     }
 
-    // Regenerate `systemMessageTokensCount` if `systemMessage` changed.
-    const prevConfiguration =
-      currConversation.configuration as ChatConfiguration
-    const configuration: ChatConfiguration = {
-      ...values,
-      systemMessageTokensCount:
-        prevConfiguration.systemMessage !== values.systemMessage
-          ? getTokensCount(values.systemMessage, values.model)
-          : prevConfiguration.systemMessageTokensCount
-    }
-
-    await updateOneById(currConversation.conversationId, {
-      configuration,
+    await updateOneById(currConversation.id, {
+      currConversation,
       updatedAt: +new Date()
     })
 
-    setCurrConversation({ ...currConversation, configuration })
-  }
-
-  const AutoSubmitToken = () => {
-    const { submitForm } = useFormikContext()
-    useEffect(() => {
-      if (!visible) {
-        submitForm()
-      }
-    }, [visible])
-
-    return null
+    setCurrConversation(currConversation)
   }
 
   if (!currConversation) {
@@ -65,21 +45,25 @@ const Configuration: FC = () => {
   }
 
   return (
-    <Drawer anchor="right" open={visible} onClose={() => setVisible(false)}>
-      <section className="w-87.75">
-        <section className="flex h-22 items-center justify-between pl-6">
-          <span className="text-xl font-semibold dark:text-dark-text">
-            Configuration
-          </span>
-        </section>
+    <section className="w-87.75">
+      <section className="flex h-22 items-center justify-between pl-6">
+        <span className="text-xl font-semibold dark:text-dark-text">
+          Configuration
+        </span>
+      </section>
 
-        <Divider />
+      <Divider />
 
-        <Formik<ChatConfiguration>
-          initialValues={currConversation.configuration as ChatConfiguration}
-          onSubmit={updateConfiguration}
-        >
-          {(formik) => (
+      <Formik<IConfiguration>
+        initialValues={currConversation.configuration}
+        onSubmit={updateConfiguration}
+      >
+        {(formik) => {
+          const { maxOutput } = availableModels?.find(
+            (availableModel) => availableModel.modelName === formik.values.model
+          )
+
+          return (
             <section className="no-scrollbar h-[calc(100vh_-_7.5625rem)] overflow-y-scroll p-6">
               <FormControl size="small" sx={{ marginBottom: 4 }} fullWidth>
                 <InputLabel id="model-select-label">Model</InputLabel>
@@ -90,9 +74,9 @@ const Configuration: FC = () => {
                   label="Model"
                   {...formik.getFieldProps('model')}
                 >
-                  {models.map((gpt) => (
-                    <MenuItem key={gpt.name} value={gpt.name}>
-                      {gpt.name}
+                  {availableModels.map((model) => (
+                    <MenuItem key={model.modelName} value={model.modelName}>
+                      {model.modelName}
                     </MenuItem>
                   ))}
                 </Select>
@@ -110,16 +94,13 @@ const Configuration: FC = () => {
 
               <InputSlider
                 title="Max response"
-                tooltipTitle="Set a limit on the number of tokens per model response. The API supports a maximum of 4000 tokens shared between the prompt (including system message, examples, message history, and user query) and the model's response. One token is roughly 4 characters for typical English text."
+                tooltipTitle={`Set a limit on the number of tokens per model response. The API supports a maximum of ${maxOutput} tokens shared between the prompt (including system message, examples, message history, and user query) and the model's response. One token is roughly 4 characters for typical English text.`}
                 min={1}
-                max={4000}
+                max={maxOutput}
                 step={1}
-                defaultValue={
-                  (currConversation.configuration as ChatConfiguration)
-                    .maxTokens
-                }
+                defaultValue={maxOutput}
                 setFieldValue={(value: number) =>
-                  formik.setFieldValue('maxTokens', value)
+                  formik.setFieldValue('maxResponse', value)
                 }
               />
 
@@ -127,12 +108,9 @@ const Configuration: FC = () => {
                 title="Temperature"
                 tooltipTitle="Controls randomness. Lowering the temperature means that the model will produce more repetitive and deterministic responses. Increasing the temperature will result in more unexpected or creative responses. Try adjusting temperature or Top P but not both."
                 min={0}
-                max={1}
+                max={2}
                 step={0.01}
-                defaultValue={
-                  (currConversation.configuration as ChatConfiguration)
-                    .temperature
-                }
+                defaultValue={currConversation.configuration.temperature}
                 setFieldValue={(value: number) =>
                   formik.setFieldValue('temperature', value)
                 }
@@ -176,9 +154,7 @@ const Configuration: FC = () => {
                 min={0}
                 max={1}
                 step={0.01}
-                defaultValue={
-                  (currConversation.configuration as ChatConfiguration).topP
-                }
+                defaultValue={currConversation.configuration.topP}
                 setFieldValue={(value: number) =>
                   formik.setFieldValue('topP', value)
                 }
@@ -186,13 +162,10 @@ const Configuration: FC = () => {
               <InputSlider
                 title="Frequency penalty"
                 tooltipTitle="Reduce the chance of repeating a token proportionally based on how often it has appeared in the text so far. This decreases the likelihood of repeating the exact same text in a response."
-                min={0}
+                min={-2}
                 max={2}
                 step={0.01}
-                defaultValue={
-                  (currConversation.configuration as ChatConfiguration)
-                    .frequencyPenalty
-                }
+                defaultValue={currConversation.configuration.frequencyPenalty}
                 setFieldValue={(value: number) =>
                   formik.setFieldValue('frequencyPenalty', value)
                 }
@@ -203,20 +176,21 @@ const Configuration: FC = () => {
                 min={0}
                 max={2}
                 step={0.01}
-                defaultValue={
-                  (currConversation.configuration as ChatConfiguration)
-                    .presencePenalty
-                }
+                defaultValue={currConversation.configuration.presencePenalty}
                 setFieldValue={(value: number) =>
-                  formik.setFieldValue('frequencyPenalty', value)
+                  formik.setFieldValue('presencePenalty', value)
                 }
               />
-              <AutoSubmitToken />
+              <Button variant="contained" fullWidth>Submit</Button>
             </section>
-          )}
-        </Formik>
-      </section>
-    </Drawer>
+          )
+        }}
+
+
+      </Formik>
+
+      
+    </section>
   )
 }
 

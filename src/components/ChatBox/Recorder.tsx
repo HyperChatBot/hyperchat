@@ -5,7 +5,7 @@ import { FC, useRef, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import RecorderJSON from 'src/assets/lotties/recorder.json'
 import { useSTT } from 'src/hooks'
-import { userInputState } from 'src/stores/conversation'
+import { inputTextState } from 'src/stores/conversation'
 import { settingsState } from 'src/stores/settings'
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
 const AudioRecorder: FC<Props> = ({ className }) => {
   const settings = useRecoilValue(settingsState)
   const createSTT = useSTT()
-  const [userInput, setUserInput] = useRecoilState(userInputState)
+  const [inputText, setInputText] = useRecoilState(inputTextState)
   const [isRecording, setIsRecording] = useState(false)
   // const [audioUrl, setAudioUrl] = useState('')
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
@@ -37,7 +37,7 @@ const AudioRecorder: FC<Props> = ({ className }) => {
       }
       mediaRecorderRef.current.onstop = async () => {
         const transcriptionText = await createSTT(audioChunksRef.current)
-        setUserInput(`${userInput}${transcriptionText}`)
+        setInputText(`${inputText}${transcriptionText}`)
         audioChunksRef.current = []
 
         // setAudioUrl(

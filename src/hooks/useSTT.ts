@@ -6,7 +6,7 @@ import { settingsState } from 'src/stores/settings'
 import { Companies } from 'src/types/global'
 
 const useSTT = () => {
-  const { openAiClient, azureClient } = useClients()
+  const { openAiClient } = useClients()
   const currConversation = useRecoilValue(currConversationState)
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
@@ -30,21 +30,7 @@ const useSTT = () => {
     }
   }
 
-  const createSpeechByAzure = async (blob: Blob[]) => {
-    const audioBlob = new Blob(blob, {
-      type: 'audio/mp3'
-    })
-    const uint8Array = new Uint8Array(await audioBlob.arrayBuffer())
-    const transcription = await azureClient.getAudioTranscription(
-      settings.azureDeploymentNameAudioGeneration,
-      uint8Array
-    )
-
-    return transcription.text
-  }
-
   const services = {
-    [Companies.Azure]: createSpeechByAzure,
     [Companies.OpenAI]: createSpeechByOpenAI
   }
 

@@ -57,8 +57,18 @@
       @apply whitespace-nowrap border border-gray-500 p-2 dark:border-gray-200;
     }
   }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
 }
 
-mjx-container[jax='SVG'] > svg {
+/* mjx-container[jax='SVG'] > svg {
   display: inline-block;
-}
+} */

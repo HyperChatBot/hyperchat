@@ -1,51 +1,64 @@
-import { ChatCompletionContentPart } from 'openai/resources'
-import { AudioTranscriptionConfiguration } from '../configurations/audioTranscription'
-import { AudioTranslationConfiguration } from '../configurations/audioTranslation'
-import { ChatConfiguration } from '../configurations/chatCompletion'
-import { CompletionConfiguration } from '../configurations/completion'
-import { ImageGenerationConfiguration } from '../configurations/imageGeneration'
-import { Products } from './global'
-
-export interface AudioContentPart {
-  type: 'audio'
-  audioUrl: {
-    url: string
-  }
-  text: string
-  binary?: File
-}
-
 export enum Roles {
   System = 'system',
   Assistant = 'assistant',
   User = 'user'
 }
 
+export enum ContentPartType {
+  Base64FilePromptType,
+  UrlFileUrlPromptType,
+  TextPrompt
+}
+
+export interface Base64FilePrompt {
+  id: string
+  name: string
+  type: ContentPartType.Base64FilePromptType
+  data: string
+  mimeType: string
+}
+
+export interface UrlFileUrlPrompt {
+  id: string
+  name: string
+  type: ContentPartType.UrlFileUrlPromptType
+  url: string
+  mimeType: string
+}
+
+export interface TextPrompt {
+  type: ContentPartType.TextPrompt
+  text: string
+}
+
+export type ContentPart = (Base64FilePrompt | UrlFileUrlPrompt | TextPrompt)[]
+
 export interface Message {
-  messageId: string
+  id: string
   role: Roles
-  content: (ChatCompletionContentPart | AudioContentPart)[]
-  tokensCount: number
+  content: ContentPart
+  tokenCount: number
   createdAt: number
 }
 
+export interface Configuration {
+  model: string
+  systemMessage: string
+  maxResponse: number
+  temperature: number
+  topP: number
+  stop: string[]
+  frequencyPenalty: number
+  presencePenalty: number
+  systemMessageTokensCount: number
+}
+
 export interface Conversation {
-  conversationId: string
+  id: string
   summary: string
   avatar: string
   createdAt: number
   updatedAt: number
-  product: Products
   messages: Message[]
-  configuration:
-    | ChatConfiguration
-    | ImageGenerationConfiguration
-    | AudioTranscriptionConfiguration
-    | AudioTranslationConfiguration
-    | CompletionConfiguration
-}
-
-export interface AudioFile {
-  filename: string
-  binary?: File
+  configuration: Configuration
 }

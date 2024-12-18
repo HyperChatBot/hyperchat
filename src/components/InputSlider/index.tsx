@@ -3,7 +3,7 @@ import IconButton from '@mui/material/IconButton'
 import Slider from '@mui/material/Slider'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
-import { ChangeEvent, FC, SyntheticEvent, useState } from 'react'
+import { ChangeEvent, FC, SyntheticEvent, useEffect, useState } from 'react'
 
 interface Props {
   title: string
@@ -60,6 +60,10 @@ const InputSlider: FC<Props> = ({
 
     setFieldValue(newValue)
   }
+
+  useEffect(() => {
+    setValue((prev) => (prev > defaultValue ? defaultValue : prev))
+  }, [defaultValue])
 
   return (
     <section className="my-8 flex flex-col">

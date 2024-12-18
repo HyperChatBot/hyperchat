@@ -16,11 +16,12 @@
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
   "dependencies": {
-    "@azure/openai": "1.0.0-beta.12",
+    "@anthropic-ai/sdk": "^0.32.1",
     "@emoji-mart/data": "^1.2.1",
     "@emoji-mart/react": "^1.1.1",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
+    "@google/generative-ai": "^0.21.0",
     "@heroicons/react": "^2.1.5",
     "@lottiefiles/react-lottie-player": "^3.5.4",
     "@mui/material": "^6.1.2",
@@ -38,7 +39,6 @@
     "js-tiktoken": "^1.0.15",
     "luxon": "^3.5.0",
     "marked": "^15.0.3",
-    "microsoft-cognitiveservices-speech-sdk": "^1.40.0",
     "notistack": "^3.0.1",
     "openai": "^4.76.0",
     "react": "^18.3.1",
