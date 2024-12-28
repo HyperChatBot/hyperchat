@@ -6,7 +6,7 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import RecorderJSON from 'src/assets/lotties/recorder.json'
 import { useSTT } from 'src/hooks'
 import { inputTextState } from 'src/stores/conversation'
-import { settingsState } from 'src/stores/settings'
+import { settingsState } from 'src/stores/global'
 
 interface Props {
   className?: string
@@ -27,7 +27,6 @@ const AudioRecorder: FC<Props> = ({ className }) => {
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-      console.log(stream)
       mediaRecorderRef.current = new MediaRecorder(stream)
       mediaRecorderRef.current.start()
       setIsRecording(true)

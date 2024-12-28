@@ -10,7 +10,7 @@ import {
   TransformFilenameToSrcRequest,
   TransformFilenameToSrcResponse
 } from 'src/ipc'
-import { BRIDGE_NAME, IPC_NAMES } from './constants'
+import { BRIDGE_NAME, IPC_NAMES } from './shared/constants'
 
 contextBridge.exposeInMainWorld(BRIDGE_NAME, {
   saveFileWithDialog: (

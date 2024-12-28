@@ -2,7 +2,7 @@ import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { useDB } from 'src/hooks'
-import { settingsState } from 'src/stores/settings'
+import { settingsState } from 'src/stores/global'
 import { Companies, ThemeMode } from 'src/types/global'
 import { Settings } from 'src/types/settings'
 import { v4 } from 'uuid'
@@ -32,7 +32,6 @@ const useSettings = () => {
   const updateSettings = async (newSettings: Settings) => {
     if (!settings) return
 
-    console.log(newSettings)
     await updateOneById(settings.id, newSettings)
 
     if (

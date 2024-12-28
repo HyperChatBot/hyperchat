@@ -1,5 +1,5 @@
-import Button from '@mui/material/Button'
 import Autocomplete from '@mui/material/Autocomplete'
+import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
@@ -7,40 +7,30 @@ import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
-import { Formik } from 'formik'
+import { Form, Formik } from 'formik'
 import { FC } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import configurations from 'src/configurations'
-import { useDB } from 'src/hooks'
-import { currConversationState } from 'src/stores/conversation'
-import { settingsState } from 'src/stores/settings'
+import { useConfiguration } from 'src/hooks'
+import { conversationState } from 'src/stores/conversation'
+import {
+  companyState,
+  configurationState,
+  loadingState
+} from 'src/stores/global'
 import { Configuration as IConfiguration } from 'src/types/conversation'
 import Divider from '../Divider'
 import InputSlider from '../InputSlider'
 
 const Configuration: FC = () => {
-  const [currConversation, setCurrConversation] = useRecoilState(
-    currConversationState
-  )
-  const settings = useRecoilValue(settingsState)
-  const availableModels = configurations[settings.company].models
+  const conversation = useRecoilValue(conversationState)
+  const loading = useRecoilValue(loadingState)
+  const company = useRecoilValue(companyState)
+  const configuration = useRecoilValue(configurationState)
+  const { updateConfiguration } = useConfiguration()
+  const availableModels = configurations[company]?.models
 
-  const { updateOneById } = useDB('conversations')
-
-  const updateConfiguration = async (values: IConfiguration) => {
-    if (!currConversation) {
-      return
-    }
-
-    await updateOneById(currConversation.id, {
-      currConversation,
-      updatedAt: +new Date()
-    })
-
-    setCurrConversation(currConversation)
-  }
-
-  if (!currConversation) {
+  if (!conversation || loading || !configuration) {
     return null
   }
 
@@ -55,16 +45,20 @@ const Configuration: FC = () => {
       <Divider />
 
       <Formik<IConfiguration>
-        initialValues={currConversation.configuration}
-        onSubmit={updateConfiguration}
+        initialValues={configuration}
+        enableReinitialize // Reset `initialValues` if it changed.
+        onSubmit={(values) => updateConfiguration(values)}
       >
         {(formik) => {
-          const { maxOutput } = availableModels?.find(
+          const maxOutput = availableModels?.find(
             (availableModel) => availableModel.modelName === formik.values.model
-          )
+          )?.maxOutput
 
           return (
-            <section className="no-scrollbar h-[calc(100vh_-_7.5625rem)] overflow-y-scroll p-6">
+            <Form
+              onSubmit={formik.handleSubmit}
+              className="no-scrollbar h-[calc(100vh_-_7.5625rem)] overflow-y-scroll p-6"
+            >
               <FormControl size="small" sx={{ marginBottom: 4 }} fullWidth>
                 <InputLabel id="model-select-label">Model</InputLabel>
                 <Select
@@ -110,7 +104,7 @@ const Configuration: FC = () => {
                 min={0}
                 max={2}
                 step={0.01}
-                defaultValue={currConversation.configuration.temperature}
+                defaultValue={configuration.temperature}
                 setFieldValue={(value: number) =>
                   formik.setFieldValue('temperature', value)
                 }
@@ -154,7 +148,7 @@ const Configuration: FC = () => {
                 min={0}
                 max={1}
                 step={0.01}
-                defaultValue={currConversation.configuration.topP}
+                defaultValue={configuration.topP}
                 setFieldValue={(value: number) =>
                   formik.setFieldValue('topP', value)
                 }
@@ -165,7 +159,7 @@ const Configuration: FC = () => {
                 min={-2}
                 max={2}
                 step={0.01}
-                defaultValue={currConversation.configuration.frequencyPenalty}
+                defaultValue={configuration.frequencyPenalty}
                 setFieldValue={(value: number) =>
                   formik.setFieldValue('frequencyPenalty', value)
                 }
@@ -176,20 +170,18 @@ const Configuration: FC = () => {
                 min={0}
                 max={2}
                 step={0.01}
-                defaultValue={currConversation.configuration.presencePenalty}
+                defaultValue={configuration.presencePenalty}
                 setFieldValue={(value: number) =>
                   formik.setFieldValue('presencePenalty', value)
                 }
               />
-              <Button variant="contained" fullWidth>Submit</Button>
-            </section>
+              <Button variant="contained" fullWidth type="submit">
+                Submit
+              </Button>
+            </Form>
           )
         }}
-
-
       </Formik>
-
-      
     </section>
   )
 }

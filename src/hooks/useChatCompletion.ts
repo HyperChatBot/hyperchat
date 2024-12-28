@@ -1,7 +1,13 @@
 import Anthropic, { AnthropicError } from '@anthropic-ai/sdk'
+import { TiktokenModel } from 'js-tiktoken'
 import { enqueueSnackbar } from 'notistack'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { useClients, useSettings, useStoreMessages } from 'src/hooks'
+import {
+  useClients,
+  useConfiguration,
+  useSettings,
+  useStoreMessages
+} from 'src/hooks'
 import {
   checkUserPromptTokensCountIsValid,
   collectOpenAiPrompt,
@@ -9,21 +15,24 @@ import {
   getTokensCount,
   showRequestErrorToast
 } from 'src/shared/utils'
-import { currConversationState, loadingState } from 'src/stores/conversation'
+import { conversationState } from 'src/stores/conversation'
+import { companyState, loadingState } from 'src/stores/global'
 import {
+  transformContextToAnthropic,
   transformContextToGoogle,
-  transformToGoogle
-} from 'src/transformer/google'
-import {
   transformContextToOpenAI,
+  transformToAnthropic,
+  transformToGoogle,
   transformToOpenAI
-} from 'src/transformer/openai'
+} from 'src/transformer'
 import { ContentPart, Roles } from 'src/types/conversation'
 import { Companies } from 'src/types/global'
 
 const useChatCompletion = () => {
   const { openAiClient, googleClient, anthropicClient } = useClients()
-  const currConversation = useRecoilValue(currConversationState)
+  const conversation = useRecoilValue(conversationState)
+  const company = useRecoilValue(companyState)
+  const { configuration } = useConfiguration()
   const { settings } = useSettings()
   const setLoading = useSetRecoilState(loadingState)
   const {
@@ -33,32 +42,33 @@ const useChatCompletion = () => {
     updateChatCompletionStream
   } = useStoreMessages()
 
-  if (!settings || !currConversation) return
+  if (!settings || !conversation) return
+
+  const {
+    model,
+    systemMessage,
+    maxResponse,
+    temperature,
+    topP,
+    frequencyPenalty,
+    presencePenalty,
+    stop,
+    systemMessageTokensCount
+  } = configuration
 
   const createChatCompletionByOpenAI = async (userPrompt: ContentPart) => {
-    const {
-      model,
-      systemMessage,
-      maxTokens,
-      temperature,
-      topP,
-      frequencyPenalty,
-      presencePenalty,
-      stop,
-      systemMessageTokensCount
-    } = currConversation.configuration
     let userMessageText = ''
 
     const userPromptTokenCount = getTokensCount(
       collectOpenAiPrompt(userPrompt),
-      model
+      model as TiktokenModel
     )
     checkUserPromptTokensCountIsValid(0, 104856, userPromptTokenCount)
     await saveUserMessage(userPrompt, userPromptTokenCount)
 
     const contexts = computeContext(
       104856 - 0 - userPromptTokenCount,
-      currConversation.messages
+      conversation.messages
     )
 
     try {
@@ -76,6 +86,12 @@ const useChatCompletion = () => {
             content: transformToOpenAI(userPrompt)
           }
         ],
+        max_completion_tokens: maxResponse,
+        temperature,
+        top_p: topP,
+        frequency_penalty: frequencyPenalty,
+        presence_penalty: presencePenalty,
+        stop,
         stream: true
       })
 
@@ -98,7 +114,10 @@ const useChatCompletion = () => {
           }
         }
 
-      const assistantMessageTokenCount = getTokensCount(assistantText, model)
+      const assistantMessageTokenCount = getTokensCount(
+        assistantText,
+        model as TiktokenModel
+      )
       saveAssistantMessage(assistantMessageTokenCount)
     } catch (e) {
       showRequestErrorToast(e)
@@ -108,23 +127,33 @@ const useChatCompletion = () => {
   }
 
   const createChatCompletionByGoogle = async (userPrompt: ContentPart) => {
-    const model = googleClient.getGenerativeModel({
-      model: 'gemini-2.0-flash-exp'
+    const generativeModel = googleClient.getGenerativeModel({
+      model,
+      systemInstruction: systemMessage,
+      generationConfig: {
+        stopSequences: stop,
+        maxOutputTokens: maxResponse,
+        temperature,
+        topP,
+        frequencyPenalty,
+        presencePenalty
+      }
     })
 
     const { parts } = transformToGoogle(Roles.User, userPrompt)
-    const { totalTokens: userPromptTokenCount } = await model.countTokens(parts)
+    const { totalTokens: userPromptTokenCount } =
+      await generativeModel.countTokens(parts)
 
     checkUserPromptTokensCountIsValid(0, 104856, userPromptTokenCount)
     await saveUserMessage(userPrompt, userPromptTokenCount)
 
     const contexts = computeContext(
       104856 - 0 - userPromptTokenCount,
-      currConversation.messages
+      conversation.messages
     )
 
     let assistantMessageTokenCount = 0
-    const chat = model.startChat({
+    const chat = generativeModel.startChat({
       history: transformContextToGoogle(contexts)
     })
     const { stream } = await chat.sendMessageStream(parts)
@@ -142,22 +171,32 @@ const useChatCompletion = () => {
   }
 
   const createChatCompletionByAnthropic = async (userMessage: ContentPart) => {
-    const { input_tokens } = await anthropicClient.beta.messages.countTokens({
-      model: 'claude-3-5-sonnet-20241022',
-      messages: [{ role: 'user', content: 'Hello, world' }]
-    })
-    await saveUserMessage(userMessage, input_tokens)
+    const userPrompt = {
+      role: Roles.User as 'user' | 'assistant',
+      content: transformToAnthropic(userMessage)
+    }
 
-    const stream = anthropicClient.messages
+    const { input_tokens: userPromptTokenCount } =
+      await anthropicClient.beta.messages.countTokens({
+        model,
+        messages: [userPrompt]
+      })
+    await saveUserMessage(userMessage, userPromptTokenCount)
+
+    const contexts = computeContext(
+      104856 - 0 - userPromptTokenCount,
+      conversation.messages
+    )
+
+    anthropicClient.messages
       .stream({
-        model: 'claude-3-5-sonnet-20241022',
-        max_tokens: 1024,
-        messages: [
-          {
-            role: 'user',
-            content: 'Say hello there!'
-          }
-        ]
+        model,
+        system: systemMessage,
+        max_tokens: maxResponse,
+        temperature,
+        top_p: topP,
+        stop_sequences: stop,
+        messages: [...transformContextToAnthropic(contexts), userPrompt]
       })
       .on('text', (textDelta) => {
         updateChatCompletionStream(textDelta || '')
@@ -168,9 +207,9 @@ const useChatCompletion = () => {
       })
       .on('error', (error: AnthropicError) => {
         if (error instanceof Anthropic.APIError) {
-          console.log(error.status) // 400
-          console.log(error.name) // BadRequestError
-          console.log(error.headers) // {server: 'nginx', ...}
+          enqueueSnackbar(`[${error.status}] ${error.message}`, {
+            variant: 'error'
+          })
         } else {
           throw error
         }
@@ -183,7 +222,7 @@ const useChatCompletion = () => {
     [Companies.Google]: createChatCompletionByGoogle
   }
 
-  return services[settings.company]
+  return services[company]
 }
 
 export default useChatCompletion

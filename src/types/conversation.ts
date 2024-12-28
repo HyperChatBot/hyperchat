@@ -1,3 +1,5 @@
+import { Companies } from './global'
+
 export enum Roles {
   System = 'system',
   Assistant = 'assistant',
@@ -42,6 +44,7 @@ export interface Message {
 }
 
 export interface Configuration {
+  company: Companies
   model: string
   systemMessage: string
   maxResponse: number
@@ -60,5 +63,10 @@ export interface Conversation {
   createdAt: number
   updatedAt: number
   messages: Message[]
-  configuration: Configuration
+  company: Companies
+}
+
+export enum SpeechService {
+  TTS = 'tts', // Text to Speech
+  STT = 'stt' // Speech to Text
 }

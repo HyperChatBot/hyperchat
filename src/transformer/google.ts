@@ -29,7 +29,7 @@ export const transformToGoogle = (
       const part: InlineDataPart = {
         inlineData: {
           mimeType: item.mimeType,
-          data: item.data
+          data: item.data.split(',')[1]
         }
       }
 

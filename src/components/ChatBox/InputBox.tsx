@@ -4,11 +4,10 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import { useChatCompletion } from 'src/hooks'
 import {
   base64FilePromptState,
-  currConversationState,
-  inputTextState,
-  loadingState
+  conversationState,
+  inputTextState
 } from 'src/stores/conversation'
-import { settingsState } from 'src/stores/settings'
+import { loadingState, settingsState } from 'src/stores/global'
 import { ContentPartType, TextPrompt } from 'src/types/conversation'
 import { LoadingIcon, SolidSendIcon } from '../Icons'
 import AttachmentPreview from './AttachmentPreview'
@@ -16,7 +15,7 @@ import AttachmentUploader from './AttachmentUploader'
 import AudioRecorder from './Recorder'
 
 const InputBox: FC = () => {
-  const currConversation = useRecoilValue(currConversationState)
+  const conversation = useRecoilValue(conversationState)
   const settings = useRecoilValue(settingsState)
   const loading = useRecoilValue(loadingState)
   const [inputText, setInputText] = useRecoilState(inputTextState)
@@ -82,7 +81,7 @@ const InputBox: FC = () => {
     }
   }, [inputText])
 
-  if (!currConversation) return null
+  if (!conversation) return null
 
   return (
     <section className="absolute bottom-6 left-6 w-[calc(100%_-_3rem)] rounded-md border border-black/10 bg-white dark:bg-gray-700">

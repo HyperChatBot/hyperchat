@@ -1,17 +1,18 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { useClients } from 'src/hooks'
 import { showRequestErrorToast } from 'src/shared/utils'
-import { currConversationState, loadingState } from 'src/stores/conversation'
-import { settingsState } from 'src/stores/settings'
+import { conversationState } from 'src/stores/conversation'
+import { companyState, loadingState, settingsState } from 'src/stores/global'
 import { Companies } from 'src/types/global'
 
 const useSTT = () => {
   const { openAiClient } = useClients()
-  const currConversation = useRecoilValue(currConversationState)
+  const conversation = useRecoilValue(conversationState)
   const setLoading = useSetRecoilState(loadingState)
   const settings = useRecoilValue(settingsState)
+  const company = useRecoilValue(companyState)
 
-  if (!settings || !currConversation) return
+  if (!settings || !conversation) return
 
   const createSpeechByOpenAI = async (blob: Blob[]) => {
     try {
@@ -34,7 +35,7 @@ const useSTT = () => {
     [Companies.OpenAI]: createSpeechByOpenAI
   }
 
-  return services[settings.company]
+  return services[company]
 }
 
 export default useSTT

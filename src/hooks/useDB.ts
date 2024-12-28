@@ -1,6 +1,10 @@
+import { useRecoilValue } from 'recoil'
 import { db } from 'src/db'
+import { companyState } from 'src/stores/global'
 
 const useDB = (tableName: string) => {
+  const company = useRecoilValue(companyState)
+
   const deleteOneById = async (id: string) => {
     try {
       await db.table(tableName).delete(id)
@@ -9,7 +13,7 @@ const useDB = (tableName: string) => {
 
   const toArray = async <T>() => {
     try {
-      const array = (await db.table(tableName).toArray()) as T
+      const array: T[] = await db.table(tableName).toArray()
       return array
     } catch {}
   }
@@ -20,7 +24,7 @@ const useDB = (tableName: string) => {
     } catch {}
   }
 
-  const insertOne = async (data: any) => {
+  const insertOne = async <T>(data: T) => {
     try {
       await db.table(tableName).add(data)
     } catch {}
@@ -33,14 +37,7 @@ const useDB = (tableName: string) => {
     } catch {}
   }
 
-  const getAllAndOrderByUpdatedAt = async () => {
-    try {
-      return db.table(tableName).orderBy('updatedAt').reverse().toArray()
-    } catch {}
-  }
-
   return {
-    getAllAndOrderByUpdatedAt,
     deleteOneById,
     toArray,
     updateOneById,

@@ -1,4 +1,5 @@
 import { Configuration } from 'src/types/conversation'
+import { Companies } from 'src/types/global'
 
 export const models = [
   {
@@ -21,6 +22,7 @@ export const models = [
 ]
 
 export const configuration: Configuration = {
+  company: Companies.Anthropic,
   model: 'claude-3-5-sonnet-latest',
   systemMessage: 'You are an AI assistant that helps people find information.',
   maxResponse: 8192,

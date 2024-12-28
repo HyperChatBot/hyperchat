@@ -33,7 +33,7 @@ const ToolsBox: FC<Props> = ({ message: { createdAt, content, role } }) => {
   return (
     <section
       className={
-        'mt-2 flex items-center gap-2 text-xs text-black text-opacity-30 opacity-0 transition duration-250 ease-in-out group-hover:opacity-100 group-hover:duration-250 dark:text-dark-bubble-assistant-text dark:text-opacity-30'
+        'mt-2 flex items-center gap-2 text-xs text-black text-opacity-30 dark:text-dark-bubble-assistant-text dark:text-opacity-30'
       }
     >
       {role === Roles.Assistant && (

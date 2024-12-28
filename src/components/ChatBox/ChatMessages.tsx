@@ -2,15 +2,15 @@ import classNames from 'classnames'
 import { FC, memo, useEffect, useMemo, useRef } from 'react'
 import { useRecoilValue } from 'recoil'
 import NoDataIllustration from 'src/assets/illustrations/no-data.svg'
-import { currConversationState } from 'src/stores/conversation'
+import { conversationState } from 'src/stores/conversation'
 import ChatBubble from './ChatBubble'
 
 const ChatMessages: FC = () => {
   const chatBoxRef = useRef<HTMLDivElement>(null)
-  const currConversation = useRecoilValue(currConversationState)
+  const conversation = useRecoilValue(conversationState)
   const hasMessages = useMemo(
-    () => currConversation && currConversation.messages.length > 0,
-    [currConversation?.messages?.length]
+    () => conversation && conversation.messages.length > 0,
+    [conversation?.messages?.length]
   )
 
   const scrollToBottom = () => {
@@ -27,7 +27,7 @@ const ChatMessages: FC = () => {
 
   useEffect(() => {
     scrollToBottom()
-  }, [currConversation])
+  }, [conversation])
 
   return (
     <section
@@ -39,7 +39,7 @@ const ChatMessages: FC = () => {
     >
       {hasMessages ? (
         <>
-          {currConversation?.messages.map((message) => (
+          {conversation?.messages.map((message) => (
             <ChatBubble key={message.id} message={message} />
           ))}
         </>

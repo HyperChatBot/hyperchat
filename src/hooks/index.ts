@@ -1,5 +1,6 @@
 import useChatCompletion from './useChatCompletion'
 import useClients from './useClients'
+import useConfiguration from './useConfiguration'
 import useDB from './useDB'
 import useOnline from './useOnline'
 import useSettings from './useSettings'
@@ -17,5 +18,6 @@ export {
   useTTS,
   useStoreMessages,
   useTheme,
-  useSTT
+  useSTT,
+  useConfiguration
 }

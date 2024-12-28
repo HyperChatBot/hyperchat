@@ -16,7 +16,7 @@ import Typography from '@mui/material/Typography'
 import { Formik } from 'formik'
 import { enqueueSnackbar } from 'notistack'
 import { ChangeEvent, FC } from 'react'
-import ChatGPTImg from 'src/assets/chatbot.png'
+import HyperChatLogo from 'src/assets/images/logo.png'
 import { SolidSettingsBrightnessIcon } from 'src/components/Icons'
 import ImportAndExportDexie from 'src/components/ImportAndExportDexie'
 import { useSettings, useTheme } from 'src/hooks'
@@ -282,7 +282,7 @@ const Settings: FC = () => {
                         src={
                           settings.assistantAvatarFilename
                             ? settings.assistantAvatarFilename
-                            : ChatGPTImg
+                            : HyperChatLogo
                         }
                         sx={{ width: 128, height: 128 }}
                       />

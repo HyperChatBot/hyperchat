@@ -3,44 +3,48 @@ import { Cog6ToothIcon as Cog6ToothIconSolid } from '@heroicons/react/24/solid'
 import Tooltip from '@mui/material/Tooltip'
 import { FC } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import LogoImg from 'src/assets/chatbot.png'
-import {
-  AnthropicLogoIcon,
-  GoogleLogoIcon,
-  OpenAiLogoIcon
-} from 'src/components/Icons'
-import { useSettings } from 'src/hooks'
-import { Companies } from 'src/types/global'
+import { useRecoilState } from 'recoil'
+import HyperChatLogo from 'src/assets/images/logo.png'
+import { useConfiguration, useSettings } from 'src/hooks'
+import companies from 'src/shared/companies'
+import { companyState } from 'src/stores/global'
 import Avatar from '../Avatar'
-
-const companyLogo = {
-  [Companies.OpenAI]: {
-    logo: <OpenAiLogoIcon />
-  },
-  [Companies.Anthropic]: {
-    logo: <AnthropicLogoIcon />
-  },
-  [Companies.Google]: {
-    logo: <GoogleLogoIcon />
-  }
-}
+import Divider from '../Divider'
+import Loading from '../Loading'
 
 const Sidebar: FC = () => {
   const location = useLocation()
+  const [company, setCompany] = useRecoilState(companyState)
   const { settings } = useSettings()
+  const { configuration } = useConfiguration()
 
-  if (!settings) return null
+  if (!settings || !configuration) return <Loading />
 
   return (
     <section className="no-scrollbar flex h-screen w-22 min-w-22 flex-col items-center justify-between overflow-y-scroll p-4 shadow-sidebar dark:shadow-dark-sidebar">
       <div className="flex flex-col items-center">
-        <Avatar size="xs" src={LogoImg} />
+        <Avatar size="xs" src={HyperChatLogo} />
         <section className="mt-12 w-full">
-          <div className="mb-6 flex flex-col items-center">
-            {companyLogo[settings.company].logo}
+          <div className="mb-6 flex flex-col items-center gap-6">
+            {companies.map(({ name, logo: Logo }) => {
+              const isCurrentCompany = name === company
+              return (
+                <div
+                  key={name}
+                  onClick={() => {
+                    window.localStorage.setItem('$$hyperchat-company', name)
+                    setCompany(name)
+                  }}
+                >
+                  <Logo
+                    className={`${!isCurrentCompany && 'grayscale'} h-6 w-6`}
+                  />
+                </div>
+              )
+            })}
           </div>
-
-          <div className="mb-6 flex justify-center">
+          <Divider />
+          <div className="my-6 flex justify-center">
             <Tooltip title="Settings" placement="right">
               <Link to="/settings">
                 {location.pathname === '/settings' ? (

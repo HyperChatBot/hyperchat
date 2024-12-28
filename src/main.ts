@@ -1,12 +1,12 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import started from 'electron-squirrel-startup'
 import path from 'path'
-import { IPC_NAMES } from './constants'
 import {
   saveFileToAppDataDir,
   saveFileWithDialog,
   transformFilenameToSrc
 } from './ipc'
+import { IPC_NAMES } from './shared/constants'
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {

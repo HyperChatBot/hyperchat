@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { FC, memo } from 'react'
-import ChatGPTLogoImg from 'src/assets/chatbot.png'
+import HyperChatLogo from 'src/assets/images/logo.png'
 import { useSettings } from 'src/hooks'
 import {
   ContentPartType,
@@ -23,7 +23,7 @@ const ChatBubble: FC<Props> = ({ message }) => {
     role === Roles.Assistant
       ? settings?.assistantAvatarFilename
         ? settings.assistantAvatarFilename
-        : ChatGPTLogoImg
+        : HyperChatLogo
       : ''
 
   return (

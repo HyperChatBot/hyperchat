@@ -1,4 +1,5 @@
 import { Configuration } from 'src/types/conversation'
+import { Companies } from 'src/types/global'
 
 export const models = [
   { modelName: 'gemini-2.0-flash-exp', maxInput: 1048576, maxOutput: 8192 },
@@ -8,6 +9,7 @@ export const models = [
 ]
 
 export const configuration: Configuration = {
+  company: Companies.Google,
   model: 'gemini-2.0-flash-exp',
   systemMessage: 'You are an AI assistant that helps people find information.',
   maxResponse: 8192,

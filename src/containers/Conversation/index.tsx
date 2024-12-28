@@ -1,28 +1,42 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { FC, useEffect } from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import ChatBox from 'src/components/ChatBox'
 import Configuration from 'src/components/Configuration'
 import ConversationList from 'src/components/ConversationList'
 import Divider from 'src/components/Divider'
 import Loading from 'src/components/Loading'
-import { useDB } from 'src/hooks'
-import { currConversationState } from 'src/stores/conversation'
+import { db } from 'src/db'
+import { conversationState } from 'src/stores/conversation'
+import { companyState } from 'src/stores/global'
 import { Conversation as IConversation } from 'src/types/conversation'
 
 const Conversation: FC = () => {
-  const [currConversation, setCurrConversation] = useRecoilState(
-    currConversationState
+  const [conversation, setConversation] = useRecoilState(conversationState)
+  const company = useRecoilValue(companyState)
+  const conversations = useLiveQuery<IConversation[]>(
+    () =>
+      db
+        .table<IConversation>('conversations')
+        .where('company')
+        .equals(company)
+        .reverse()
+        .sortBy('updatedAt'),
+    [company]
   )
 
-  const { getAllAndOrderByUpdatedAt } = useDB('conversations')
-  const conversations = useLiveQuery<IConversation[]>(getAllAndOrderByUpdatedAt)
-
   useEffect(() => {
-    if (conversations && !currConversation) {
-      setCurrConversation(conversations[0])
+    if (
+      // Initialing App
+      !conversation ||
+      // Switching company
+      conversation?.company !== company ||
+      // Deleting a conversation
+      conversations.findIndex((c) => c.id === conversation.id) === -1
+    ) {
+      setConversation(conversations?.[0])
     }
-  }, [currConversation, conversations])
+  }, [conversation, conversations, company])
 
   if (!conversations) return <Loading />
 
@@ -32,7 +46,7 @@ const Conversation: FC = () => {
       <Divider direction="vertical" />
       <ChatBox />
       <Divider direction="vertical" />
-      {currConversation ? <Configuration /> : null}
+      <Configuration />
     </>
   )
 }

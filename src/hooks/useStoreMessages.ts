@@ -2,7 +2,7 @@ import { produce, WritableDraft } from 'immer'
 import { useCallback } from 'react'
 import { useRecoilState } from 'recoil'
 import { useDB } from 'src/hooks'
-import { currConversationState } from 'src/stores/conversation'
+import { conversationState } from 'src/stores/conversation'
 import {
   ContentPart,
   ContentPartType,
@@ -14,15 +14,13 @@ import { v4 } from 'uuid'
 
 const useStoreMessages = () => {
   const { updateOneById } = useDB('conversations')
-  const [currConversation, setCurrConversation] = useRecoilState(
-    currConversationState
-  )
+  const [conversation, setConversation] = useRecoilState(conversationState)
 
   // If a stream chat completion request fails, delete it in the user interface.
   const rollbackMessage = () => {
-    if (!currConversation) return
+    if (!conversation) return
 
-    setCurrConversation((prevState) =>
+    setConversation((prevState) =>
       produce(prevState, (draft) => {
         if (!draft) return
         draft.messages.pop()
@@ -31,9 +29,9 @@ const useStoreMessages = () => {
   }
 
   const updateChatCompletionStream = (token?: string) => {
-    if (!currConversation) return
+    if (!conversation) return
 
-    setCurrConversation((prevState) =>
+    setConversation((prevState) =>
       produce(prevState, (draft) => {
         if (!draft) return
 
@@ -61,9 +59,9 @@ const useStoreMessages = () => {
 
   const saveCommonAssistantMessage = useCallback(
     (content: TextPrompt[]) => {
-      if (!currConversation) return
+      if (!conversation) return
 
-      setCurrConversation((prevState) => {
+      setConversation((prevState) => {
         const newConversation = produce(prevState, (draft) => {
           if (!draft) return
           const message: Message = {
@@ -78,7 +76,7 @@ const useStoreMessages = () => {
         })
 
         if (newConversation) {
-          updateOneById(currConversation.id, {
+          updateOneById(conversation.id, {
             messages: newConversation.messages,
             updatedAt: newConversation.updatedAt
           })
@@ -87,13 +85,13 @@ const useStoreMessages = () => {
         return newConversation
       })
     },
-    [currConversation]
+    [conversation]
   )
 
   const saveAssistantMessage = (assistantMessageTokenCount: number) => {
-    if (!currConversation) return
+    if (!conversation) return
 
-    setCurrConversation((prevState) => {
+    setConversation((prevState) => {
       const newConversation = produce(prevState, (draft) => {
         if (!draft) return
         const lastMessage = draft.messages[draft.messages.length - 1]
@@ -105,7 +103,7 @@ const useStoreMessages = () => {
       })
 
       if (newConversation) {
-        updateOneById(currConversation.id, {
+        updateOneById(conversation.id, {
           messages: newConversation.messages,
           updatedAt: newConversation.updatedAt
         })
@@ -116,7 +114,7 @@ const useStoreMessages = () => {
   }
 
   const saveUserMessage = async (content: ContentPart, tokenCount: number) => {
-    if (!currConversation) return
+    if (!conversation) return
 
     const message: Message = {
       id: v4(),
@@ -126,14 +124,14 @@ const useStoreMessages = () => {
       createdAt: +new Date()
     }
 
-    const newConversations = produce(currConversation, (draft) => {
+    const newConversations = produce(conversation, (draft) => {
       draft.messages.push(message)
       draft.updatedAt = +new Date()
     })
 
-    setCurrConversation(newConversations)
+    setConversation(newConversations)
 
-    await updateOneById(currConversation.id, {
+    await updateOneById(conversation.id, {
       messages: newConversations.messages,
       updatedAt: newConversations.updatedAt
     })

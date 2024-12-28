@@ -29,8 +29,8 @@
 import { StrictMode, Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
 import { RecoilRoot } from 'recoil'
+import './assets/styles/index.css'
 import Loading from './components/Loading'
-import './index.css'
 import Layouts from './layouts'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

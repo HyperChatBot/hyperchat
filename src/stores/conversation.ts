@@ -1,7 +1,7 @@
 import { atom } from 'recoil'
 import { Base64FilePrompt, Conversation } from 'src/types/conversation'
 
-export const currConversationState = atom<Conversation | undefined>({
+export const conversationState = atom<Conversation | undefined>({
   key: 'CurrConversation',
   default: undefined
 })
@@ -19,11 +19,6 @@ export const avatarPickerVisibleState = atom({
 export const currPlayingAudioIdState = atom<string | undefined>({
   key: 'CurrPlayingAudioId',
   default: undefined
-})
-
-export const loadingState = atom({
-  key: 'Loading',
-  default: false
 })
 
 export const inputTextState = atom({

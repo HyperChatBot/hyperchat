@@ -1,4 +1,5 @@
 import { Configuration } from 'src/types/conversation'
+import { Companies } from 'src/types/global'
 
 export const models = [
   { modelName: 'gpt-4o', maxInput: 128000, maxOutput: 8192 },
@@ -9,6 +10,7 @@ export const models = [
 ]
 
 export const configuration: Configuration = {
+  company: Companies.OpenAI,
   model: 'gpt-4o',
   systemMessage: 'You are an AI assistant that helps people find information.',
   maxResponse: 8192,

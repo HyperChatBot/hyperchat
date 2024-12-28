@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { FC } from 'react'
-import ChatGPTLogoImg from 'src/assets/chatbot.png'
+import HyperChatLogo from 'src/assets/images/logo.png'
 import { formatDate } from 'src/shared/utils'
 import { ContentPartType, Conversation } from 'src/types/conversation'
 import ItemWrapper from './ItemWrapper'
@@ -33,7 +33,7 @@ const ConversationItem: FC<Props> = ({ active, conversation, onClick }) => {
         </div>
       ) : (
         <img
-          src={ChatGPTLogoImg}
+          src={HyperChatLogo}
           alt="avatar"
           className="mr-4 h-12 w-12 rounded-xl"
         />
