@@ -1,17 +1,17 @@
 import { atom } from 'recoil'
 import { themeModeToTheme } from 'src/shared/utils'
-import { Products, ThemeMode } from 'src/types/global'
+import { Configuration } from 'src/types/conversation'
+import { Companies, ThemeMode } from 'src/types/global'
+import { Settings } from 'src/types/settings'
+
+export const settingsState = atom<Settings | undefined>({
+  key: 'Settings',
+  default: undefined
+})
 
 export const onlineState = atom({
   key: 'OnlineState',
   default: window.navigator.onLine
-})
-
-export const currProductState = atom({
-  key: 'CurrProduct',
-  default:
-    (window.localStorage.getItem('currProductState') as Products) ||
-    Products.ChatCompletion
 })
 
 export const themeState = atom<ThemeMode.dark | ThemeMode.light>({
@@ -19,7 +19,20 @@ export const themeState = atom<ThemeMode.dark | ThemeMode.light>({
   default: themeModeToTheme()
 })
 
-export const configurationDrawerVisibleState = atom({
-  key: 'ConfigurationDrawerVisible',
+export const companyState = atom<Companies>({
+  key: 'Company',
+  default:
+    (window.localStorage.getItem('$$hyperchat-company') as
+      | Companies
+      | undefined) ?? Companies.OpenAI
+})
+
+export const configurationState = atom<Configuration | undefined>({
+  key: 'Configuration',
+  default: undefined
+})
+
+export const loadingState = atom({
+  key: 'Loading',
   default: false
 })
