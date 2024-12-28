@@ -16,26 +16,31 @@ import Typography from '@mui/material/Typography'
 import { Formik } from 'formik'
 import { enqueueSnackbar } from 'notistack'
 import { ChangeEvent, FC } from 'react'
-import ChatGPTImg from 'src/assets/chatbot.png'
+import HyperChatLogo from 'src/assets/images/logo.png'
 import { SolidSettingsBrightnessIcon } from 'src/components/Icons'
 import ImportAndExportDexie from 'src/components/ImportAndExportDexie'
-import { useAppData, useSettings, useTheme } from 'src/hooks'
+import { useSettings, useTheme } from 'src/hooks'
 import { Companies, ThemeMode } from 'src/types/global'
 import { Settings as SettingsParams } from 'src/types/settings'
 
 const Settings: FC = () => {
   const { settings, updateSettings } = useSettings()
   const { toggleTheme } = useTheme()
-  const { saveFileToAppDataDir } = useAppData()
 
   const handleUploadChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
 
-    // FIXME: Even if I set accept="image/*" on the input file tag, non-image files can still be selected in tauri.
     if (file && file.type.startsWith('image/') && settings) {
-      const filename = await saveFileToAppDataDir(file)
-      if (filename) {
-        updateSettings({ ...settings, assistantAvatarFilename: filename })
+      const arrayBuffer = await file.arrayBuffer()
+      const response = await window.electronAPI.saveFileToAppDataDir({
+        arrayBuffer,
+        filename: file.name
+      })
+      if (response.filename) {
+        updateSettings({
+          ...settings,
+          assistantAvatarFilename: response.filename
+        })
         enqueueSnackbar('Assistant avatar updated successfully.', {
           variant: 'success'
         })
@@ -139,12 +144,12 @@ const Settings: FC = () => {
                   </>
                 )}
 
-                {formik.values.company === Companies.Azure && (
+                {formik.values.company === Companies.Anthropic && (
                   <>
                     <TextField
                       autoComplete="current-password"
                       required
-                      id="azure-secret-key-input"
+                      id="anthropic-secret-key-input"
                       label="Secret Key"
                       size="small"
                       type="password"
@@ -158,104 +163,44 @@ const Settings: FC = () => {
                         </span>
                       }
                       className="w-160"
-                      {...formik.getFieldProps('azureSecretKey')}
-                    />
-
-                    <TextField
-                      required
-                      id="azure-endpoint-input"
-                      label="Endpoint"
-                      size="small"
-                      type="text"
-                      className="w-160"
-                      helperText="Use this endpoint to make calls to the service. The format likes: https://YOUR_DOMAIN.openai.azure.com"
-                      {...formik.getFieldProps('azureEndPoint')}
-                    />
-
-                    <Divider />
-
-                    <TextField
-                      id="azure-deployment-name-chat-completion-input"
-                      label="Chat Completion Deployment Name"
-                      size="small"
-                      type="text"
-                      className="w-80"
-                      {...formik.getFieldProps(
-                        'azureDeploymentNameChatCompletion'
-                      )}
-                      placeholder="gpt-4o"
-                    />
-
-                    <TextField
-                      id="azure-deployment-name-completion-input"
-                      label="Completion Deployment Name"
-                      size="small"
-                      type="text"
-                      className="w-80"
-                      {...formik.getFieldProps('azureDeploymentNameCompletion')}
-                      placeholder="Eg: davinci-002"
-                    />
-
-                    <TextField
-                      id="azure-deployment-name-text-to-image-input"
-                      label="Text to Image Deployment Name"
-                      size="small"
-                      type="text"
-                      className="w-80"
-                      {...formik.getFieldProps(
-                        'azureDeploymentNameTextToImage'
-                      )}
-                      placeholder="Eg: dall-e-3"
-                    />
-
-                    <TextField
-                      id="azure-deployment-name-embedding-input"
-                      label="Embedding Deployment Name"
-                      size="small"
-                      type="text"
-                      className="w-80"
-                      {...formik.getFieldProps('azureDeploymentNameEmbedding')}
-                      placeholder="Eg: text-embedding-ada-002"
-                    />
-
-                    <TextField
-                      id="azure-deployment-name-audio-generation-input"
-                      label="Audio Generation Deployment Name"
-                      size="small"
-                      type="text"
-                      className="w-80"
-                      {...formik.getFieldProps(
-                        'azureDeploymentNameAudioGeneration'
-                      )}
-                      placeholder="Eg: whisper-1"
-                    />
-
-                    <Divider />
-
-                    <TextField
-                      autoComplete="current-password"
-                      required
-                      id="azure-speech-secret-key-input"
-                      label="Speech Secret Key"
-                      size="small"
-                      type="password"
-                      className="w-160"
-                      {...formik.getFieldProps('azureSpeechSecretKey')}
-                    />
-
-                    <TextField
-                      required
-                      id="azure-speech-region-input"
-                      label="Speech Region"
-                      size="small"
-                      type="input"
-                      className="w-160"
-                      {...formik.getFieldProps('azureSpeechRegion')}
+                      {...formik.getFieldProps('anthropicSecretKey')}
                     />
 
                     <Button
                       variant="contained"
-                      sx={{ width: 'max-content' }}
+                      sx={{ width: 120 }}
+                      onClick={() => updateSettings(formik.values)}
+                    >
+                      Save
+                    </Button>
+                  </>
+                )}
+
+                {formik.values.company === Companies.Google && (
+                  <>
+                    <TextField
+                      autoComplete="current-password"
+                      required
+                      id="google-secret-key-input"
+                      label="Secret Key"
+                      size="small"
+                      type="password"
+                      helperText={
+                        <span>
+                          <strong>
+                            Your secret key will only be stored in IndexedDB!
+                          </strong>{' '}
+                          Do not share it with others or expose it in any
+                          client-side code.
+                        </span>
+                      }
+                      className="w-160"
+                      {...formik.getFieldProps('googleSecretKey')}
+                    />
+
+                    <Button
+                      variant="contained"
+                      sx={{ width: 120 }}
                       onClick={() => updateSettings(formik.values)}
                     >
                       Save
@@ -337,7 +282,7 @@ const Settings: FC = () => {
                         src={
                           settings.assistantAvatarFilename
                             ? settings.assistantAvatarFilename
-                            : ChatGPTImg
+                            : HyperChatLogo
                         }
                         sx={{ width: 128, height: 128 }}
                       />

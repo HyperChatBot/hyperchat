@@ -2,36 +2,27 @@ import { enqueueSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { useDB } from 'src/hooks'
-import { settingsState } from 'src/stores/settings'
+import { settingsState } from 'src/stores/global'
 import { Companies, ThemeMode } from 'src/types/global'
 import { Settings } from 'src/types/settings'
 import { v4 } from 'uuid'
-import useAppData from './useAppData'
 
 const useSettings = () => {
-  const { transformFilenameToSrc } = useAppData()
   const [loading, setLoading] = useState(false)
   const [settings, setSettings] = useRecoilState(settingsState)
   const { updateOneById, insertOne, toArray } = useDB('settings')
 
   const initialSettings = async () => {
     const defaultData: Settings = {
-      settingsId: v4(),
+      id: v4(),
       company: Companies.OpenAI,
       openaiSecretKey: '',
       openaiOrganizationId: '',
       openaiAuthorName: '',
-      azureSecretKey: '',
-      azureEndPoint: '',
-      azureDeploymentNameChatCompletion: '',
-      azureDeploymentNameCompletion: '',
-      azureDeploymentNameTextToImage: '',
-      azureDeploymentNameEmbedding: '',
-      azureDeploymentNameAudioGeneration: '',
+      googleSecretKey: '',
+      anthropicSecretKey: '',
       themeMode: ThemeMode.system,
-      assistantAvatarFilename: '',
-      azureSpeechSecretKey: '',
-      azureSpeechRegion: ''
+      assistantAvatarFilename: ''
     }
 
     await insertOne(defaultData)
@@ -41,18 +32,22 @@ const useSettings = () => {
   const updateSettings = async (newSettings: Settings) => {
     if (!settings) return
 
-    await updateOneById(settings.settingsId, newSettings)
+    await updateOneById(settings.id, newSettings)
 
     if (
       !settings.assistantAvatarFilename.endsWith(
         newSettings.assistantAvatarFilename
       )
     ) {
-      const src = await transformFilenameToSrc(
-        newSettings.assistantAvatarFilename
-      )
+      const src = await window.electronAPI.transformFilenameToSrc({
+        filename: newSettings.assistantAvatarFilename
+      })
       if (src) {
-        setSettings({ ...newSettings, assistantAvatarFilename: src })
+        const blob = new Blob([src.arrayBuffer], {
+          type: 'application/octet-stream'
+        })
+        const assetUrl = URL.createObjectURL(blob)
+        setSettings({ ...newSettings, assistantAvatarFilename: assetUrl })
       }
     } else {
       setSettings(newSettings)
@@ -65,7 +60,7 @@ const useSettings = () => {
     setLoading(true)
     try {
       const settings = (await toArray()) as Settings[]
-      const currSettings = settings[0]
+      const currSettings = settings?.[0]
 
       if (!currSettings) {
         initialSettings()
@@ -74,12 +69,19 @@ const useSettings = () => {
 
       if (currSettings.assistantAvatarFilename) {
         try {
-          const src = await transformFilenameToSrc(
-            currSettings.assistantAvatarFilename
-          )
+          const src = await window.electronAPI.transformFilenameToSrc({
+            filename: currSettings.assistantAvatarFilename
+          })
 
           if (src) {
-            setSettings({ ...currSettings, assistantAvatarFilename: src })
+            const blob = new Blob([src.arrayBuffer], {
+              type: 'application/octet-stream'
+            })
+            const assetUrl = URL.createObjectURL(blob)
+            setSettings({
+              ...currSettings,
+              assistantAvatarFilename: assetUrl
+            })
           }
         } catch {
           // if transform is error
@@ -88,7 +90,6 @@ const useSettings = () => {
       } else {
         setSettings(currSettings)
       }
-    } catch {
     } finally {
       setLoading(false)
     }
