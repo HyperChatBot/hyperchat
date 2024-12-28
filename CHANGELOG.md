@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.6](https://github.com/HyperChatBot/hyperchat/compare/v1.0.5...v1.0.6) (2024-12-28)
+
+
+### Bug Fixes
+
+* delete image icon isn't shown in dark mode ([a20c5bb](https://github.com/HyperChatBot/hyperchat/commit/a20c5bb3bc3c1672c55a94f090c8c11564c8521f))
+
 ## [2.0.1](https://github.com/HyperChatBot/hyperchat/compare/v1.0.5...v2.0.1) (2024-10-18)
 
 ### Bug Fixes
