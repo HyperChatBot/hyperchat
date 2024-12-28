@@ -2,7 +2,7 @@ import { Cog6ToothIcon as Cog6ToothIconOutline } from '@heroicons/react/24/outli
 import { Cog6ToothIcon as Cog6ToothIconSolid } from '@heroicons/react/24/solid'
 import Tooltip from '@mui/material/Tooltip'
 import { FC } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import HyperChatLogo from 'src/assets/images/logo.png'
 import { useConfiguration, useSettings } from 'src/hooks'
@@ -13,6 +13,7 @@ import Divider from '../Divider'
 import Loading from '../Loading'
 
 const Sidebar: FC = () => {
+  const navigate = useNavigate()
   const location = useLocation()
   const [company, setCompany] = useRecoilState(companyState)
   const { settings } = useSettings()
@@ -34,6 +35,7 @@ const Sidebar: FC = () => {
                   onClick={() => {
                     window.localStorage.setItem('$$hyperchat-company', name)
                     setCompany(name)
+                    navigate('/', { replace: true })
                   }}
                 >
                   <Logo

@@ -3,8 +3,9 @@ import { SnackbarProvider } from 'notistack'
 import { FC } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Sidebar from 'src/components/Sidebar'
+import Conversation from 'src/containers/Conversation'
+import Settings from 'src/containers/Settings'
 import { useOnline, useTheme } from 'src/hooks'
-import { routers } from 'src/routers'
 import {
   SNACKBAR_ANCHOR_ORIGIN,
   SNACKBAR_AUTO_HIDE_DURATION,
@@ -31,13 +32,8 @@ const Layouts: FC = () => {
           <BrowserRouter>
             <Sidebar />
             <Routes>
-              {routers.map((router) => (
-                <Route
-                  key={router.path}
-                  path={router.path}
-                  element={<router.element />}
-                />
-              ))}
+              <Route path="/" element={<Conversation />} />
+              <Route path="/settings" element={<Settings />} />
             </Routes>
           </BrowserRouter>
         </section>

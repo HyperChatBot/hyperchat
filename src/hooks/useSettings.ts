@@ -3,31 +3,12 @@ import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { useDB } from 'src/hooks'
 import { settingsState } from 'src/stores/global'
-import { Companies, ThemeMode } from 'src/types/global'
 import { Settings } from 'src/types/settings'
-import { v4 } from 'uuid'
 
 const useSettings = () => {
   const [loading, setLoading] = useState(false)
   const [settings, setSettings] = useRecoilState(settingsState)
-  const { updateOneById, insertOne, toArray } = useDB('settings')
-
-  const initialSettings = async () => {
-    const defaultData: Settings = {
-      id: v4(),
-      company: Companies.OpenAI,
-      openaiSecretKey: '',
-      openaiOrganizationId: '',
-      openaiAuthorName: '',
-      googleSecretKey: '',
-      anthropicSecretKey: '',
-      themeMode: ThemeMode.system,
-      assistantAvatarFilename: ''
-    }
-
-    await insertOne(defaultData)
-    setSettings(defaultData)
-  }
+  const { updateOneById, toArray } = useDB('settings')
 
   const updateSettings = async (newSettings: Settings) => {
     if (!settings) return
@@ -61,11 +42,6 @@ const useSettings = () => {
     try {
       const settings = (await toArray()) as Settings[]
       const currSettings = settings?.[0]
-
-      if (!currSettings) {
-        initialSettings()
-        return
-      }
 
       if (currSettings.assistantAvatarFilename) {
         try {
@@ -101,7 +77,7 @@ const useSettings = () => {
     }
   }, [settings])
 
-  return { settings, loading, initialSettings, updateSettings }
+  return { settings, loading, updateSettings }
 }
 
 export default useSettings

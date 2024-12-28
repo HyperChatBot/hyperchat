@@ -10,7 +10,10 @@ import {
   TransformFilenameToSrcRequest,
   TransformFilenameToSrcResponse
 } from 'src/ipc'
+import { init } from './db'
 import { BRIDGE_NAME, IPC_NAMES } from './shared/constants'
+
+init()
 
 contextBridge.exposeInMainWorld(BRIDGE_NAME, {
   saveFileWithDialog: (
