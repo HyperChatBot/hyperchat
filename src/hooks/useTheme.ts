@@ -1,13 +1,14 @@
 import { createTheme } from '@mui/material/styles'
 import { useEffect, useMemo } from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { themeModeToTheme } from 'src/shared/utils'
-import { themeState } from 'src/stores/global'
+import { settingsState, themeState } from 'src/stores/global'
 import { ThemeMode } from 'src/types/global'
 import useSettings from './useSettings'
 
 const useTheme = () => {
-  const { settings, updateSettings } = useSettings()
+  const settings = useRecoilValue(settingsState)
+  const { updateSettings } = useSettings()
   const [theme, setTheme] = useRecoilState(themeState)
 
   const muiTheme = useMemo(

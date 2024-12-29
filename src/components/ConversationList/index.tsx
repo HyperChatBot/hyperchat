@@ -1,12 +1,10 @@
-import { capitalCase } from 'change-case'
 import { enqueueSnackbar } from 'notistack'
 import { FC } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { configurations } from 'src/configurations'
 import { useDB } from 'src/hooks'
 import { BAN_ACTIVE_HINT } from 'src/shared/constants'
-import { currConversationState, loadingState } from 'src/stores/conversation'
-import { currProductState } from 'src/stores/global'
+import { conversationState } from 'src/stores/conversation'
+import { companyState, loadingState } from 'src/stores/global'
 import { Conversation } from 'src/types/conversation'
 import { v4 } from 'uuid'
 import Divider from '../Divider'
@@ -20,10 +18,9 @@ interface Props {
 
 const ConversationList: FC<Props> = ({ conversations }) => {
   const loading = useRecoilValue(loadingState)
-  const currProduct = useRecoilValue(currProductState)
-  const [currConversation, setCurrConversation] = useRecoilState(
-    currConversationState
-  )
+  const company = useRecoilValue(companyState)
+  const [currentConversation, setConversation] =
+    useRecoilState(conversationState)
   const { insertOne } = useDB('conversations')
 
   const addConversation = async () => {
@@ -32,19 +29,16 @@ const ConversationList: FC<Props> = ({ conversations }) => {
       return
     }
 
-    const conversation: Conversation = {
+    const defaultConversation: Conversation = {
       avatar: '',
-      conversationId: v4(),
+      id: v4(),
       summary: '',
       messages: [],
-      product: currProduct,
       createdAt: +new Date(),
       updatedAt: +new Date(),
-      configuration: configurations[currProduct].default
+      company
     }
-
-    setCurrConversation(conversation)
-    insertOne(conversation)
+    await insertOne(defaultConversation)
   }
 
   const switchConversation = (conversation: Conversation) => {
@@ -52,14 +46,14 @@ const ConversationList: FC<Props> = ({ conversations }) => {
       enqueueSnackbar(BAN_ACTIVE_HINT, { variant: 'warning' })
       return
     }
-    setCurrConversation(conversation)
+    setConversation(conversation)
   }
 
   return (
     <section className="w-87.75">
       <section className="flex items-center justify-between p-6">
-        <span className="mr-4 truncate text-xl font-semibold dark:text-dark-text">
-          {capitalCase(currProduct)}
+        <span className="mr-4 truncate text-xl font-bold dark:text-dark-text">
+          Hyper Chat
         </span>
         <OutlinePlusIcon onClick={addConversation} />
       </section>
@@ -70,10 +64,8 @@ const ConversationList: FC<Props> = ({ conversations }) => {
         {Array.isArray(conversations) && conversations.length > 0 ? (
           conversations.map((conversation) => (
             <ConversationItem
-              key={conversation.conversationId}
-              active={
-                conversation.conversationId === currConversation?.conversationId
-              }
+              key={conversation.id}
+              active={conversation.id === currentConversation?.id}
               conversation={conversation}
               onClick={() => switchConversation(conversation)}
             />
