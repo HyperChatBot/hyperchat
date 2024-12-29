@@ -69,7 +69,7 @@ const InputSlider: FC<Props> = ({
     <section className="my-8 flex flex-col">
       <div className="mb-2 flex items-start justify-between">
         <div className="flex items-center">
-          <p className="text-sm font-semibold dark:text-dark-text">{title}</p>
+          <p className="text-sm font-bold dark:text-dark-text">{title}</p>
           <Tooltip title={tooltipTitle} placement="top">
             <IconButton>
               <InformationCircleIcon className="h-4 w-4 text-black dark:text-white" />

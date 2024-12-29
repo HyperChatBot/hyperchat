@@ -1,7 +1,8 @@
 import classNames from 'classnames'
 import { FC, memo } from 'react'
+import { useRecoilValue } from 'recoil'
 import HyperChatLogo from 'src/assets/images/logo.png'
-import { useSettings } from 'src/hooks'
+import { customBotAvatarUrlState } from 'src/stores/global'
 import {
   ContentPartType,
   Message,
@@ -17,12 +18,12 @@ interface Props {
 }
 
 const ChatBubble: FC<Props> = ({ message }) => {
-  const { settings } = useSettings()
+  const customBotAvatarUrl = useRecoilValue(customBotAvatarUrlState)
 
   const getBotLogo = (role: Roles) =>
     role === Roles.Assistant
-      ? settings?.assistantAvatarFilename
-        ? settings.assistantAvatarFilename
+      ? customBotAvatarUrl
+        ? customBotAvatarUrl
         : HyperChatLogo
       : ''
 

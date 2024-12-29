@@ -13,6 +13,7 @@ import { LoadingIcon, SolidSendIcon } from '../Icons'
 import AttachmentPreview from './AttachmentPreview'
 import AttachmentUploader from './AttachmentUploader'
 import AudioRecorder from './Recorder'
+import TokenCount from './TokenCount'
 
 const InputBox: FC = () => {
   const conversation = useRecoilValue(conversationState)
@@ -132,6 +133,7 @@ const InputBox: FC = () => {
           />
         )}
       </section>
+      <TokenCount />
     </section>
   )
 }

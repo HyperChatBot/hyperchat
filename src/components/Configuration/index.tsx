@@ -11,33 +11,32 @@ import { Form, Formik } from 'formik'
 import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
 import configurations from 'src/configurations'
-import { useConfiguration } from 'src/hooks'
+import { useDB } from 'src/hooks'
 import { conversationState } from 'src/stores/conversation'
-import {
-  companyState,
-  configurationState,
-  loadingState
-} from 'src/stores/global'
+import { companyState, configurationState } from 'src/stores/global'
 import { Configuration as IConfiguration } from 'src/types/conversation'
 import Divider from '../Divider'
 import InputSlider from '../InputSlider'
 
 const Configuration: FC = () => {
   const conversation = useRecoilValue(conversationState)
-  const loading = useRecoilValue(loadingState)
   const company = useRecoilValue(companyState)
   const configuration = useRecoilValue(configurationState)
-  const { updateConfiguration } = useConfiguration()
+  const { updateOneById } = useDB('configurations')
   const availableModels = configurations[company]?.models
 
-  if (!conversation || loading || !configuration) {
+  const updateConfiguration = async (configuration: IConfiguration) => {
+    await updateOneById(configuration.company, configuration)
+  }
+
+  if (!conversation) {
     return null
   }
 
   return (
     <section className="w-87.75">
       <section className="flex h-22 items-center justify-between pl-6">
-        <span className="text-xl font-semibold dark:text-dark-text">
+        <span className="text-xl font-bold dark:text-dark-text">
           Configuration
         </span>
       </section>
@@ -124,6 +123,7 @@ const Configuration: FC = () => {
                     renderTags={(value: readonly string[], getTagProps) =>
                       value.map((option: string, index: number) => (
                         <Chip
+                          key={index}
                           variant="outlined"
                           label={option}
                           {...getTagProps({ index })}

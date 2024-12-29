@@ -1,7 +1,7 @@
 import useChatCompletion from './useChatCompletion'
 import useClients from './useClients'
-import useConfiguration from './useConfiguration'
 import useDB from './useDB'
+import useInitial from './useInitial'
 import useOnline from './useOnline'
 import useSettings from './useSettings'
 import useStoreMessages from './useStoreMessages'
@@ -19,5 +19,5 @@ export {
   useStoreMessages,
   useTheme,
   useSTT,
-  useConfiguration
+  useInitial
 }

@@ -2,12 +2,8 @@ import Anthropic, { AnthropicError } from '@anthropic-ai/sdk'
 import { TiktokenModel } from 'js-tiktoken'
 import { enqueueSnackbar } from 'notistack'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import {
-  useClients,
-  useConfiguration,
-  useSettings,
-  useStoreMessages
-} from 'src/hooks'
+import configurations from 'src/configurations'
+import { useClients, useStoreMessages } from 'src/hooks'
 import {
   checkUserPromptTokensCountIsValid,
   collectOpenAiPrompt,
@@ -16,7 +12,11 @@ import {
   showRequestErrorToast
 } from 'src/shared/utils'
 import { conversationState } from 'src/stores/conversation'
-import { companyState, loadingState } from 'src/stores/global'
+import {
+  companyState,
+  configurationState,
+  loadingState
+} from 'src/stores/global'
 import {
   transformContextToAnthropic,
   transformContextToGoogle,
@@ -32,8 +32,7 @@ const useChatCompletion = () => {
   const { openAiClient, googleClient, anthropicClient } = useClients()
   const conversation = useRecoilValue(conversationState)
   const company = useRecoilValue(companyState)
-  const { configuration } = useConfiguration()
-  const { settings } = useSettings()
+  const configuration = useRecoilValue(configurationState)
   const setLoading = useSetRecoilState(loadingState)
   const {
     rollbackMessage,
@@ -41,9 +40,7 @@ const useChatCompletion = () => {
     saveAssistantMessage,
     updateChatCompletionStream
   } = useStoreMessages()
-
-  if (!settings || !conversation) return
-
+  const { models } = configurations[company]
   const {
     model,
     systemMessage,
@@ -55,19 +52,23 @@ const useChatCompletion = () => {
     stop,
     systemMessageTokensCount
   } = configuration
+  const { maxInput } = models.find((m) => m.modelName === model) ?? {}
 
   const createChatCompletionByOpenAI = async (userPrompt: ContentPart) => {
-    let userMessageText = ''
-
     const userPromptTokenCount = getTokensCount(
       collectOpenAiPrompt(userPrompt),
       model as TiktokenModel
     )
-    checkUserPromptTokensCountIsValid(0, 104856, userPromptTokenCount)
+
+    checkUserPromptTokensCountIsValid(
+      systemMessageTokensCount,
+      maxInput,
+      userPromptTokenCount
+    )
     await saveUserMessage(userPrompt, userPromptTokenCount)
 
     const contexts = computeContext(
-      104856 - 0 - userPromptTokenCount,
+      maxInput - systemMessageTokensCount - userPromptTokenCount,
       conversation.messages
     )
 
@@ -144,11 +145,15 @@ const useChatCompletion = () => {
     const { totalTokens: userPromptTokenCount } =
       await generativeModel.countTokens(parts)
 
-    checkUserPromptTokensCountIsValid(0, 104856, userPromptTokenCount)
+    checkUserPromptTokensCountIsValid(
+      systemMessageTokensCount,
+      maxInput,
+      userPromptTokenCount
+    )
     await saveUserMessage(userPrompt, userPromptTokenCount)
 
     const contexts = computeContext(
-      104856 - 0 - userPromptTokenCount,
+      maxInput - systemMessageTokensCount - userPromptTokenCount,
       conversation.messages
     )
 
@@ -184,7 +189,7 @@ const useChatCompletion = () => {
     await saveUserMessage(userMessage, userPromptTokenCount)
 
     const contexts = computeContext(
-      104856 - 0 - userPromptTokenCount,
+      maxInput - systemMessageTokensCount - userPromptTokenCount,
       conversation.messages
     )
 

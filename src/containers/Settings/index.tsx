@@ -3,6 +3,7 @@ import { SunIcon } from '@heroicons/react/24/solid'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Dialog from '@mui/material/Dialog'
 import Divider from '@mui/material/Divider'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
@@ -16,14 +17,21 @@ import Typography from '@mui/material/Typography'
 import { Formik } from 'formik'
 import { enqueueSnackbar } from 'notistack'
 import { ChangeEvent, FC } from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import HyperChatLogo from 'src/assets/images/logo.png'
 import { SolidSettingsBrightnessIcon } from 'src/components/Icons'
 import ImportAndExportDexie from 'src/components/ImportAndExportDexie'
 import { useSettings, useTheme } from 'src/hooks'
+import {
+  customBotAvatarUrlState,
+  settingsDialogVisibleState
+} from 'src/stores/global'
 import { Companies, ThemeMode } from 'src/types/global'
 import { Settings as SettingsParams } from 'src/types/settings'
 
 const Settings: FC = () => {
+  const [visible, setVisible] = useRecoilState(settingsDialogVisibleState)
+  const customBotAvatarUrl = useRecoilValue(customBotAvatarUrlState)
   const { settings, updateSettings } = useSettings()
   const { toggleTheme } = useTheme()
 
@@ -51,10 +59,13 @@ const Settings: FC = () => {
   if (!settings) return null
 
   return (
-    <section className="w-full">
-      <p className="px-6 py-4 text-xl font-semibold dark:text-white">
-        Settings
-      </p>
+    <Dialog
+      open={visible}
+      onClose={() => setVisible(!visible)}
+      maxWidth="md"
+      fullWidth
+    >
+      <p className="px-6 py-4 text-xl font-bold dark:text-white">Settings</p>
 
       <Divider />
 
@@ -280,8 +291,8 @@ const Settings: FC = () => {
                       <Avatar
                         alt="assistant avatar"
                         src={
-                          settings.assistantAvatarFilename
-                            ? settings.assistantAvatarFilename
+                          customBotAvatarUrl
+                            ? customBotAvatarUrl
                             : HyperChatLogo
                         }
                         sx={{ width: 128, height: 128 }}
@@ -309,7 +320,7 @@ const Settings: FC = () => {
           </section>
         </Box>
       </div>
-    </section>
+    </Dialog>
   )
 }
 

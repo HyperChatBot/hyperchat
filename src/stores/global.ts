@@ -36,3 +36,13 @@ export const loadingState = atom({
   key: 'Loading',
   default: false
 })
+
+export const settingsDialogVisibleState = atom({
+  key: 'SettingsDialogVisible',
+  default: false
+})
+
+export const customBotAvatarUrlState = atom({
+  key: 'CustomBotAvatarUrl',
+  default: ''
+})

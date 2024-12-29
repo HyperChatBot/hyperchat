@@ -38,9 +38,7 @@ const ConversationList: FC<Props> = ({ conversations }) => {
       updatedAt: +new Date(),
       company
     }
-
     await insertOne(defaultConversation)
-    setConversation(defaultConversation)
   }
 
   const switchConversation = (conversation: Conversation) => {
@@ -54,7 +52,7 @@ const ConversationList: FC<Props> = ({ conversations }) => {
   return (
     <section className="w-87.75">
       <section className="flex items-center justify-between p-6">
-        <span className="mr-4 truncate text-xl font-semibold dark:text-dark-text">
+        <span className="mr-4 truncate text-xl font-bold dark:text-dark-text">
           Hyper Chat
         </span>
         <OutlinePlusIcon onClick={addConversation} />

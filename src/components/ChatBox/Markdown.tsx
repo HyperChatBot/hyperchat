@@ -1,6 +1,6 @@
 import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.css'
-import { marked, Tokens } from 'marked'
+import { Marked, Renderer, Tokens } from 'marked'
 import { FC, memo, useCallback } from 'react'
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 
 const Markdown: FC<Props> = memo(({ src }) => {
   const parseMarkdown = useCallback(() => {
-    const renderer = new marked.Renderer()
+    const renderer = new Renderer()
 
     renderer.code = ({ text, lang }: Tokens.Code) => {
       const language = (lang && lang.split(/\s/)[0]) ?? 'javascript'
@@ -33,9 +33,16 @@ const Markdown: FC<Props> = memo(({ src }) => {
       return `<a href="${href}" target="_blank" rel="noopener noreferrer" class="font-bold underline">${text}</a>`
     }
 
-    return marked(src, {
-      renderer
+    const marked = new Marked({
+      renderer: {
+        ...renderer,
+        table(...args) {
+          return `<div class="overflow-x-scroll">${renderer.table.apply(this, args)}</div>`
+        }
+      }
     })
+
+    return marked.parse(src)
   }, [src])
 
   return (

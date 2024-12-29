@@ -120,7 +120,7 @@ const ContactHeader: FC = () => {
         {avatarPickerVisible && <EmojiPicker onEmojiSelect={saveAvatar} />}
 
         <section className="ml-4 flex flex-col">
-          <div className="mb-1 flex items-center font-semibold text-black dark:text-dark-text">
+          <div className="mb-1 flex items-center font-bold text-black dark:text-dark-text">
             {summaryInputVisible ? (
               <>
                 <Input
@@ -157,7 +157,7 @@ const ContactHeader: FC = () => {
                 'bg-status-green': isOnline
               })}
             />
-            <span className="text-xs font-semibold text-black text-opacity-60 dark:text-dark-text-sub">
+            <span className="text-xs font-bold text-black text-opacity-60 dark:text-dark-text-sub">
               {isOnline ? 'Online' : 'Offline'}
             </span>
           </p>

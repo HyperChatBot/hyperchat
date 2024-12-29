@@ -1,10 +1,6 @@
-import { useRecoilValue } from 'recoil'
 import { db } from 'src/db'
-import { companyState } from 'src/stores/global'
 
 const useDB = (tableName: string) => {
-  const company = useRecoilValue(companyState)
-
   const deleteOneById = async (id: string) => {
     try {
       await db.table(tableName).delete(id)

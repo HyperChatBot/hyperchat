@@ -1,23 +1,24 @@
 import { Cog6ToothIcon as Cog6ToothIconOutline } from '@heroicons/react/24/outline'
 import { Cog6ToothIcon as Cog6ToothIconSolid } from '@heroicons/react/24/solid'
-import Tooltip from '@mui/material/Tooltip'
 import { FC } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import HyperChatLogo from 'src/assets/images/logo.png'
-import { useConfiguration, useSettings } from 'src/hooks'
 import companies from 'src/shared/companies'
-import { companyState } from 'src/stores/global'
+import {
+  companyState,
+  configurationState,
+  settingsDialogVisibleState,
+  settingsState
+} from 'src/stores/global'
 import Avatar from '../Avatar'
 import Divider from '../Divider'
 import Loading from '../Loading'
 
 const Sidebar: FC = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
   const [company, setCompany] = useRecoilState(companyState)
-  const { settings } = useSettings()
-  const { configuration } = useConfiguration()
+  const settings = useRecoilValue(settingsState)
+  const configuration = useRecoilValue(configurationState)
+  const [visible, setVisible] = useRecoilState(settingsDialogVisibleState)
 
   if (!settings || !configuration) return <Loading />
 
@@ -35,7 +36,6 @@ const Sidebar: FC = () => {
                   onClick={() => {
                     window.localStorage.setItem('$$hyperchat-company', name)
                     setCompany(name)
-                    navigate('/', { replace: true })
                   }}
                 >
                   <Logo
@@ -46,20 +46,19 @@ const Sidebar: FC = () => {
             })}
           </div>
           <Divider />
-          <div className="my-6 flex justify-center">
-            <Tooltip title="Settings" placement="right">
-              <Link to="/settings">
-                {location.pathname === '/settings' ? (
-                  <Cog6ToothIconSolid
-                    className={'h-6 w-6 text-black dark:text-white'}
-                  />
-                ) : (
-                  <Cog6ToothIconOutline
-                    className={'h-6 w-6 text-black dark:text-white'}
-                  />
-                )}
-              </Link>
-            </Tooltip>
+          <div
+            className="my-6 flex justify-center"
+            onClick={() => setVisible(!visible)}
+          >
+            {visible ? (
+              <Cog6ToothIconSolid
+                className={'h-6 w-6 cursor-pointer text-black dark:text-white'}
+              />
+            ) : (
+              <Cog6ToothIconOutline
+                className={'h-6 w-6 cursor-pointer text-black dark:text-white'}
+              />
+            )}
           </div>
         </section>
       </div>

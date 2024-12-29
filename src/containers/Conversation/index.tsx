@@ -5,7 +5,6 @@ import ChatBox from 'src/components/ChatBox'
 import Configuration from 'src/components/Configuration'
 import ConversationList from 'src/components/ConversationList'
 import Divider from 'src/components/Divider'
-import Loading from 'src/components/Loading'
 import { db } from 'src/db'
 import { conversationState } from 'src/stores/conversation'
 import { companyState } from 'src/stores/global'
@@ -27,7 +26,7 @@ const Conversation: FC = () => {
 
   useEffect(() => {
     if (
-      // Initialing App
+      // Initializing App
       !conversation ||
       // Switching company
       conversation?.company !== company ||
@@ -36,9 +35,7 @@ const Conversation: FC = () => {
     ) {
       setConversation(conversations?.[0])
     }
-  }, [conversation, conversations, company])
-
-  if (!conversations) return <Loading />
+  }, [conversation, conversations, company, setConversation])
 
   return (
     <>
