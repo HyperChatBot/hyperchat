@@ -20,7 +20,7 @@
     "@emoji-mart/react": "^1.1.1",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@heroicons/react": "^2.1.5",
+    "@heroicons/react": "^2.2.0",
     "@lottiefiles/react-lottie-player": "^3.5.4",
     "@mui/material": "^6.1.2",
     "@tauri-apps/api": "^2.0.2",
