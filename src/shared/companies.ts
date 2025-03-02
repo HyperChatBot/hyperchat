@@ -1,8 +1,8 @@
 import {
   AnthropicLogoIcon,
   GoogleLogoIcon,
-  OpenAiLogoIcon,
-  LlamaLogoIcon
+  LlamaLogoIcon,
+  OpenAiLogoIcon
 } from 'src/components/Icons'
 import { SpeechService } from 'src/types/conversation'
 import { Companies } from 'src/types/global'

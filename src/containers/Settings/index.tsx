@@ -1,27 +1,36 @@
-import { MoonIcon } from '@heroicons/react/24/outline'
-import { SunIcon } from '@heroicons/react/24/solid'
-import { Link } from '@mui/material'
-import Avatar from '@mui/material/Avatar'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Dialog from '@mui/material/Dialog'
-import Divider from '@mui/material/Divider'
-import FormControl from '@mui/material/FormControl'
-import FormHelperText from '@mui/material/FormHelperText'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import Select from '@mui/material/Select'
-import TextField from '@mui/material/TextField'
-import ToggleButton from '@mui/material/ToggleButton'
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
-import Typography from '@mui/material/Typography'
-import { Formik } from 'formik'
 import { useAtom, useAtomValue } from 'jotai'
+import { Moon, Sun } from 'lucide-react'
 import { enqueueSnackbar } from 'notistack'
-import { ChangeEvent, FC } from 'react'
+import { ChangeEvent, FC, useEffect } from 'react'
+import { useForm } from 'react-hook-form'
 import HyperChatLogo from 'src/assets/images/logo.png'
 import { SolidSettingsBrightnessIcon } from 'src/components/Icons'
 import ImportAndExportDexie from 'src/components/ImportAndExportDexie'
+import { Avatar, AvatarFallback, AvatarImage } from 'src/components/ui/avatar'
+import { Button } from 'src/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle
+} from 'src/components/ui/dialog'
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel
+} from 'src/components/ui/form'
+import { Input } from 'src/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from 'src/components/ui/select'
+import { ToggleGroup, ToggleGroupItem } from 'src/components/ui/toggle-group'
 import { useSettings, useTheme } from 'src/hooks'
 import {
   customBotAvatarUrlAtom,
@@ -30,11 +39,26 @@ import {
 import { Companies, ThemeMode } from 'src/types/global'
 import { Settings as SettingsParams } from 'src/types/settings'
 
-const Settings: FC = () => {
+const SettingsNew: FC = () => {
   const [visible, setVisible] = useAtom(settingsDialogVisibleAtom)
   const customBotAvatarUrl = useAtomValue(customBotAvatarUrlAtom)
   const { settings, updateSettings } = useSettings()
   const { toggleTheme } = useTheme()
+
+  const form = useForm<SettingsParams>({
+    defaultValues: settings
+  })
+
+  // Update form values when settings change
+  useEffect(() => {
+    if (settings) {
+      form.reset(settings)
+    }
+  }, [settings, form])
+
+  const onSubmit = async (values: SettingsParams) => {
+    await updateSettings(values)
+  }
 
   const handleUploadChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0]
@@ -46,10 +70,12 @@ const Settings: FC = () => {
         filename: file.name
       })
       if (response.filename) {
-        updateSettings({
-          ...settings,
+        const updatedSettings = {
+          ...form.getValues(),
           assistantAvatarFilename: response.filename
-        })
+        }
+        updateSettings(updatedSettings)
+        form.setValue('assistantAvatarFilename', response.filename)
         enqueueSnackbar('Assistant avatar updated successfully.', {
           variant: 'success'
         })
@@ -59,305 +85,333 @@ const Settings: FC = () => {
 
   if (!settings) return null
 
+  const company = form.watch('company')
+
   return (
-    <Dialog
-      open={visible}
-      onClose={() => setVisible(!visible)}
-      maxWidth="md"
-      fullWidth
-    >
-      <p className="px-6 py-4 text-xl font-bold dark:text-white">Settings</p>
+    <Dialog open={visible} onOpenChange={() => setVisible(!visible)}>
+      <DialogContent className="h-2/3 max-w-3xl overflow-y-scroll">
+        <DialogHeader>
+          <DialogTitle className="text-xl font-bold dark:text-white">
+            Settings
+          </DialogTitle>
+        </DialogHeader>
 
-      <Divider />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <section className="flex flex-col gap-4">
+              <header className="text-xl font-medium dark:text-white">
+                Account
+              </header>
 
-      <div className="no-scrollbar h-[calc(100vh_-_3.8125rem)] w-full overflow-y-scroll p-6">
-        <Formik<SettingsParams>
-          initialValues={settings}
-          onSubmit={updateSettings}
-        >
-          {(formik) => (
-            <Box
-              component="form"
-              noValidate
-              autoComplete="off"
-              className="my-8"
-            >
-              <section className="flex flex-col gap-6">
-                <header className="text-xl font-medium dark:text-white">
-                  Account
-                </header>
+              <div>
+                <FormField
+                  control={form.control}
+                  name="company"
+                  render={({ field }) => (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select company" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Object.values(Companies).map((companyOption) => (
+                          <SelectItem key={companyOption} value={companyOption}>
+                            {companyOption}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              </div>
 
-                <FormControl size="small">
-                  <InputLabel id="company-select-label">Company</InputLabel>
-                  <Select
-                    className="w-80"
-                    labelId="company-select-label"
-                    id="company-select"
-                    label="Company"
-                    {...formik.getFieldProps('company')}
-                  >
-                    {Object.values(Companies).map((company) => (
-                      <MenuItem key={company} value={company}>
-                        {company}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-
-                {formik.values.company === Companies.OpenAI && (
-                  <>
-                    <TextField
-                      autoComplete="current-password"
-                      required
-                      id="openai-secret-key-input"
-                      label="Secret Key"
-                      size="small"
-                      type="password"
-                      helperText={
-                        <span>
-                          <strong>
-                            Your secret key will only be stored in IndexedDB!
-                          </strong>{' '}
-                          Do not share it with others or expose it in any
-                          client-side code.
-                        </span>
-                      }
-                      className="w-160"
-                      {...formik.getFieldProps('openaiSecretKey')}
+              {company === Companies.OpenAI && (
+                <>
+                  <div>
+                    <FormField
+                      control={form.control}
+                      name="openaiSecretKey"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Secret Key</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="password"
+                              required
+                              id="openai-secret-key-input"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            <span>
+                              <strong>
+                                Your secret key will only be stored in
+                                IndexedDB!
+                              </strong>{' '}
+                              Do not share it with others or expose it in any
+                              client-side code.
+                            </span>
+                          </FormDescription>
+                        </FormItem>
+                      )}
                     />
+                  </div>
 
-                    <TextField
-                      id="openai-organization-id-input"
-                      label="Organization ID"
-                      size="small"
-                      type="text"
-                      className="w-160"
-                      helperText="For users who belong to multiple organizations, you can pass a header to specify which organization is used for an API request. Usage from these API requests will count against the specified organization's subscription quota."
-                      {...formik.getFieldProps('openaiOrganizationId')}
+                  <div>
+                    <FormField
+                      control={form.control}
+                      name="openaiOrganizationId"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Organization ID</FormLabel>
+                          <FormControl>
+                            <Input
+                              id="openai-organization-id-input"
+                              type="text"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            For users who belong to multiple organizations, you
+                            can pass a header to specify which organization is
+                            used for an API request. Usage from these API
+                            requests will count against the specified
+                            organization&apos;s subscription quota.
+                          </FormDescription>
+                        </FormItem>
+                      )}
                     />
+                  </div>
 
-                    <TextField
-                      id="openai-author-name-input"
-                      label="Name"
-                      size="small"
-                      type="text"
-                      className="w-160"
-                      helperText="The name of the author of this message. May contain a-z, A-Z, 0-9, and underscores, with a maximum length of 64 characters."
-                      {...formik.getFieldProps('openaiAuthorName')}
+                  <div>
+                    <FormField
+                      control={form.control}
+                      name="openaiAuthorName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Name</FormLabel>
+                          <FormControl>
+                            <Input
+                              id="openai-author-name-input"
+                              type="text"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            The name of the author of this message. May contain
+                            a-z, A-Z, 0-9, and underscores, with a maximum
+                            length of 64 characters.
+                          </FormDescription>
+                        </FormItem>
+                      )}
                     />
+                  </div>
 
-                    <Button
-                      variant="contained"
-                      sx={{ width: 120 }}
-                      onClick={() => updateSettings(formik.values)}
-                    >
-                      Save
-                    </Button>
-                  </>
-                )}
+                  <Button className="w-30" type="submit">
+                    Save
+                  </Button>
+                </>
+              )}
 
-                {formik.values.company === Companies.Anthropic && (
-                  <>
-                    <TextField
-                      autoComplete="current-password"
-                      required
-                      id="anthropic-secret-key-input"
-                      label="Secret Key"
-                      size="small"
-                      type="password"
-                      helperText={
-                        <span>
-                          <strong>
-                            Your secret key will only be stored in IndexedDB!
-                          </strong>{' '}
-                          Do not share it with others or expose it in any
-                          client-side code.
-                        </span>
-                      }
-                      className="w-160"
-                      {...formik.getFieldProps('anthropicSecretKey')}
+              {company === Companies.Anthropic && (
+                <>
+                  <div>
+                    <FormField
+                      control={form.control}
+                      name="anthropicSecretKey"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Secret Key</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="password"
+                              required
+                              id="anthropic-secret-key-input"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            <span>
+                              <strong>
+                                Your secret key will only be stored in
+                                IndexedDB!
+                              </strong>{' '}
+                              Do not share it with others or expose it in any
+                              client-side code.
+                            </span>
+                          </FormDescription>
+                        </FormItem>
+                      )}
                     />
+                  </div>
 
-                    <Button
-                      variant="contained"
-                      sx={{ width: 120 }}
-                      onClick={() => updateSettings(formik.values)}
-                    >
-                      Save
-                    </Button>
-                  </>
-                )}
+                  <Button className="w-30" type="submit">
+                    Save
+                  </Button>
+                </>
+              )}
 
-                {formik.values.company === Companies.Google && (
-                  <>
-                    <TextField
-                      autoComplete="current-password"
-                      required
-                      id="google-secret-key-input"
-                      label="Secret Key"
-                      size="small"
-                      type="password"
-                      helperText={
-                        <span>
-                          <strong>
-                            Your secret key will only be stored in IndexedDB!
-                          </strong>{' '}
-                          Do not share it with others or expose it in any
-                          client-side code.
-                        </span>
-                      }
-                      className="w-160"
-                      {...formik.getFieldProps('googleSecretKey')}
+              {company === Companies.Google && (
+                <>
+                  <div>
+                    <FormField
+                      control={form.control}
+                      name="googleSecretKey"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Secret Key</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="password"
+                              required
+                              id="google-secret-key-input"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            <span>
+                              <strong>
+                                Your secret key will only be stored in
+                                IndexedDB!
+                              </strong>{' '}
+                              Do not share it with others or expose it in any
+                              client-side code.
+                            </span>
+                          </FormDescription>
+                        </FormItem>
+                      )}
                     />
+                  </div>
 
-                    <Button
-                      variant="contained"
-                      sx={{ width: 120 }}
-                      onClick={() => updateSettings(formik.values)}
-                    >
-                      Save
-                    </Button>
-                  </>
-                )}
+                  <Button className="w-30" type="submit">
+                    Save
+                  </Button>
+                </>
+              )}
 
-                {formik.values.company === Companies.Llama && (
-                  <>
-                    <TextField
-                      id="ollama-url"
-                      label="Ollama Url"
-                      size="small"
-                      type="text"
-                      className="w-160"
-                      placeholder="http://127.0.0.1:11434"
-                      helperText={
-                        <p>
-                          Make sure you've been running Llama by{' '}
-                          <Link
-                            href="https://github.com/ollama/ollama"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            Ollama
-                          </Link>
-                          .
-                        </p>
-                      }
-                      {...formik.getFieldProps('ollamaUrl')}
+              {company === Companies.Llama && (
+                <>
+                  <div>
+                    <FormField
+                      control={form.control}
+                      name="ollamaUrl"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Ollama Url</FormLabel>
+                          <FormControl>
+                            <Input
+                              id="ollama-url"
+                              type="text"
+                              placeholder="http://127.0.0.1:11434"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormDescription>
+                            <p>
+                              Make sure you&apos;ve been running Llama by{' '}
+                              <a
+                                href="https://github.com/ollama/ollama"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-500 hover:underline"
+                              >
+                                Ollama
+                              </a>
+                              .
+                            </p>
+                          </FormDescription>
+                        </FormItem>
+                      )}
                     />
+                  </div>
 
-                    <Button
-                      variant="contained"
-                      sx={{ width: 120 }}
-                      onClick={() => updateSettings(formik.values)}
-                    >
-                      Save
-                    </Button>
-                  </>
-                )}
-              </section>
-            </Box>
-          )}
-        </Formik>
+                  <Button className="w-30" type="submit">
+                    Save
+                  </Button>
+                </>
+              )}
+            </section>
 
-        <Divider />
+            <section className="mt-8 flex flex-col gap-6">
+              <header className="text-xl font-medium dark:text-white">
+                Appearance
+              </header>
 
-        <Formik<SettingsParams>
-          initialValues={settings}
-          onSubmit={updateSettings}
-        >
-          {(formik) => (
-            <Box
-              component="form"
-              noValidate
-              autoComplete="off"
-              className="my-8"
-            >
-              <section className="flex flex-col gap-6">
-                <header className="text-xl font-medium dark:text-white">
-                  Customization
-                </header>
-
-                <section>
-                  <Typography variant="body1" className="dark:text-white">
-                    Theme Mode
-                  </Typography>
-                  <ToggleButtonGroup
-                    color="primary"
-                    exclusive
-                    aria-label="Theme Mode"
-                    sx={{
-                      marginTop: 1,
-                      '& .Mui-selected': {
-                        borderColor: '#615ef0'
-                      },
-                      '& .Mui-selected.MuiToggleButtonGroup-grouped': {
-                        borderLeftColor: '#615ef0'
-                      }
-                    }}
-                    value={formik.values.themeMode}
-                    onChange={(_, newVal) => {
-                      formik.setFieldValue('themeMode', newVal)
-                      toggleTheme(newVal)
-                    }}
-                  >
-                    <ToggleButton disableRipple value={ThemeMode.light}>
-                      <SunIcon className="mr-2 h-6 w-6" /> Light
-                    </ToggleButton>
-                    <ToggleButton disableRipple value={ThemeMode.system}>
-                      <SolidSettingsBrightnessIcon className="mr-2 h-6 w-6" />{' '}
-                      System
-                    </ToggleButton>
-                    <ToggleButton disableRipple value={ThemeMode.dark}>
-                      <MoonIcon className="mr-2 h-6 w-6" /> Dark
-                    </ToggleButton>
-                  </ToggleButtonGroup>
-                </section>
-
-                <section>
-                  <Typography variant="body1" className="dark:text-white">
-                    Assistant Avatar
-                  </Typography>
-                  <FormHelperText>
-                    Upload your own assistant avatar for a better experience.
-                    The avatar will be shown in chat box.
-                  </FormHelperText>
-
-                  <section className="mt-2 flex items-center">
-                    <label className="cursor-pointer">
-                      <Avatar
-                        alt="assistant avatar"
-                        src={
-                          customBotAvatarUrl
-                            ? customBotAvatarUrl
-                            : HyperChatLogo
+              <div>
+                <p className="mb-2 text-sm font-medium">Theme</p>
+                <FormField
+                  control={form.control}
+                  name="themeMode"
+                  render={({ field }) => (
+                    <ToggleGroup
+                      className="flex justify-start"
+                      type="single"
+                      value={field.value}
+                      onValueChange={(value: string) => {
+                        if (value) {
+                          field.onChange(value)
+                          toggleTheme(value as ThemeMode)
                         }
-                        sx={{ width: 128, height: 128 }}
-                      />
-                      <input
-                        hidden
-                        accept="image/*"
-                        type="file"
-                        onChange={handleUploadChange}
-                      />
-                    </label>
-                  </section>
-                </section>
-              </section>
-            </Box>
-          )}
-        </Formik>
-        <Divider />
-        <Box component="div" className="my-8">
-          <section className="flex flex-col gap-6">
-            <header className="text-xl font-medium dark:text-white">
-              Data Import and Export
-            </header>
-            <ImportAndExportDexie />
-          </section>
-        </Box>
-      </div>
+                      }}
+                    >
+                      <ToggleGroupItem value={ThemeMode.light}>
+                        <Sun className="mr-2 h-4 w-4" />
+                        Light
+                      </ToggleGroupItem>
+                      <ToggleGroupItem value={ThemeMode.dark}>
+                        <Moon className="mr-2 h-4 w-4" />
+                        Dark
+                      </ToggleGroupItem>
+                      <ToggleGroupItem value={ThemeMode.system}>
+                        <SolidSettingsBrightnessIcon className="mr-2 h-4 w-4" />
+                        System
+                      </ToggleGroupItem>
+                    </ToggleGroup>
+                  )}
+                />
+              </div>
+
+              <div>
+                <p className="mb-2 text-sm font-medium">Assistant Avatar</p>
+                <div className="flex items-center gap-4">
+                  <Avatar className="h-32 w-32">
+                    <AvatarImage
+                      src={customBotAvatarUrl || HyperChatLogo}
+                      alt="Assistant Avatar"
+                    />
+                    <AvatarFallback>AI</AvatarFallback>
+                  </Avatar>
+                  <Button
+                    variant="outline"
+                    type="button"
+                    onClick={() =>
+                      document.getElementById('avatar-upload')?.click()
+                    }
+                  >
+                    Upload
+                  </Button>
+                  <input
+                    type="file"
+                    id="avatar-upload"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleUploadChange}
+                  />
+                </div>
+              </div>
+            </section>
+
+            <section className="mt-8 flex flex-col gap-6">
+              <header className="text-xl font-medium dark:text-white">
+                Data
+              </header>
+
+              <ImportAndExportDexie />
+            </section>
+          </form>
+        </Form>
+      </DialogContent>
     </Dialog>
   )
 }
 
-export default Settings
+export default SettingsNew

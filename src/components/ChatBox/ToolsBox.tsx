@@ -1,7 +1,4 @@
-import {
-  DocumentDuplicateIcon,
-  SpeakerWaveIcon
-} from '@heroicons/react/24/outline'
+import { Copy, Speaker } from 'lucide-react'
 import { DateTime } from 'luxon'
 import { FC, useState } from 'react'
 import { useTTS } from 'src/hooks'
@@ -31,18 +28,14 @@ const ToolsBox: FC<Props> = ({ message: { createdAt, content, role } }) => {
   }
 
   return (
-    <section
-      className={
-        'mt-2 flex items-center gap-2 text-xs text-black text-opacity-30 dark:text-dark-bubble-assistant-text dark:text-opacity-30'
-      }
-    >
+    <section className={'mt-2 flex items-center gap-2 text-xs'}>
       {role === Roles.Assistant && (
         <>
-          <SpeakerWaveIcon
+          <Speaker
             className="h-4 w-4 cursor-pointer text-black opacity-30 dark:text-white"
             onClick={createTTSUrl}
           />
-          <DocumentDuplicateIcon className="h-4 w-4 cursor-pointer text-black opacity-30 dark:text-white" />
+          <Copy className="h-4 w-4 cursor-pointer text-black opacity-30 dark:text-white" />
         </>
       )}
 

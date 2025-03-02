@@ -1,6 +1,5 @@
-import { createTheme } from '@mui/material/styles'
 import { useAtom, useAtomValue } from 'jotai'
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { themeModeToTheme } from 'src/shared/utils'
 import { settingsAtom, themeAtom } from 'src/stores/global'
 import { ThemeMode } from 'src/types/global'
@@ -10,27 +9,6 @@ const useTheme = () => {
   const settings = useAtomValue(settingsAtom)
   const { updateSettings } = useSettings()
   const [theme, setTheme] = useAtom(themeAtom)
-
-  const muiTheme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode: theme,
-          primary: {
-            main: '#615ef0'
-          }
-        },
-        typography: {
-          button: {
-            textTransform: 'none'
-          }
-        },
-        shape: {
-          borderRadius: 8
-        }
-      }),
-    [theme, settings]
-  )
 
   const setThemeClass = (currTheme: ThemeMode.light | ThemeMode.dark) => {
     if (currTheme === ThemeMode.dark) {
@@ -74,7 +52,7 @@ const useTheme = () => {
         .removeEventListener('change', onSystemThemeChange)
   }, [settings])
 
-  return { theme, muiTheme, toggleTheme }
+  return { theme, toggleTheme }
 }
 
 export default useTheme

@@ -1,6 +1,7 @@
 import { useAtom } from 'jotai'
 import { PauseCircle, PlayCircle } from 'lucide-react'
 import { FC, useEffect, useRef, useState } from 'react'
+import { TransformFilenameToSrcResponse } from 'src/ipc'
 import { currPlayingAudioIdAtom } from 'src/stores/conversation'
 import WaveSurfer from 'wavesurfer.js'
 
@@ -8,7 +9,7 @@ interface Props {
   filename: string
 }
 
-const Waveform: FC<Props> = ({ filename }) => {
+const LucideWaveform: FC<Props> = ({ filename }) => {
   const [currPlayingAudioId, setCurrPlayingAudioId] = useAtom(
     currPlayingAudioIdAtom
   )
@@ -22,35 +23,52 @@ const Waveform: FC<Props> = ({ filename }) => {
     setIsPlaying(!isCurrentlyPlaying)
 
     if (!isCurrentlyPlaying) {
-      if (typeof setCurrPlayingAudioId === 'function') {
-        setCurrPlayingAudioId(filename)
-      }
+      setCurrPlayingAudioId(filename)
     }
 
     waveSurferRef.current?.playPause()
   }
 
   const createFileSrc = async () => {
-    const src = await window.electronAPI.transformFilenameToSrc({
-      filename
-    })
-    const blob = new Blob([src.arrayBuffer], {
-      type: 'application/octet-stream'
-    })
-    const assetUrl = URL.createObjectURL(blob)
-    setSrc(assetUrl || '')
+    if (
+      !window.electronAPI ||
+      typeof window.electronAPI.transformFilenameToSrc !== 'function'
+    ) {
+      console.error('electronAPI.transformFilenameToSrc is not available')
+      return
+    }
+
+    try {
+      const response: TransformFilenameToSrcResponse =
+        await window.electronAPI.transformFilenameToSrc({
+          filename
+        })
+
+      if (response.success && response.arrayBuffer) {
+        const blob = new Blob([response.arrayBuffer], {
+          type: 'application/octet-stream'
+        })
+        const assetUrl = URL.createObjectURL(blob)
+        setSrc(assetUrl)
+      } else {
+        console.error('Failed to transform filename to src:', response)
+      }
+    } catch (error) {
+      console.error('Error transforming filename to src:', error)
+    }
   }
 
   useEffect(() => {
     createFileSrc()
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filename])
 
   useEffect(() => {
     if (currPlayingAudioId !== filename) {
       waveSurferRef.current?.stop()
       setIsPlaying(false)
     }
-  }, [currPlayingAudioId])
+  }, [currPlayingAudioId, filename])
 
   useEffect(() => {
     if (!src) return
@@ -99,4 +117,4 @@ const Waveform: FC<Props> = ({ filename }) => {
   )
 }
 
-export default Waveform
+export default LucideWaveform

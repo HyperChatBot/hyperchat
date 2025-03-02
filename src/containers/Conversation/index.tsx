@@ -4,7 +4,7 @@ import { FC, useEffect } from 'react'
 import ChatBox from 'src/components/ChatBox'
 import Configuration from 'src/components/Configuration'
 import ConversationList from 'src/components/ConversationList'
-import Divider from 'src/components/Divider'
+import { Separator } from 'src/components/ui/separator'
 import { db } from 'src/db'
 import { conversationAtom } from 'src/stores/conversation'
 import { companyAtom } from 'src/stores/global'
@@ -38,13 +38,13 @@ const Conversation: FC = () => {
   }, [conversation, conversations, company, setConversation])
 
   return (
-    <>
+    <section className="flex w-full">
       <ConversationList conversations={conversations} />
-      <Divider direction="vertical" />
+      <Separator orientation="vertical" />
       <ChatBox />
-      <Divider direction="vertical" />
+      <Separator orientation="vertical" />
       <Configuration />
-    </>
+    </section>
   )
 }
 

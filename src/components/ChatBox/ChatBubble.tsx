@@ -10,6 +10,7 @@ import {
   TextPrompt
 } from 'src/types/conversation'
 import Avatar from '../Avatar'
+import { Card } from '../ui/card'
 import Markdown from './Markdown'
 import ToolsBox from './ToolsBox'
 
@@ -48,13 +49,11 @@ const ChatBubble: FC<Props> = ({ message }) => {
           'items-end': message.role === Roles.User
         })}
       >
-        <section
-          className={classNames('max-w-160 rounded-2xl p-4 text-sm', {
-            'rounded-tl-none bg-main-gray text-black dark:bg-gray-700 dark:text-dark-bubble-assistant-text':
-              message.role === Roles.Assistant,
-            'flex min-h-[20px] flex-col items-start gap-4 whitespace-pre-wrap break-words rounded-br-none bg-main-purple text-white':
-              message.role === Roles.User
-          })}
+        <Card
+          className={classNames(
+            'max-w-160 rounded-2xl p-4 text-sm text-black dark:text-white',
+            { 'break-words whitespace-pre-wrap': message.role === Roles.User }
+          )}
         >
           {message.role === Roles.Assistant && (
             <Markdown src={(message.content as TextPrompt[])[0].text} />
@@ -113,11 +112,11 @@ const ChatBubble: FC<Props> = ({ message }) => {
                   return <video src={item.url} key={key} controls />
                 }
 
-                return <div>File: {item.name}</div>
+                return <div key={key}>File: {item.name}</div>
               })}
             </div>
           )}
-        </section>
+        </Card>
         <ToolsBox message={message} />
       </section>
     </section>

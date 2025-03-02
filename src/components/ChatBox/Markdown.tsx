@@ -20,11 +20,11 @@ const Markdown: FC<Props> = ({ src }) => {
           ? hljs.highlight(text, { language: language }).value
           : hljs.highlightAuto(text).value
 
-      return `<pre class="-mx-4 my-3 overflow-x-scroll text-xs last:my-0"><code class="hljs ${language}">${highlighted}</code></pre>`
+      return `<pre class="-mx-4 my-3 overflow-x-scroll text-xs last:my-0"><code class=" hljs ${language}">${highlighted}</code></pre>`
     }
 
     renderer.codespan = ({ text }: Tokens.Codespan) =>
-      `<code class="p-0.5 bg-slate-300 rounded-md dark:bg-slate-600">${text}</code>`
+      `<code class="px-[6px] py-[1px] text-xs text-primary rounded-[6px] bg-accent">${text}</code>`
 
     renderer.image = ({ text, href }: Tokens.Image) => {
       return `<img src="${href}" alt="${text}" class="mb-3" loading="lazy" />`

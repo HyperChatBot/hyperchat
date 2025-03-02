@@ -1,6 +1,6 @@
-import { PaperClipIcon } from '@heroicons/react/24/outline'
 import classNames from 'classnames'
 import { useAtom } from 'jotai'
+import { Paperclip } from 'lucide-react'
 import { enqueueSnackbar } from 'notistack'
 import { ChangeEvent, FC, useRef } from 'react'
 import { convertToBase64 } from 'src/shared/utils'
@@ -50,15 +50,14 @@ const AttachmentUploader: FC<Props> = ({ className }) => {
           onChange={onFileChange}
         />
 
-        <PaperClipIcon
+        <Paperclip
           className={classNames(
             'relative h-5 w-5',
             {
-              'text-black text-opacity-30 dark:text-white': !validate()
+              'text-opacity-30 text-black dark:text-white': !validate()
             },
             {
-              'text-main-purple text-opacity-100 dark:text-main-purple':
-                validate()
+              '': validate()
             }
           )}
         />

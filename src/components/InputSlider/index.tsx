@@ -1,9 +1,13 @@
-import { InformationCircleIcon } from '@heroicons/react/20/solid'
-import IconButton from '@mui/material/IconButton'
-import Slider from '@mui/material/Slider'
-import TextField from '@mui/material/TextField'
-import Tooltip from '@mui/material/Tooltip'
-import { ChangeEvent, FC, SyntheticEvent, useEffect, useState } from 'react'
+import { Info } from 'lucide-react'
+import { FC, useEffect, useState } from 'react'
+import { Input } from 'src/components/ui/input'
+import { Slider } from 'src/components/ui/slider'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from 'src/components/ui/tooltip'
 
 interface Props {
   title: string
@@ -26,25 +30,15 @@ const InputSlider: FC<Props> = ({
 }) => {
   const [value, setValue] = useState<number>(defaultValue)
 
-  const handleSliderChange = (_: Event, newValue: number | number[]) => {
-    if (typeof newValue === 'number') {
-      setValue(newValue)
-    }
+  const handleSliderChange = (newValue: number[]) => {
+    setValue(newValue[0])
+    setFieldValue(newValue[0])
   }
 
-  const handleSliderChangeCommitted = (
-    _: Event | SyntheticEvent<Element, Event>,
-    newValue: number | number[]
-  ) => {
-    if (typeof newValue === 'number') {
-      setFieldValue(newValue)
-    }
-  }
-
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setValue(
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue =
       event.target.value === '' ? defaultValue : Number(event.target.value)
-    )
+    setValue(newValue)
   }
 
   const handleBlur = () => {
@@ -69,42 +63,38 @@ const InputSlider: FC<Props> = ({
     <section className="my-8 flex flex-col">
       <div className="mb-2 flex items-start justify-between">
         <div className="flex items-center">
-          <p className="text-sm font-bold dark:text-dark-text">{title}</p>
-          <Tooltip title={tooltipTitle} placement="top">
-            <IconButton>
-              <InformationCircleIcon className="h-4 w-4 text-black dark:text-white" />
-            </IconButton>
-          </Tooltip>
+          <p className="text-sm font-bold">{title}</p>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button className="hover:bg-accent ml-1 inline-flex h-8 w-8 items-center justify-center rounded-full">
+                  <Info className="h-4 w-4" />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="max-w-xs">{tooltipTitle}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
 
-        <TextField
-          slotProps={{
-            inputLabel: { shrink: true },
-            htmlInput: {
-              inputMode: 'numeric',
-              pattern: '[0-9]*',
-              step,
-              min,
-              max
-            }
-          }}
+        <Input
           type="number"
           value={value}
           onChange={handleInputChange}
           onBlur={handleBlur}
-          size="small"
-          sx={{
-            width: 100
-          }}
+          className="w-24"
+          min={min}
+          max={max}
+          step={step}
         />
       </div>
       <Slider
         min={min}
         max={max}
         step={step}
-        value={typeof value === 'number' ? value : defaultValue}
-        onChangeCommitted={handleSliderChangeCommitted}
-        onChange={handleSliderChange}
+        value={[value]}
+        onValueChange={handleSliderChange}
       />
     </section>
   )

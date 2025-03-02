@@ -1,17 +1,15 @@
-import { useAtom } from 'jotai'
 import { PauseCircle, PlayCircle } from 'lucide-react'
 import { FC, useEffect, useRef, useState } from 'react'
-import { currPlayingAudioIdAtom } from 'src/stores/conversation'
 import WaveSurfer from 'wavesurfer.js'
 
 interface Props {
   filename: string
 }
 
+// Global variable to track the currently playing audio
+let currentPlayingAudioId: string | undefined = undefined
+
 const Waveform: FC<Props> = ({ filename }) => {
-  const [currPlayingAudioId, setCurrPlayingAudioId] = useAtom(
-    currPlayingAudioIdAtom
-  )
   const [src, setSrc] = useState('')
   const [isPlaying, setIsPlaying] = useState(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -22,35 +20,46 @@ const Waveform: FC<Props> = ({ filename }) => {
     setIsPlaying(!isCurrentlyPlaying)
 
     if (!isCurrentlyPlaying) {
-      if (typeof setCurrPlayingAudioId === 'function') {
-        setCurrPlayingAudioId(filename)
-      }
+      currentPlayingAudioId = filename
     }
 
     waveSurferRef.current?.playPause()
   }
 
   const createFileSrc = async () => {
-    const src = await window.electronAPI.transformFilenameToSrc({
-      filename
-    })
-    const blob = new Blob([src.arrayBuffer], {
-      type: 'application/octet-stream'
-    })
-    const assetUrl = URL.createObjectURL(blob)
-    setSrc(assetUrl || '')
+    try {
+      if (
+        window.electronAPI &&
+        typeof window.electronAPI.transformFilenameToSrc === 'function'
+      ) {
+        const response = await window.electronAPI.transformFilenameToSrc({
+          filename
+        })
+
+        if (response.success && response.arrayBuffer) {
+          const blob = new Blob([response.arrayBuffer], {
+            type: 'application/octet-stream'
+          })
+          const assetUrl = URL.createObjectURL(blob)
+          setSrc(assetUrl)
+        }
+      }
+    } catch (error) {
+      console.error('Error transforming filename to src:', error)
+    }
   }
 
   useEffect(() => {
     createFileSrc()
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filename])
 
   useEffect(() => {
-    if (currPlayingAudioId !== filename) {
+    if (currentPlayingAudioId !== filename) {
       waveSurferRef.current?.stop()
       setIsPlaying(false)
     }
-  }, [currPlayingAudioId])
+  }, [filename])
 
   useEffect(() => {
     if (!src) return

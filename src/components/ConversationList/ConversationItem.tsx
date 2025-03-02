@@ -42,20 +42,17 @@ const ConversationItem: FC<Props> = ({ active, conversation, onClick }) => {
       <div className="flex w-full flex-col">
         <p className="flex justify-between">
           <span
-            className={classNames(
-              'w-32 truncate text-sm font-bold dark:text-dark-text',
-              { 'w-44': isSameDay }
-            )}
+            className={classNames('w-32 truncate text-sm font-bold', {
+              'w-44': isSameDay
+            })}
           >
             {conversation.summary || conversation.id}
           </span>
-          <span className="text-xs font-bold text-black text-opacity-30 dark:text-dark-text-sub">
-            {display}
-          </span>
+          <span className="text-opacity-30 text-xs font-bold">{display}</span>
         </p>
 
         {conversation.messages.length > 0 && (
-          <p className="mt-2 w-48 truncate text-xs font-bold text-black text-opacity-40 dark:text-dark-text-sub">
+          <p className="text-opacity-40 mt-2 w-48 truncate text-xs font-bold">
             {showLastMessage()}
           </p>
         )}

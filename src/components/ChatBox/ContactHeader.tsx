@@ -1,11 +1,6 @@
-import {
-  CheckIcon,
-  PencilSquareIcon,
-  TrashIcon
-} from '@heroicons/react/24/solid'
-import Input from '@mui/material/Input'
 import classNames from 'classnames'
 import { useAtom, useAtomValue } from 'jotai'
+import { Check, Pencil, Trash } from 'lucide-react'
 import { enqueueSnackbar } from 'notistack'
 import { FC, KeyboardEvent, memo, useEffect, useState } from 'react'
 import HyperChatLogo from 'src/assets/images/logo.png'
@@ -18,11 +13,10 @@ import {
 } from 'src/stores/conversation'
 import { loadingAtom, onlineAtom } from 'src/stores/global'
 import { EmojiPickerProps } from 'src/types/global'
-import Avatar from '../Avatar'
-import EmojiPicker from '../EmojiPicker'
+import { Input } from '../ui/input'
 
 const ContactHeader: FC = () => {
-  const loading = useAtomValue(loadingAtom)
+  const { deleteOneById, updateOneById } = useDB()
   const [conversation, setConversation] = useAtom(conversationAtom)
   const [summaryInputVisible, setSummaryInputVisible] = useAtom(
     summaryInputVisibleAtom
@@ -30,18 +24,23 @@ const ContactHeader: FC = () => {
   const [avatarPickerVisible, setAvatarPickerVisible] = useAtom(
     avatarPickerVisibleAtom
   )
-  const isOnline = useAtomValue(onlineAtom)
+  const loading = useAtomValue(loadingAtom)
+  const online = useAtomValue(onlineAtom)
+  const [summaryValue, setSummaryValue] = useState('')
   const [isTyping, setIsTyping] = useState(false)
-  const [summaryValue, setSummaryValue] = useState(conversation?.summary || '')
-  const { updateOneById, deleteOneById } = useDB('conversations')
 
-  const summary = conversation?.summary || conversation?.id || EMPTY_CHAT_HINT
+  useEffect(() => {
+    if (conversation) {
+      setSummaryValue(conversation.summary || '')
+    }
+  }, [conversation])
 
   const openAvatarPicker = () => {
     if (loading) {
       enqueueSnackbar(BAN_ACTIVE_HINT, { variant: 'warning' })
       return
     }
+    if (!conversation) return
     setAvatarPickerVisible(true)
   }
 
@@ -98,81 +97,80 @@ const ContactHeader: FC = () => {
     }
   }
 
-  useEffect(() => {
-    setSummaryInputVisible(false)
-    setAvatarPickerVisible(false)
-  }, [conversation])
+  const summary = conversation?.summary || EMPTY_CHAT_HINT
 
   return (
-    <section className="relative flex items-start justify-between pb-5 pl-6 pr-6 pt-5">
-      <section className="flex cursor-pointer items-center">
-        {conversation?.avatar ? (
-          <div
-            className="flex items-center justify-center text-5xl"
-            onClick={openAvatarPicker}
-          >
-            {conversation?.avatar}
+    <section className="flex h-14 items-center justify-between border-b border-gray-200 px-4 dark:border-gray-700">
+      <section className="flex items-center">
+        <div
+          className={classNames(
+            'mr-2 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full',
+            {
+              'bg-gray-200 dark:bg-gray-700': !conversation?.avatar
+            }
+          )}
+          onClick={openAvatarPicker}
+        >
+          {conversation?.avatar || (
+            <img
+              src={HyperChatLogo}
+              alt="HyperChat Logo"
+              className="h-6 w-6 rounded-full"
+            />
+          )}
+        </div>
+
+        <div className="flex flex-col">
+          <div className="flex items-center">
+            <div className="mr-2 h-2 w-2 rounded-full bg-green-500" />
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              {online ? 'Online' : 'Offline'}
+            </p>
           </div>
-        ) : (
-          <Avatar size="xs" src={HyperChatLogo} onClick={openAvatarPicker} />
-        )}
 
-        {avatarPickerVisible && <EmojiPicker onEmojiSelect={saveAvatar} />}
-
-        <section className="ml-4 flex flex-col">
-          <div className="mb-1 flex items-center font-bold text-black dark:text-dark-text">
+          <div className="flex items-center">
             {summaryInputVisible ? (
               <>
                 <Input
-                  autoFocus
+                  className="w-60 text-base"
                   value={summaryValue}
-                  onKeyDown={handleKeyDown}
-                  onChange={(e) => setSummaryValue(e.target.value)}
-                  onCompositionStart={() => setIsTyping(true)}
-                  onCompositionEnd={() => setIsTyping(false)}
-                  className="w-80"
-                  sx={{
-                    '.MuiInput-input': {
-                      padding: 0
-                    }
+                  onChange={(e) => {
+                    setSummaryValue(e.target.value)
+                    setIsTyping(true)
+                    setTimeout(() => setIsTyping(false), 500)
                   }}
+                  onKeyDown={handleKeyDown}
+                  onBlur={() => {
+                    setSummaryInputVisible(false)
+                  }}
+                  autoFocus
                 />
-                <CheckIcon className="h-4 w-4" onClick={saveSummary} />
+                <Check
+                  className="h-4 w-4 cursor-pointer"
+                  onClick={saveSummary}
+                />
               </>
             ) : (
               <div
-                onClick={openSummaryInput}
                 className="flex cursor-pointer items-center"
+                onClick={openSummaryInput}
               >
                 <p className="mr-4 text-base">{summary}</p>
-                {!!conversation && <PencilSquareIcon className="h-4 w-4" />}
+                {!!conversation && (
+                  <Pencil className="h-4 w-4 cursor-pointer" />
+                )}
               </div>
             )}
           </div>
-
-          <p className="flex items-center">
-            <span
-              className={classNames('mr-2 h-2.5 w-2.5 rounded-full', {
-                'bg-red-500': !isOnline,
-                'bg-status-green': isOnline
-              })}
-            />
-            <span className="text-xs font-bold text-black text-opacity-60 dark:text-dark-text-sub">
-              {isOnline ? 'Online' : 'Offline'}
-            </span>
-          </p>
-        </section>
+        </div>
       </section>
-      {conversation && (
-        <section className="flex flex-row gap-2">
-          <section
-            className="flex cursor-pointer rounded-lg bg-main-purple bg-opacity-10 pb-2.5 pl-4 pr-4 pt-2.5 text-main-purple"
-            onClick={deleteCurrConversation}
-          >
-            <TrashIcon className="h-4 w-4" />
-          </section>
-        </section>
-      )}
+
+      <section
+        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
+        onClick={deleteCurrConversation}
+      >
+        <Trash className="h-4 w-4 cursor-pointer" />
+      </section>
     </section>
   )
 }

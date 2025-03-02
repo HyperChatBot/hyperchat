@@ -1,12 +1,8 @@
-import {
-  DocumentArrowDownIcon,
-  DocumentArrowUpIcon
-} from '@heroicons/react/24/outline'
-import Button from '@mui/material/Button'
 import Dexie from 'dexie'
 import { exportDB, importDB } from 'dexie-export-import'
 import { enqueueSnackbar } from 'notistack'
 import { ChangeEvent, FC, useRef } from 'react'
+import { Button } from 'src/components/ui/button'
 
 const ImportAndExportDexie: FC = () => {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -60,27 +56,24 @@ const ImportAndExportDexie: FC = () => {
 
   return (
     <section className="flex gap-4">
-      <Button
-        variant="contained"
-        onClick={exportDatabase}
-        startIcon={<DocumentArrowDownIcon className="h-4 w-4" />}
-      >
+      <Button variant="outline" type="button" onClick={exportDatabase}>
         Export Data
       </Button>
+
       <Button
-        variant="contained"
-        startIcon={<DocumentArrowUpIcon className="h-4 w-4" />}
-        className="relative"
+        variant="outline"
+        type="button"
+        onClick={() => document.getElementById('import-data')?.click()}
       >
-        <input
-          ref={inputRef}
-          type="file"
-          accept="*.json"
-          className="absolute left-0 top-0 h-full w-full opacity-0"
-          onChange={(e) => importDatabase(e)}
-        />
         Import Data
       </Button>
+      <input
+        type="file"
+        id="import-data"
+        accept="image/*"
+        className="hidden"
+        onChange={importDatabase}
+      />
     </section>
   )
 }

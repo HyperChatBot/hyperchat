@@ -1,8 +1,8 @@
-import { Cog6ToothIcon as Cog6ToothIconOutline } from '@heroicons/react/24/outline'
-import { Cog6ToothIcon as Cog6ToothIconSolid } from '@heroicons/react/24/solid'
 import { useAtom, useAtomValue } from 'jotai'
+import { Settings } from 'lucide-react'
 import { FC } from 'react'
 import HyperChatLogo from 'src/assets/images/logo.png'
+import { Separator } from 'src/components/ui/separator'
 import companies from 'src/shared/companies'
 import { configurationAtom } from 'src/stores/conversation'
 import {
@@ -11,7 +11,6 @@ import {
   settingsDialogVisibleAtom
 } from 'src/stores/global'
 import Avatar from '../Avatar'
-import Divider from '../Divider'
 import Loading from '../Loading'
 
 const Sidebar: FC = () => {
@@ -23,7 +22,7 @@ const Sidebar: FC = () => {
   if (!settings || !configuration) return <Loading />
 
   return (
-    <section className="no-scrollbar flex h-screen w-22 min-w-22 flex-col items-center justify-between overflow-y-scroll p-4 shadow-sidebar dark:shadow-dark-sidebar">
+    <section className="no-scrollbar shadow-sidebar dark:shadow-dark-sidebar flex h-screen w-22 min-w-22 flex-col items-center justify-between overflow-y-scroll p-4">
       <div className="flex flex-col items-center">
         <Avatar size="xs" src={HyperChatLogo} />
         <section className="mt-12 w-full">
@@ -45,20 +44,15 @@ const Sidebar: FC = () => {
               )
             })}
           </div>
-          <Divider />
+          <Separator />
           <div
             className="my-6 flex justify-center"
             onClick={() => setVisible(!visible)}
           >
-            {visible ? (
-              <Cog6ToothIconSolid
-                className={'h-6 w-6 cursor-pointer text-black dark:text-white'}
-              />
-            ) : (
-              <Cog6ToothIconOutline
-                className={'h-6 w-6 cursor-pointer text-black dark:text-white'}
-              />
-            )}
+            <Settings
+              className={'h-6 w-6 cursor-pointer text-black dark:text-white'}
+              fill={visible ? 'currentColor' : 'none'}
+            />
           </div>
         </section>
       </div>

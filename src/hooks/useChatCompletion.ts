@@ -239,7 +239,6 @@ const useChatCompletion = () => {
         stream: true
       })
       for await (const part of response) {
-
         updateChatCompletionStream(part.message.content)
         if (part.done) {
           assistantToken = part.eval_count

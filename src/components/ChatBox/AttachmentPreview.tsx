@@ -20,11 +20,11 @@ const AttachmentPreview: FC<Props> = ({ className }) => {
         if (prompt.mimeType.includes('image')) {
           return (
             <section
-              className="mb-2 ml-4 mt-4 flex w-full flex-row gap-2"
+              className="mt-4 mb-2 ml-4 flex w-full flex-row gap-2"
               key={prompt.id}
             >
               <section className="group relative">
-                <span className="absolute -right-2 -top-2 hidden rounded-full bg-white group-hover:block">
+                <span className="absolute -top-2 -right-2 hidden rounded-full bg-white group-hover:block">
                   <SolidCloseIcon
                     className="h-6 w-6 text-black"
                     onClick={() => deleteBase64FilePrompt(prompt.id)}
@@ -42,7 +42,7 @@ const AttachmentPreview: FC<Props> = ({ className }) => {
         if (prompt.mimeType.includes('audio')) {
           return (
             <section
-              className="ml-4 mt-4 flex w-1/2 rounded-3xl bg-main-purple"
+              className="mt-4 ml-4 flex w-1/2 rounded-3xl"
               key={prompt.id}
             >
               <audio src={prompt.data} controls />
@@ -53,7 +53,7 @@ const AttachmentPreview: FC<Props> = ({ className }) => {
         if (prompt.mimeType.includes('video')) {
           return (
             <section
-              className="ml-4 mt-4 flex w-1/2 rounded-3xl bg-main-purple"
+              className="mt-4 ml-4 flex w-1/2 rounded-3xl"
               key={prompt.id}
             >
               <video src={prompt.data} controls />
@@ -62,10 +62,7 @@ const AttachmentPreview: FC<Props> = ({ className }) => {
         }
 
         return (
-          <section
-            className="ml-4 mt-4 flex w-1/2 rounded-3xl bg-main-purple"
-            key={prompt.id}
-          >
+          <section className="mt-4 ml-4 flex w-1/2 rounded-3xl" key={prompt.id}>
             {prompt.name}
           </section>
         )

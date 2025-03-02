@@ -16,7 +16,7 @@ const TokenCount: FC = () => {
     configuration.systemMessageTokensCount
 
   return (
-    <p className="absolute -bottom-5 right-0 text-10 text-black text-opacity-30 dark:text-dark-text-sub">
+    <p className="text-opacity-30 absolute right-0 -bottom-5 text-[10px]">
       Token count: {usedTokenCount} / {maxInput}
     </p>
   )

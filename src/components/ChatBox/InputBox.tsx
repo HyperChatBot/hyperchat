@@ -6,6 +6,7 @@ import { base64FilePromptAtom, inputTextAtom } from 'src/stores/conversation'
 import { loadingAtom, settingsAtom } from 'src/stores/global'
 import { ContentPartType, TextPrompt } from 'src/types/conversation'
 import { LoadingIcon, SolidSendIcon } from '../Icons'
+import { Textarea } from '../ui/textarea'
 import AttachmentPreview from './AttachmentPreview'
 import AttachmentUploader from './AttachmentUploader'
 import AudioRecorder from './Recorder'
@@ -76,14 +77,14 @@ const InputBox: FC = () => {
   }, [inputText])
 
   return (
-    <section className="absolute bottom-6 left-6 w-[calc(100%_-_3rem)] rounded-md border border-black/10 bg-white dark:bg-gray-700">
+    <section className="bg-background absolute bottom-6 left-6 w-[calc(100%_-_3rem)]">
       <AttachmentUploader className="absolute bottom-3 left-4" />
       <AttachmentPreview />
 
-      <textarea
+      <Textarea
         ref={textareaRef}
         className={classNames(
-          'block w-full resize-none rounded-md bg-white px-4 py-3 pl-12 pr-20 text-sm text-black outline-none dark:border-gray-900/50 dark:bg-gray-700 dark:text-white'
+          'block w-full resize-none px-4 py-3 pr-20 pl-12 text-sm outline-none'
         )}
         style={{
           resize: 'none',
@@ -103,11 +104,11 @@ const InputBox: FC = () => {
         onChange={(e) => setInputText(e.target.value)}
         onKeyDown={handleKeyDown}
       />
-      <section className="absolute bottom-[2px] right-4 flex items-center">
+      <section className="absolute right-4 bottom-[2px] flex items-center">
         <AudioRecorder />
 
         {loading ? (
-          <LoadingIcon className="h-5 w-5 animate-spin text-main-purple" />
+          <LoadingIcon className="h-5 w-5 animate-spin" />
         ) : (
           <SolidSendIcon
             onClick={handleRequest}
@@ -117,8 +118,7 @@ const InputBox: FC = () => {
                 'text-black dark:text-white text-opacity-30': !validate()
               },
               {
-                'text-main-purple dark:text-main-purple text-opacity-100':
-                  validate()
+                '': validate()
               }
             )}
           />
