@@ -13,6 +13,8 @@ if (started) {
   app.quit()
 }
 
+// let serverProcess: ChildProcess | null = null;
+
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -24,6 +26,11 @@ const createWindow = () => {
     },
     icon: '../public/icon.png'
   })
+
+  // serverProcess = spawn('node', [path.join(__dirname, 'server.js')], {
+  //   stdio: 'inherit',
+  //   shell: true
+  // });
 
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
@@ -64,6 +71,9 @@ app.on('ready', createWindow)
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
+    // if (serverProcess) {
+    //   serverProcess.kill();
+    // }
     app.quit()
   }
 })

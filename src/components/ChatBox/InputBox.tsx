@@ -1,18 +1,22 @@
+import { useChat } from '@ai-sdk/react'
 import classNames from 'classnames'
 import { useAtom, useAtomValue } from 'jotai'
 import { FC, memo, useEffect, useRef, useState } from 'react'
 import { useChatCompletion } from 'src/hooks'
 import { base64FilePromptAtom, inputTextAtom } from 'src/stores/conversation'
 import { loadingAtom, settingsAtom } from 'src/stores/global'
-import { ContentPartType, TextPrompt } from 'src/types/conversation'
 import { LoadingIcon, SolidSendIcon } from '../Icons'
 import { Textarea } from '../ui/textarea'
 import AttachmentPreview from './AttachmentPreview'
 import AttachmentUploader from './AttachmentUploader'
 import AudioRecorder from './Recorder'
 import TokenCount from './TokenCount'
+import { Button } from '../ui/button'
 
 const InputBox: FC = () => {
+  const { messages, input, handleInputChange, handleSubmit } = useChat({
+    api: 'http://localhost:8965/api/chat'
+  })
   const settings = useAtomValue(settingsAtom)
   const loading = useAtomValue(loadingAtom)
   const [inputText, setInputText] = useAtom(inputTextAtom)
@@ -55,14 +59,15 @@ const InputBox: FC = () => {
   const handleRequest = () => {
     if (!settings || !validate()) return
 
-    const textPrompt: TextPrompt[] = [
-      {
-        type: ContentPartType.TextPrompt,
-        text: inputText
-      }
-    ]
+    // const textPrompt: TextPrompt[] = [
+    //   {
+    //     type: ContentPartType.TextPrompt,
+    //     text: inputText
+    //   }
+    // ]
 
-    createChatCompletion([...textPrompt, ...base64FilePrompt])
+    // createChatCompletion([...textPrompt, ...base64FilePrompt])
+
     resetInput()
   }
 
@@ -77,7 +82,10 @@ const InputBox: FC = () => {
   }, [inputText])
 
   return (
-    <section className="bg-background absolute bottom-6 left-6 w-[calc(100%_-_3rem)]">
+    <form
+      onSubmit={handleSubmit}
+      className="bg-background absolute bottom-6 left-6 w-[calc(100%_-_3rem)]"
+    >
       <AttachmentUploader className="absolute bottom-3 left-4" />
       <AttachmentPreview />
 
@@ -97,12 +105,13 @@ const InputBox: FC = () => {
           }`
         }}
         placeholder="Type a message..."
-        value={inputText}
         rows={1}
         onCompositionStart={() => setIsTyping(true)}
         onCompositionEnd={() => setIsTyping(false)}
-        onChange={(e) => setInputText(e.target.value)}
         onKeyDown={handleKeyDown}
+        name="prompt"
+        value={input}
+        onChange={handleInputChange}
       />
       <section className="absolute right-4 bottom-[2px] flex items-center">
         <AudioRecorder />
@@ -110,8 +119,8 @@ const InputBox: FC = () => {
         {loading ? (
           <LoadingIcon className="h-5 w-5 animate-spin" />
         ) : (
+          <Button type='submit'>
           <SolidSendIcon
-            onClick={handleRequest}
             pathClassName={classNames(
               'fill-current',
               {
@@ -122,10 +131,11 @@ const InputBox: FC = () => {
               }
             )}
           />
+          </Button>
         )}
       </section>
       <TokenCount />
-    </section>
+    </form>
   )
 }
 
