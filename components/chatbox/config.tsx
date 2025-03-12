@@ -19,7 +19,6 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import {
   Tooltip,
-  TooltipContent,
   TooltipProvider,
   TooltipTrigger
 } from '@/components/ui/tooltip'
@@ -194,7 +193,7 @@ export function SidebarRight({
                         </FormControl>
                       </FormItem>
                     </TooltipTrigger>
-                    <TooltipContent>
+                    {/* <TooltipContent>
                       <p className="max-w-xs">
                         Make responses stop at a desired point, such as the end
                         of a sentence or list. Specify up to four sequences
@@ -202,7 +201,7 @@ export function SidebarRight({
                         response. The returned text will not contain the stop
                         sequence.
                       </p>
-                    </TooltipContent>
+                    </TooltipContent> */}
                   </Tooltip>
                 </TooltipProvider>
               )}

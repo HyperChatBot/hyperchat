@@ -64,10 +64,6 @@ export const setting = pgTable('Setting', {
   xAiApiKey: varchar('xAiApiKey').notNull(),
   xAiBaseUrl: varchar('xAiBaseUrl').notNull(),
   ollamaBaseUrl: varchar('ollamaBaseUrl').notNull(),
-  createdAt: timestamp('createdAt').defaultNow().notNull(),
-  updatedAt: timestamp('updatedAt')
-    .default(sql`now()`)
-    .notNull()
 })
 
 export type Setting = InferSelectModel<typeof setting>

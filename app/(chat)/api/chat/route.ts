@@ -1,10 +1,9 @@
 import { regularPrompt } from '@/lib/ai/prompts'
 import { toolFn as calculator } from '@/lib/ai/tools/calculator'
+import { toolFn as deepSearch } from '@/lib/ai/tools/deep-search'
 import { toolFn as getCurrencyRate } from '@/lib/ai/tools/get-currency-rate'
 import { toolFn as getDate } from '@/lib/ai/tools/get-date'
 import { toolFn as getWeather } from '@/lib/ai/tools/get-weather'
-import { toolFn as searchOnline } from '@/lib/ai/tools/search-online'
-import { toolFn as webScraper } from '@/lib/ai/tools/web-scraper'
 import {
   deleteChatById,
   getChatById,
@@ -13,8 +12,9 @@ import {
 } from '@/lib/db/queries'
 import { Setting } from '@/lib/db/schema'
 import { getMostRecentUserMessage, sanitizeResponseMessages } from '@/lib/utils'
+import { createGoogleGenerativeAI } from '@ai-sdk/google'
 import { createOpenAI } from '@ai-sdk/openai'
-import { type Message, createDataStreamResponse, streamText } from 'ai'
+import { createDataStreamResponse, streamText, type Message } from 'ai'
 import { v4 as uuidV4 } from 'uuid'
 import { generateTitleFromUserMessage } from '../../actions'
 
@@ -35,7 +35,10 @@ export async function POST(request: Request) {
   }
   const chat = await getChatById({ id })
   if (!chat) {
-    const title = await generateTitleFromUserMessage({ message: userMessage })
+    const title = await generateTitleFromUserMessage({
+      message: userMessage,
+      setting
+    })
     await saveChat({ id, title })
   }
 
@@ -48,26 +51,29 @@ export async function POST(request: Request) {
     baseURL: setting.openaiBaseUrl
   })
 
+  const gemini = createGoogleGenerativeAI({
+    apiKey: setting.googleApiKey
+  })
+
   return createDataStreamResponse({
     execute: (dataStream) => {
       const result = streamText({
-        model: openai('gpt-4o'),
+        model: gemini('gemini-2.0-flash-001'),
         system: regularPrompt,
         messages,
-        maxSteps: 10,
+        maxSteps: 20,
         experimental_generateMessageId: uuidV4,
-        providerOptions: {
-          openai: {
-            // reasoningEffort: 'medium'
-          }
-        },
+        // providerOptions: {
+        //   openai: {
+        //     reasoningEffort: 'medium'
+        //   }
+        // },
         tools: {
           ...calculator,
           ...getWeather,
           ...getCurrencyRate,
-          ...searchOnline,
           ...getDate,
-          ...webScraper
+          ...deepSearch
         },
         onFinish: async ({ response, reasoning }) => {
           try {

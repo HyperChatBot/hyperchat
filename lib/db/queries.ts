@@ -137,9 +137,7 @@ export async function getSetting() {
         xAiApiKey: '',
         xAiBaseUrl: '',
         ollamaBaseUrl: '',
-        id: uuidV4(),
-        createdAt: new Date(),
-        updatedAt: new Date()
+        id: uuidV4()
       })
     }
 
@@ -150,9 +148,12 @@ export async function getSetting() {
   }
 }
 
-export async function updateSetting(id: string, payload: Setting) {
+export async function updateSetting(payload: Setting) {
   try {
-    return await db.update(setting).set(payload).where(eq(setting.id, id))
+    return await db
+      .update(setting)
+      .set(payload)
+      .where(eq(setting.id, payload.id))
   } catch (error) {
     console.error('Failed to save setting in database')
     throw error

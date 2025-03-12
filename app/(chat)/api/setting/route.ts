@@ -7,9 +7,8 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const { id, setting: settingPayload }: { id: string; setting: Setting } =
-    await request.json()
-  const setting = await updateSetting(id, settingPayload)
+  const payload: Setting = await request.json()
+  const setting = await updateSetting(payload)
 
   return Response.json(setting, { status: 200 })
 }

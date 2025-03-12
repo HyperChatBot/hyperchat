@@ -1,8 +1,24 @@
+// Bring Your Own Browser (BYOB)
+
 import { CallingToolsProps } from '@/types'
+import * as cheerio from 'cheerio'
 import { search, SearchOptions } from 'duck-duck-scrape'
 import { z } from 'zod'
 
 export const callingToolName = 'searchOnline'
+
+async function webScraper({ url }: { url: string }) {
+  try {
+    const $ = await cheerio.fromURL(url)
+
+    $('style').remove()
+    $('script').remove()
+
+    return $.text()
+  } catch {
+    console.log("I don't know how to do that.")
+  }
+}
 
 export const toolFn = {
   [callingToolName]: {

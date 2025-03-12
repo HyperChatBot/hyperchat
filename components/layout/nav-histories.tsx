@@ -37,8 +37,9 @@ interface GroupedChats {
 export function NavHistorySkeleton() {
   return (
     <section className="flex flex-col gap-3 p-2">
+      <Skeleton className="m-2 h-4 w-20" />
       {new Array(10).fill(0).map((_, idx) => (
-        <div key={idx} className="flex gap-2">
+        <div key={idx} className="flex gap-2 px-2">
           <Skeleton className="h-5 w-5" />
           <Skeleton className="h-5 w-full" />
         </div>
@@ -130,7 +131,12 @@ export function NavHistories({}) {
   }
 
   if (isLoading) {
-    return <NavHistorySkeleton />
+    return (
+      <>
+        <NavHistorySkeleton />
+        <NavHistorySkeleton />
+      </>
+    )
   }
 
   if (history?.length === 0) {

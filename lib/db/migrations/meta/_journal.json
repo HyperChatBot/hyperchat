@@ -15,6 +15,13 @@
       "when": 1741679572564,
       "tag": "0001_dizzy_cassandra_nova",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1741770400074,
+      "tag": "0002_thin_black_widow",
+      "breakpoints": true
     }
   ]
 }

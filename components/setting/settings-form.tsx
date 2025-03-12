@@ -55,7 +55,7 @@ export function SettingsForm() {
     const subscription = form.watch(
       debounce((formValue) => {
         if (data?.id) {
-          updateSetting(data.id, formValue)
+          updateSetting(formValue)
           mutate()
         }
 

@@ -8,10 +8,10 @@ export function useSetting() {
     fetcher
   )
 
-  const updateSetting = async (id: string, payload: Setting) => {
+  const updateSetting = async (payload: Setting) => {
     await fetch('/api/setting', {
       method: 'POST',
-      body: JSON.stringify({ id, setting: payload })
+      body: JSON.stringify(payload)
     })
 
     mutate()
