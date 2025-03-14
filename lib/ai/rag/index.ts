@@ -4,7 +4,8 @@ import { Embedding, generateEmbedding, generateEmbeddings } from './embeddings'
 import { loadPDF } from './loaders'
 import {
   generateChunksByMarkdownTextSplitter,
-  generateChunksByRecursiveCharacterTextSplitter
+  generateChunksByRecursiveCharacterTextSplitter,
+  transformTextsToLangChainDocument
 } from './splitters'
 
 export {
@@ -12,7 +13,7 @@ export {
   generateChunksByRecursiveCharacterTextSplitter,
   generateEmbedding,
   generateEmbeddings,
-  loadPDF
+  loadPDF,
+  transformTextsToLangChainDocument
 }
-
 export type { Embedding }

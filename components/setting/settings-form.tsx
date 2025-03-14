@@ -11,7 +11,7 @@ import { textFetcher } from '@/lib/utils'
 import { activeAtom } from '@/stores/settings'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAtomValue } from 'jotai'
-import debounce from 'lodash.debounce'
+import { debounce } from 'lodash-es'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -137,7 +137,7 @@ export function SettingsForm() {
                     <Input
                       type="text"
                       id="azure-openai-endpoint"
-                      placeholder="https://<RESOURCE_NAME>.openai.azure.com"
+                      placeholder="https://{resourceName}.openai.azure.com/openai/deployments/{modelId}{path}"
                       {...field}
                     />
                   </FormControl>

@@ -4,23 +4,33 @@ import {
   RecursiveCharacterTextSplitter
 } from '@langchain/textsplitters'
 
+export const transformTextsToLangChainDocument = async (texts: string[]) => {
+  const splitter = new RecursiveCharacterTextSplitter()
+  const document = await splitter.createDocuments(texts)
+  return document
+}
+
 export const generateChunksByMarkdownTextSplitter = async (
-  input: string
+  input: string,
+  chunkSize = 1000,
+  chunkOverlap = 200
 ): Promise<string[]> => {
   const splitter = new MarkdownTextSplitter({
-    chunkSize: 1000,
-    chunkOverlap: 200
+    chunkSize,
+    chunkOverlap
   })
   const output = await splitter.splitText(input)
   return output
 }
 
 export const generateChunksByRecursiveCharacterTextSplitter = async (
-  document: Document[]
+  document: Document[],
+  chunkSize = 1024,
+  chunkOverlap = 128
 ): Promise<Document[]> => {
   const splitter = new RecursiveCharacterTextSplitter({
-    chunkSize: 1024,
-    chunkOverlap: 128
+    chunkSize,
+    chunkOverlap
   })
 
   const output = await splitter.splitDocuments(document)

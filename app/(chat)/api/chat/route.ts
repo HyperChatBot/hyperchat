@@ -1,6 +1,5 @@
 import { regularPrompt } from '@/lib/ai/prompts'
 import { toolFn as calculator } from '@/lib/ai/tools/calculator'
-import { toolFn as deepSearch } from '@/lib/ai/tools/deep-search'
 import { toolFn as getCurrencyRate } from '@/lib/ai/tools/get-currency-rate'
 import { toolFn as getDate } from '@/lib/ai/tools/get-date'
 import { toolFn as getWeather } from '@/lib/ai/tools/get-weather'
@@ -72,8 +71,7 @@ export async function POST(request: Request) {
           ...calculator,
           ...getWeather,
           ...getCurrencyRate,
-          ...getDate,
-          ...deepSearch
+          ...getDate
         },
         onFinish: async ({ response, reasoning }) => {
           try {
