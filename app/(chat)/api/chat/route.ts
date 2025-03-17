@@ -47,7 +47,7 @@ export async function POST(request: Request) {
 
   const openai = createOpenAI({
     apiKey: setting.openaiApiKey,
-    baseURL: setting.openaiBaseUrl
+    baseURL: setting.openaiBaseUrl,
   })
 
   const gemini = createGoogleGenerativeAI({
@@ -57,7 +57,8 @@ export async function POST(request: Request) {
   return createDataStreamResponse({
     execute: (dataStream) => {
       const result = streamText({
-        model: gemini('gemini-2.0-flash-001'),
+        // model: gemini('gemini-2.0-flash-001'),
+        model: openai('gpt-4o'),
         system: regularPrompt,
         messages,
         maxSteps: 20,

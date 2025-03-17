@@ -1,64 +1,34 @@
-import { createOpenAI } from '@ai-sdk/openai'
+import { customsearch_v1 } from '@googleapis/customsearch'
 import { generateObject } from 'ai'
-import * as cheerio from 'cheerio'
-import { search, SearchResult } from 'duck-duck-scrape'
+import 'dotenv/config'
 import { compact } from 'lodash-es'
 import pLimit from 'p-limit'
-import TurndownService from 'turndown'
 import { z } from 'zod'
 import { deepResearchPrompt } from '../prompts'
-import { generateChunksByMarkdownTextSplitter } from '../rag'
 import {
   generateChunksByRecursiveCharacterTextSplitter,
   transformTextsToLangChainDocument
 } from '../rag/splitters'
+import { transformSerpToChunks } from './load-url'
+import { o3MiniModel } from './models'
+import { researchPlanPrompt } from './prompts'
+import { ResearchProgress, ResearchResult } from './types'
+import { searchWeb } from './web-search'
 
-interface ResearchResult {
-  learnings: string[]
-  visitedUrls: string[]
-}
-
-interface ResearchProgress {
-  currentDepth: number
-  totalDepth: number
-  currentBreadth: number
-  totalBreadth: number
-  currentQuery?: string
-  totalQueries: number
-  completedQueries: number
-}
-
-const openai = createOpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-  baseURL: process.env.OPENAI_API_BASE_URL
-})
-
-const o3MiniModel = openai('o3-mini', {
-  reasoningEffort: 'medium',
-  structuredOutputs: true
-})
-
-async function loadHtmlFromUrl(url: string) {
-  const $ = await cheerio.fromURL(url)
-
-  $('style').remove()
-  $('script').remove()
-
-  return $.html()
-}
-
-function htmlToMarkdown(domString: string) {
-  const turndownService = new TurndownService()
-  return turndownService.turndown(domString)
-}
-
-async function searchWeb(query: string, limit = 5) {
-  const { results } = await search(query, {
-    locale: 'en-us'
+async function generateResearchPlan(prompt: string) {
+  const response = await generateObject({
+    model: o3MiniModel,
+    system: researchPlanPrompt,
+    prompt,
+    schema: z.object({
+      queries: z.string().array().describe(`List of the research plan`)
+    })
   })
 
-  return results.slice(0, limit)
+  return response.object.queries
 }
+
+generateResearchPlan("How did Trump's tariffs influence the world")
 
 async function generateSerpQueries({
   query,
@@ -104,23 +74,6 @@ async function generateSerpQueries({
   return response.object.queries.slice(0, numQueries)
 }
 
-async function transformSerpToChunks(results: SearchResult[]) {
-  const chuncks = []
-
-  for (const result of results) {
-    const htmlStr = await loadHtmlFromUrl(result.url)
-    const markdown =
-      `# ${result.title}\n` +
-      `> ${result.description} \n` +
-      htmlToMarkdown(htmlStr)
-
-    const chunk = await generateChunksByMarkdownTextSplitter(markdown)
-    chuncks.push(...chunk)
-  }
-
-  return chuncks
-}
-
 async function learningsToChunks(learnings: string[]) {
   const document = await transformTextsToLangChainDocument(
     learnings.map((learning) => `<learning>\n${learning}\n</learning>`)
@@ -140,7 +93,7 @@ async function processSerpResult({
   numFollowUpQuestions = 3
 }: {
   query: string
-  searchResults: SearchResult[]
+  searchResults: customsearch_v1.Schema$Result[]
   numLearnings?: number
   numFollowUpQuestions?: number
 }) {
@@ -149,7 +102,7 @@ async function processSerpResult({
 
   const response = await generateObject({
     model: o3MiniModel,
-    abortSignal: AbortSignal.timeout(60_000),
+    // abortSignal: AbortSignal.timeout(60_000),
     system: deepResearchPrompt(),
     prompt: `Given the following contents from a SERP search for the query <query>${query}</query>, generate a list of learnings from the contents. Return a maximum of ${numLearnings} learnings, but feel free to return less if the contents are clear. Make sure each learning is unique and not similar to each other. The learnings should be concise and to the point, as detailed and information dense as possible. Make sure to include any entities like people, places, companies, products, things, etc in the learnings, as well as any exact metrics, numbers, or dates. The learnings will be used to research the topic further.\n\n<contents>${contents
       .map((content) => `<content>\n${content}\n</content>`)
@@ -275,7 +228,11 @@ export async function deepResearch({
         try {
           const searchResults = await searchWeb(query)
 
-          const newUrls = compact(searchResults.map((item) => item.url))
+          if (!searchResults) {
+            throw new Error('Your search did not match any documents.')
+          }
+
+          const newUrls = compact(searchResults.map((item) => item.link))
           const newBreadth = Math.ceil(breadth / 2)
           const newDepth = depth - 1
 

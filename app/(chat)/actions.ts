@@ -22,7 +22,8 @@ export async function generateTitleFromUserMessage({
   })
 
   const { text: title } = await generateText({
-    model: gemini('gemini-2.0-flash-001'),
+    // model: gemini('gemini-2.0-flash-001'),
+    model: openai('gpt-4o'),
     system: `\n
     - you will generate a short title based on the first message a user begins a conversation with
     - ensure it is not more than 80 characters long
