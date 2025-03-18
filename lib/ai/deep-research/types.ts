@@ -14,6 +14,6 @@ export interface ResearchProgress {
 }
 
 export interface DocumentData {
-  chunks: string[]
+  chunk: string[]
   tokenCount: number
 }

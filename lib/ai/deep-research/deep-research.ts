@@ -2,7 +2,6 @@ import { customsearch_v1 } from '@googleapis/customsearch'
 import { generateObject } from 'ai'
 import chalk from 'chalk'
 import 'dotenv/config'
-import { compact } from 'lodash-es'
 import pLimit from 'p-limit'
 import { z } from 'zod'
 import { transformDocumentIntoChunks } from './load-url'
@@ -12,7 +11,7 @@ import { deepResearchPrompt, queriesGenerationPrompt } from './prompts'
 import { DocumentData, ResearchProgress, ResearchResult } from './types'
 import { searchWeb } from './web-search'
 
-export const visitedURLs = new Map<string, DocumentData[]>()
+export const visitedUrls = new Map<string, DocumentData>()
 
 async function generateSerpQueries({
   query,
@@ -54,15 +53,17 @@ async function generateSerpQueries({
 async function processSerpResult({
   query,
   searchResults,
+  visitedUrls = new Map(),
   numLearnings = 3,
   numFollowUpQuestions = 3
 }: {
   query: string
   searchResults: customsearch_v1.Schema$Result[]
+  visitedUrls: Map<string, DocumentData>
   numLearnings?: number
   numFollowUpQuestions?: number
 }) {
-  const contents = await transformDocumentIntoChunks(searchResults)
+  const contents = await transformDocumentIntoChunks(searchResults, visitedUrls)
   console.log(
     chalk.blueBright(`Run "${query}", found ${contents.length} contents\n`)
   )
@@ -99,7 +100,7 @@ export async function deepResearch({
   breadth,
   depth,
   learnings = [],
-  visitedUrls = [],
+  visitedUrls = new Map(),
   // timestamp,
   onProgress
 }: {
@@ -108,7 +109,7 @@ export async function deepResearch({
   depth: number
   // timestamp?: number
   learnings?: string[]
-  visitedUrls?: string[]
+  visitedUrls?: Map<string, DocumentData>
   onProgress?: (progress: ResearchProgress) => void
 }): Promise<ResearchResult> {
   // if (!timestamp) {
@@ -156,18 +157,17 @@ export async function deepResearch({
             throw new Error('Your search did not match any documents.')
           }
 
-          const newUrls = compact(searchResults.map((item) => item.link))
           const newBreadth = Math.ceil(breadth / 2)
           const newDepth = depth - 1
 
           const newLearnings = await processSerpResult({
             query: serpQuery.query,
             searchResults,
+            visitedUrls,
             numFollowUpQuestions: newBreadth
           })
 
           const allLearnings = [...learnings, ...newLearnings.learnings]
-          const allUrls = [...visitedUrls, ...newUrls]
 
           if (newDepth > 0) {
             console.log(
@@ -193,7 +193,7 @@ export async function deepResearch({
               breadth: newBreadth,
               depth: newDepth,
               learnings: allLearnings,
-              visitedUrls: allUrls,
+              visitedUrls,
               // timestamp,
               onProgress
             })
@@ -205,7 +205,7 @@ export async function deepResearch({
             })
             return {
               learnings: allLearnings,
-              visitedUrls: allUrls
+              visitedUrls
             }
           }
         } catch (error) {
@@ -230,12 +230,6 @@ export async function deepResearch({
         researchResults.flatMap((researchResults) => researchResults.learnings)
       )
     ],
-    visitedUrls: [
-      ...new Set(
-        researchResults.flatMap(
-          (researchResults) => researchResults.visitedUrls
-        )
-      )
-    ]
+    visitedUrls: [...visitedUrls.keys()]
   }
 }

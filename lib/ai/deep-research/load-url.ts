@@ -5,7 +5,7 @@ import * as cheerio from 'cheerio'
 import { encodingForModel } from 'js-tiktoken'
 import TurndownService from 'turndown'
 import { generateChunksByMarkdownTextSplitter } from '../rag'
-import { visitedURLs } from './deep-research'
+import { DocumentData } from './types'
 
 const enc = encodingForModel('o3-mini')
 
@@ -59,7 +59,8 @@ export async function loadPdf(url: string, blob: Blob) {
 }
 
 export async function transformDocumentIntoChunks(
-  results: customsearch_v1.Schema$Result[]
+  results: customsearch_v1.Schema$Result[],
+  visitedURLs: Map<string, DocumentData>
 ) {
   let tokens = 0
   const chuncks: string[] = []
@@ -70,7 +71,7 @@ export async function transformDocumentIntoChunks(
       tokens += tokenCount
       const chunk = await generateChunksByMarkdownTextSplitter(text)
       chuncks.push(...chunk)
-      visitedURLs.set(link, chunk)
+      visitedURLs.set(link, { chunk, tokenCount })
     } else {
       console.log(
         chalk.yellowBright(
@@ -87,9 +88,14 @@ export async function transformDocumentIntoChunks(
     }
 
     if (visitedURLs.has(link)) {
+      const { chunk, tokenCount } = visitedURLs.get(link) as DocumentData
+      if (tokens + tokenCount <= 200_000) {
+        chuncks.push(...chunk)
+      }
+
       console.log(
         chalk.yellowBright(
-          `"Ignore "${link}" because it has already been used in previous research.\n`
+          `"Just uses cache from "${link}" because it has already been used in previous research.\n`
         )
       )
       continue
