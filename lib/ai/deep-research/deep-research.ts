@@ -5,11 +5,14 @@ import 'dotenv/config'
 import { compact } from 'lodash-es'
 import pLimit from 'p-limit'
 import { z } from 'zod'
-import { transformDocumentToChunks } from './load-url'
+import { transformDocumentIntoChunks } from './load-url'
 import { o3MiniModel } from './models'
 import { deepResearchPrompt, queriesGenerationPrompt } from './prompts'
-import { ResearchProgress, ResearchResult } from './types'
+// import { isTimeout, setSleep } from './timer'
+import { DocumentData, ResearchProgress, ResearchResult } from './types'
 import { searchWeb } from './web-search'
+
+export const visitedURLs = new Map<string, DocumentData[]>()
 
 async function generateSerpQueries({
   query,
@@ -59,9 +62,9 @@ async function processSerpResult({
   numLearnings?: number
   numFollowUpQuestions?: number
 }) {
-  const contents = await transformDocumentToChunks(searchResults)
+  const contents = await transformDocumentIntoChunks(searchResults)
   console.log(
-    chalk.blueBright(`Ran "${query}", found ${contents.length} contents\n`)
+    chalk.blueBright(`Run "${query}", found ${contents.length} contents\n`)
   )
 
   const response = await generateObject({
@@ -97,15 +100,26 @@ export async function deepResearch({
   depth,
   learnings = [],
   visitedUrls = [],
+  // timestamp,
   onProgress
 }: {
   query: string
   breadth: number
   depth: number
+  // timestamp?: number
   learnings?: string[]
   visitedUrls?: string[]
   onProgress?: (progress: ResearchProgress) => void
 }): Promise<ResearchResult> {
+  // if (!timestamp) {
+  //   timestamp = performance.now()
+  // } else {
+  //   if (!isTimeout(timestamp)) {
+  //     await setSleep(timestamp)
+  //     timestamp = performance.now()
+  //   }
+  // }
+
   const progress: ResearchProgress = {
     currentDepth: depth,
     totalDepth: depth,
@@ -119,17 +133,6 @@ export async function deepResearch({
     Object.assign(progress, update)
     onProgress?.(progress)
   }
-
-  // const plans = await generateResearchPlan(query)
-  // const serpQueries = []
-  // for (const plan of plans) {
-  //   const queries = await generateSerpQueries({
-  //     query: plan,
-  //     learnings,
-  //     numQueries: breadth
-  //   })
-  //   serpQueries.push(...queries)
-  // }
 
   const serpQueries = await generateSerpQueries({
     query,
@@ -191,6 +194,7 @@ export async function deepResearch({
               depth: newDepth,
               learnings: allLearnings,
               visitedUrls: allUrls,
+              // timestamp,
               onProgress
             })
           } else {

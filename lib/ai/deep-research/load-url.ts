@@ -2,13 +2,15 @@ import { customsearch_v1 } from '@googleapis/customsearch'
 import { WebPDFLoader } from '@langchain/community/document_loaders/web/pdf'
 import chalk from 'chalk'
 import * as cheerio from 'cheerio'
+import { encodingForModel } from 'js-tiktoken'
 import TurndownService from 'turndown'
 import { generateChunksByMarkdownTextSplitter } from '../rag'
+import { visitedURLs } from './deep-research'
 
-export async function loadHtmlFromUrl(url: string) {
+const enc = encodingForModel('o3-mini')
+
+export async function loadHtmlFromUrl(url: string, html: string) {
   try {
-    const res = await fetch(url, {})
-    const html = await res.text()
     const $ = cheerio.load(html)
 
     $('style').remove()
@@ -39,10 +41,8 @@ export function domToMarkdown(dom: string) {
   }
 }
 
-export async function loadPdf(url: string) {
+export async function loadPdf(url: string, blob: Blob) {
   try {
-    const result = await fetch(url)
-    const blob = await result.blob()
     const loader = new WebPDFLoader(blob, { parsedItemSeparator: '' })
     const docs = await loader.load()
 
@@ -58,31 +58,58 @@ export async function loadPdf(url: string) {
   }
 }
 
-export async function transformDocumentToChunks(
+export async function transformDocumentIntoChunks(
   results: customsearch_v1.Schema$Result[]
 ) {
+  let tokens = 0
   const chuncks: string[] = []
 
-  for (const { link } of results) {
-    if (!link) continue
+  async function addToChunks(text: string, link: string, chuncks: string[]) {
+    const tokenCount = enc.encode(text).length
+    if (tokens + tokenCount <= 200_000) {
+      tokens += tokenCount
+      const chunk = await generateChunksByMarkdownTextSplitter(text)
+      chuncks.push(...chunk)
+      visitedURLs.set(link, chunk)
+    } else {
+      console.log(
+        chalk.yellowBright(
+          `Discard the document from "${link}" because of too large tokens.\n`
+        )
+      )
+    }
+  }
 
-    if (link.includes('.pdf')) {
-      const pdf = await loadPdf(link)
+  for (const { link } of results) {
+    if (!link) {
+      console.log(chalk.yellowBright(`Ignore the empty URL\n`))
+      continue
+    }
+
+    if (visitedURLs.has(link)) {
+      console.log(
+        chalk.yellowBright(
+          `"Ignore "${link}" because it has already been used in previous research.\n`
+        )
+      )
+      continue
+    }
+
+    const response = await fetch(link)
+    const contentType = response.headers.get('content-type')
+
+    if (contentType?.includes('application/pdf')) {
+      const blob = await response.blob()
+      const pdf = await loadPdf(link, blob)
 
       if (pdf) {
-        const chunk = await generateChunksByMarkdownTextSplitter(pdf)
-        chuncks.push(...chunk)
+        addToChunks(pdf, link, chuncks)
       }
     } else {
-      const dom = await loadHtmlFromUrl(link)
-
+      const html = await response.text()
+      const dom = await loadHtmlFromUrl(link, html)
       if (dom) {
-        const markdown = domToMarkdown(dom)
-
-        if (markdown) {
-          const chunk = await generateChunksByMarkdownTextSplitter(markdown)
-          chuncks.push(...chunk)
-        }
+        addToChunks(dom, link, chuncks)
       }
     }
   }

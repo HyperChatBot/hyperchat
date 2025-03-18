@@ -12,3 +12,8 @@ export interface ResearchProgress {
   totalQueries: number
   completedQueries: number
 }
+
+export interface DocumentData {
+  chunks: string[]
+  tokenCount: number
+}
