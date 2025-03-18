@@ -1,7 +1,6 @@
 import { useTTS } from '@/hooks'
 import { ContentPartType, Message, Roles } from '@/types/conversation'
 import { Copy, Speaker } from 'lucide-react'
-import { DateTime } from 'luxon'
 import { FC, useState } from 'react'
 
 interface Props {
@@ -37,10 +36,6 @@ const ToolsBox: FC<Props> = ({ message: { createdAt, content, role } }) => {
           />
           <Copy className="h-4 w-4 cursor-pointer text-black opacity-30 dark:text-white" />
         </>
-      )}
-
-      {DateTime.fromMillis(createdAt).toLocaleString(
-        DateTime.DATETIME_SHORT_WITH_SECONDS
       )}
 
       {audioUrl && <audio src={audioUrl} className="hidden" autoPlay />}

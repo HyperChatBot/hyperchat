@@ -42,3 +42,10 @@ next-env.d.ts
 
 # Database data
 lib/db/data/*
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

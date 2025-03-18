@@ -1,34 +1,15 @@
 import { customsearch_v1 } from '@googleapis/customsearch'
 import { generateObject } from 'ai'
+import chalk from 'chalk'
 import 'dotenv/config'
 import { compact } from 'lodash-es'
 import pLimit from 'p-limit'
 import { z } from 'zod'
-import { deepResearchPrompt } from '../prompts'
-import {
-  generateChunksByRecursiveCharacterTextSplitter,
-  transformTextsToLangChainDocument
-} from '../rag/splitters'
-import { transformSerpToChunks } from './load-url'
+import { transformDocumentToChunks } from './load-url'
 import { o3MiniModel } from './models'
-import { researchPlanPrompt } from './prompts'
+import { deepResearchPrompt, queriesGenerationPrompt } from './prompts'
 import { ResearchProgress, ResearchResult } from './types'
 import { searchWeb } from './web-search'
-
-async function generateResearchPlan(prompt: string) {
-  const response = await generateObject({
-    model: o3MiniModel,
-    system: researchPlanPrompt,
-    prompt,
-    schema: z.object({
-      queries: z.string().array().describe(`List of the research plan`)
-    })
-  })
-
-  return response.object.queries
-}
-
-generateResearchPlan("How did Trump's tariffs influence the world")
 
 async function generateSerpQueries({
   query,
@@ -37,20 +18,12 @@ async function generateSerpQueries({
 }: {
   query: string
   numQueries?: number
-
-  // optional, if provided, the research will continue from the last learning
-  learnings?: string[]
+  learnings?: string[] // optional, if provided, the research will continue from the last learning
 }) {
   const response = await generateObject({
     model: o3MiniModel,
-    system: deepResearchPrompt(),
-    prompt: `Given the following prompt from the user, generate a list of SERP queries to research the topic. Return a maximum of ${numQueries} queries, but feel free to return less if the original prompt is clear. Make sure each query is unique and not similar to each other: <prompt>${query}</prompt>\n\n${
-      learnings
-        ? `Here are some learnings from previous research, use them to generate more specific queries: ${learnings.join(
-            '\n'
-          )}`
-        : ''
-    }`,
+    system: deepResearchPrompt,
+    prompt: queriesGenerationPrompt(query, numQueries, learnings),
     schema: z.object({
       queries: z
         .array(
@@ -67,23 +40,12 @@ async function generateSerpQueries({
     })
   })
   console.log(
-    `Created ${response.object.queries.length} queries`,
-    response.object.queries
+    chalk.blueBright(
+      `Created ${response.object.queries.length} queries: \n${JSON.stringify(response.object.queries, null, 2)}\n`
+    )
   )
 
   return response.object.queries.slice(0, numQueries)
-}
-
-async function learningsToChunks(learnings: string[]) {
-  const document = await transformTextsToLangChainDocument(
-    learnings.map((learning) => `<learning>\n${learning}\n</learning>`)
-  )
-  const learningsString = await generateChunksByRecursiveCharacterTextSplitter(
-    document,
-    150_000
-  )
-
-  return learningsString
 }
 
 async function processSerpResult({
@@ -97,13 +59,15 @@ async function processSerpResult({
   numLearnings?: number
   numFollowUpQuestions?: number
 }) {
-  const contents = await transformSerpToChunks(searchResults)
-  console.log(`Ran ${query}, found ${contents.length} contents`)
+  const contents = await transformDocumentToChunks(searchResults)
+  console.log(
+    chalk.blueBright(`Ran "${query}", found ${contents.length} contents\n`)
+  )
 
   const response = await generateObject({
     model: o3MiniModel,
-    // abortSignal: AbortSignal.timeout(60_000),
-    system: deepResearchPrompt(),
+    abortSignal: AbortSignal.timeout(60_000),
+    system: deepResearchPrompt,
     prompt: `Given the following contents from a SERP search for the query <query>${query}</query>, generate a list of learnings from the contents. Return a maximum of ${numLearnings} learnings, but feel free to return less if the contents are clear. Make sure each learning is unique and not similar to each other. The learnings should be concise and to the point, as detailed and information dense as possible. Make sure to include any entities like people, places, companies, products, things, etc in the learnings, as well as any exact metrics, numbers, or dates. The learnings will be used to research the topic further.\n\n<contents>${contents
       .map((content) => `<content>\n${content}\n</content>`)
       .join('\n')}</contents>`,
@@ -119,66 +83,12 @@ async function processSerpResult({
     })
   })
   console.log(
-    `Created ${response.object.learnings.length} learnings`,
-    response.object.learnings
+    chalk.blueBright(
+      `Created ${response.object.learnings.length} learnings: \n${JSON.stringify(response.object.learnings, null, 2)}\n`
+    )
   )
 
   return response.object
-}
-
-export async function writeFinalReport({
-  prompt,
-  learnings,
-  visitedUrls
-}: {
-  prompt: string
-  learnings: string[]
-  visitedUrls: string[]
-}) {
-  const learningsString = await learningsToChunks(
-    learnings.map((learning) => `<learning>\n${learning}\n</learning>`)
-  )
-
-  const response = await generateObject({
-    model: o3MiniModel,
-    system: deepResearchPrompt(),
-    prompt: `Given the following prompt from the user, write a final report on the topic using the learnings from research. Make it as as detailed as possible, aim for 3 or more pages, include ALL the learnings from research:\n\n<prompt>${prompt}</prompt>\n\nHere are all the learnings from previous research:\n\n<learnings>\n${learningsString}\n</learnings>`,
-    schema: z.object({
-      reportMarkdown: z
-        .string()
-        .describe('Final report on the topic in Markdown')
-    })
-  })
-
-  const urlsSection = `\n\n## Sources\n\n${visitedUrls.map((url) => `- ${url}`).join('\n')}`
-  return response.object.reportMarkdown + urlsSection
-}
-
-export async function writeFinalAnswer({
-  prompt,
-  learnings
-}: {
-  prompt: string
-  learnings: string[]
-}) {
-  const learningsString = await learningsToChunks(
-    learnings.map((learning) => `<learning>\n${learning}\n</learning>`)
-  )
-
-  const response = await generateObject({
-    model: o3MiniModel,
-    system: deepResearchPrompt(),
-    prompt: `Given the following prompt from the user, write a final answer on the topic using the learnings from research. Follow the format specified in the prompt. Do not yap or babble or include any other text than the answer besides the format specified in the prompt. Keep the answer as concise as possible - usually it should be just a few words or maximum a sentence. Try to follow the format specified in the prompt (for example, if the prompt is using Latex, the answer should be in Latex. If the prompt gives multiple answer choices, the answer should be one of the choices).\n\n<prompt>${prompt}</prompt>\n\nHere are all the learnings from research on the topic that you can use to help answer the prompt:\n\n<learnings>\n${learningsString}\n</learnings>`,
-    schema: z.object({
-      exactAnswer: z
-        .string()
-        .describe(
-          'The final answer, make it short and concise, just the answer, no other text'
-        )
-    })
-  })
-
-  return response.object.exactAnswer
 }
 
 export async function deepResearch({
@@ -209,6 +119,17 @@ export async function deepResearch({
     Object.assign(progress, update)
     onProgress?.(progress)
   }
+
+  // const plans = await generateResearchPlan(query)
+  // const serpQueries = []
+  // for (const plan of plans) {
+  //   const queries = await generateSerpQueries({
+  //     query: plan,
+  //     learnings,
+  //     numQueries: breadth
+  //   })
+  //   serpQueries.push(...queries)
+  // }
 
   const serpQueries = await generateSerpQueries({
     query,
@@ -241,12 +162,15 @@ export async function deepResearch({
             searchResults,
             numFollowUpQuestions: newBreadth
           })
+
           const allLearnings = [...learnings, ...newLearnings.learnings]
           const allUrls = [...visitedUrls, ...newUrls]
 
           if (newDepth > 0) {
             console.log(
-              `Researching deeper, breadth: ${newBreadth}, depth: ${newDepth}`
+              chalk.blueBright(
+                `Researching deeper, breadth: ${newBreadth}, depth: ${newDepth}\n`
+              )
             )
 
             reportProgress({
@@ -281,18 +205,12 @@ export async function deepResearch({
             }
           }
         } catch (error) {
-          if (
-            error instanceof Error &&
-            error.message &&
-            error.message.includes('Timeout')
-          ) {
-            console.log(
-              `Timeout error running query: ${serpQuery.query}: `,
-              error
+          console.log(
+            chalk.redBright(
+              `Error running query: "${serpQuery.query}"${error instanceof Error ? ` due to ${error.message}` : ''}\n`
             )
-          } else {
-            console.log(`Error running query: ${serpQuery.query}: `, error)
-          }
+          )
+
           return {
             learnings: [],
             visitedUrls: []

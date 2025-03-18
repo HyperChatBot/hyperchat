@@ -1,9 +1,9 @@
 import RecorderJSON from '@/assets/lotties/recorder.json'
 import { useSTT } from '@/hooks'
+import { cn } from '@/lib/utils'
 import { inputTextAtom } from '@/stores/conversation'
 import { settingsAtom } from '@/stores/global'
 import { Player } from '@lottiefiles/react-lottie-player'
-import classNames from 'classnames'
 import { useAtom, useAtomValue } from 'jotai'
 import { enqueueSnackbar } from 'notistack'
 import { FC, useRef, useState } from 'react'
@@ -62,7 +62,7 @@ const AudioRecorder: FC<Props> = ({ className }) => {
   return (
     <section
       onClick={isRecording ? stopRecording : startRecording}
-      className={classNames('cursor-pointer', className)}
+      className={cn('cursor-pointer', className)}
     >
       <Player
         ref={lottieRef}

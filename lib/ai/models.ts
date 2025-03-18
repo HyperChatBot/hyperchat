@@ -1,5 +1,3 @@
-import { google } from "@ai-sdk/google"
-
 export const openai = [
   {
     model: 'gpt-4o'
@@ -7,21 +5,21 @@ export const openai = [
 ]
 
 export const dailyUse = {
-  openai: [], 
+  openai: [],
   google: []
 }
 
 export const deepResearch = {
-  openai: [], 
+  openai: [],
   google: []
 }
 
 export const deepThink = {
-  openai: [], 
+  openai: [],
   google: []
 }
 
 export const browserUse = {
-  openai: [], 
+  openai: [],
   google: []
 }

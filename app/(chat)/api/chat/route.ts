@@ -47,7 +47,7 @@ export async function POST(request: Request) {
 
   const openai = createOpenAI({
     apiKey: setting.openaiApiKey,
-    baseURL: setting.openaiBaseUrl,
+    baseURL: setting.openaiBaseUrl
   })
 
   const gemini = createGoogleGenerativeAI({

@@ -1,7 +1,7 @@
+import { cn } from '@/lib/utils'
 import { customBotAvatarUrlAtom } from '@/stores/global'
 import { Roles } from '@/types/conversation'
 import { UIMessage } from 'ai'
-import classNames from 'classnames'
 import { useAtomValue } from 'jotai'
 import { FC, memo } from 'react'
 import { Avatar, AvatarImage } from '../ui/avatar'
@@ -16,13 +16,13 @@ const ChatBubble: FC<Props> = ({ message }) => {
 
   return (
     <section
-      className={classNames('group mb-8 flex items-start', {
+      className={cn('group mb-8 flex items-start', {
         'flex-row-reverse': message.role === Roles.User
       })}
     >
       {message.role === Roles.Assistant && (
         <Avatar
-          className={classNames({
+          className={cn({
             'mr-4': message.role === Roles.Assistant
           })}
         >
@@ -31,13 +31,13 @@ const ChatBubble: FC<Props> = ({ message }) => {
       )}
 
       <section
-        className={classNames('flex flex-col', {
+        className={cn('flex flex-col', {
           'items-start': message.role === Roles.Assistant,
           'items-end': message.role === Roles.User
         })}
       >
         <div
-          className={classNames('text-sm', {
+          className={cn({
             'bg-accent rounded-xl px-3 py-2 break-words whitespace-pre-wrap':
               message.role === Roles.User
           })}

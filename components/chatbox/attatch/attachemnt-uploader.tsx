@@ -1,6 +1,5 @@
-import { convertToBase64 } from '@/lib/utils'
+import { cn, convertToBase64 } from '@/lib/utils'
 import { base64FilePromptAtom } from '@/stores/conversation'
-import classNames from 'classnames'
 import { useAtom } from 'jotai'
 import { Paperclip } from 'lucide-react'
 import { ChangeEvent, FC, useRef } from 'react'
@@ -50,7 +49,7 @@ const AttachmentUploader: FC<Props> = ({ className }) => {
         />
 
         <Paperclip
-          className={classNames(
+          className={cn(
             'relative h-5 w-5',
             {
               'text-opacity-30 text-black dark:text-white': !validate()

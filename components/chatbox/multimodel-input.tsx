@@ -49,7 +49,6 @@ const InputBox: FC<Props> = ({
   const resetHeight = () => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto'
-      textareaRef.current.style.height = '98px'
     }
   }
 
