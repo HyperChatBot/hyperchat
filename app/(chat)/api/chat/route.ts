@@ -11,7 +11,7 @@ import {
 } from '@/lib/db/queries'
 import { Setting } from '@/lib/db/schema'
 import { getMostRecentUserMessage, sanitizeResponseMessages } from '@/lib/utils'
-import { createGoogleGenerativeAI } from '@ai-sdk/google'
+// import { createGoogleGenerativeAI } from '@ai-sdk/google'
 import { createOpenAI } from '@ai-sdk/openai'
 import { createDataStreamResponse, streamText, type Message } from 'ai'
 import { v4 as uuidV4 } from 'uuid'
@@ -50,9 +50,9 @@ export async function POST(request: Request) {
     baseURL: setting.openaiBaseUrl
   })
 
-  const gemini = createGoogleGenerativeAI({
-    apiKey: setting.googleApiKey
-  })
+  // const gemini = createGoogleGenerativeAI({
+  //   apiKey: setting.googleApiKey
+  // })
 
   return createDataStreamResponse({
     execute: (dataStream) => {

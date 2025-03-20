@@ -1,73 +1,71 @@
-import { SidebarRight } from '@/components/chatbox/config'
-import { AppSidebar } from '@/components/layout/app-sidebar'
-import { NavActions } from '@/components/layout/nav-actions'
-import { SettingsDialog } from '@/components/setting/settings-dialog'
-import { Separator } from '@/components/ui/separator'
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger
-} from '@/components/ui/sidebar'
-import { Toaster } from '@/components/ui/sonner'
 import '@/public/stylesheets/globals.css'
-import { Provider } from 'jotai'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { ThemeProvider } from 'next-themes'
-import { Geist, Geist_Mono } from 'next/font/google'
-
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin']
-})
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin']
-})
+import { Toaster } from 'sonner'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://hyperagent.yancey.app'),
   title: 'Hyper Chat',
-  description: 'Advanced AI Agent'
+  description: 'Advanced AI agent using your own data and API.'
 }
 
-export default function RootLayout({
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false
+}
+
+const LIGHT_THEME_COLOR = 'hsl(0 0% 100%)'
+const DARK_THEME_COLOR = 'hsl(240deg 10% 3.92%)'
+const THEME_COLOR_SCRIPT = `\
+(function() {
+  var html = document.documentElement;
+  var meta = document.querySelector('meta[name="theme-color"]');
+  if (!meta) {
+    meta = document.createElement('meta');
+    meta.setAttribute('name', 'theme-color');
+    document.head.appendChild(meta);
+  }
+  function updateThemeColor() {
+    var isDark = html.classList.contains('dark');
+    meta.setAttribute('content', isDark ? '${DARK_THEME_COLOR}' : '${LIGHT_THEME_COLOR}');
+  }
+  var observer = new MutationObserver(updateThemeColor);
+  observer.observe(html, { attributes: true, attributeFilter: ['class'] });
+  updateThemeColor();
+})();`
+
+export default async function RootLayout({
   children
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html
+      lang="en"
+      // `next-themes` injects an extra classname to the body element to avoid
+      // visual flicker before hydration. Hence the `suppressHydrationWarning`
+      // prop is necessary to avoid the React hydration mismatch warning.
+      // https://github.com/pacocoursey/next-themes?tab=readme-ov-file#with-app
+      suppressHydrationWarning
+    >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: THEME_COLOR_SCRIPT
+          }}
+        />
+      </head>
+      <body className="antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <Provider>
-            <SidebarProvider>
-              <AppSidebar />
-              <SidebarInset>
-                <div className="bg-background flex h-dvh min-w-0 flex-col">
-                  <header className="sticky flex h-14 w-full shrink-0 items-center gap-2">
-                    <div className="flex flex-1 items-center gap-2 px-3">
-                      <SidebarTrigger />
-                      <Separator orientation="vertical" className="mr-2 h-4" />
-                    </div>
-                    <div className="ml-auto px-3">
-                      <NavActions />
-                    </div>
-                  </header>
-                  {children}
-                  <SettingsDialog />
-                  <Toaster />
-                </div>
-              </SidebarInset>
-              <SidebarRight />
-            </SidebarProvider>
-          </Provider>
+          <Toaster position="bottom-left" />
+          {children}
         </ThemeProvider>
       </body>
     </html>

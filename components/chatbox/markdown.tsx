@@ -38,7 +38,7 @@ const Markdown: FC<Props> = ({ src }) => {
       renderer: {
         ...renderer,
         table(...args) {
-          return `<div class="overflow-x-scroll">${renderer.table.apply(this, args)}</div>`
+          return `<div class="rounded-md border overflow-x-scroll mb-4">${renderer.table.apply(this, args)}</div>`
         }
       }
     })

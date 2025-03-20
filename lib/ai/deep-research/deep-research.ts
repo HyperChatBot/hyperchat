@@ -1,23 +1,22 @@
 import { customsearch_v1 } from '@googleapis/customsearch'
 import { generateObject } from 'ai'
-import chalk from 'chalk'
 import 'dotenv/config'
 import pLimit from 'p-limit'
 import { z } from 'zod'
 import { transformDocumentIntoChunks } from './load-url'
 import { o3MiniModel } from './models'
 import { deepResearchPrompt, queriesGenerationPrompt } from './prompts'
-// import { isTimeout, setSleep } from './timer'
+import { sendSse } from './sse'
 import { DocumentData, ResearchProgress, ResearchResult } from './types'
 import { searchWeb } from './web-search'
 
-export const visitedUrls = new Map<string, DocumentData>()
-
 async function generateSerpQueries({
+  controller,
   query,
   numQueries = 3,
   learnings
 }: {
+  controller: ReadableStreamDefaultController
   query: string
   numQueries?: number
   learnings?: string[] // optional, if provided, the research will continue from the last learning
@@ -41,31 +40,38 @@ async function generateSerpQueries({
         .describe(`List of SERP queries, max of ${numQueries}`)
     })
   })
-  console.log(
-    chalk.blueBright(
-      `Created ${response.object.queries.length} queries: \n${JSON.stringify(response.object.queries, null, 2)}\n`
-    )
+
+  sendSse(
+    controller,
+    `Created ${response.object.queries.length} queries: \n \`\`\`json\n${JSON.stringify(response.object.queries, null, 2)}`
   )
 
   return response.object.queries.slice(0, numQueries)
 }
 
 async function processSerpResult({
+  controller,
   query,
   searchResults,
   visitedUrls = new Map(),
   numLearnings = 3,
   numFollowUpQuestions = 3
 }: {
+  controller: ReadableStreamDefaultController
   query: string
   searchResults: customsearch_v1.Schema$Result[]
   visitedUrls: Map<string, DocumentData>
   numLearnings?: number
   numFollowUpQuestions?: number
 }) {
-  const contents = await transformDocumentIntoChunks(searchResults, visitedUrls)
-  console.log(
-    chalk.blueBright(`Run "${query}", found ${contents.length} contents\n`)
+  const contents = await transformDocumentIntoChunks({
+    controller,
+    results: searchResults,
+    visitedUrls
+  })
+  sendSse(
+    controller,
+    `Research query: **${query}**, found **${contents.length}** contents.`
   )
 
   const response = await generateObject({
@@ -86,41 +92,31 @@ async function processSerpResult({
         )
     })
   })
-  console.log(
-    chalk.blueBright(
-      `Created ${response.object.learnings.length} learnings: \n${JSON.stringify(response.object.learnings, null, 2)}\n`
-    )
+  sendSse(
+    controller,
+    `Created ${response.object.learnings.length} learnings: \n\`\`\`json\n${JSON.stringify(response.object.learnings, null, 2)}`
   )
 
   return response.object
 }
 
 export async function deepResearch({
+  controller,
   query,
   breadth,
   depth,
   learnings = [],
   visitedUrls = new Map(),
-  // timestamp,
   onProgress
 }: {
+  controller: ReadableStreamDefaultController
   query: string
   breadth: number
   depth: number
-  // timestamp?: number
   learnings?: string[]
   visitedUrls?: Map<string, DocumentData>
   onProgress?: (progress: ResearchProgress) => void
 }): Promise<ResearchResult> {
-  // if (!timestamp) {
-  //   timestamp = performance.now()
-  // } else {
-  //   if (!isTimeout(timestamp)) {
-  //     await setSleep(timestamp)
-  //     timestamp = performance.now()
-  //   }
-  // }
-
   const progress: ResearchProgress = {
     currentDepth: depth,
     totalDepth: depth,
@@ -136,6 +132,7 @@ export async function deepResearch({
   }
 
   const serpQueries = await generateSerpQueries({
+    controller,
     query,
     learnings,
     numQueries: breadth
@@ -151,9 +148,14 @@ export async function deepResearch({
     serpQueries.map((serpQuery) =>
       limit(async () => {
         try {
-          const searchResults = await searchWeb(query)
+          const searchResults = await searchWeb({ controller, query })
 
           if (!searchResults) {
+            sendSse(
+              controller,
+              `Your query: "${query}" did not match any documents.`
+            )
+
             throw new Error('Your search did not match any documents.')
           }
 
@@ -161,6 +163,7 @@ export async function deepResearch({
           const newDepth = depth - 1
 
           const newLearnings = await processSerpResult({
+            controller,
             query: serpQuery.query,
             searchResults,
             visitedUrls,
@@ -170,10 +173,9 @@ export async function deepResearch({
           const allLearnings = [...learnings, ...newLearnings.learnings]
 
           if (newDepth > 0) {
-            console.log(
-              chalk.blueBright(
-                `Researching deeper, breadth: ${newBreadth}, depth: ${newDepth}\n`
-              )
+            sendSse(
+              controller,
+              `Researching deeper, breadth: ${newBreadth}, depth: ${newDepth}`
             )
 
             reportProgress({
@@ -189,12 +191,12 @@ export async function deepResearch({
           `.trim()
 
             return deepResearch({
+              controller,
               query: nextQuery,
               breadth: newBreadth,
               depth: newDepth,
               learnings: allLearnings,
               visitedUrls,
-              // timestamp,
               onProgress
             })
           } else {
@@ -209,10 +211,9 @@ export async function deepResearch({
             }
           }
         } catch (error) {
-          console.log(
-            chalk.redBright(
-              `Error running query: "${serpQuery.query}"${error instanceof Error ? ` due to ${error.message}` : ''}\n`
-            )
+          sendSse(
+            controller,
+            `Error running query: "${serpQuery.query}"${error instanceof Error ? ` due to ${error.message}` : ''}`
           )
 
           return {

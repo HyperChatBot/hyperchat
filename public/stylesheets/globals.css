@@ -148,13 +148,29 @@
   }
 
   .markdown {
+    h1 {
+      @apply mb-4 text-3xl font-bold;
+    }
+
+    h2 {
+      @apply mb-4 text-2xl font-bold;
+    }
+
+    h3 {
+      @apply mb-4 text-xl font-bold;
+    }
+
     p {
-      @apply mb-3 break-words whitespace-pre-wrap last:mb-0;
+      @apply mb-4 break-words whitespace-pre-wrap;
+    }
+
+    hr {
+      @apply mb-4;
     }
 
     ol,
     ul {
-      @apply mb-3 pl-3 last:mb-0;
+      @apply my-4 pl-6;
     }
 
     ol {
@@ -166,19 +182,35 @@
     }
 
     li {
-      @apply mb-3 last:mb-0;
+      @apply mb-4 pl-1;
+    }
+
+    a {
+      @apply break-words;
     }
 
     table {
-      @apply mb-3 table-fixed border border-gray-500;
+      @apply w-full caption-bottom text-sm;
+    }
+
+    thead {
+      @apply [&_tr]:border-b;
+    }
+
+    tbody {
+      @apply [&_tr:last-child]:border-0;
+    }
+
+    tr {
+      @apply hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors;
     }
 
     th {
-      @apply border border-gray-500 p-2 whitespace-nowrap dark:border-gray-200;
+      @apply text-muted-foreground h-10 px-2 text-left align-middle font-bold [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px];
     }
 
     td {
-      @apply border border-gray-500 p-2 whitespace-nowrap dark:border-gray-200;
+      @apply p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px];
     }
   }
 

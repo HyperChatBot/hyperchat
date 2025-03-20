@@ -1,15 +1,23 @@
 import { customsearch_v1 } from '@googleapis/customsearch'
 import { WebPDFLoader } from '@langchain/community/document_loaders/web/pdf'
-import chalk from 'chalk'
 import * as cheerio from 'cheerio'
 import { encodingForModel } from 'js-tiktoken'
 import TurndownService from 'turndown'
 import { generateChunksByMarkdownTextSplitter } from '../rag'
+import { sendSse } from './sse'
 import { DocumentData } from './types'
 
 const enc = encodingForModel('o3-mini')
 
-export async function loadHtmlFromUrl(url: string, html: string) {
+export async function loadHtmlFromUrl({
+  controller,
+  link,
+  html
+}: {
+  controller: ReadableStreamDefaultController
+  link: string
+  html: string
+}) {
   try {
     const $ = cheerio.load(html)
 
@@ -17,51 +25,67 @@ export async function loadHtmlFromUrl(url: string, html: string) {
     $('script').remove()
     $('head').remove()
 
-    console.log(chalk.greenBright(`Succeed to visit: "${url}"\n`))
+    sendSse(controller, `Succeed to visit: **${link}**`)
     return $.html()
   } catch (e) {
-    console.log(
-      chalk.redBright(
-        `Failed to load: "${url}"${e instanceof Error ? ` due to ${e.message}` : ''}\n`
-      )
+    sendSse(
+      controller,
+      `Failed to load: **${link}**${e instanceof Error ? ` due to _${e.message}_` : ''}`
     )
   }
 }
 
-export function domToMarkdown(dom: string) {
+export function domToMarkdown({
+  controller,
+  dom
+}: {
+  controller: ReadableStreamDefaultController
+  dom: string
+}) {
   try {
     const turndownService = new TurndownService()
     return turndownService.turndown(dom)
   } catch (e) {
-    console.log(
-      chalk.redBright(
-        `Failed to transform DOM into markdown${e instanceof Error ? ` due to ${e.message}` : ''}\n`
-      )
+    sendSse(
+      controller,
+      `Failed to transform DOM into markdown${e instanceof Error ? ` due to _${e.message}_` : ''}`
     )
   }
 }
 
-export async function loadPdf(url: string, blob: Blob) {
+export async function loadPdf({
+  controller,
+  link,
+  blob
+}: {
+  controller: ReadableStreamDefaultController
+  link: string
+  blob: Blob
+}) {
   try {
     const loader = new WebPDFLoader(blob, { parsedItemSeparator: '' })
     const docs = await loader.load()
 
-    console.log(chalk.greenBright(`Succeed to load PDF from "${url}"\n`))
+    sendSse(controller, `Succeed to load PDF from **${link}**`)
 
     return docs[0].pageContent
   } catch (e) {
-    console.log(
-      chalk.redBright(
-        `Failed to load PDF from "${url}"${e instanceof Error ? ` due to ${e.message}` : ''}\n`
-      )
+    sendSse(
+      controller,
+      `Failed to load PDF from **${link}**${e instanceof Error ? ` due to _${e.message}_` : ''}`
     )
   }
 }
 
-export async function transformDocumentIntoChunks(
-  results: customsearch_v1.Schema$Result[],
-  visitedURLs: Map<string, DocumentData>
-) {
+export async function transformDocumentIntoChunks({
+  controller,
+  results,
+  visitedUrls
+}: {
+  controller: ReadableStreamDefaultController
+  results: customsearch_v1.Schema$Result[]
+  visitedUrls: Map<string, DocumentData>
+}) {
   let tokens = 0
   const chuncks: string[] = []
 
@@ -71,33 +95,33 @@ export async function transformDocumentIntoChunks(
       tokens += tokenCount
       const chunk = await generateChunksByMarkdownTextSplitter(text)
       chuncks.push(...chunk)
-      visitedURLs.set(link, { chunk, tokenCount })
+      visitedUrls.set(link, { chunk, tokenCount })
     } else {
-      console.log(
-        chalk.yellowBright(
-          `Discard the document from "${link}" because of too large tokens.\n`
-        )
+      visitedUrls.set(link, { chunk: [], tokenCount })
+      sendSse(
+        controller,
+        `Discard the document from **${link}** because of too large tokens.`
       )
     }
   }
 
   for (const { link } of results) {
     if (!link) {
-      console.log(chalk.yellowBright(`Ignore the empty URL\n`))
+      sendSse(controller, 'Ignore the empty URL.')
       continue
     }
 
-    if (visitedURLs.has(link)) {
-      const { chunk, tokenCount } = visitedURLs.get(link) as DocumentData
+    if (visitedUrls.has(link)) {
+      const { chunk, tokenCount } = visitedUrls.get(link) as DocumentData
       if (tokens + tokenCount <= 200_000) {
         chuncks.push(...chunk)
       }
 
-      console.log(
-        chalk.yellowBright(
-          `"Just uses cache from "${link}" because it has already been used in previous research.\n`
-        )
+      sendSse(
+        controller,
+        `Just uses the cache from **${link}** because it has already been parsed from previous research.`
       )
+
       continue
     }
 
@@ -106,14 +130,14 @@ export async function transformDocumentIntoChunks(
 
     if (contentType?.includes('application/pdf')) {
       const blob = await response.blob()
-      const pdf = await loadPdf(link, blob)
+      const pdf = await loadPdf({ controller, link, blob })
 
       if (pdf) {
         addToChunks(pdf, link, chuncks)
       }
     } else {
       const html = await response.text()
-      const dom = await loadHtmlFromUrl(link, html)
+      const dom = await loadHtmlFromUrl({ controller, link, html })
       if (dom) {
         addToChunks(dom, link, chuncks)
       }
