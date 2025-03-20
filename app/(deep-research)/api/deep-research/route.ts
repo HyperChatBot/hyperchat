@@ -1,6 +1,5 @@
-// app/api/sse/route.ts
 import { deepResearch } from '@/lib/ai/deep-research/deep-research'
-import { writeFinalReport } from '@/lib/ai/deep-research/report'
+import { writeFinalReport } from '@/lib/ai/deep-research/final-report'
 import { sendSse } from '@/lib/ai/deep-research/sse'
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
