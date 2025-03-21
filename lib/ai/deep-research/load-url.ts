@@ -155,9 +155,13 @@ export async function transformDocumentIntoChunks({
         if (visitedUrls.has(result.link)) {
           sendSse(
             controller,
-            `Just uses the cache from **${result.link}** because it has already been parsed from previous research.`
+            `Ignore to parse **${result.link}** because it has already been researched on previous research.`
           )
-          documents.push(visitedUrls.get(result.link) as DocumentData)
+          // sendSse(
+          //   controller,
+          //   `Just uses the cache from **${result.link}** because it has already been parsed on previous research.`
+          // )
+          // documents.push(visitedUrls.get(result.link) as DocumentData)
           return false
         }
         return true
