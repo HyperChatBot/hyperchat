@@ -1,6 +1,6 @@
 export interface ResearchResult {
   learnings: string[]
-  visitedUrls: string[]
+  visitedUrls: Map<string, DocumentData>
 }
 
 export interface ResearchProgress {
@@ -14,6 +14,6 @@ export interface ResearchProgress {
 }
 
 export interface DocumentData {
-  chunk: string[]
+  document: string
   tokenCount: number
 }

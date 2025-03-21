@@ -21,14 +21,21 @@ export async function searchWeb({
 
     sendSse(
       controller,
-      `Search results for **${query}**: \n\`\`\`json\n${JSON.stringify(result.data.items, null, 2)}`
+      `Search results from Google: \n\`\`\`json\n${JSON.stringify(
+        result.data.items?.map((item) => ({
+          title: item.title,
+          link: item.link
+        })),
+        null,
+        2
+      )}`
     )
 
     return result.data.items
   } catch (error) {
     sendSse(
       controller,
-      `Failed to search "${query}" from Google${error instanceof Error ? ` due to ${error.message}` : ''}`
+      `Failed to search "${query}" from Google${error instanceof Error ? ` due to *${error.message}*` : ''}`
     )
   }
 }

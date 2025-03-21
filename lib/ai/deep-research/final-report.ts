@@ -1,23 +1,8 @@
 import { generateObject } from 'ai'
 import { z } from 'zod'
-import {
-  generateChunksByRecursiveCharacterTextSplitter,
-  transformTextsToLangChainDocument
-} from '../rag'
 import { o3MiniModel } from './models'
 import { deepResearchPrompt } from './prompts'
-
-async function learningsToChunks(learnings: string[]) {
-  const document = await transformTextsToLangChainDocument(
-    learnings.map((learning) => `<learning>\n${learning}\n</learning>`)
-  )
-  const learningsString = await generateChunksByRecursiveCharacterTextSplitter(
-    document,
-    150_000
-  )
-
-  return learningsString
-}
+import { DocumentData } from './types'
 
 export async function writeFinalReport({
   prompt,
@@ -26,11 +11,11 @@ export async function writeFinalReport({
 }: {
   prompt: string
   learnings: string[]
-  visitedUrls: string[]
+  visitedUrls: Map<string, DocumentData>
 }) {
-  const learningsString = await learningsToChunks(
-    learnings.map((learning) => `<learning>\n${learning}\n</learning>`)
-  )
+  const learningsString = learnings
+    .map((learning) => `<learning>\n${learning}\n</learning>`)
+    .join('\n')
 
   const response = await generateObject({
     model: o3MiniModel,
@@ -43,6 +28,6 @@ export async function writeFinalReport({
     })
   })
 
-  const urlsSection = `\n\n## Sources\n\n${visitedUrls.map((url) => `- ${url}`).join('\n')}`
+  const urlsSection = `\n\n## Sources\n\n${[...visitedUrls.keys()].map((url) => `- ${url}`).join('\n')}`
   return response.object.reportMarkdown + urlsSection
 }

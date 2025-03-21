@@ -137,6 +137,7 @@ export default function DeepResearch() {
       if (source.readyState === EventSource.CLOSED) {
         console.log('SSE connection closed')
       }
+      source.close()
     }
 
     return () => {
@@ -251,13 +252,13 @@ export default function DeepResearch() {
         </Form>
       </Card>
       <Card
-        className="flex max-h-[calc(100dvh-2rem)] flex-auto flex-col gap-4 overflow-y-scroll p-4 pb-0"
+        className="flex max-h-[calc(100dvh-2rem)] flex-auto flex-col gap-0 overflow-y-scroll p-4"
         ref={ref}
       >
         {messages.map((message, idx) => (
-          <section key={idx} className="flex flex-col gap-4">
+          <section key={idx} className="flex flex-col">
             <Markdown src={message} />
-            {idx !== messages.length - 1 && <Separator />}
+            {idx !== messages.length - 1 && <Separator className="mb-4" />}
           </section>
         ))}
       </Card>

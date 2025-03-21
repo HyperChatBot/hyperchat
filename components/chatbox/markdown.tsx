@@ -20,7 +20,7 @@ const Markdown: FC<Props> = ({ src }) => {
           ? hljs.highlight(text, { language: language }).value
           : hljs.highlightAuto(text).value
 
-      return `<pre class="mb-4 rounded-xl overflow-x-scroll text-xs last:my-0"><code class=" hljs ${language}">${highlighted}</code></pre>`
+      return `<pre class="mb-4 rounded-xl overflow-x-scroll text-xs"><code class=" hljs ${language}">${highlighted}</code></pre>`
     }
 
     renderer.codespan = ({ text }: Tokens.Codespan) =>

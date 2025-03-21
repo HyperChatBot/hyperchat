@@ -29,16 +29,20 @@ export async function GET(request: NextRequest) {
 
   const stream = new ReadableStream({
     async start(controller) {
+      const startTimestamp = performance.now()
       sendSse(controller, 'Starting research...')
       const { learnings, visitedUrls } = await deepResearch({
         ...deserializedSearchParams.data,
         controller
       })
 
-      sendSse(controller, `Learnings:\n${learnings.join('\n')}`)
       sendSse(
         controller,
-        `Visited URLs (${visitedUrls.length}):\n${visitedUrls.join('\n')}`
+        `Learnings:\n${learnings.map((learning) => `- ${learning}`).join('\n')}`
+      )
+      sendSse(
+        controller,
+        `Visited URLs (${visitedUrls.size}):\n${[...visitedUrls.keys()].map((url) => `- ${url}`).join('\n')}`
       )
       sendSse(controller, 'Writing final report...')
 
@@ -49,6 +53,11 @@ export async function GET(request: NextRequest) {
       })
 
       sendSse(controller, report)
+      sendSse(
+        controller,
+        `It took a total of ${((performance.now() - startTimestamp) / 1000 / 60).toFixed(2)} minutes.`
+      )
+
       sendSse(controller, '__END__')
 
       request.signal.onabort = () => {
