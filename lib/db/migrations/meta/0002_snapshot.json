@@ -1,0 +1,254 @@
+{
+  "id": "d6c76c07-6c9d-43cb-a9bf-cf6df603f889",
+  "prevId": "d0256739-69ee-4c15-a504-296146dc6f85",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.Chat": {
+      "name": "Chat",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Message": {
+      "name": "Message",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "chatId": {
+          "name": "chatId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "content": {
+          "name": "content",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Message_chatId_Chat_id_fk": {
+          "name": "Message_chatId_Chat_id_fk",
+          "tableFrom": "Message",
+          "tableTo": "Chat",
+          "columnsFrom": ["chatId"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Setting": {
+      "name": "Setting",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "openaiApiKey": {
+          "name": "openaiApiKey",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "openaiBaseUrl": {
+          "name": "openaiBaseUrl",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "azureOpenaiApiKey": {
+          "name": "azureOpenaiApiKey",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "azureOpenAiEndpoint": {
+          "name": "azureOpenAiEndpoint",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "azureOpenAiApiVersion": {
+          "name": "azureOpenAiApiVersion",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "anthropicApiKey": {
+          "name": "anthropicApiKey",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "anthropicBaseUrl": {
+          "name": "anthropicBaseUrl",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "googleApiKey": {
+          "name": "googleApiKey",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "googleBaseUrl": {
+          "name": "googleBaseUrl",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "xAiApiKey": {
+          "name": "xAiApiKey",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "xAiBaseUrl": {
+          "name": "xAiBaseUrl",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ollamaBaseUrl": {
+          "name": "ollamaBaseUrl",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Vote": {
+      "name": "Vote",
+      "schema": "",
+      "columns": {
+        "chatId": {
+          "name": "chatId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "messageId": {
+          "name": "messageId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "isUpvoted": {
+          "name": "isUpvoted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Vote_chatId_Chat_id_fk": {
+          "name": "Vote_chatId_Chat_id_fk",
+          "tableFrom": "Vote",
+          "tableTo": "Chat",
+          "columnsFrom": ["chatId"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "Vote_messageId_Message_id_fk": {
+          "name": "Vote_messageId_Message_id_fk",
+          "tableFrom": "Vote",
+          "tableTo": "Message",
+          "columnsFrom": ["messageId"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "Vote_chatId_messageId_pk": {
+          "name": "Vote_chatId_messageId_pk",
+          "columns": ["chatId", "messageId"]
+        }
+      },
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

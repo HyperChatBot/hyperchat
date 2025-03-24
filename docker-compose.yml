@@ -1,0 +1,12 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    container_name: hyperchat-pg
+    environment:
+      POSTGRES_USER: tennoheika
+      POSTGRES_PASSWORD: jinping8964
+      POSTGRES_DB: hyperchat
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./lib/db/data:/var/lib/postgresql/data

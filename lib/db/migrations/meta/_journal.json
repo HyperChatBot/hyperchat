@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1741677884808,
+      "tag": "0000_wooden_blindfold",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1741679572564,
+      "tag": "0001_dizzy_cassandra_nova",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1741770400074,
+      "tag": "0002_thin_black_widow",
+      "breakpoints": true
+    }
+  ]
+}
