@@ -69,8 +69,8 @@ dependencies:
     specifier: ^10.1.1
     version: 10.1.1
   js-tiktoken:
-    specifier: ^1.0.15
-    version: 1.0.15
+    specifier: ^1.0.21
+    version: 1.0.21
   luxon:
     specifier: ^3.5.0
     version: 3.5.0
@@ -4271,8 +4271,8 @@ packages:
     hasBin: true
     dev: true
 
-  /js-tiktoken@1.0.15:
-    resolution: {integrity: sha512-65ruOWWXDEZHHbAo7EjOcNxOGasQKbL4Fq3jEr2xsCqSsoOo6VVSqzWQb6PRIqypFSDcma4jO90YP0w5X8qVXQ==}
+  /js-tiktoken@1.0.21:
+    resolution: {integrity: sha512-biOj/6M5qdgx5TKjDnFT1ymSpM5tbd3ylwDtrQvFQSu0Z7bBYko2dF+W/aUkXUPuk6IVpRxk/3Q2sHOzGlS36g==}
     dependencies:
       base64-js: 1.5.1
     dev: false
