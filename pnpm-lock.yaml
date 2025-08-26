@@ -51,14 +51,14 @@ dependencies:
     specifier: ^2.5.1
     version: 2.5.1
   dexie:
-    specifier: ^4.0.8
-    version: 4.0.8
+    specifier: ^4.2.0
+    version: 4.2.0
   dexie-export-import:
     specifier: ^4.1.2
-    version: 4.1.2(dexie@4.0.8)
+    version: 4.1.2(dexie@4.2.0)
   dexie-react-hooks:
     specifier: ^1.1.7
-    version: 1.1.7(@types/react@18.3.11)(dexie@4.0.8)(react@18.3.1)
+    version: 1.1.7(@types/react@18.3.11)(dexie@4.2.0)(react@18.3.1)
   emoji-mart:
     specifier: ^5.6.0
     version: 5.6.0
@@ -2867,15 +2867,15 @@ packages:
       dequal: 2.0.3
     dev: false
 
-  /dexie-export-import@4.1.2(dexie@4.0.8):
+  /dexie-export-import@4.1.2(dexie@4.2.0):
     resolution: {integrity: sha512-dWIkkajX+CsEJ19xMnvyqUDlldIl7jW/G49hy3pXZeIgCei9fPeGSjteoh7BeTujexIM3XZ+uAGCEwgCx2HAsQ==}
     peerDependencies:
       dexie: ^2.0.4 || ^3.0.0 || ^4.0.1-alpha.5
     dependencies:
-      dexie: 4.0.8
+      dexie: 4.2.0
     dev: false
 
-  /dexie-react-hooks@1.1.7(@types/react@18.3.11)(dexie@4.0.8)(react@18.3.1):
+  /dexie-react-hooks@1.1.7(@types/react@18.3.11)(dexie@4.2.0)(react@18.3.1):
     resolution: {integrity: sha512-Lwv5W0Hk+uOW3kGnsU9GZoR1er1B7WQ5DSdonoNG+focTNeJbHW6vi6nBoX534VKI3/uwHebYzSw1fwY6a7mTw==}
     peerDependencies:
       '@types/react': '>=16'
@@ -2883,12 +2883,12 @@ packages:
       react: '>=16'
     dependencies:
       '@types/react': 18.3.11
-      dexie: 4.0.8
+      dexie: 4.2.0
       react: 18.3.1
     dev: false
 
-  /dexie@4.0.8:
-    resolution: {integrity: sha512-1G6cJevS17KMDK847V3OHvK2zei899GwpDiqfEXHP1ASvme6eWJmAp9AU4s1son2TeGkWmC0g3y8ezOBPnalgQ==}
+  /dexie@4.2.0:
+    resolution: {integrity: sha512-OSeyyWOUetDy9oFWeddJgi83OnRA3hSFh3RrbltmPgqHszE9f24eUCVLI4mPg0ifsWk0lQTdnS+jyGNrPMvhDA==}
     dev: false
 
   /didyoumean@1.2.2:
