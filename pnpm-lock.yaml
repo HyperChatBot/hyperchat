@@ -30,8 +30,8 @@ dependencies:
     specifier: ^6.1.2
     version: 6.1.2(@emotion/react@11.13.3)(@emotion/styled@11.13.0)(@types/react@18.3.11)(react-dom@18.3.1)(react@18.3.1)
   '@tauri-apps/api':
-    specifier: ^2.0.2
-    version: 2.0.2
+    specifier: ^2.9.0
+    version: 2.9.0
   '@tauri-apps/plugin-fs':
     specifier: ~2.0.0
     version: 2.0.0
@@ -1504,8 +1504,8 @@ packages:
     resolution: {integrity: sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==}
     dev: true
 
-  /@tauri-apps/api@2.0.2:
-    resolution: {integrity: sha512-3wSwmG+1kr6WrgAFKK5ijkNFPp8TT3FLj3YHUb5EwMO+3FxX4uWlfSWkeeBy+Kc1RsKzugtYLuuya+98Flj+3w==}
+  /@tauri-apps/api@2.9.0:
+    resolution: {integrity: sha512-qD5tMjh7utwBk9/5PrTA/aGr3i5QaJ/Mlt7p8NilQ45WgbifUNPyKWsA63iQ8YfQq6R8ajMapU+/Q8nMcPRLNw==}
     dev: false
 
   /@tauri-apps/cli-darwin-arm64@2.0.2:
@@ -1618,19 +1618,19 @@ packages:
   /@tauri-apps/plugin-fs@2.0.0:
     resolution: {integrity: sha512-BNEeQQ5aH8J5SwYuWgRszVyItsmquRuzK2QRkVj8Z0sCsLnSvJFYI3JHRzzr3ltZGq1nMPtblrlZzuKqVzRawA==}
     dependencies:
-      '@tauri-apps/api': 2.0.2
+      '@tauri-apps/api': 2.9.0
     dev: false
 
   /@tauri-apps/plugin-shell@2.0.0:
     resolution: {integrity: sha512-OpW2+ycgJLrEoZityWeWYk+6ZWP9VyiAfbO+N/O8VfLkqyOym8kXh7odKDfINx9RAotkSGBtQM4abyKfJDkcUg==}
     dependencies:
-      '@tauri-apps/api': 2.0.2
+      '@tauri-apps/api': 2.9.0
     dev: false
 
   /@tauri-apps/plugin-updater@2.0.0:
     resolution: {integrity: sha512-N0cl71g7RPr7zK2Fe5aoIwzw14NcdLcz7XMGFWZVjprsqgDRWoxbnUkknyCQMZthjhGkppCd/wN2MIsUz+eAhQ==}
     dependencies:
-      '@tauri-apps/api': 2.0.2
+      '@tauri-apps/api': 2.9.0
     dev: false
 
   /@types/babel__core@7.20.5:
